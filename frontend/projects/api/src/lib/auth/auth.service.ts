@@ -31,7 +31,7 @@ export class AuthService {
   private readonly accessToken = signal<string | null>(null);
   private readonly rolesSignal = signal<readonly string[]>([]);
 
-  async signIn(returnUrl?: string): Promise<void> {
+  async signIn(returnUrl?: string, options?: { prompt?: 'login' | 'none' }): Promise<void> {
     const verifier = randomBase64Url(32);
     const state = randomBase64Url(16);
     sessionStorage.setItem(VERIFIER_KEY, verifier);
@@ -50,6 +50,9 @@ export class AuthService {
     url.searchParams.set('state', state);
     url.searchParams.set('code_challenge', challenge);
     url.searchParams.set('code_challenge_method', 'S256');
+    if (options?.prompt) {
+      url.searchParams.set('prompt', options.prompt);
+    }
 
     this.redirect(url.toString());
   }

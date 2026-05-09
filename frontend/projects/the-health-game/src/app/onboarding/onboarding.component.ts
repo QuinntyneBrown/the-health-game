@@ -45,6 +45,7 @@ import { AuthService } from 'api';
           class="onboarding__secondary"
           type="button"
           data-testid="onboarding-have-account"
+          (click)="onHaveAccount()"
         >
           I have an account
         </button>
@@ -227,5 +228,9 @@ export class OnboardingComponent {
 
   onGetStarted(): void {
     void this.auth.signIn('/');
+  }
+
+  onHaveAccount(): void {
+    void this.auth.signIn('/', { prompt: 'login' });
   }
 }

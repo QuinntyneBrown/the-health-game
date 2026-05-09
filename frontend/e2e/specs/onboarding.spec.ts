@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 01-TC-V-001..010, 01-TC-C-001..010, 01-TC-L-001..010, 01-TC-R-001..008, 01-TC-F-001
+// Traces to: 01-TC-V-001..010, 01-TC-C-001..010, 01-TC-L-001..010, 01-TC-R-001..008, 01-TC-F-001..002
 // Description: Onboarding headline ("Make health a game") renders with font family Inter weight 500
 //              and the design-spec font-size at each breakpoint (mobile = 28 px, tablet = 45 px,
 //              desktop = 57 px with line-height 1.1). Body description paragraph renders at
@@ -213,6 +213,28 @@ test.describe('Onboarding — headline typography', () => {
 
     const url = new URL(page.url());
     expect(url.pathname).toBe('/connect/authorize');
+    expect(url.searchParams.get('response_type')).toBe('code');
+    expect(url.searchParams.get('code_challenge_method')).toBe('S256');
+    expect(url.searchParams.get('code_challenge')).toBeTruthy();
+    expect(url.searchParams.get('state')).toBeTruthy();
+    expect(url.searchParams.get('client_id')).toBeTruthy();
+  });
+
+  test('clicking "I have an account" navigates to OIDC authorize with prompt=login (TC-F-002)', async ({
+    page,
+  }) => {
+    await page.route('**/connect/authorize**', (route) =>
+      route.fulfill({ status: 200, contentType: 'text/html', body: '<html></html>' }),
+    );
+
+    await page.goto('/onboarding');
+    const navigation = page.waitForURL(/\/connect\/authorize/);
+    await page.getByTestId('onboarding-have-account').click();
+    await navigation;
+
+    const url = new URL(page.url());
+    expect(url.pathname).toBe('/connect/authorize');
+    expect(url.searchParams.get('prompt')).toBe('login');
     expect(url.searchParams.get('response_type')).toBe('code');
     expect(url.searchParams.get('code_challenge_method')).toBe('S256');
     expect(url.searchParams.get('code_challenge')).toBeTruthy();
