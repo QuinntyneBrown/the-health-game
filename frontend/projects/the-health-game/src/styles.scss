@@ -206,6 +206,14 @@ lib-goal-list mat-progress-bar .mdc-linear-progress__buffer {
   background-color: #e5e9e2 !important;
 }
 
+button[data-testid='delete-goal-confirm'] {
+  background-color: #ba1a1a !important;
+  color: #ffffff !important;
+}
+button[data-testid='delete-goal-confirm'] .mdc-button__label {
+  color: #ffffff !important;
+}
+
 hg-empty-state .empty-state__title {
   font-family:
     Inter,

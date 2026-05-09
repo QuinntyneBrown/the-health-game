@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 03-TC-V-001..009, 03-TC-C-001..010
+// Traces to: 03-TC-V-001..009, 03-TC-C-001..011
 // Description: /goals page title "Goals" renders with Inter weight 500 at 22/32 px.
 // Subtitle is Inter 13 px weight 400 with computed counts.
 import { expect, test } from '@playwright/test';
@@ -236,6 +236,40 @@ test.describe('Goals page — header typography', () => {
 
   test.describe('goal form', () => {
     test.use({ viewport: { width: 1440, height: 900 } });
+
+    test('Delete confirm button bg #BA1A1A / label #FFFFFF (03-TC-C-011)', async ({ page }) => {
+      await authenticate(page);
+      await page.route('**/api/goals/g1', (route) =>
+        route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify({
+            id: 'g1',
+            name: 'Walk',
+            description: '',
+            cadence: 'daily',
+            target: { value: 10, unit: 'min' },
+            completedQuantity: 0,
+            currentStreak: 0,
+            longestStreak: 0,
+            rewardName: '',
+          }),
+        }),
+      );
+      await page.route('**/api/goals/g1/activity**', (route) =>
+        route.fulfill({ status: 200, contentType: 'application/json', body: '[]' }),
+      );
+      await page.goto('/goals/g1');
+      await page.locator('[data-testid="goal-detail-delete"]').click();
+      const btn = page.locator('[data-testid="delete-goal-confirm"]');
+      await expect(btn).toBeVisible();
+      const styles = await btn.evaluate((el) => {
+        const s = getComputedStyle(el);
+        return { bg: s.backgroundColor, color: s.color };
+      });
+      expect(styles.bg).toBe('rgb(186, 26, 26)');
+      expect(styles.color).toBe('rgb(255, 255, 255)');
+    });
 
     test('"New goal" button bg #006D3F / label #FFFFFF (03-TC-C-010)', async ({ page }) => {
       await authenticate(page);
