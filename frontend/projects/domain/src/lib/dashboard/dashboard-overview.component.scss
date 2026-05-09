@@ -9,8 +9,20 @@
   gap: var(--hg-space-6);
   margin-inline: auto;
   max-width: var(--hg-size-content-max);
-  padding: var(--hg-space-4);
+  padding: 16px;
   min-height: 100%;
+}
+
+@media (min-width: 768px) {
+  .dashboard-overview {
+    padding: 24px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .dashboard-overview {
+    padding: 32px;
+  }
 }
 
 .dashboard-overview__metrics,

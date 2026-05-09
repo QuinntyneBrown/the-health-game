@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 02-TC-V-001..007, 02-TC-C-001..010
+// Traces to: 02-TC-V-001..007, 02-TC-C-001..010, 02-TC-L-001
 // Description: Dashboard greeting renders with Inter font, weight 500, sizes 22/28/32 px (mobile/tablet/desktop).
 // Section labels render with Inter weight 500 at 18 px.
 import AxeBuilder from '@axe-core/playwright';
@@ -55,6 +55,13 @@ test.describe('Home Dashboard — greeting typography', () => {
       expect(computed.fontFamily.split(',')[0].replace(/['"]/g, '').trim()).toBe('Inter');
       expect(computed.fontWeight).toBe('500');
       expect(computed.fontSize).toBe('32px');
+    });
+
+    test('dashboard page padding is 32 px on desktop (02-TC-L-001)', async ({ page }) => {
+      await authenticate(page);
+      const root = page.locator('hg-dashboard-overview .dashboard-overview').first();
+      const paddingTop = await root.evaluate((el) => getComputedStyle(el).paddingTop);
+      expect(paddingTop).toBe('32px');
     });
 
     test('dashboard text passes WCAG AA contrast (02-TC-C-010)', async ({ page }) => {
@@ -462,6 +469,13 @@ test.describe('Home Dashboard — greeting typography', () => {
       const fontSize = await greeting.evaluate((el) => getComputedStyle(el).fontSize);
       expect(fontSize).toBe('28px');
     });
+
+    test('dashboard page padding is 24 px on tablet (02-TC-L-001)', async ({ page }) => {
+      await authenticate(page);
+      const root = page.locator('hg-dashboard-overview .dashboard-overview').first();
+      const paddingTop = await root.evaluate((el) => getComputedStyle(el).paddingTop);
+      expect(paddingTop).toBe('24px');
+    });
   });
 
   test.describe('mobile viewport', () => {
@@ -475,6 +489,13 @@ test.describe('Home Dashboard — greeting typography', () => {
 
       const fontSize = await greeting.evaluate((el) => getComputedStyle(el).fontSize);
       expect(fontSize).toBe('22px');
+    });
+
+    test('dashboard page padding is 16 px on mobile (02-TC-L-001)', async ({ page }) => {
+      await authenticate(page);
+      const root = page.locator('hg-dashboard-overview .dashboard-overview').first();
+      const paddingTop = await root.evaluate((el) => getComputedStyle(el).paddingTop);
+      expect(paddingTop).toBe('16px');
     });
   });
 });
