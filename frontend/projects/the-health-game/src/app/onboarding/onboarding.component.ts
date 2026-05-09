@@ -30,9 +30,11 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
   styles: [
     `
       .onboarding {
+        background-color: #f7fbf3;
         display: grid;
         gap: 24px;
         padding: 24px;
+        min-height: 100%;
       }
 
       .onboarding__wordmark {
