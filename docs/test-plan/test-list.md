@@ -40,7 +40,7 @@ and made green. The /loop process picks the first test with
 | 29 | 01 | TC-L-009 | Pill button corner radius | 9999 (full) | 2026-05-09T18:40:27Z |
 | 30 | 01 | TC-L-010 | Desktop split — left column ~50% width, right hero ~50% | left contains copy + actions, right contains trophy hero | 2026-05-09T18:45:25Z |
 | 31 | 01 | TC-R-001 | Viewport 360x780 | Single-column mobile layout, no horizontal scrollbar | 2026-05-09T18:46:49Z |
-| 32 | 01 | TC-R-002 | Viewport 375x812 | Same layout as 360 (mobile) | null |
+| 32 | 01 | TC-R-002 | Viewport 375x812 | Same layout as 360 (mobile) | 2026-05-09T18:48:12Z |
 | 33 | 01 | TC-R-003 | Viewport 768x1024 | Tablet layout — buttons inline, larger hero | null |
 | 34 | 01 | TC-R-004 | Viewport 1024x768 | Tablet layout still applies (rail variant for app shell when signed in) | null |
 | 35 | 01 | TC-R-005 | Viewport 1440x900 | Desktop layout — split hero with brand wordmark visible | null |
