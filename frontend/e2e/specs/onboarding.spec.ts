@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 01-TC-V-001..010, 01-TC-C-001..010, 01-TC-L-001..010, 01-TC-R-001..008, 01-TC-F-001..008, 01-TC-B-001..007, 01-TC-A-001..006, 01-TC-D-001..005, 01-TC-P-001
+// Traces to: 01-TC-V-001..010, 01-TC-C-001..010, 01-TC-L-001..010, 01-TC-R-001..008, 01-TC-F-001..008, 01-TC-B-001..007, 01-TC-A-001..006, 01-TC-D-001..005, 01-TC-P-001..002
 // Description: Onboarding headline ("Make health a game") renders with font family Inter weight 500
 //              and the design-spec font-size at each breakpoint (mobile = 28 px, tablet = 45 px,
 //              desktop = 57 px with line-height 1.1). Body description paragraph renders at
@@ -219,6 +219,37 @@ test.describe('Onboarding — headline typography', () => {
     expect(url.searchParams.get('code_challenge')).toBeTruthy();
     expect(url.searchParams.get('state')).toBeTruthy();
     expect(url.searchParams.get('client_id')).toBeTruthy();
+  });
+
+  test('initial JS payload for /onboarding does not pull in dashboard code (TC-P-002)', async ({
+    page,
+  }) => {
+    const jsRequests: { url: string; bytes: number; hasDashboard: boolean }[] = [];
+    page.on('response', async (response) => {
+      const url = response.url();
+      if (!/\.js(\?|$)/.test(url)) return;
+      try {
+        const body = await response.text();
+        jsRequests.push({
+          url,
+          bytes: body.length,
+          hasDashboard:
+            body.includes('DashboardOverviewComponent.ɵfac') ||
+            body.includes('class DashboardOverviewComponent'),
+        });
+      } catch {
+        // 304s and the like can't be read; skip silently.
+      }
+    });
+
+    await page.goto('/onboarding', { waitUntil: 'networkidle' });
+    await expect(page.getByTestId('onboarding-headline')).toBeVisible();
+
+    // The actual DashboardOverviewComponent class must live in a lazy chunk that is
+    // NOT fetched on /onboarding. (A bare 'DashboardOverviewComponent' string can
+    // appear in route metadata; we look for the compiled-class shape instead.)
+    const heavy = jsRequests.filter((r) => r.hasDashboard);
+    expect(heavy).toEqual([]);
   });
 
   test('cold load Largest Contentful Paint stays under 2.5s (TC-P-001)', async ({ page }) => {
