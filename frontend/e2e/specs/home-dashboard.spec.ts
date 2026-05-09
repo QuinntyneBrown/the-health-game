@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 02-TC-V-001..007, 02-TC-C-001..010, 02-TC-L-001..010, 02-TC-R-001..006, 02-TC-F-001..014, 02-TC-B-001..006
+// Traces to: 02-TC-V-001..007, 02-TC-C-001..010, 02-TC-L-001..010, 02-TC-R-001..006, 02-TC-F-001..014, 02-TC-B-001..006, 02-TC-A-001
 // Description: Dashboard greeting renders with Inter font, weight 500, sizes 22/28/32 px (mobile/tablet/desktop).
 // Section labels render with Inter weight 500 at 18 px.
 import AxeBuilder from '@axe-core/playwright';
@@ -46,6 +46,18 @@ async function authenticate(page: import('@playwright/test').Page): Promise<void
 }
 
 test.describe('Home Dashboard — greeting typography', () => {
+  test('greeting renders as <h1> (02-TC-A-001)', async ({ page }) => {
+    await authenticate(page);
+    await page.goto('/home');
+
+    const greeting = page.locator('.page-header__title').first();
+    const tag = await greeting.evaluate((el) => el.tagName);
+    expect(tag).toBe('H1');
+
+    const h1Count = await page.locator('hg-dashboard-overview h1').count();
+    expect(h1Count).toBe(1);
+  });
+
   test('reduced-motion suppresses bar chart entrance animation (02-TC-B-006)', async ({ page }) => {
     await page.emulateMedia({ reducedMotion: 'reduce' });
     await authenticate(page);
