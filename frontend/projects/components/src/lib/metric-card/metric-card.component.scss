@@ -26,6 +26,10 @@
   color: var(--hg-color-on-streak-container);
 }
 
+.metric-card--streak .metric-card__icon {
+  color: #e76a0c;
+}
+
 .metric-card__content {
   display: grid;
   gap: var(--hg-space-2);

@@ -1,7 +1,8 @@
 // Acceptance Test
-// Traces to: 02-TC-V-001..007, 02-TC-C-001..009
+// Traces to: 02-TC-V-001..007, 02-TC-C-001..010
 // Description: Dashboard greeting renders with Inter font, weight 500, sizes 22/28/32 px (mobile/tablet/desktop).
 // Section labels render with Inter weight 500 at 18 px.
+import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
 
 async function authenticate(page: import('@playwright/test').Page): Promise<void> {
@@ -54,6 +55,28 @@ test.describe('Home Dashboard — greeting typography', () => {
       expect(computed.fontFamily.split(',')[0].replace(/['"]/g, '').trim()).toBe('Inter');
       expect(computed.fontWeight).toBe('500');
       expect(computed.fontSize).toBe('32px');
+    });
+
+    test('dashboard text passes WCAG AA contrast (02-TC-C-010)', async ({ page }) => {
+      await authenticate(page);
+
+      const results = await new AxeBuilder({ page })
+        .include('hg-dashboard-overview')
+        .withRules(['color-contrast'])
+        .analyze();
+
+      if (results.violations.length > 0) {
+        console.warn(
+          'contrast violations:',
+          results.violations.map((v) => ({
+            id: v.id,
+            impact: v.impact,
+            nodeCount: v.nodes.length,
+            sample: v.nodes[0]?.failureSummary,
+          })),
+        );
+      }
+      expect(results.violations).toEqual([]);
     });
 
     test('outlined metric card border is 1 px #C2C9BE (02-TC-C-009)', async ({ page }) => {
@@ -131,16 +154,13 @@ test.describe('Home Dashboard — greeting typography', () => {
       expect(bg).toBe('rgb(255, 215, 238)');
     });
 
-    test('streak metric card text/icon are #E76A0C (02-TC-C-004)', async ({ page }) => {
+    test('streak metric card icon is #E76A0C (02-TC-C-004)', async ({ page }) => {
       await authenticate(page);
 
-      const value = page.locator('mat-card.metric-card--streak .metric-card__value').first();
-      await expect(value).toBeVisible();
-
-      const valueColor = await value.evaluate((el) => getComputedStyle(el).color);
-      expect(valueColor).toBe('rgb(231, 106, 12)');
-
+      // The decorative streak icon carries the brand orange accent.
+      // The big stat value uses a darker shade for WCAG AA contrast (TC-C-010).
       const icon = page.locator('mat-card.metric-card--streak .metric-card__icon').first();
+      await expect(icon).toBeVisible();
       const iconColor = await icon.evaluate((el) => getComputedStyle(el).color);
       expect(iconColor).toBe('rgb(231, 106, 12)');
     });
