@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 01-TC-V-001..010, 01-TC-C-001..010, 01-TC-L-001..010, 01-TC-R-001..008, 01-TC-F-001..002
+// Traces to: 01-TC-V-001..010, 01-TC-C-001..010, 01-TC-L-001..010, 01-TC-R-001..008, 01-TC-F-001..003
 // Description: Onboarding headline ("Make health a game") renders with font family Inter weight 500
 //              and the design-spec font-size at each breakpoint (mobile = 28 px, tablet = 45 px,
 //              desktop = 57 px with line-height 1.1). Body description paragraph renders at
@@ -218,6 +218,31 @@ test.describe('Onboarding — headline typography', () => {
     expect(url.searchParams.get('code_challenge')).toBeTruthy();
     expect(url.searchParams.get('state')).toBeTruthy();
     expect(url.searchParams.get('client_id')).toBeTruthy();
+  });
+
+  test('OIDC state and code_challenge are random per click (TC-F-003)', async ({ page }) => {
+    await page.route('**/connect/authorize**', (route) =>
+      route.fulfill({ status: 200, contentType: 'text/html', body: '<html></html>' }),
+    );
+
+    const captured: Array<{ state: string; codeChallenge: string }> = [];
+
+    for (let i = 0; i < 2; i++) {
+      await page.goto('/onboarding');
+      const navigation = page.waitForURL(/\/connect\/authorize/);
+      await page.getByTestId('onboarding-get-started').click();
+      await navigation;
+
+      const url = new URL(page.url());
+      const state = url.searchParams.get('state') ?? '';
+      const codeChallenge = url.searchParams.get('code_challenge') ?? '';
+      expect(state.length).toBeGreaterThan(0);
+      expect(codeChallenge.length).toBeGreaterThan(0);
+      captured.push({ state, codeChallenge });
+    }
+
+    expect(captured[0].state).not.toBe(captured[1].state);
+    expect(captured[0].codeChallenge).not.toBe(captured[1].codeChallenge);
   });
 
   test('clicking "I have an account" navigates to OIDC authorize with prompt=login (TC-F-002)', async ({
