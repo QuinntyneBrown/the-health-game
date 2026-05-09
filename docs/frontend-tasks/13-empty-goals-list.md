@@ -1,3 +1,7 @@
+---
+status: Accepted
+---
+
 # Task 13 — Empty goals list
 
 **Traces to:** L2-002, L2-020, L2-021
