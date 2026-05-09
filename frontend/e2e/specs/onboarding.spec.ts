@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 01-TC-V-001..010, 01-TC-C-001..010, 01-TC-L-001..010, 01-TC-R-001..008, 01-TC-F-001..008, 01-TC-B-001..003
+// Traces to: 01-TC-V-001..010, 01-TC-C-001..010, 01-TC-L-001..010, 01-TC-R-001..008, 01-TC-F-001..008, 01-TC-B-001..004
 // Description: Onboarding headline ("Make health a game") renders with font family Inter weight 500
 //              and the design-spec font-size at each breakpoint (mobile = 28 px, tablet = 45 px,
 //              desktop = 57 px with line-height 1.1). Body description paragraph renders at
@@ -218,6 +218,23 @@ test.describe('Onboarding — headline typography', () => {
     expect(url.searchParams.get('code_challenge')).toBeTruthy();
     expect(url.searchParams.get('state')).toBeTruthy();
     expect(url.searchParams.get('client_id')).toBeTruthy();
+  });
+
+  test('Space on focused "Get started" button activates it (TC-B-004)', async ({ page }) => {
+    await page.route('**/connect/authorize**', (route) =>
+      route.fulfill({ status: 200, contentType: 'text/html', body: '<html></html>' }),
+    );
+
+    await page.goto('/onboarding');
+    const button = page.getByTestId('onboarding-get-started');
+    await expect(button).toBeVisible();
+    await button.focus();
+
+    const navigation = page.waitForURL(/\/connect\/authorize/);
+    await page.keyboard.press('Space');
+    await navigation;
+
+    expect(page.url()).toContain('/connect/authorize');
   });
 
   test('Enter on focused "Get started" button activates it (TC-B-003)', async ({ page }) => {
