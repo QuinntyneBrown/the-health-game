@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 02-TC-V-001..005
+// Traces to: 02-TC-V-001..006
 // Description: Dashboard greeting renders with Inter font, weight 500, sizes 22/28/32 px (mobile/tablet/desktop).
 // Section labels render with Inter weight 500 at 18 px.
 import { expect, test } from '@playwright/test';
@@ -54,6 +54,51 @@ test.describe('Home Dashboard — greeting typography', () => {
       expect(computed.fontFamily.split(',')[0].replace(/['"]/g, '').trim()).toBe('Inter');
       expect(computed.fontWeight).toBe('500');
       expect(computed.fontSize).toBe('32px');
+    });
+
+    test('goal-card streak chip text is Inter 13 px / weight 500-600 (02-TC-V-006)', async ({
+      page,
+    }) => {
+      await authenticate(page);
+      await page.route('**/api/goals**', (route) =>
+        route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify([
+            {
+              id: 'g1',
+              name: 'Drink water',
+              description: 'Stay hydrated',
+              cadence: 'daily',
+              target: { value: 8, unit: 'glasses' },
+              completedQuantity: 4,
+              currentStreak: 3,
+              longestStreak: 5,
+              rewardName: '',
+            },
+          ]),
+        }),
+      );
+
+      await page.goto('/goals');
+      const chip = page
+        .locator('.goal-card__chips .mdc-evolution-chip__text-label')
+        .filter({ hasText: 'streak' })
+        .first();
+      await expect(chip).toBeVisible();
+
+      const computed = await chip.evaluate((el) => {
+        const style = getComputedStyle(el);
+        return {
+          fontFamily: style.fontFamily,
+          fontWeight: parseFloat(style.fontWeight),
+          fontSize: parseFloat(style.fontSize),
+        };
+      });
+
+      expect(computed.fontFamily.split(',')[0].replace(/['"]/g, '').trim()).toBe('Inter');
+      expect(computed.fontSize).toBe(13);
+      expect([500, 600]).toContain(computed.fontWeight);
     });
 
     test('goal/reward card descriptions are Inter 12-13 px / weight 400 (02-TC-V-005)', async ({

@@ -81,7 +81,7 @@ and made green. The /loop process picks the first test with
 | 70 | 02 | TC-V-003 | Stat numbers (e.g., "12", "3 / 6", "Lvl 8", "87%") | Inter 28–32 px, weight 600 or 500 | 2026-05-09T20:14:20Z |
 | 71 | 02 | TC-V-004 | Goal/reward card titles | Inter 14 px, weight 500 | 2026-05-09T20:20:44Z |
 | 72 | 02 | TC-V-005 | Card subtitles / metadata | Inter 12–13 px, weight 400 | 2026-05-09T20:23:44Z |
-| 73 | 02 | TC-V-006 | Streak label "Trophy" / streak count | Inter 13 px, weight 500–600 | null |
+| 73 | 02 | TC-V-006 | Streak label "Trophy" / streak count | Inter 13 px, weight 500–600 | 2026-05-09T20:26:44Z |
 | 74 | 02 | TC-V-007 | Bar-chart axis text | Inter 11 px, weight 400 | null |
 | 75 | 02 | TC-C-001 | Page background | `#F1F5ED` (surface-container-low) | null |
 | 76 | 02 | TC-C-002 | Bar-chart bars | `#006D3F` (primary) | null |
