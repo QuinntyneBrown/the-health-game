@@ -1,3 +1,7 @@
+---
+status: Accepted
+---
+
 # Task 19 — Delete goal with confirmation
 
 **Traces to:** L2-004
