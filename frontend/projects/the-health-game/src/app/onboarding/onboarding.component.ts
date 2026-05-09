@@ -10,6 +10,13 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
       <p class="onboarding__description" data-testid="onboarding-description">
         Build streaks with goals, activity, and personal rewards.
       </p>
+      <button
+        class="onboarding__primary"
+        type="button"
+        data-testid="onboarding-get-started"
+      >
+        Get started
+      </button>
     </main>
   `,
   styles: [
@@ -35,6 +42,19 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
         margin: 0;
       }
 
+      .onboarding__primary {
+        font-family: Inter, Roboto, Arial, sans-serif;
+        font-weight: 500;
+        font-size: 14px;
+        color: #ffffff;
+        background: #006d3f;
+        border: 0;
+        border-radius: 9999px;
+        padding: 12px 24px;
+        cursor: pointer;
+        justify-self: start;
+      }
+
       @media (min-width: 768px) {
         .onboarding__headline {
           font-size: 45px;
@@ -42,6 +62,10 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 
         .onboarding__description {
           font-size: 18px;
+        }
+
+        .onboarding__primary {
+          font-size: 16px;
         }
       }
 

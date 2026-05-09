@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 01-TC-V-001, 01-TC-V-002, 01-TC-V-003, 01-TC-V-004, 01-TC-V-005, 01-TC-V-006, 01-TC-V-007
+// Traces to: 01-TC-V-001, 01-TC-V-002, 01-TC-V-003, 01-TC-V-004, 01-TC-V-005, 01-TC-V-006, 01-TC-V-007, 01-TC-V-008
 // Description: Onboarding headline ("Make health a game") renders with font family Inter weight 500
 //              and the design-spec font-size at each breakpoint (mobile = 28 px, tablet = 45 px,
 //              desktop = 57 px with line-height 1.1). Body description paragraph renders at
@@ -74,6 +74,29 @@ test.describe('Onboarding — headline typography', () => {
       const fontSize = await description.evaluate((el) => getComputedStyle(el).fontSize);
       expect(fontSize).toBe('16px');
     });
+
+    test('"Get started" button typography on mobile (TC-V-008)', async ({ page }) => {
+      await page.goto('/onboarding');
+
+      const button = page.getByTestId('onboarding-get-started');
+      await expect(button).toBeVisible();
+      await expect(button).toHaveText('Get started');
+
+      const computed = await button.evaluate((el) => {
+        const style = getComputedStyle(el);
+        return {
+          fontFamily: style.fontFamily,
+          fontWeight: style.fontWeight,
+          fontSize: style.fontSize,
+          color: style.color,
+        };
+      });
+
+      expect(computed.fontFamily.split(',')[0].replace(/['"]/g, '').trim()).toBe('Inter');
+      expect(computed.fontWeight).toBe('500');
+      expect(computed.fontSize).toBe('14px');
+      expect(computed.color).toBe('rgb(255, 255, 255)');
+    });
   });
 
   test.describe('tablet viewport', () => {
@@ -97,6 +120,22 @@ test.describe('Onboarding — headline typography', () => {
 
       const fontSize = await description.evaluate((el) => getComputedStyle(el).fontSize);
       expect(fontSize).toBe('18px');
+    });
+
+    test('"Get started" button typography on tablet (TC-V-008)', async ({ page }) => {
+      await page.goto('/onboarding');
+
+      const button = page.getByTestId('onboarding-get-started');
+      await expect(button).toBeVisible();
+
+      const computed = await button.evaluate((el) => {
+        const style = getComputedStyle(el);
+        return { fontWeight: style.fontWeight, fontSize: style.fontSize, color: style.color };
+      });
+
+      expect(computed.fontWeight).toBe('500');
+      expect(computed.fontSize).toBe('16px');
+      expect(computed.color).toBe('rgb(255, 255, 255)');
     });
   });
 
