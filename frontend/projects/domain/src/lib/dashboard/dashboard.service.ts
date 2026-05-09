@@ -77,6 +77,9 @@ export class DashboardService implements IDashboardService {
             longestStreak,
             earnedRewards.length,
             pendingRewards.length,
+            goals
+              .filter((g) => g.cadence === 'daily')
+              .reduce((sum, g) => sum + g.completedQuantity, 0),
           ),
           rewards: rewards.map((reward) => this.toRewardItem(reward)),
         };
@@ -90,19 +93,20 @@ export class DashboardService implements IDashboardService {
     longestStreak: number,
     earnedCount: number,
     pendingCount: number,
+    todayActivityTotal: number,
   ): readonly DashboardMetric[] {
     const completionValue =
       activeGoalCount === 0 ? 0 : Math.round((completedGoalCount / activeGoalCount) * 100);
 
     return [
       {
-        ariaLabel: `${completedGoalCount} of ${activeGoalCount} goals complete today`,
+        ariaLabel: `${todayActivityTotal} units of daily activity logged today`,
         icon: 'check_circle',
         label: 'Today',
         progressValue: completionValue,
         supportText: `${completedGoalCount} of ${activeGoalCount} goals complete`,
         tone: 'primary',
-        value: `${completionValue}%`,
+        value: `${todayActivityTotal}`,
       },
       {
         ariaLabel: `${longestStreak} day best streak`,

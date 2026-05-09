@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 02-TC-V-001..007, 02-TC-C-001..010, 02-TC-L-001..010, 02-TC-R-001..006, 02-TC-F-001..002
+// Traces to: 02-TC-V-001..007, 02-TC-C-001..010, 02-TC-L-001..010, 02-TC-R-001..006, 02-TC-F-001..003
 // Description: Dashboard greeting renders with Inter font, weight 500, sizes 22/28/32 px (mobile/tablet/desktop).
 // Section labels render with Inter weight 500 at 18 px.
 import AxeBuilder from '@axe-core/playwright';
@@ -46,6 +46,60 @@ async function authenticate(page: import('@playwright/test').Page): Promise<void
 }
 
 test.describe('Home Dashboard — greeting typography', () => {
+  test('today metric sums activity for daily goals (02-TC-F-003)', async ({ page }) => {
+    await authenticate(page);
+    await page.route('**/api/goals**', (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify([
+          {
+            id: 'g1',
+            name: 'Water',
+            description: '',
+            cadence: 'daily',
+            target: { value: 8, unit: 'glasses' },
+            completedQuantity: 4,
+            currentStreak: 0,
+            longestStreak: 0,
+            rewardName: '',
+          },
+          {
+            id: 'g2',
+            name: 'Walk',
+            description: '',
+            cadence: 'daily',
+            target: { value: 30, unit: 'min' },
+            completedQuantity: 3,
+            currentStreak: 0,
+            longestStreak: 0,
+            rewardName: '',
+          },
+          {
+            id: 'g3',
+            name: 'Workouts',
+            description: '',
+            cadence: 'weekly',
+            target: { value: 4, unit: 'sessions' },
+            completedQuantity: 100,
+            currentStreak: 0,
+            longestStreak: 0,
+            rewardName: '',
+          },
+        ]),
+      }),
+    );
+    await page.goto('/home');
+
+    const todayCard = page.locator('mat-card.metric-card', { hasText: /today/i }).first();
+    await expect(todayCard).toBeVisible();
+
+    const value = await todayCard.locator('.metric-card__value').textContent();
+    // Daily goals contributed 4 + 3 = 7; the weekly goal must be excluded.
+    expect(value).toContain('7');
+    expect(value).not.toContain('100');
+  });
+
   test('greeting includes the user display name (02-TC-F-002)', async ({ page }) => {
     await authenticate(page);
     const greeting = page.locator('.page-header__title').first();
