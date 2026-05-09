@@ -8,7 +8,7 @@
       "y": 0,
       "name": "Design System / Components",
       "width": 1800,
-      "fill": "\\$md-sys-color-surface-container-low",
+      "fill": "#E5E9E2",
       "layout": "vertical",
       "gap": 48,
       "padding": 48,
@@ -50,7 +50,7 @@
           "id": "P9Y0dO",
           "name": "Section / Buttons",
           "width": "fill_container",
-          "fill": "\\$md-sys-color-surface-container-low",
+          "fill": "#E5E9E2",
           "cornerRadius": 16,
           "layout": "vertical",
           "gap": 24,
@@ -223,7 +223,7 @@
           "id": "e9tbxF",
           "name": "Section / FAB & Icon Buttons",
           "width": "fill_container",
-          "fill": "\\$md-sys-color-surface-container-low",
+          "fill": "#E5E9E2",
           "cornerRadius": 16,
           "layout": "vertical",
           "gap": 24,
@@ -509,7 +509,7 @@
           "id": "x4omlt",
           "name": "Section / Text Fields",
           "width": "fill_container",
-          "fill": "\\$md-sys-color-surface-container-low",
+          "fill": "#E5E9E2",
           "cornerRadius": 16,
           "layout": "vertical",
           "gap": 24,
@@ -560,7 +560,7 @@
                         "thickness": {
                           "bottom": 1
                         },
-                        "fill": "\\$md-sys-color-outline-variant"
+                        "fill": "#C2C9BE"
                       },
                       "layout": "vertical",
                       "padding": [
@@ -844,7 +844,7 @@
           "id": "U2WUNP",
           "name": "Section / Cards",
           "width": "fill_container",
-          "fill": "\\$md-sys-color-surface-container-low",
+          "fill": "#E5E9E2",
           "cornerRadius": 16,
           "layout": "vertical",
           "gap": 24,
@@ -999,7 +999,7 @@
           "id": "oUh40",
           "name": "Section / Chips",
           "width": "fill_container",
-          "fill": "\\$md-sys-color-surface-container-low",
+          "fill": "#E5E9E2",
           "cornerRadius": 16,
           "layout": "vertical",
           "gap": 24,
@@ -1208,7 +1208,7 @@
           "id": "SKZOx",
           "name": "Section / App Bars & Navigation",
           "width": "fill_container",
-          "fill": "\\$md-sys-color-surface-container-low",
+          "fill": "#E5E9E2",
           "cornerRadius": 16,
           "layout": "vertical",
           "gap": 24,
@@ -1650,7 +1650,7 @@
           "id": "mwrvY",
           "name": "Section / Snackbars & Banners",
           "width": "fill_container",
-          "fill": "\\$md-sys-color-surface-container-low",
+          "fill": "#E5E9E2",
           "cornerRadius": 16,
           "layout": "vertical",
           "gap": 24,
@@ -1672,7 +1672,7 @@
               "id": "Y0n6fU",
               "name": "Component / Snackbar / Default",
               "reusable": true,
-              "fill": "\\$md-sys-color-surface-container-low",
+              "fill": "#E5E9E2",
               "cornerRadius": 4,
               "effect": {
                 "type": "shadow",
@@ -1743,7 +1743,7 @@
                       "height": 18,
                       "iconFontName": "close",
                       "iconFontFamily": "Material Symbols Rounded",
-                      "fill": "\\$md-sys-color-surface-container-low"
+                      "fill": "#E5E9E2"
                     }
                   ]
                 }
@@ -1753,7 +1753,7 @@
               "type": "frame",
               "id": "TNSf1",
               "name": "Snackbar / Error",
-              "fill": "\\$md-sys-color-surface-container-low",
+              "fill": "#E5E9E2",
               "cornerRadius": 4,
               "effect": {
                 "type": "shadow",
@@ -1779,7 +1779,7 @@
                   "height": 20,
                   "iconFontName": "error",
                   "iconFontFamily": "Material Symbols Rounded",
-                  "fill": "\\$md-sys-color-surface-container-low"
+                  "fill": "#E5E9E2"
                 },
                 {
                   "type": "text",
@@ -1821,13 +1821,13 @@
               "name": "Component / Banner",
               "reusable": true,
               "width": 480,
-              "fill": "\\$md-sys-color-surface-container-low",
+              "fill": "#E5E9E2",
               "stroke": {
                 "align": "inside",
                 "thickness": {
                   "bottom": 1
                 },
-                "fill": "\\$md-sys-color-outline-variant"
+                "fill": "#C2C9BE"
               },
               "gap": 16,
               "padding": 16,
@@ -1839,7 +1839,7 @@
                   "height": 24,
                   "iconFontName": "info",
                   "iconFontFamily": "Material Symbols Rounded",
-                  "fill": "\\$md-sys-color-surface-container-low"
+                  "fill": "#E5E9E2"
                 },
                 {
                   "type": "frame",
@@ -1927,7 +1927,7 @@
           "id": "flW4L",
           "name": "Section / List Items, Switches, Checkboxes",
           "width": "fill_container",
-          "fill": "\\$md-sys-color-surface-container-low",
+          "fill": "#E5E9E2",
           "cornerRadius": 16,
           "layout": "vertical",
           "gap": 24,
@@ -1950,7 +1950,7 @@
               "name": "Component / ListItem / TwoLine",
               "reusable": true,
               "width": 480,
-              "fill": "\\$md-sys-color-surface-container-low",
+              "fill": "#E5E9E2",
               "gap": 16,
               "padding": [
                 8,
@@ -1964,7 +1964,7 @@
                   "name": "liLead",
                   "width": 40,
                   "height": 40,
-                  "fill": "\\$md-sys-color-surface-container-low",
+                  "fill": "#E5E9E2",
                   "cornerRadius": 9999,
                   "justifyContent": "center",
                   "alignItems": "center",
@@ -1976,7 +1976,7 @@
                       "height": 24,
                       "iconFontName": "local_drink",
                       "iconFontFamily": "Material Symbols Rounded",
-                      "fill": "\\$md-sys-color-surface-container-low"
+                      "fill": "#E5E9E2"
                     }
                   ]
                 },
@@ -2025,7 +2025,7 @@
                       "height": 24,
                       "iconFontName": "chevron_right",
                       "iconFontFamily": "Material Symbols Rounded",
-                      "fill": "\\$md-sys-color-surface-container-low"
+                      "fill": "#E5E9E2"
                     }
                   ]
                 }
@@ -2046,7 +2046,7 @@
                   "reusable": true,
                   "width": 52,
                   "height": 32,
-                  "fill": "\\$md-sys-color-surface-container-low",
+                  "fill": "#E5E9E2",
                   "cornerRadius": 9999,
                   "padding": [
                     0,
@@ -2058,7 +2058,7 @@
                     {
                       "type": "ellipse",
                       "id": "S1prT",
-                      "fill": "\\$md-sys-color-surface-container-low",
+                      "fill": "#E5E9E2",
                       "width": 24,
                       "height": 24
                     }
@@ -2071,12 +2071,12 @@
                   "reusable": true,
                   "width": 52,
                   "height": 32,
-                  "fill": "\\$md-sys-color-surface-container-low",
+                  "fill": "#E5E9E2",
                   "cornerRadius": 9999,
                   "stroke": {
                     "align": "inside",
                     "thickness": 2,
-                    "fill": "\\$md-sys-color-outline-variant"
+                    "fill": "#C2C9BE"
                   },
                   "padding": [
                     0,
@@ -2087,7 +2087,7 @@
                     {
                       "type": "ellipse",
                       "id": "VvZVp",
-                      "fill": "\\$md-sys-color-surface-container-low",
+                      "fill": "#E5E9E2",
                       "width": 16,
                       "height": 16
                     }
@@ -2100,7 +2100,7 @@
                   "reusable": true,
                   "width": 18,
                   "height": 18,
-                  "fill": "\\$md-sys-color-surface-container-low",
+                  "fill": "#E5E9E2",
                   "cornerRadius": 2,
                   "justifyContent": "center",
                   "alignItems": "center",
@@ -2112,7 +2112,7 @@
                       "height": 14,
                       "iconFontName": "check",
                       "iconFontFamily": "Material Symbols Rounded",
-                      "fill": "\\$md-sys-color-surface-container-low"
+                      "fill": "#E5E9E2"
                     }
                   ]
                 },
@@ -2127,7 +2127,7 @@
                   "stroke": {
                     "align": "inside",
                     "thickness": 2,
-                    "fill": "\\$md-sys-color-outline-variant"
+                    "fill": "#C2C9BE"
                   }
                 },
                 {
@@ -2141,7 +2141,7 @@
                   "stroke": {
                     "align": "inside",
                     "thickness": 2,
-                    "fill": "\\$md-sys-color-outline-variant"
+                    "fill": "#C2C9BE"
                   },
                   "justifyContent": "center",
                   "alignItems": "center",
@@ -2149,7 +2149,7 @@
                     {
                       "type": "ellipse",
                       "id": "TJyDN",
-                      "fill": "\\$md-sys-color-surface-container-low",
+                      "fill": "#E5E9E2",
                       "width": 10,
                       "height": 10
                     }
@@ -2166,7 +2166,7 @@
                   "stroke": {
                     "align": "inside",
                     "thickness": 2,
-                    "fill": "\\$md-sys-color-outline-variant"
+                    "fill": "#C2C9BE"
                   }
                 }
               ]
@@ -2178,7 +2178,7 @@
           "id": "gLafv",
           "name": "Section / Progress, Badges, Avatars, Segmented",
           "width": "fill_container",
-          "fill": "\\$md-sys-color-surface-container-low",
+          "fill": "#E5E9E2",
           "cornerRadius": 16,
           "layout": "vertical",
           "gap": 24,
@@ -2210,7 +2210,7 @@
                   "reusable": true,
                   "width": 320,
                   "height": 4,
-                  "fill": "\\$md-sys-color-surface-container-low",
+                  "fill": "#E5E9E2",
                   "cornerRadius": 9999,
                   "children": [
                     {
@@ -2218,7 +2218,7 @@
                       "id": "GL0EB",
                       "width": 192,
                       "height": 4,
-                      "fill": "\\$md-sys-color-surface-container-low",
+                      "fill": "#E5E9E2",
                       "cornerRadius": 9999
                     }
                   ]
@@ -2241,7 +2241,7 @@
                   "innerRadius": 0.84,
                   "startAngle": 90,
                   "sweepAngle": -270,
-                  "fill": "\\$md-sys-color-surface-container-low",
+                  "fill": "#E5E9E2",
                   "width": 48,
                   "height": 48
                 },
@@ -2261,7 +2261,7 @@
                       "x": 0,
                       "y": 0,
                       "innerRadius": 0.84,
-                      "fill": "\\$md-sys-color-surface-container-low",
+                      "fill": "#E5E9E2",
                       "width": 80,
                       "height": 80
                     },
@@ -2274,7 +2274,7 @@
                       "innerRadius": 0.84,
                       "startAngle": 90,
                       "sweepAngle": -270,
-                      "fill": "\\$md-sys-color-surface-container-low",
+                      "fill": "#E5E9E2",
                       "width": 80,
                       "height": 80
                     },
@@ -2304,7 +2304,7 @@
                   "id": "K8xxb",
                   "name": "Component / Badge / Dot",
                   "reusable": true,
-                  "fill": "\\$md-sys-color-surface-container-low",
+                  "fill": "#E5E9E2",
                   "width": 6,
                   "height": 6
                 },
@@ -2314,7 +2314,7 @@
                   "name": "Component / Badge / Number",
                   "reusable": true,
                   "height": 16,
-                  "fill": "\\$md-sys-color-surface-container-low",
+                  "fill": "#E5E9E2",
                   "cornerRadius": 8,
                   "padding": [
                     0,
@@ -2341,7 +2341,7 @@
                   "reusable": true,
                   "width": 64,
                   "height": 64,
-                  "fill": "\\$md-sys-color-surface-container-low",
+                  "fill": "#E5E9E2",
                   "cornerRadius": 9999,
                   "justifyContent": "center",
                   "alignItems": "center",
@@ -2364,7 +2364,7 @@
                   "reusable": true,
                   "width": 40,
                   "height": 40,
-                  "fill": "\\$md-sys-color-surface-container-low",
+                  "fill": "#E5E9E2",
                   "cornerRadius": 9999,
                   "justifyContent": "center",
                   "alignItems": "center",
@@ -2387,7 +2387,7 @@
                   "reusable": true,
                   "width": 24,
                   "height": 24,
-                  "fill": "\\$md-sys-color-surface-container-low",
+                  "fill": "#E5E9E2",
                   "cornerRadius": 9999,
                   "justifyContent": "center",
                   "alignItems": "center",
@@ -2415,7 +2415,7 @@
               "stroke": {
                 "align": "inside",
                 "thickness": 1,
-                "fill": "\\$md-sys-color-outline-variant"
+                "fill": "#C2C9BE"
               },
               "children": [
                 {
@@ -2423,7 +2423,7 @@
                   "id": "G4UI7x",
                   "name": "seg1",
                   "height": 40,
-                  "fill": "\\$md-sys-color-surface-container-low",
+                  "fill": "#E5E9E2",
                   "cornerRadius": [
                     9999,
                     0,
@@ -2447,7 +2447,7 @@
                       "height": 18,
                       "iconFontName": "check",
                       "iconFontFamily": "Material Symbols Rounded",
-                      "fill": "\\$md-sys-color-surface-container-low"
+                      "fill": "#E5E9E2"
                     },
                     {
                       "type": "text",
@@ -2521,7 +2521,7 @@
           "id": "CkAS8",
           "name": "Section / Dialogs & Bottom Sheets",
           "width": "fill_container",
-          "fill": "\\$md-sys-color-surface-container-low",
+          "fill": "#E5E9E2",
           "cornerRadius": 16,
           "layout": "vertical",
           "gap": 24,
@@ -2544,7 +2544,7 @@
               "name": "Component / Dialog / Basic",
               "reusable": true,
               "width": 312,
-              "fill": "\\$md-sys-color-surface-container-low",
+              "fill": "#E5E9E2",
               "cornerRadius": 28,
               "effect": {
                 "type": "shadow",
@@ -2574,7 +2574,7 @@
                       "height": 24,
                       "iconFontName": "delete",
                       "iconFontFamily": "Material Symbols Rounded",
-                      "fill": "\\$md-sys-color-surface-container-low"
+                      "fill": "#E5E9E2"
                     }
                   ]
                 },
@@ -2666,7 +2666,7 @@
               "name": "Component / BottomSheet",
               "reusable": true,
               "width": 412,
-              "fill": "\\$md-sys-color-surface-container-low",
+              "fill": "#E5E9E2",
               "cornerRadius": [
                 28,
                 28,
@@ -2701,7 +2701,7 @@
                       "opacity": 0.4,
                       "width": 32,
                       "height": 4,
-                      "fill": "\\$md-sys-color-surface-container-low",
+                      "fill": "#E5E9E2",
                       "cornerRadius": 9999
                     }
                   ]
@@ -2727,7 +2727,7 @@
           "name": "Component / GoalCard",
           "reusable": true,
           "width": 380,
-          "fill": "\\$md-sys-color-surface-container-low",
+          "fill": "#E5E9E2",
           "cornerRadius": 16,
           "effect": {
             "type": "shadow",
@@ -2749,7 +2749,7 @@
               "name": "gcIcon",
               "width": 48,
               "height": 48,
-              "fill": "\\$md-sys-color-surface-container-low",
+              "fill": "#E5E9E2",
               "cornerRadius": 9999,
               "justifyContent": "center",
               "alignItems": "center",
@@ -2761,7 +2761,7 @@
                   "height": 24,
                   "iconFontName": "local_drink",
                   "iconFontFamily": "Material Symbols Rounded",
-                  "fill": "\\$md-sys-color-surface-container-low"
+                  "fill": "#E5E9E2"
                 }
               ]
             },
@@ -2795,7 +2795,7 @@
                       "id": "CovJ9",
                       "name": "gcCadence",
                       "height": 20,
-                      "fill": "\\$md-sys-color-surface-container-low",
+                      "fill": "#E5E9E2",
                       "cornerRadius": 9999,
                       "padding": [
                         0,
@@ -2831,7 +2831,7 @@
                       "name": "gcProg",
                       "width": "fill_container",
                       "height": 6,
-                      "fill": "\\$md-sys-color-surface-container-low",
+                      "fill": "#E5E9E2",
                       "cornerRadius": 9999,
                       "children": [
                         {
@@ -2839,7 +2839,7 @@
                           "id": "B7EiO9",
                           "width": 228,
                           "height": 6,
-                          "fill": "\\$md-sys-color-surface-container-low",
+                          "fill": "#E5E9E2",
                           "cornerRadius": 9999
                         }
                       ]
@@ -2879,7 +2879,7 @@
                       "height": 18,
                       "iconFontName": "local_fire_department",
                       "iconFontFamily": "Material Symbols Rounded",
-                      "fill": "\\$md-sys-color-surface-container-low"
+                      "fill": "#E5E9E2"
                     },
                     {
                       "type": "text",
@@ -2914,7 +2914,7 @@
       "y": 0,
       "name": "Design Tokens",
       "width": 1400,
-      "fill": "\\$md-sys-color-surface-container-low",
+      "fill": "#E5E9E2",
       "layout": "vertical",
       "gap": 32,
       "padding": 48,
@@ -2963,7 +2963,7 @@
           "stroke": {
             "align": "inside",
             "thickness": 1,
-            "fill": "\\$md-sys-color-outline-variant"
+            "fill": "#C2C9BE"
           },
           "layout": "vertical",
           "children": [
@@ -2980,7 +2980,7 @@
                   "name": "c1a",
                   "width": "fill_container",
                   "height": "fill_container",
-                  "fill": "\\$md-sys-color-surface-container-low",
+                  "fill": "#E5E9E2",
                   "layout": "vertical",
                   "gap": 4,
                   "padding": 16,
@@ -3012,12 +3012,12 @@
                   "name": "c1b",
                   "width": "fill_container",
                   "height": "fill_container",
-                  "fill": "\\$md-sys-color-surface-container-low",
+                  "fill": "#E5E9E2",
                   "stroke": {
                     "thickness": {
                       "left": 1
                     },
-                    "fill": "\\$md-sys-color-outline-variant"
+                    "fill": "#C2C9BE"
                   },
                   "layout": "vertical",
                   "gap": 4,
@@ -3050,7 +3050,7 @@
                   "name": "c1c",
                   "width": "fill_container",
                   "height": "fill_container",
-                  "fill": "\\$md-sys-color-surface-container-low",
+                  "fill": "#E5E9E2",
                   "layout": "vertical",
                   "gap": 4,
                   "padding": 16,
@@ -3082,7 +3082,7 @@
                   "name": "c1d",
                   "width": "fill_container",
                   "height": "fill_container",
-                  "fill": "\\$md-sys-color-surface-container-low",
+                  "fill": "#E5E9E2",
                   "layout": "vertical",
                   "gap": 4,
                   "padding": 16,
@@ -3123,7 +3123,7 @@
                   "name": "c2a",
                   "width": "fill_container",
                   "height": "fill_container",
-                  "fill": "\\$md-sys-color-surface-container-low",
+                  "fill": "#E5E9E2",
                   "layout": "vertical",
                   "gap": 4,
                   "padding": 16,
@@ -3155,7 +3155,7 @@
                   "name": "c2b",
                   "width": "fill_container",
                   "height": "fill_container",
-                  "fill": "\\$md-sys-color-surface-container-low",
+                  "fill": "#E5E9E2",
                   "layout": "vertical",
                   "gap": 4,
                   "padding": 16,
@@ -3187,7 +3187,7 @@
                   "name": "c2c",
                   "width": "fill_container",
                   "height": "fill_container",
-                  "fill": "\\$md-sys-color-surface-container-low",
+                  "fill": "#E5E9E2",
                   "layout": "vertical",
                   "gap": 4,
                   "padding": 16,
@@ -3219,7 +3219,7 @@
                   "name": "c2d",
                   "width": "fill_container",
                   "height": "fill_container",
-                  "fill": "\\$md-sys-color-surface-container-low",
+                  "fill": "#E5E9E2",
                   "layout": "vertical",
                   "gap": 4,
                   "padding": 16,
@@ -3260,7 +3260,7 @@
                   "name": "c3a",
                   "width": "fill_container",
                   "height": "fill_container",
-                  "fill": "\\$md-sys-color-surface-container-low",
+                  "fill": "#E5E9E2",
                   "layout": "vertical",
                   "gap": 4,
                   "padding": 16,
@@ -3292,7 +3292,7 @@
                   "name": "c3b",
                   "width": "fill_container",
                   "height": "fill_container",
-                  "fill": "\\$md-sys-color-surface-container-low",
+                  "fill": "#E5E9E2",
                   "layout": "vertical",
                   "gap": 4,
                   "padding": 16,
@@ -3324,7 +3324,7 @@
                   "name": "c3c",
                   "width": "fill_container",
                   "height": "fill_container",
-                  "fill": "\\$md-sys-color-surface-container-low",
+                  "fill": "#E5E9E2",
                   "layout": "vertical",
                   "gap": 4,
                   "padding": 16,
@@ -3356,7 +3356,7 @@
                   "name": "c3d",
                   "width": "fill_container",
                   "height": "fill_container",
-                  "fill": "\\$md-sys-color-surface-container-low",
+                  "fill": "#E5E9E2",
                   "layout": "vertical",
                   "gap": 4,
                   "padding": 16,
@@ -3397,7 +3397,7 @@
                   "name": "c4a",
                   "width": "fill_container",
                   "height": "fill_container",
-                  "fill": "\\$md-sys-color-surface-container-low",
+                  "fill": "#E5E9E2",
                   "layout": "vertical",
                   "gap": 4,
                   "padding": 16,
@@ -3420,7 +3420,7 @@
                   "name": "c4b",
                   "width": "fill_container",
                   "height": "fill_container",
-                  "fill": "\\$md-sys-color-surface-container-low",
+                  "fill": "#E5E9E2",
                   "layout": "vertical",
                   "gap": 4,
                   "padding": 16,
@@ -3443,7 +3443,7 @@
                   "name": "c4c",
                   "width": "fill_container",
                   "height": "fill_container",
-                  "fill": "\\$md-sys-color-surface-container-low",
+                  "fill": "#E5E9E2",
                   "layout": "vertical",
                   "gap": 4,
                   "padding": 16,
@@ -3466,7 +3466,7 @@
                   "name": "c4d",
                   "width": "fill_container",
                   "height": "fill_container",
-                  "fill": "\\$md-sys-color-surface-container-low",
+                  "fill": "#E5E9E2",
                   "layout": "vertical",
                   "gap": 4,
                   "padding": 16,
@@ -3504,7 +3504,7 @@
           "id": "I5FRAK",
           "name": "typeGrid",
           "width": "fill_container",
-          "fill": "\\$md-sys-color-surface-container-low",
+          "fill": "#E5E9E2",
           "cornerRadius": 12,
           "layout": "vertical",
           "gap": 12,
@@ -3636,7 +3636,7 @@
                   "id": "OeV1B",
                   "width": 80,
                   "height": 80,
-                  "fill": "\\$md-sys-color-surface-container-low"
+                  "fill": "#E5E9E2"
                 },
                 {
                   "type": "text",
@@ -3662,7 +3662,7 @@
                   "id": "ZYcy7",
                   "width": 80,
                   "height": 80,
-                  "fill": "\\$md-sys-color-surface-container-low",
+                  "fill": "#E5E9E2",
                   "cornerRadius": 4
                 },
                 {
@@ -3689,7 +3689,7 @@
                   "id": "qamek",
                   "width": 80,
                   "height": 80,
-                  "fill": "\\$md-sys-color-surface-container-low",
+                  "fill": "#E5E9E2",
                   "cornerRadius": 8
                 },
                 {
@@ -3716,7 +3716,7 @@
                   "id": "tyyxL",
                   "width": 80,
                   "height": 80,
-                  "fill": "\\$md-sys-color-surface-container-low",
+                  "fill": "#E5E9E2",
                   "cornerRadius": 12
                 },
                 {
@@ -3743,7 +3743,7 @@
                   "id": "A0s7q",
                   "width": 80,
                   "height": 80,
-                  "fill": "\\$md-sys-color-surface-container-low",
+                  "fill": "#E5E9E2",
                   "cornerRadius": 16
                 },
                 {
@@ -3770,7 +3770,7 @@
                   "id": "EyetC",
                   "width": 80,
                   "height": 80,
-                  "fill": "\\$md-sys-color-surface-container-low",
+                  "fill": "#E5E9E2",
                   "cornerRadius": 28
                 },
                 {
@@ -3797,7 +3797,7 @@
                   "id": "PHNzr",
                   "width": 80,
                   "height": 80,
-                  "fill": "\\$md-sys-color-surface-container-low",
+                  "fill": "#E5E9E2",
                   "cornerRadius": 9999
                 },
                 {
@@ -3830,7 +3830,7 @@
           "id": "XzKM1",
           "name": "elevRow",
           "width": "fill_container",
-          "fill": "\\$md-sys-color-surface-container-low",
+          "fill": "#E5E9E2",
           "cornerRadius": 12,
           "gap": 24,
           "padding": 24,
@@ -3849,7 +3849,7 @@
                   "id": "Eu2ix",
                   "width": 80,
                   "height": 80,
-                  "fill": "\\$md-sys-color-surface-container-low",
+                  "fill": "#E5E9E2",
                   "cornerRadius": 12
                 },
                 {
@@ -3876,7 +3876,7 @@
                   "id": "QAL87",
                   "width": 80,
                   "height": 80,
-                  "fill": "\\$md-sys-color-surface-container-low",
+                  "fill": "#E5E9E2",
                   "cornerRadius": 12,
                   "effect": {
                     "type": "shadow",
@@ -3913,7 +3913,7 @@
                   "id": "L4FEF",
                   "width": 80,
                   "height": 80,
-                  "fill": "\\$md-sys-color-surface-container-low",
+                  "fill": "#E5E9E2",
                   "cornerRadius": 12,
                   "effect": {
                     "type": "shadow",
@@ -3950,7 +3950,7 @@
                   "id": "YYQsC",
                   "width": 80,
                   "height": 80,
-                  "fill": "\\$md-sys-color-surface-container-low",
+                  "fill": "#E5E9E2",
                   "cornerRadius": 12,
                   "effect": {
                     "type": "shadow",
@@ -3987,7 +3987,7 @@
                   "id": "qVLab",
                   "width": 80,
                   "height": 80,
-                  "fill": "\\$md-sys-color-surface-container-low",
+                  "fill": "#E5E9E2",
                   "cornerRadius": 12,
                   "effect": {
                     "type": "shadow",
@@ -4024,7 +4024,7 @@
                   "id": "M9bXuj",
                   "width": 80,
                   "height": 80,
-                  "fill": "\\$md-sys-color-surface-container-low",
+                  "fill": "#E5E9E2",
                   "cornerRadius": 12,
                   "effect": {
                     "type": "shadow",
@@ -4059,7 +4059,7 @@
       "y": 3956,
       "name": "Screens / Onboarding",
       "width": 2900,
-      "fill": "\\$md-sys-color-surface-container-low",
+      "fill": "#E5E9E2",
       "layout": "vertical",
       "gap": 32,
       "padding": 48,
@@ -4145,7 +4145,7 @@
                           "height": 14,
                           "iconFontName": "network_cell",
                           "iconFontFamily": "Material Symbols Rounded",
-                          "fill": "\\$md-sys-color-surface-container-low"
+                          "fill": "#E5E9E2"
                         },
                         {
                           "type": "icon_font",
@@ -4154,7 +4154,7 @@
                           "height": 14,
                           "iconFontName": "wifi",
                           "iconFontFamily": "Material Symbols Rounded",
-                          "fill": "\\$md-sys-color-surface-container-low"
+                          "fill": "#E5E9E2"
                         },
                         {
                           "type": "icon_font",
@@ -4163,7 +4163,7 @@
                           "height": 14,
                           "iconFontName": "battery_full",
                           "iconFontFamily": "Material Symbols Rounded",
-                          "fill": "\\$md-sys-color-surface-container-low"
+                          "fill": "#E5E9E2"
                         }
                       ]
                     }
@@ -4256,14 +4256,14 @@
                         {
                           "type": "ellipse",
                           "id": "D7jBs5",
-                          "fill": "\\$md-sys-color-surface-container-low",
+                          "fill": "#E5E9E2",
                           "width": 8,
                           "height": 8
                         },
                         {
                           "type": "ellipse",
                           "id": "A8Daq",
-                          "fill": "\\$md-sys-color-surface-container-low",
+                          "fill": "#E5E9E2",
                           "width": 8,
                           "height": 8
                         }
@@ -4385,7 +4385,7 @@
                           "height": 14,
                           "iconFontName": "wifi",
                           "iconFontFamily": "Material Symbols Rounded",
-                          "fill": "\\$md-sys-color-surface-container-low"
+                          "fill": "#E5E9E2"
                         },
                         {
                           "type": "icon_font",
@@ -4394,7 +4394,7 @@
                           "height": 14,
                           "iconFontName": "battery_full",
                           "iconFontFamily": "Material Symbols Rounded",
-                          "fill": "\\$md-sys-color-surface-container-low"
+                          "fill": "#E5E9E2"
                         }
                       ]
                     }
@@ -4490,14 +4490,14 @@
                         {
                           "type": "ellipse",
                           "id": "Hh1Gq",
-                          "fill": "\\$md-sys-color-surface-container-low",
+                          "fill": "#E5E9E2",
                           "width": 10,
                           "height": 10
                         },
                         {
                           "type": "ellipse",
                           "id": "llDuC",
-                          "fill": "\\$md-sys-color-surface-container-low",
+                          "fill": "#E5E9E2",
                           "width": 10,
                           "height": 10
                         }
@@ -4549,7 +4549,7 @@
                           "stroke": {
                             "align": "inside",
                             "thickness": 1,
-                            "fill": "\\$md-sys-color-outline-variant"
+                            "fill": "#C2C9BE"
                           },
                           "justifyContent": "center",
                           "alignItems": "center",
@@ -4583,7 +4583,7 @@
               "stroke": {
                 "align": "inside",
                 "thickness": 1,
-                "fill": "\\$md-sys-color-outline-variant"
+                "fill": "#C2C9BE"
               },
               "children": [
                 {
@@ -4705,7 +4705,7 @@
                           "stroke": {
                             "align": "inside",
                             "thickness": 1,
-                            "fill": "\\$md-sys-color-outline-variant"
+                            "fill": "#C2C9BE"
                           },
                           "justifyContent": "center",
                           "alignItems": "center",
@@ -4760,7 +4760,7 @@
       "y": 5296,
       "name": "Screens / Home Dashboard",
       "width": 2900,
-      "fill": "\\$md-sys-color-surface-container-low",
+      "fill": "#E5E9E2",
       "layout": "vertical",
       "gap": 32,
       "padding": 48,
@@ -4846,7 +4846,7 @@
                           "height": 14,
                           "iconFontName": "network_cell",
                           "iconFontFamily": "Material Symbols Rounded",
-                          "fill": "\\$md-sys-color-surface-container-low"
+                          "fill": "#E5E9E2"
                         },
                         {
                           "type": "icon_font",
@@ -4855,7 +4855,7 @@
                           "height": 14,
                           "iconFontName": "wifi",
                           "iconFontFamily": "Material Symbols Rounded",
-                          "fill": "\\$md-sys-color-surface-container-low"
+                          "fill": "#E5E9E2"
                         },
                         {
                           "type": "icon_font",
@@ -4864,7 +4864,7 @@
                           "height": 14,
                           "iconFontName": "battery_full",
                           "iconFontFamily": "Material Symbols Rounded",
-                          "fill": "\\$md-sys-color-surface-container-low"
+                          "fill": "#E5E9E2"
                         }
                       ]
                     }
@@ -4944,7 +4944,7 @@
                               "height": 24,
                               "iconFontName": "notifications",
                               "iconFontFamily": "Material Symbols Rounded",
-                              "fill": "\\$md-sys-color-surface-container-low"
+                              "fill": "#E5E9E2"
                             }
                           ]
                         },
@@ -4965,7 +4965,7 @@
                               "height": 24,
                               "iconFontName": "settings",
                               "iconFontFamily": "Material Symbols Rounded",
-                              "fill": "\\$md-sys-color-surface-container-low"
+                              "fill": "#E5E9E2"
                             }
                           ]
                         }
@@ -5153,7 +5153,7 @@
                                   "height": 22,
                                   "iconFontName": "local_drink",
                                   "iconFontFamily": "Material Symbols Rounded",
-                                  "fill": "\\$md-sys-color-surface-container-low"
+                                  "fill": "#E5E9E2"
                                 }
                               ]
                             },
@@ -5199,7 +5199,7 @@
                                   "name": "g1pr",
                                   "width": "fill_container",
                                   "height": 6,
-                                  "fill": "\\$md-sys-color-surface-container-low",
+                                  "fill": "#E5E9E2",
                                   "cornerRadius": 9999,
                                   "children": [
                                     {
@@ -5232,7 +5232,7 @@
                                   "height": 20,
                                   "iconFontName": "add",
                                   "iconFontFamily": "Material Symbols Rounded",
-                                  "fill": "\\$md-sys-color-surface-container-low"
+                                  "fill": "#E5E9E2"
                                 }
                               ]
                             }
@@ -5267,7 +5267,7 @@
                                   "height": 22,
                                   "iconFontName": "directions_walk",
                                   "iconFontFamily": "Material Symbols Rounded",
-                                  "fill": "\\$md-sys-color-surface-container-low"
+                                  "fill": "#E5E9E2"
                                 }
                               ]
                             },
@@ -5313,7 +5313,7 @@
                                   "name": "g2pr",
                                   "width": "fill_container",
                                   "height": 6,
-                                  "fill": "\\$md-sys-color-surface-container-low",
+                                  "fill": "#E5E9E2",
                                   "cornerRadius": 9999,
                                   "children": [
                                     {
@@ -5346,7 +5346,7 @@
                                   "height": 20,
                                   "iconFontName": "add",
                                   "iconFontFamily": "Material Symbols Rounded",
-                                  "fill": "\\$md-sys-color-surface-container-low"
+                                  "fill": "#E5E9E2"
                                 }
                               ]
                             }
@@ -5381,7 +5381,7 @@
                                   "height": 22,
                                   "iconFontName": "check",
                                   "iconFontFamily": "Material Symbols Rounded",
-                                  "fill": "\\$md-sys-color-surface-container-low"
+                                  "fill": "#E5E9E2"
                                 }
                               ]
                             },
@@ -5450,7 +5450,7 @@
                       "id": "mQSTC",
                       "name": "hmWeek",
                       "width": "fill_container",
-                      "fill": "\\$md-sys-color-surface-container-low",
+                      "fill": "#E5E9E2",
                       "cornerRadius": 16,
                       "gap": 6,
                       "padding": 12,
@@ -5694,7 +5694,7 @@
                               "height": 24,
                               "iconFontName": "add",
                               "iconFontFamily": "Material Symbols Rounded",
-                              "fill": "\\$md-sys-color-surface-container-low"
+                              "fill": "#E5E9E2"
                             },
                             {
                               "type": "text",
@@ -5717,7 +5717,7 @@
                   "name": "hmNav",
                   "width": "fill_container",
                   "height": 80,
-                  "fill": "\\$md-sys-color-surface-container-low",
+                  "fill": "#E5E9E2",
                   "padding": [
                     12,
                     8,
@@ -5752,7 +5752,7 @@
                               "height": 24,
                               "iconFontName": "home",
                               "iconFontFamily": "Material Symbols Rounded",
-                              "fill": "\\$md-sys-color-surface-container-low"
+                              "fill": "#E5E9E2"
                             }
                           ]
                         },
@@ -5792,7 +5792,7 @@
                               "height": 24,
                               "iconFontName": "flag",
                               "iconFontFamily": "Material Symbols Rounded",
-                              "fill": "\\$md-sys-color-surface-container-low"
+                              "fill": "#E5E9E2"
                             }
                           ]
                         },
@@ -5832,7 +5832,7 @@
                               "height": 24,
                               "iconFontName": "trophy",
                               "iconFontFamily": "Material Symbols Rounded",
-                              "fill": "\\$md-sys-color-surface-container-low"
+                              "fill": "#E5E9E2"
                             }
                           ]
                         },
@@ -5872,7 +5872,7 @@
                               "height": 24,
                               "iconFontName": "bar_chart",
                               "iconFontFamily": "Material Symbols Rounded",
-                              "fill": "\\$md-sys-color-surface-container-low"
+                              "fill": "#E5E9E2"
                             }
                           ]
                         },
@@ -5912,7 +5912,7 @@
                               "height": 24,
                               "iconFontName": "person",
                               "iconFontFamily": "Material Symbols Rounded",
-                              "fill": "\\$md-sys-color-surface-container-low"
+                              "fill": "#E5E9E2"
                             }
                           ]
                         },
@@ -6074,7 +6074,7 @@
                               "height": 24,
                               "iconFontName": "flag",
                               "iconFontFamily": "Material Symbols Rounded",
-                              "fill": "\\$md-sys-color-surface-container-low"
+                              "fill": "#E5E9E2"
                             }
                           ]
                         },
@@ -6118,7 +6118,7 @@
                               "height": 24,
                               "iconFontName": "trophy",
                               "iconFontFamily": "Material Symbols Rounded",
-                              "fill": "\\$md-sys-color-surface-container-low"
+                              "fill": "#E5E9E2"
                             }
                           ]
                         },
@@ -6162,7 +6162,7 @@
                               "height": 24,
                               "iconFontName": "bar_chart",
                               "iconFontFamily": "Material Symbols Rounded",
-                              "fill": "\\$md-sys-color-surface-container-low"
+                              "fill": "#E5E9E2"
                             }
                           ]
                         },
@@ -6206,7 +6206,7 @@
                               "height": 24,
                               "iconFontName": "person",
                               "iconFontFamily": "Material Symbols Rounded",
-                              "fill": "\\$md-sys-color-surface-container-low"
+                              "fill": "#E5E9E2"
                             }
                           ]
                         },
@@ -6278,7 +6278,7 @@
                                   "height": 24,
                                   "iconFontName": "notifications",
                                   "iconFontFamily": "Material Symbols Rounded",
-                                  "fill": "\\$md-sys-color-surface-container-low"
+                                  "fill": "#E5E9E2"
                                 }
                               ]
                             },
@@ -6288,7 +6288,7 @@
                               "name": "htBrAv",
                               "width": 40,
                               "height": 40,
-                              "fill": "\\$md-sys-color-surface-container-low",
+                              "fill": "#E5E9E2",
                               "cornerRadius": 9999,
                               "justifyContent": "center",
                               "alignItems": "center",
@@ -6465,7 +6465,7 @@
                                   "id": "W4Cxs",
                                   "name": "htG1",
                                   "width": "fill_container",
-                                  "fill": "\\$md-sys-color-surface-container-low",
+                                  "fill": "#E5E9E2",
                                   "cornerRadius": 12,
                                   "gap": 12,
                                   "padding": 12,
@@ -6535,7 +6535,7 @@
                                           "name": "htG1P",
                                           "width": "fill_container",
                                           "height": 6,
-                                          "fill": "\\$md-sys-color-surface-container-low",
+                                          "fill": "#E5E9E2",
                                           "cornerRadius": 9999,
                                           "children": [
                                             {
@@ -6557,7 +6557,7 @@
                                   "id": "MhlQQ",
                                   "name": "htG2",
                                   "width": "fill_container",
-                                  "fill": "\\$md-sys-color-surface-container-low",
+                                  "fill": "#E5E9E2",
                                   "cornerRadius": 12,
                                   "gap": 12,
                                   "padding": 12,
@@ -6627,7 +6627,7 @@
                                           "name": "htG2P",
                                           "width": "fill_container",
                                           "height": 6,
-                                          "fill": "\\$md-sys-color-surface-container-low",
+                                          "fill": "#E5E9E2",
                                           "cornerRadius": 9999,
                                           "children": [
                                             {
@@ -7027,7 +7027,7 @@
               "stroke": {
                 "align": "inside",
                 "thickness": 1,
-                "fill": "\\$md-sys-color-outline-variant"
+                "fill": "#C2C9BE"
               },
               "children": [
                 {
@@ -7163,7 +7163,7 @@
                           "height": 24,
                           "iconFontName": "flag",
                           "iconFontFamily": "Material Symbols Rounded",
-                          "fill": "\\$md-sys-color-surface-container-low"
+                          "fill": "#E5E9E2"
                         },
                         {
                           "type": "text",
@@ -7186,7 +7186,7 @@
                           "id": "q6Sh8",
                           "name": "hdNav2Bg",
                           "height": 20,
-                          "fill": "\\$md-sys-color-surface-container-low",
+                          "fill": "#E5E9E2",
                           "cornerRadius": 9999,
                           "padding": [
                             0,
@@ -7229,7 +7229,7 @@
                           "height": 24,
                           "iconFontName": "trophy",
                           "iconFontFamily": "Material Symbols Rounded",
-                          "fill": "\\$md-sys-color-surface-container-low"
+                          "fill": "#E5E9E2"
                         },
                         {
                           "type": "text",
@@ -7263,7 +7263,7 @@
                           "height": 24,
                           "iconFontName": "bar_chart",
                           "iconFontFamily": "Material Symbols Rounded",
-                          "fill": "\\$md-sys-color-surface-container-low"
+                          "fill": "#E5E9E2"
                         },
                         {
                           "type": "text",
@@ -7316,7 +7316,7 @@
                           "height": 24,
                           "iconFontName": "person",
                           "iconFontFamily": "Material Symbols Rounded",
-                          "fill": "\\$md-sys-color-surface-container-low"
+                          "fill": "#E5E9E2"
                         },
                         {
                           "type": "text",
@@ -7350,7 +7350,7 @@
                           "height": 24,
                           "iconFontName": "settings",
                           "iconFontFamily": "Material Symbols Rounded",
-                          "fill": "\\$md-sys-color-surface-container-low"
+                          "fill": "#E5E9E2"
                         },
                         {
                           "type": "text",
@@ -7374,7 +7374,7 @@
                       "id": "qzgcq",
                       "name": "hdProf",
                       "width": "fill_container",
-                      "fill": "\\$md-sys-color-surface-container-low",
+                      "fill": "#E5E9E2",
                       "cornerRadius": 16,
                       "gap": 12,
                       "padding": 12,
@@ -7386,7 +7386,7 @@
                           "name": "hdProfAv",
                           "width": 40,
                           "height": 40,
-                          "fill": "\\$md-sys-color-surface-container-low",
+                          "fill": "#E5E9E2",
                           "cornerRadius": 9999,
                           "justifyContent": "center",
                           "alignItems": "center",
@@ -7487,7 +7487,7 @@
                               "name": "hdSearch",
                               "width": 280,
                               "height": 40,
-                              "fill": "\\$md-sys-color-surface-container-low",
+                              "fill": "#E5E9E2",
                               "cornerRadius": 9999,
                               "gap": 12,
                               "padding": [
@@ -7503,7 +7503,7 @@
                                   "height": 20,
                                   "iconFontName": "search",
                                   "iconFontFamily": "Material Symbols Rounded",
-                                  "fill": "\\$md-sys-color-surface-container-low"
+                                  "fill": "#E5E9E2"
                                 },
                                 {
                                   "type": "text",
@@ -7534,7 +7534,7 @@
                                   "height": 24,
                                   "iconFontName": "notifications",
                                   "iconFontFamily": "Material Symbols Rounded",
-                                  "fill": "\\$md-sys-color-surface-container-low"
+                                  "fill": "#E5E9E2"
                                 }
                               ]
                             },
@@ -7821,7 +7821,7 @@
                                           "height": 18,
                                           "iconFontName": "chevron_right",
                                           "iconFontFamily": "Material Symbols Rounded",
-                                          "fill": "\\$md-sys-color-surface-container-low"
+                                          "fill": "#E5E9E2"
                                         }
                                       ]
                                     }
@@ -7840,7 +7840,7 @@
                                       "id": "N2PMb",
                                       "name": "hdgr1",
                                       "width": "fill_container",
-                                      "fill": "\\$md-sys-color-surface-container-low",
+                                      "fill": "#E5E9E2",
                                       "cornerRadius": 12,
                                       "gap": 16,
                                       "padding": 16,
@@ -7898,7 +7898,7 @@
                                                   "id": "eqm8N",
                                                   "name": "hdgr1Cad",
                                                   "height": 20,
-                                                  "fill": "\\$md-sys-color-surface-container-low",
+                                                  "fill": "#E5E9E2",
                                                   "cornerRadius": 9999,
                                                   "padding": [
                                                     0,
@@ -7942,7 +7942,7 @@
                                               "name": "hdgr1P",
                                               "width": "fill_container",
                                               "height": 6,
-                                              "fill": "\\$md-sys-color-surface-container-low",
+                                              "fill": "#E5E9E2",
                                               "cornerRadius": 9999,
                                               "children": [
                                                 {
@@ -7971,7 +7971,7 @@
                                               "height": 18,
                                               "iconFontName": "local_fire_department",
                                               "iconFontFamily": "Material Symbols Rounded",
-                                              "fill": "\\$md-sys-color-surface-container-low"
+                                              "fill": "#E5E9E2"
                                             },
                                             {
                                               "type": "text",
@@ -7989,7 +7989,7 @@
                                           "id": "TEyuk",
                                           "name": "hdgr1Btn",
                                           "height": 36,
-                                          "fill": "\\$md-sys-color-surface-container-low",
+                                          "fill": "#E5E9E2",
                                           "cornerRadius": 9999,
                                           "gap": 8,
                                           "padding": [
@@ -8007,7 +8007,7 @@
                                               "height": 18,
                                               "iconFontName": "add",
                                               "iconFontFamily": "Material Symbols Rounded",
-                                              "fill": "\\$md-sys-color-surface-container-low"
+                                              "fill": "#E5E9E2"
                                             },
                                             {
                                               "type": "text",
@@ -8027,7 +8027,7 @@
                                       "id": "XfALW",
                                       "name": "hdgr2",
                                       "width": "fill_container",
-                                      "fill": "\\$md-sys-color-surface-container-low",
+                                      "fill": "#E5E9E2",
                                       "cornerRadius": 12,
                                       "gap": 16,
                                       "padding": 16,
@@ -8085,7 +8085,7 @@
                                                   "id": "Kk3V1",
                                                   "name": "hdgr2Cad",
                                                   "height": 20,
-                                                  "fill": "\\$md-sys-color-surface-container-low",
+                                                  "fill": "#E5E9E2",
                                                   "cornerRadius": 9999,
                                                   "padding": [
                                                     0,
@@ -8129,7 +8129,7 @@
                                               "name": "hdgr2P",
                                               "width": "fill_container",
                                               "height": 6,
-                                              "fill": "\\$md-sys-color-surface-container-low",
+                                              "fill": "#E5E9E2",
                                               "cornerRadius": 9999,
                                               "children": [
                                                 {
@@ -8158,7 +8158,7 @@
                                               "height": 18,
                                               "iconFontName": "local_fire_department",
                                               "iconFontFamily": "Material Symbols Rounded",
-                                              "fill": "\\$md-sys-color-surface-container-low"
+                                              "fill": "#E5E9E2"
                                             },
                                             {
                                               "type": "text",
@@ -8632,7 +8632,7 @@
       "y": 6636,
       "name": "Screens / Goals",
       "width": 2900,
-      "fill": "\\$md-sys-color-surface-container-low",
+      "fill": "#E5E9E2",
       "layout": "vertical",
       "gap": 32,
       "padding": 48,
@@ -8718,7 +8718,7 @@
                           "height": 14,
                           "iconFontName": "wifi",
                           "iconFontFamily": "Material Symbols Rounded",
-                          "fill": "\\$md-sys-color-surface-container-low"
+                          "fill": "#E5E9E2"
                         },
                         {
                           "type": "icon_font",
@@ -8727,7 +8727,7 @@
                           "height": 14,
                           "iconFontName": "battery_full",
                           "iconFontFamily": "Material Symbols Rounded",
-                          "fill": "\\$md-sys-color-surface-container-low"
+                          "fill": "#E5E9E2"
                         }
                       ]
                     }
@@ -8781,7 +8781,7 @@
                           "height": 24,
                           "iconFontName": "search",
                           "iconFontFamily": "Material Symbols Rounded",
-                          "fill": "\\$md-sys-color-surface-container-low"
+                          "fill": "#E5E9E2"
                         }
                       ]
                     }
@@ -8846,7 +8846,7 @@
                       "stroke": {
                         "align": "inside",
                         "thickness": 1,
-                        "fill": "\\$md-sys-color-outline-variant"
+                        "fill": "#C2C9BE"
                       },
                       "padding": [
                         0,
@@ -8874,7 +8874,7 @@
                       "stroke": {
                         "align": "inside",
                         "thickness": 1,
-                        "fill": "\\$md-sys-color-outline-variant"
+                        "fill": "#C2C9BE"
                       },
                       "padding": [
                         0,
@@ -8902,7 +8902,7 @@
                       "stroke": {
                         "align": "inside",
                         "thickness": 1,
-                        "fill": "\\$md-sys-color-outline-variant"
+                        "fill": "#C2C9BE"
                       },
                       "padding": [
                         0,
@@ -8944,7 +8944,7 @@
                       "id": "LJUrE",
                       "name": "gmL1",
                       "width": "fill_container",
-                      "fill": "\\$md-sys-color-surface-container-low",
+                      "fill": "#E5E9E2",
                       "cornerRadius": 16,
                       "gap": 12,
                       "padding": 12,
@@ -9011,7 +9011,7 @@
                                 {
                                   "type": "ellipse",
                                   "id": "XEwt4",
-                                  "fill": "\\$md-sys-color-surface-container-low",
+                                  "fill": "#E5E9E2",
                                   "width": 3,
                                   "height": 3
                                 },
@@ -9044,7 +9044,7 @@
                           "height": 20,
                           "iconFontName": "chevron_right",
                           "iconFontFamily": "Material Symbols Rounded",
-                          "fill": "\\$md-sys-color-surface-container-low"
+                          "fill": "#E5E9E2"
                         }
                       ]
                     },
@@ -9053,7 +9053,7 @@
                       "id": "aMngt",
                       "name": "gmL2",
                       "width": "fill_container",
-                      "fill": "\\$md-sys-color-surface-container-low",
+                      "fill": "#E5E9E2",
                       "cornerRadius": 16,
                       "gap": 12,
                       "padding": 12,
@@ -9120,7 +9120,7 @@
                                 {
                                   "type": "ellipse",
                                   "id": "i8pRKB",
-                                  "fill": "\\$md-sys-color-surface-container-low",
+                                  "fill": "#E5E9E2",
                                   "width": 3,
                                   "height": 3
                                 },
@@ -9153,7 +9153,7 @@
                           "height": 20,
                           "iconFontName": "chevron_right",
                           "iconFontFamily": "Material Symbols Rounded",
-                          "fill": "\\$md-sys-color-surface-container-low"
+                          "fill": "#E5E9E2"
                         }
                       ]
                     },
@@ -9162,7 +9162,7 @@
                       "id": "yI9TD",
                       "name": "gmL3",
                       "width": "fill_container",
-                      "fill": "\\$md-sys-color-surface-container-low",
+                      "fill": "#E5E9E2",
                       "cornerRadius": 16,
                       "gap": 12,
                       "padding": 12,
@@ -9229,7 +9229,7 @@
                                 {
                                   "type": "ellipse",
                                   "id": "S7ErzL",
-                                  "fill": "\\$md-sys-color-surface-container-low",
+                                  "fill": "#E5E9E2",
                                   "width": 3,
                                   "height": 3
                                 },
@@ -9262,7 +9262,7 @@
                           "height": 20,
                           "iconFontName": "chevron_right",
                           "iconFontFamily": "Material Symbols Rounded",
-                          "fill": "\\$md-sys-color-surface-container-low"
+                          "fill": "#E5E9E2"
                         }
                       ]
                     },
@@ -9271,7 +9271,7 @@
                       "id": "dSqWb",
                       "name": "gmL4",
                       "width": "fill_container",
-                      "fill": "\\$md-sys-color-surface-container-low",
+                      "fill": "#E5E9E2",
                       "cornerRadius": 16,
                       "gap": 12,
                       "padding": 12,
@@ -9338,7 +9338,7 @@
                                 {
                                   "type": "ellipse",
                                   "id": "kWfWu",
-                                  "fill": "\\$md-sys-color-surface-container-low",
+                                  "fill": "#E5E9E2",
                                   "width": 3,
                                   "height": 3
                                 },
@@ -9371,7 +9371,7 @@
                           "height": 20,
                           "iconFontName": "chevron_right",
                           "iconFontFamily": "Material Symbols Rounded",
-                          "fill": "\\$md-sys-color-surface-container-low"
+                          "fill": "#E5E9E2"
                         }
                       ]
                     },
@@ -9380,7 +9380,7 @@
                       "id": "HL3nQ",
                       "name": "gmL5",
                       "width": "fill_container",
-                      "fill": "\\$md-sys-color-surface-container-low",
+                      "fill": "#E5E9E2",
                       "cornerRadius": 16,
                       "gap": 12,
                       "padding": 12,
@@ -9455,7 +9455,7 @@
                           "height": 20,
                           "iconFontName": "chevron_right",
                           "iconFontFamily": "Material Symbols Rounded",
-                          "fill": "\\$md-sys-color-surface-container-low"
+                          "fill": "#E5E9E2"
                         }
                       ]
                     }
@@ -9549,7 +9549,7 @@
                           "name": "gtSearch",
                           "width": 280,
                           "height": 40,
-                          "fill": "\\$md-sys-color-surface-container-low",
+                          "fill": "#E5E9E2",
                           "cornerRadius": 9999,
                           "gap": 12,
                           "padding": [
@@ -9565,7 +9565,7 @@
                               "height": 20,
                               "iconFontName": "search",
                               "iconFontFamily": "Material Symbols Rounded",
-                              "fill": "\\$md-sys-color-surface-container-low"
+                              "fill": "#E5E9E2"
                             },
                             {
                               "type": "text",
@@ -9676,7 +9676,7 @@
                       "stroke": {
                         "align": "inside",
                         "thickness": 1,
-                        "fill": "\\$md-sys-color-outline-variant"
+                        "fill": "#C2C9BE"
                       },
                       "padding": [
                         0,
@@ -9704,7 +9704,7 @@
                       "stroke": {
                         "align": "inside",
                         "thickness": 1,
-                        "fill": "\\$md-sys-color-outline-variant"
+                        "fill": "#C2C9BE"
                       },
                       "padding": [
                         0,
@@ -9732,7 +9732,7 @@
                       "stroke": {
                         "align": "inside",
                         "thickness": 1,
-                        "fill": "\\$md-sys-color-outline-variant"
+                        "fill": "#C2C9BE"
                       },
                       "padding": [
                         0,
@@ -9760,7 +9760,7 @@
                       "stroke": {
                         "align": "inside",
                         "thickness": 1,
-                        "fill": "\\$md-sys-color-outline-variant"
+                        "fill": "#C2C9BE"
                       },
                       "padding": [
                         0,
@@ -9912,7 +9912,7 @@
                               "name": "gtc1Pr",
                               "width": "fill_container",
                               "height": 8,
-                              "fill": "\\$md-sys-color-surface-container-low",
+                              "fill": "#E5E9E2",
                               "cornerRadius": 9999,
                               "children": [
                                 {
@@ -10069,7 +10069,7 @@
                                       "height": 18,
                                       "iconFontName": "local_fire_department",
                                       "iconFontFamily": "Material Symbols Rounded",
-                                      "fill": "\\$md-sys-color-surface-container-low"
+                                      "fill": "#E5E9E2"
                                     },
                                     {
                                       "type": "text",
@@ -10090,7 +10090,7 @@
                               "name": "gtc2Pr",
                               "width": "fill_container",
                               "height": 8,
-                              "fill": "\\$md-sys-color-surface-container-low",
+                              "fill": "#E5E9E2",
                               "cornerRadius": 9999,
                               "children": [
                                 {
@@ -10381,7 +10381,7 @@
                               "name": "gtc4Pr",
                               "width": "fill_container",
                               "height": 8,
-                              "fill": "\\$md-sys-color-surface-container-low",
+                              "fill": "#E5E9E2",
                               "cornerRadius": 9999,
                               "children": [
                                 {
@@ -10469,7 +10469,7 @@
               "stroke": {
                 "align": "inside",
                 "thickness": 1,
-                "fill": "\\$md-sys-color-outline-variant"
+                "fill": "#C2C9BE"
               },
               "layout": "vertical",
               "children": [
@@ -10527,7 +10527,7 @@
                           "name": "gdSearch",
                           "width": 320,
                           "height": 40,
-                          "fill": "\\$md-sys-color-surface-container-low",
+                          "fill": "#E5E9E2",
                           "cornerRadius": 9999,
                           "gap": 12,
                           "padding": [
@@ -10543,7 +10543,7 @@
                               "height": 20,
                               "iconFontName": "search",
                               "iconFontFamily": "Material Symbols Rounded",
-                              "fill": "\\$md-sys-color-surface-container-low"
+                              "fill": "#E5E9E2"
                             },
                             {
                               "type": "text",
@@ -10653,7 +10653,7 @@
                       "stroke": {
                         "align": "inside",
                         "thickness": 1,
-                        "fill": "\\$md-sys-color-outline-variant"
+                        "fill": "#C2C9BE"
                       },
                       "padding": [
                         0,
@@ -10681,7 +10681,7 @@
                       "stroke": {
                         "align": "inside",
                         "thickness": 1,
-                        "fill": "\\$md-sys-color-outline-variant"
+                        "fill": "#C2C9BE"
                       },
                       "padding": [
                         0,
@@ -10709,7 +10709,7 @@
                       "stroke": {
                         "align": "inside",
                         "thickness": 1,
-                        "fill": "\\$md-sys-color-outline-variant"
+                        "fill": "#C2C9BE"
                       },
                       "padding": [
                         0,
@@ -10737,7 +10737,7 @@
                       "stroke": {
                         "align": "inside",
                         "thickness": 1,
-                        "fill": "\\$md-sys-color-outline-variant"
+                        "fill": "#C2C9BE"
                       },
                       "padding": [
                         0,
@@ -10792,7 +10792,7 @@
                           "height": 18,
                           "iconFontName": "arrow_drop_down",
                           "iconFontFamily": "Material Symbols Rounded",
-                          "fill": "\\$md-sys-color-surface-container-low"
+                          "fill": "#E5E9E2"
                         }
                       ]
                     }
@@ -10911,7 +10911,7 @@
                                       "height": 18,
                                       "iconFontName": "more_vert",
                                       "iconFontFamily": "Material Symbols Rounded",
-                                      "fill": "\\$md-sys-color-surface-container-low"
+                                      "fill": "#E5E9E2"
                                     }
                                   ]
                                 }
@@ -10923,7 +10923,7 @@
                               "name": "gdc1aP",
                               "width": "fill_container",
                               "height": 8,
-                              "fill": "\\$md-sys-color-surface-container-low",
+                              "fill": "#E5E9E2",
                               "cornerRadius": 9999,
                               "children": [
                                 {
@@ -11110,7 +11110,7 @@
                               "name": "gdc1bP",
                               "width": "fill_container",
                               "height": 8,
-                              "fill": "\\$md-sys-color-surface-container-low",
+                              "fill": "#E5E9E2",
                               "cornerRadius": 9999,
                               "children": [
                                 {
@@ -11271,7 +11271,7 @@
                               "name": "gdc2aP",
                               "width": "fill_container",
                               "height": 8,
-                              "fill": "\\$md-sys-color-surface-container-low",
+                              "fill": "#E5E9E2",
                               "cornerRadius": 9999,
                               "children": [
                                 {
@@ -11458,7 +11458,7 @@
                               "name": "gdc2bP",
                               "width": "fill_container",
                               "height": 8,
-                              "fill": "\\$md-sys-color-surface-container-low",
+                              "fill": "#E5E9E2",
                               "cornerRadius": 9999,
                               "children": [
                                 {
@@ -11687,7 +11687,7 @@
       "y": 7976,
       "name": "Screens / Log Activity & Create Goal",
       "width": 2900,
-      "fill": "\\$md-sys-color-surface-container-low",
+      "fill": "#E5E9E2",
       "layout": "vertical",
       "gap": 32,
       "padding": 48,
@@ -11787,7 +11787,7 @@
                               "opacity": 0.4,
                               "width": 32,
                               "height": 4,
-                              "fill": "\\$md-sys-color-surface-container-low",
+                              "fill": "#E5E9E2",
                               "cornerRadius": 9999
                             }
                           ]
@@ -11826,7 +11826,7 @@
                                   "height": 20,
                                   "iconFontName": "close",
                                   "iconFontFamily": "Material Symbols Rounded",
-                                  "fill": "\\$md-sys-color-surface-container-low"
+                                  "fill": "#E5E9E2"
                                 }
                               ]
                             }
@@ -12011,7 +12011,7 @@
                               "stroke": {
                                 "align": "inside",
                                 "thickness": 1,
-                                "fill": "\\$md-sys-color-outline-variant"
+                                "fill": "#C2C9BE"
                               },
                               "padding": [
                                 0,
@@ -12040,7 +12040,7 @@
                               "stroke": {
                                 "align": "inside",
                                 "thickness": 1,
-                                "fill": "\\$md-sys-color-outline-variant"
+                                "fill": "#C2C9BE"
                               },
                               "padding": [
                                 0,
@@ -12069,7 +12069,7 @@
                               "stroke": {
                                 "align": "inside",
                                 "thickness": 1,
-                                "fill": "\\$md-sys-color-outline-variant"
+                                "fill": "#C2C9BE"
                               },
                               "padding": [
                                 0,
@@ -12109,12 +12109,12 @@
                           "name": "lmNote",
                           "width": "fill_container",
                           "height": 56,
-                          "fill": "\\$md-sys-color-surface-container-low",
+                          "fill": "#E5E9E2",
                           "cornerRadius": 4,
                           "stroke": {
                             "align": "inside",
                             "thickness": 1,
-                            "fill": "\\$md-sys-color-outline-variant"
+                            "fill": "#C2C9BE"
                           },
                           "layout": "vertical",
                           "padding": 16,
@@ -12153,7 +12153,7 @@
                               "stroke": {
                                 "align": "inside",
                                 "thickness": 1,
-                                "fill": "\\$md-sys-color-outline-variant"
+                                "fill": "#C2C9BE"
                               },
                               "justifyContent": "center",
                               "alignItems": "center",
@@ -12245,7 +12245,7 @@
                           "height": 24,
                           "iconFontName": "close",
                           "iconFontFamily": "Material Symbols Rounded",
-                          "fill": "\\$md-sys-color-surface-container-low"
+                          "fill": "#E5E9E2"
                         }
                       ]
                     },
@@ -12299,7 +12299,7 @@
                   "name": "ltBody",
                   "width": "fill_container",
                   "height": "fill_container",
-                  "fill": "\\$md-sys-color-surface-container-low",
+                  "fill": "#E5E9E2",
                   "layout": "vertical",
                   "gap": 24,
                   "padding": [
@@ -12328,7 +12328,7 @@
                           "stroke": {
                             "align": "inside",
                             "thickness": 2,
-                            "fill": "\\$md-sys-color-outline-variant"
+                            "fill": "#C2C9BE"
                           },
                           "layout": "vertical",
                           "padding": [
@@ -12377,7 +12377,7 @@
                           "stroke": {
                             "align": "inside",
                             "thickness": 1,
-                            "fill": "\\$md-sys-color-outline-variant"
+                            "fill": "#C2C9BE"
                           },
                           "padding": 16,
                           "alignItems": "center",
@@ -12424,7 +12424,7 @@
                           "stroke": {
                             "align": "inside",
                             "thickness": 1,
-                            "fill": "\\$md-sys-color-outline-variant"
+                            "fill": "#C2C9BE"
                           },
                           "children": [
                             {
@@ -12568,7 +12568,7 @@
                               "stroke": {
                                 "align": "inside",
                                 "thickness": 1,
-                                "fill": "\\$md-sys-color-outline-variant"
+                                "fill": "#C2C9BE"
                               },
                               "padding": 16,
                               "alignItems": "center",
@@ -12595,7 +12595,7 @@
                               "stroke": {
                                 "align": "inside",
                                 "thickness": 1,
-                                "fill": "\\$md-sys-color-outline-variant"
+                                "fill": "#C2C9BE"
                               },
                               "padding": 16,
                               "alignItems": "center",
@@ -12622,7 +12622,7 @@
                                   "height": 24,
                                   "iconFontName": "arrow_drop_down",
                                   "iconFontFamily": "Material Symbols Rounded",
-                                  "fill": "\\$md-sys-color-surface-container-low"
+                                  "fill": "#E5E9E2"
                                 }
                               ]
                             }
@@ -12667,7 +12667,7 @@
                               "stroke": {
                                 "align": "outside",
                                 "thickness": 3,
-                                "fill": "\\$md-sys-color-outline-variant"
+                                "fill": "#C2C9BE"
                               },
                               "justifyContent": "center",
                               "alignItems": "center",
@@ -12686,35 +12686,35 @@
                             {
                               "type": "ellipse",
                               "id": "DMwIM",
-                              "fill": "\\$md-sys-color-surface-container-low",
+                              "fill": "#E5E9E2",
                               "width": 48,
                               "height": 48
                             },
                             {
                               "type": "ellipse",
                               "id": "J8Hz81",
-                              "fill": "\\$md-sys-color-surface-container-low",
+                              "fill": "#E5E9E2",
                               "width": 48,
                               "height": 48
                             },
                             {
                               "type": "ellipse",
                               "id": "ZIsmz",
-                              "fill": "\\$md-sys-color-surface-container-low",
+                              "fill": "#E5E9E2",
                               "width": 48,
                               "height": 48
                             },
                             {
                               "type": "ellipse",
                               "id": "XP8hj",
-                              "fill": "\\$md-sys-color-surface-container-low",
+                              "fill": "#E5E9E2",
                               "width": 48,
                               "height": 48
                             },
                             {
                               "type": "ellipse",
                               "id": "u5Xxl",
-                              "fill": "\\$md-sys-color-surface-container-low",
+                              "fill": "#E5E9E2",
                               "width": 48,
                               "height": 48
                             }
@@ -12819,594 +12819,6 @@
                   ]
                 }
               ]
-            },
-            {
-              "type": "frame",
-              "id": "CvfKW",
-              "name": "Desktop / Create goal modal / 1440",
-              "clip": true,
-              "width": 1440,
-              "height": 900,
-              "fill": "#0000007A",
-              "cornerRadius": 12,
-              "justifyContent": "center",
-              "alignItems": "center",
-              "children": [
-                {
-                  "type": "frame",
-                  "id": "y0JJg",
-                  "name": "ldDlg",
-                  "width": 560,
-                  "fill": "#E5E9E2",
-                  "cornerRadius": 28,
-                  "effect": {
-                    "type": "shadow",
-                    "shadowType": "outer",
-                    "color": "#00000040",
-                    "offset": {
-                      "x": 0,
-                      "y": 8
-                    },
-                    "blur": 24
-                  },
-                  "layout": "vertical",
-                  "gap": 24,
-                  "padding": 32,
-                  "children": [
-                    {
-                      "type": "frame",
-                      "id": "M8rcaH",
-                      "name": "ldHdr",
-                      "width": "fill_container",
-                      "justifyContent": "space_between",
-                      "alignItems": "center",
-                      "children": [
-                        {
-                          "type": "text",
-                          "id": "wrFB1",
-                          "fill": "#191D17",
-                          "content": "New goal",
-                          "fontFamily": "Inter",
-                          "fontSize": 24,
-                          "fontWeight": "500"
-                        },
-                        {
-                          "type": "frame",
-                          "id": "VYPlq",
-                          "name": "ldClose",
-                          "width": 32,
-                          "height": 32,
-                          "cornerRadius": 9999,
-                          "justifyContent": "center",
-                          "alignItems": "center",
-                          "children": [
-                            {
-                              "type": "icon_font",
-                              "id": "f1vpA",
-                              "width": 20,
-                              "height": 20,
-                              "iconFontName": "close",
-                              "iconFontFamily": "Material Symbols Rounded",
-                              "fill": "\\$md-sys-color-surface-container-low"
-                            }
-                          ]
-                        }
-                      ]
-                    },
-                    {
-                      "type": "frame",
-                      "id": "kW5jD",
-                      "name": "ldRow1",
-                      "width": "fill_container",
-                      "gap": 16,
-                      "children": [
-                        {
-                          "type": "frame",
-                          "id": "dC7DD",
-                          "name": "ldField1",
-                          "width": "fill_container",
-                          "layout": "vertical",
-                          "gap": 4,
-                          "children": [
-                            {
-                              "type": "frame",
-                              "id": "gP3HO",
-                              "name": "ldField1Box",
-                              "width": "fill_container",
-                              "height": 56,
-                              "fill": "#F7FBF3",
-                              "cornerRadius": 4,
-                              "stroke": {
-                                "align": "inside",
-                                "thickness": 2,
-                                "fill": "\\$md-sys-color-outline-variant"
-                              },
-                              "layout": "vertical",
-                              "padding": [
-                                8,
-                                16
-                              ],
-                              "children": [
-                                {
-                                  "type": "text",
-                                  "id": "Rk4QV",
-                                  "fill": "#191D17",
-                                  "content": "Goal name",
-                                  "fontFamily": "Inter",
-                                  "fontSize": 12,
-                                  "fontWeight": "normal"
-                                },
-                                {
-                                  "type": "text",
-                                  "id": "PGlfi",
-                                  "fill": "#191D17",
-                                  "content": "Drink water",
-                                  "fontFamily": "Inter",
-                                  "fontSize": 16,
-                                  "fontWeight": "normal"
-                                }
-                              ]
-                            }
-                          ]
-                        },
-                        {
-                          "type": "frame",
-                          "id": "ZtOs4",
-                          "name": "ldField2",
-                          "width": 160,
-                          "layout": "vertical",
-                          "gap": 4,
-                          "children": [
-                            {
-                              "type": "frame",
-                              "id": "ijHj0",
-                              "name": "ldField2Box",
-                              "width": "fill_container",
-                              "height": 56,
-                              "fill": "#F7FBF3",
-                              "cornerRadius": 4,
-                              "stroke": {
-                                "align": "inside",
-                                "thickness": 1,
-                                "fill": "\\$md-sys-color-outline-variant"
-                              },
-                              "padding": 16,
-                              "alignItems": "center",
-                              "children": [
-                                {
-                                  "type": "text",
-                                  "id": "EIH23",
-                                  "fill": "#191D17",
-                                  "content": "💧",
-                                  "fontFamily": "Inter",
-                                  "fontSize": 20,
-                                  "fontWeight": "normal"
-                                },
-                                {
-                                  "type": "frame",
-                                  "id": "Afa9C",
-                                  "width": "fill_container",
-                                  "height": 1
-                                },
-                                {
-                                  "type": "icon_font",
-                                  "id": "o1eQ8G",
-                                  "width": 24,
-                                  "height": 24,
-                                  "iconFontName": "arrow_drop_down",
-                                  "iconFontFamily": "Material Symbols Rounded",
-                                  "fill": "\\$md-sys-color-surface-container-low"
-                                }
-                              ]
-                            }
-                          ]
-                        }
-                      ]
-                    },
-                    {
-                      "type": "frame",
-                      "id": "JwKYD",
-                      "name": "ldField3",
-                      "width": "fill_container",
-                      "layout": "vertical",
-                      "gap": 4,
-                      "children": [
-                        {
-                          "type": "frame",
-                          "id": "QlvaP",
-                          "name": "ldField3Box",
-                          "width": "fill_container",
-                          "height": 56,
-                          "fill": "#F7FBF3",
-                          "cornerRadius": 4,
-                          "stroke": {
-                            "align": "inside",
-                            "thickness": 1,
-                            "fill": "\\$md-sys-color-outline-variant"
-                          },
-                          "padding": 16,
-                          "alignItems": "center",
-                          "children": [
-                            {
-                              "type": "text",
-                              "id": "ii5UQ",
-                              "fill": "#191D17",
-                              "content": "Description (optional)",
-                              "fontFamily": "Inter",
-                              "fontSize": 16,
-                              "fontWeight": "normal"
-                            }
-                          ]
-                        }
-                      ]
-                    },
-                    {
-                      "type": "text",
-                      "id": "Tvqpg",
-                      "name": "ldCadL",
-                      "fill": "#191D17",
-                      "textGrowth": "fixed-width",
-                      "width": "fill_container",
-                      "content": "Cadence",
-                      "fontFamily": "Inter",
-                      "fontSize": 14,
-                      "fontWeight": "500"
-                    },
-                    {
-                      "type": "frame",
-                      "id": "SuJiq",
-                      "name": "ldCadRow",
-                      "width": "fill_container",
-                      "height": 48,
-                      "cornerRadius": 9999,
-                      "stroke": {
-                        "align": "inside",
-                        "thickness": 1,
-                        "fill": "\\$md-sys-color-outline-variant"
-                      },
-                      "children": [
-                        {
-                          "type": "frame",
-                          "id": "LCs7H",
-                          "name": "ldC1",
-                          "width": "fill_container",
-                          "cornerRadius": [
-                            9999,
-                            0,
-                            0,
-                            9999
-                          ],
-                          "justifyContent": "center",
-                          "alignItems": "center",
-                          "children": [
-                            {
-                              "type": "text",
-                              "id": "rQOuD",
-                              "fill": "#191D17",
-                              "content": "Hourly",
-                              "fontFamily": "Inter",
-                              "fontSize": 14,
-                              "fontWeight": "500"
-                            }
-                          ]
-                        },
-                        {
-                          "type": "frame",
-                          "id": "yMNIP",
-                          "name": "ldC2",
-                          "width": "fill_container",
-                          "fill": "#D2E8D4",
-                          "gap": 8,
-                          "justifyContent": "center",
-                          "alignItems": "center",
-                          "children": [
-                            {
-                              "type": "icon_font",
-                              "id": "QoqSY",
-                              "width": 18,
-                              "height": 18,
-                              "iconFontName": "check",
-                              "iconFontFamily": "Material Symbols Rounded",
-                              "fill": "#0C1F13"
-                            },
-                            {
-                              "type": "text",
-                              "id": "vGQK7",
-                              "fill": "#0C1F13",
-                              "content": "Daily",
-                              "fontFamily": "Inter",
-                              "fontSize": 14,
-                              "fontWeight": "500"
-                            }
-                          ]
-                        },
-                        {
-                          "type": "frame",
-                          "id": "FbE11",
-                          "name": "ldC3",
-                          "width": "fill_container",
-                          "justifyContent": "center",
-                          "alignItems": "center",
-                          "children": [
-                            {
-                              "type": "text",
-                              "id": "nQPDu",
-                              "fill": "#191D17",
-                              "content": "Weekly",
-                              "fontFamily": "Inter",
-                              "fontSize": 14,
-                              "fontWeight": "500"
-                            }
-                          ]
-                        },
-                        {
-                          "type": "frame",
-                          "id": "ZgnnN",
-                          "name": "ldC4",
-                          "width": "fill_container",
-                          "cornerRadius": [
-                            0,
-                            9999,
-                            9999,
-                            0
-                          ],
-                          "justifyContent": "center",
-                          "alignItems": "center",
-                          "children": [
-                            {
-                              "type": "text",
-                              "id": "eRqxC",
-                              "fill": "#191D17",
-                              "content": "Monthly",
-                              "fontFamily": "Inter",
-                              "fontSize": 14,
-                              "fontWeight": "500"
-                            }
-                          ]
-                        }
-                      ]
-                    },
-                    {
-                      "type": "frame",
-                      "id": "SozAc",
-                      "name": "ldRow3",
-                      "width": "fill_container",
-                      "gap": 16,
-                      "children": [
-                        {
-                          "type": "frame",
-                          "id": "kHuxK",
-                          "name": "ldT1",
-                          "width": 160,
-                          "height": 56,
-                          "fill": "#F7FBF3",
-                          "cornerRadius": 4,
-                          "stroke": {
-                            "align": "inside",
-                            "thickness": 1,
-                            "fill": "\\$md-sys-color-outline-variant"
-                          },
-                          "padding": 16,
-                          "alignItems": "center",
-                          "children": [
-                            {
-                              "type": "text",
-                              "id": "fwGT9",
-                              "fill": "#191D17",
-                              "content": "Target",
-                              "fontFamily": "Inter",
-                              "fontSize": 12,
-                              "fontWeight": "normal"
-                            },
-                            {
-                              "type": "frame",
-                              "id": "AYVlp",
-                              "width": "fill_container",
-                              "height": 1
-                            },
-                            {
-                              "type": "text",
-                              "id": "vLHUG",
-                              "fill": "#191D17",
-                              "content": "8",
-                              "fontFamily": "Inter",
-                              "fontSize": 18,
-                              "fontWeight": "500"
-                            }
-                          ]
-                        },
-                        {
-                          "type": "frame",
-                          "id": "nPa2P",
-                          "name": "ldT2",
-                          "width": "fill_container",
-                          "height": 56,
-                          "fill": "#F7FBF3",
-                          "cornerRadius": 4,
-                          "stroke": {
-                            "align": "inside",
-                            "thickness": 1,
-                            "fill": "\\$md-sys-color-outline-variant"
-                          },
-                          "padding": 16,
-                          "alignItems": "center",
-                          "children": [
-                            {
-                              "type": "text",
-                              "id": "T55cKk",
-                              "fill": "#191D17",
-                              "content": "Unit",
-                              "fontFamily": "Inter",
-                              "fontSize": 12,
-                              "fontWeight": "normal"
-                            },
-                            {
-                              "type": "frame",
-                              "id": "rLOAp",
-                              "width": 16,
-                              "height": 1
-                            },
-                            {
-                              "type": "text",
-                              "id": "XUsH3",
-                              "fill": "#191D17",
-                              "content": "glasses",
-                              "fontFamily": "Inter",
-                              "fontSize": 16,
-                              "fontWeight": "normal"
-                            },
-                            {
-                              "type": "frame",
-                              "id": "eJwa0",
-                              "width": "fill_container",
-                              "height": 1
-                            },
-                            {
-                              "type": "icon_font",
-                              "id": "t0UHuw",
-                              "width": 24,
-                              "height": 24,
-                              "iconFontName": "arrow_drop_down",
-                              "iconFontFamily": "Material Symbols Rounded",
-                              "fill": "\\$md-sys-color-surface-container-low"
-                            }
-                          ]
-                        }
-                      ]
-                    },
-                    {
-                      "type": "frame",
-                      "id": "R3wsa",
-                      "name": "ldSwRow",
-                      "width": "fill_container",
-                      "padding": [
-                        8,
-                        4
-                      ],
-                      "justifyContent": "space_between",
-                      "alignItems": "center",
-                      "children": [
-                        {
-                          "type": "frame",
-                          "id": "Hp1EW",
-                          "name": "ldSwBody",
-                          "layout": "vertical",
-                          "gap": 2,
-                          "children": [
-                            {
-                              "type": "text",
-                              "id": "SgcCC",
-                              "fill": "#191D17",
-                              "content": "Reminders",
-                              "fontFamily": "Inter",
-                              "fontSize": 14,
-                              "fontWeight": "500"
-                            },
-                            {
-                              "type": "text",
-                              "id": "xnsJ4",
-                              "fill": "#191D17",
-                              "content": "Push notifications when behind schedule",
-                              "fontFamily": "Inter",
-                              "fontSize": 12,
-                              "fontWeight": "normal"
-                            }
-                          ]
-                        },
-                        {
-                          "type": "frame",
-                          "id": "vlVoE",
-                          "name": "ldSwToggle",
-                          "width": 52,
-                          "height": 32,
-                          "fill": "#006D3F",
-                          "cornerRadius": 9999,
-                          "padding": [
-                            0,
-                            4
-                          ],
-                          "justifyContent": "end",
-                          "alignItems": "center",
-                          "children": [
-                            {
-                              "type": "ellipse",
-                              "id": "a9eegu",
-                              "fill": "#FFFFFF",
-                              "width": 24,
-                              "height": 24
-                            }
-                          ]
-                        }
-                      ]
-                    },
-                    {
-                      "type": "frame",
-                      "id": "z4pDBf",
-                      "name": "ldActs",
-                      "width": "fill_container",
-                      "gap": 8,
-                      "padding": [
-                        12,
-                        0,
-                        0,
-                        0
-                      ],
-                      "justifyContent": "end",
-                      "children": [
-                        {
-                          "type": "frame",
-                          "id": "OeIA9",
-                          "name": "ldCancel",
-                          "height": 40,
-                          "cornerRadius": 9999,
-                          "padding": [
-                            0,
-                            24
-                          ],
-                          "justifyContent": "center",
-                          "alignItems": "center",
-                          "children": [
-                            {
-                              "type": "text",
-                              "id": "BxZSr",
-                              "fill": "#191D17",
-                              "content": "Cancel",
-                              "fontFamily": "Inter",
-                              "fontSize": 14,
-                              "fontWeight": "500"
-                            }
-                          ]
-                        },
-                        {
-                          "type": "frame",
-                          "id": "Z2IbkG",
-                          "name": "ldSave2",
-                          "height": 40,
-                          "fill": "#006D3F",
-                          "cornerRadius": 9999,
-                          "padding": [
-                            0,
-                            24
-                          ],
-                          "justifyContent": "center",
-                          "alignItems": "center",
-                          "children": [
-                            {
-                              "type": "text",
-                              "id": "yHues",
-                              "fill": "#FFFFFF",
-                              "content": "Create goal",
-                              "fontFamily": "Inter",
-                              "fontSize": 14,
-                              "fontWeight": "500"
-                            }
-                          ]
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
             }
           ]
         }
@@ -13419,7 +12831,7 @@
       "y": 9316,
       "name": "Screens / Rewards",
       "width": 2900,
-      "fill": "\\$md-sys-color-surface-container-low",
+      "fill": "#E5E9E2",
       "layout": "vertical",
       "gap": 32,
       "padding": 48,
@@ -13505,7 +12917,7 @@
                           "height": 14,
                           "iconFontName": "wifi",
                           "iconFontFamily": "Material Symbols Rounded",
-                          "fill": "\\$md-sys-color-surface-container-low"
+                          "fill": "#E5E9E2"
                         },
                         {
                           "type": "icon_font",
@@ -13514,7 +12926,7 @@
                           "height": 14,
                           "iconFontName": "battery_full",
                           "iconFontFamily": "Material Symbols Rounded",
-                          "fill": "\\$md-sys-color-surface-container-low"
+                          "fill": "#E5E9E2"
                         }
                       ]
                     }
@@ -13714,7 +13126,7 @@
                       "id": "rxkqX",
                       "name": "rmI1",
                       "width": "fill_container",
-                      "fill": "\\$md-sys-color-surface-container-low",
+                      "fill": "#E5E9E2",
                       "cornerRadius": 16,
                       "gap": 12,
                       "padding": 12,
@@ -13784,7 +13196,7 @@
                               "name": "rmI1bP",
                               "width": "fill_container",
                               "height": 6,
-                              "fill": "\\$md-sys-color-surface-container-low",
+                              "fill": "#E5E9E2",
                               "cornerRadius": 9999,
                               "children": [
                                 {
@@ -13806,7 +13218,7 @@
                       "id": "MBCAC",
                       "name": "rmI2",
                       "width": "fill_container",
-                      "fill": "\\$md-sys-color-surface-container-low",
+                      "fill": "#E5E9E2",
                       "cornerRadius": 16,
                       "gap": 12,
                       "padding": 12,
@@ -13876,7 +13288,7 @@
                               "name": "rmI2bP",
                               "width": "fill_container",
                               "height": 6,
-                              "fill": "\\$md-sys-color-surface-container-low",
+                              "fill": "#E5E9E2",
                               "cornerRadius": 9999,
                               "children": [
                                 {
@@ -13912,7 +13324,7 @@
                       "name": "rmI3",
                       "opacity": 0.6,
                       "width": "fill_container",
-                      "fill": "\\$md-sys-color-surface-container-low",
+                      "fill": "#E5E9E2",
                       "cornerRadius": 16,
                       "gap": 12,
                       "padding": 12,
@@ -13936,7 +13348,7 @@
                               "height": 22,
                               "iconFontName": "lock",
                               "iconFontFamily": "Material Symbols Rounded",
-                              "fill": "\\$md-sys-color-surface-container-low"
+                              "fill": "#E5E9E2"
                             }
                           ]
                         },
@@ -14057,7 +13469,7 @@
                   "clip": true,
                   "width": "fill_container",
                   "height": "fill_container",
-                  "fill": "\\$md-sys-color-surface-container-low",
+                  "fill": "#E5E9E2",
                   "layout": "vertical",
                   "gap": 24,
                   "padding": [
@@ -14278,7 +13690,7 @@
                               "name": "rtG1P",
                               "width": "fill_container",
                               "height": 8,
-                              "fill": "\\$md-sys-color-surface-container-low",
+                              "fill": "#E5E9E2",
                               "cornerRadius": 9999,
                               "children": [
                                 {
@@ -14383,7 +13795,7 @@
                               "name": "rtG2P",
                               "width": "fill_container",
                               "height": 8,
-                              "fill": "\\$md-sys-color-surface-container-low",
+                              "fill": "#E5E9E2",
                               "cornerRadius": 9999,
                               "children": [
                                 {
@@ -14451,7 +13863,7 @@
                               "height": 22,
                               "iconFontName": "lock",
                               "iconFontFamily": "Material Symbols Rounded",
-                              "fill": "\\$md-sys-color-surface-container-low"
+                              "fill": "#E5E9E2"
                             }
                           ]
                         },
@@ -14501,7 +13913,7 @@
               "stroke": {
                 "align": "inside",
                 "thickness": 1,
-                "fill": "\\$md-sys-color-outline-variant"
+                "fill": "#C2C9BE"
               },
               "layout": "vertical",
               "children": [
@@ -14848,7 +14260,7 @@
                               "name": "rdC1P",
                               "width": "fill_container",
                               "height": 8,
-                              "fill": "\\$md-sys-color-surface-container-low",
+                              "fill": "#E5E9E2",
                               "cornerRadius": 9999,
                               "children": [
                                 {
@@ -14953,7 +14365,7 @@
                               "name": "rdC2P",
                               "width": "fill_container",
                               "height": 8,
-                              "fill": "\\$md-sys-color-surface-container-low",
+                              "fill": "#E5E9E2",
                               "cornerRadius": 9999,
                               "children": [
                                 {
@@ -15015,7 +14427,7 @@
                                       "height": 22,
                                       "iconFontName": "lock",
                                       "iconFontFamily": "Material Symbols Rounded",
-                                      "fill": "\\$md-sys-color-surface-container-low"
+                                      "fill": "#E5E9E2"
                                     }
                                   ]
                                 },
@@ -15081,7 +14493,7 @@
       "y": 10656,
       "name": "Screens / Stats & Profile",
       "width": 2900,
-      "fill": "\\$md-sys-color-surface-container-low",
+      "fill": "#E5E9E2",
       "layout": "vertical",
       "gap": 32,
       "padding": 48,
@@ -15167,7 +14579,7 @@
                           "height": 14,
                           "iconFontName": "wifi",
                           "iconFontFamily": "Material Symbols Rounded",
-                          "fill": "\\$md-sys-color-surface-container-low"
+                          "fill": "#E5E9E2"
                         },
                         {
                           "type": "icon_font",
@@ -15176,7 +14588,7 @@
                           "height": 14,
                           "iconFontName": "battery_full",
                           "iconFontFamily": "Material Symbols Rounded",
-                          "fill": "\\$md-sys-color-surface-container-low"
+                          "fill": "#E5E9E2"
                         }
                       ]
                     }
@@ -15231,7 +14643,7 @@
                       "stroke": {
                         "align": "inside",
                         "thickness": 1,
-                        "fill": "\\$md-sys-color-outline-variant"
+                        "fill": "#C2C9BE"
                       },
                       "children": [
                         {
@@ -15800,7 +15212,7 @@
                               "name": "smGB1Bar",
                               "width": "fill_container",
                               "height": 8,
-                              "fill": "\\$md-sys-color-surface-container-low",
+                              "fill": "#E5E9E2",
                               "cornerRadius": 9999,
                               "children": [
                                 {
@@ -15849,7 +15261,7 @@
                               "name": "smGB2Bar",
                               "width": "fill_container",
                               "height": 8,
-                              "fill": "\\$md-sys-color-surface-container-low",
+                              "fill": "#E5E9E2",
                               "cornerRadius": 9999,
                               "children": [
                                 {
@@ -15898,7 +15310,7 @@
                               "name": "smGB3Bar",
                               "width": "fill_container",
                               "height": 8,
-                              "fill": "\\$md-sys-color-surface-container-low",
+                              "fill": "#E5E9E2",
                               "cornerRadius": 9999,
                               "children": [
                                 {
@@ -15976,7 +15388,7 @@
                       "stroke": {
                         "align": "inside",
                         "thickness": 1,
-                        "fill": "\\$md-sys-color-outline-variant"
+                        "fill": "#C2C9BE"
                       },
                       "children": [
                         {
@@ -16681,7 +16093,7 @@
               "stroke": {
                 "align": "inside",
                 "thickness": 1,
-                "fill": "\\$md-sys-color-outline-variant"
+                "fill": "#C2C9BE"
               },
               "layout": "vertical",
               "children": [
@@ -16731,7 +16143,7 @@
                           "height": 20,
                           "iconFontName": "settings",
                           "iconFontFamily": "Material Symbols Rounded",
-                          "fill": "\\$md-sys-color-surface-container-low"
+                          "fill": "#E5E9E2"
                         },
                         {
                           "type": "text",
@@ -16922,7 +16334,7 @@
                                   "height": 24,
                                   "iconFontName": "notifications",
                                   "iconFontFamily": "Material Symbols Rounded",
-                                  "fill": "\\$md-sys-color-surface-container-low"
+                                  "fill": "#E5E9E2"
                                 },
                                 {
                                   "type": "frame",
@@ -16995,7 +16407,7 @@
                                   "height": 24,
                                   "iconFontName": "dark_mode",
                                   "iconFontFamily": "Material Symbols Rounded",
-                                  "fill": "\\$md-sys-color-surface-container-low"
+                                  "fill": "#E5E9E2"
                                 },
                                 {
                                   "type": "frame",
@@ -17032,7 +16444,7 @@
                                   "height": 24,
                                   "iconFontName": "chevron_right",
                                   "iconFontFamily": "Material Symbols Rounded",
-                                  "fill": "\\$md-sys-color-surface-container-low"
+                                  "fill": "#E5E9E2"
                                 }
                               ]
                             },
@@ -17053,7 +16465,7 @@
                                   "height": 24,
                                   "iconFontName": "shield",
                                   "iconFontFamily": "Material Symbols Rounded",
-                                  "fill": "\\$md-sys-color-surface-container-low"
+                                  "fill": "#E5E9E2"
                                 },
                                 {
                                   "type": "frame",
@@ -17090,7 +16502,7 @@
                                   "height": 24,
                                   "iconFontName": "chevron_right",
                                   "iconFontFamily": "Material Symbols Rounded",
-                                  "fill": "\\$md-sys-color-surface-container-low"
+                                  "fill": "#E5E9E2"
                                 }
                               ]
                             },
@@ -17352,7 +16764,7 @@
                                   "stroke": {
                                     "align": "inside",
                                     "thickness": 1,
-                                    "fill": "\\$md-sys-color-outline-variant"
+                                    "fill": "#C2C9BE"
                                   },
                                   "children": [
                                     {
@@ -17770,7 +17182,7 @@
                                   "name": "sdg1B",
                                   "width": "fill_container",
                                   "height": 10,
-                                  "fill": "\\$md-sys-color-surface-container-low",
+                                  "fill": "#E5E9E2",
                                   "cornerRadius": 9999,
                                   "children": [
                                     {
@@ -17822,7 +17234,7 @@
                                   "name": "sdg2B",
                                   "width": "fill_container",
                                   "height": 10,
-                                  "fill": "\\$md-sys-color-surface-container-low",
+                                  "fill": "#E5E9E2",
                                   "cornerRadius": 9999,
                                   "children": [
                                     {
@@ -17874,7 +17286,7 @@
                                   "name": "sdg3B",
                                   "width": "fill_container",
                                   "height": 10,
-                                  "fill": "\\$md-sys-color-surface-container-low",
+                                  "fill": "#E5E9E2",
                                   "cornerRadius": 9999,
                                   "children": [
                                     {
@@ -17926,7 +17338,7 @@
                                   "name": "sdg4B",
                                   "width": "fill_container",
                                   "height": 10,
-                                  "fill": "\\$md-sys-color-surface-container-low",
+                                  "fill": "#E5E9E2",
                                   "cornerRadius": 9999,
                                   "children": [
                                     {
@@ -17972,7 +17384,7 @@
       "y": 11996,
       "name": "States / Notifications, Errors, Dialogs, Empty, Loading",
       "width": 2900,
-      "fill": "\\$md-sys-color-surface-container-low",
+      "fill": "#E5E9E2",
       "layout": "vertical",
       "gap": 48,
       "padding": 48,
@@ -18004,7 +17416,7 @@
           "id": "X8mdjm",
           "name": "snksec",
           "width": "fill_container",
-          "fill": "\\$md-sys-color-surface-container-low",
+          "fill": "#E5E9E2",
           "cornerRadius": 24,
           "layout": "vertical",
           "gap": 24,
@@ -18160,7 +17572,7 @@
                           "height": 18,
                           "iconFontName": "close",
                           "iconFontFamily": "Material Symbols Rounded",
-                          "fill": "\\$md-sys-color-surface-container-low"
+                          "fill": "#E5E9E2"
                         }
                       ]
                     }
@@ -18208,7 +17620,7 @@
                       "height": 20,
                       "iconFontName": "error",
                       "iconFontFamily": "Material Symbols Rounded",
-                      "fill": "\\$md-sys-color-surface-container-low"
+                      "fill": "#E5E9E2"
                     },
                     {
                       "type": "text",
@@ -18429,7 +17841,7 @@
           "id": "uusul",
           "name": "bansec",
           "width": "fill_container",
-          "fill": "\\$md-sys-color-surface-container-low",
+          "fill": "#E5E9E2",
           "cornerRadius": 24,
           "layout": "vertical",
           "gap": 24,
@@ -18617,7 +18029,7 @@
                           "stroke": {
                             "align": "inside",
                             "thickness": 1,
-                            "fill": "\\$md-sys-color-outline-variant"
+                            "fill": "#C2C9BE"
                           },
                           "padding": [
                             0,
@@ -18781,7 +18193,7 @@
           "id": "m9577",
           "name": "inlSec",
           "width": "fill_container",
-          "fill": "\\$md-sys-color-surface-container-low",
+          "fill": "#E5E9E2",
           "cornerRadius": 24,
           "layout": "vertical",
           "gap": 24,
@@ -18824,7 +18236,7 @@
                       "stroke": {
                         "align": "inside",
                         "thickness": 2,
-                        "fill": "\\$md-sys-color-outline-variant"
+                        "fill": "#C2C9BE"
                       },
                       "layout": "vertical",
                       "padding": [
@@ -18869,7 +18281,7 @@
                           "height": 16,
                           "iconFontName": "error",
                           "iconFontFamily": "Material Symbols Rounded",
-                          "fill": "\\$md-sys-color-surface-container-low"
+                          "fill": "#E5E9E2"
                         },
                         {
                           "type": "text",
@@ -18903,7 +18315,7 @@
                       "stroke": {
                         "align": "inside",
                         "thickness": 2,
-                        "fill": "\\$md-sys-color-outline-variant"
+                        "fill": "#C2C9BE"
                       },
                       "layout": "vertical",
                       "padding": [
@@ -18949,7 +18361,7 @@
                           "height": 16,
                           "iconFontName": "error",
                           "iconFontFamily": "Material Symbols Rounded",
-                          "fill": "\\$md-sys-color-surface-container-low"
+                          "fill": "#E5E9E2"
                         },
                         {
                           "type": "text",
@@ -18983,7 +18395,7 @@
                       "stroke": {
                         "align": "inside",
                         "thickness": 2,
-                        "fill": "\\$md-sys-color-outline-variant"
+                        "fill": "#C2C9BE"
                       },
                       "layout": "vertical",
                       "padding": [
@@ -19029,7 +18441,7 @@
                           "height": 16,
                           "iconFontName": "error",
                           "iconFontFamily": "Material Symbols Rounded",
-                          "fill": "\\$md-sys-color-surface-container-low"
+                          "fill": "#E5E9E2"
                         },
                         {
                           "type": "text",
@@ -19053,7 +18465,7 @@
           "id": "nSCVb",
           "name": "dlgsec",
           "width": "fill_container",
-          "fill": "\\$md-sys-color-surface-container-low",
+          "fill": "#E5E9E2",
           "cornerRadius": 24,
           "layout": "vertical",
           "gap": 24,
@@ -19426,7 +18838,7 @@
                           "stroke": {
                             "align": "inside",
                             "thickness": 1,
-                            "fill": "\\$md-sys-color-outline-variant"
+                            "fill": "#C2C9BE"
                           },
                           "justifyContent": "center",
                           "alignItems": "center",
@@ -19577,7 +18989,7 @@
           "id": "iGNjd",
           "name": "pushSec",
           "width": "fill_container",
-          "fill": "\\$md-sys-color-surface-container-low",
+          "fill": "#E5E9E2",
           "cornerRadius": 24,
           "layout": "vertical",
           "gap": 24,
@@ -19925,7 +19337,7 @@
           "id": "ag6Xx",
           "name": "emSec",
           "width": "fill_container",
-          "fill": "\\$md-sys-color-surface-container-low",
+          "fill": "#E5E9E2",
           "cornerRadius": 24,
           "layout": "vertical",
           "gap": 24,
@@ -20211,7 +19623,7 @@
                       "stroke": {
                         "align": "inside",
                         "thickness": 1,
-                        "fill": "\\$md-sys-color-outline-variant"
+                        "fill": "#C2C9BE"
                       },
                       "gap": 8,
                       "padding": [
@@ -20244,7 +19656,7 @@
           "id": "SUlWX",
           "name": "loadSec",
           "width": "fill_container",
-          "fill": "\\$md-sys-color-surface-container-low",
+          "fill": "#E5E9E2",
           "cornerRadius": 24,
           "layout": "vertical",
           "gap": 24,
@@ -20306,7 +19718,7 @@
                           "id": "YunEP",
                           "width": 40,
                           "height": 40,
-                          "fill": "\\$md-sys-color-surface-container-low",
+                          "fill": "#E5E9E2",
                           "cornerRadius": 9999
                         },
                         {
@@ -20322,7 +19734,7 @@
                               "id": "OQKD7",
                               "width": 160,
                               "height": 14,
-                              "fill": "\\$md-sys-color-surface-container-low",
+                              "fill": "#E5E9E2",
                               "cornerRadius": 9999
                             },
                             {
@@ -20330,7 +19742,7 @@
                               "id": "wBQDz",
                               "width": 100,
                               "height": 10,
-                              "fill": "\\$md-sys-color-surface-container-low",
+                              "fill": "#E5E9E2",
                               "cornerRadius": 9999
                             }
                           ]
@@ -20353,7 +19765,7 @@
                           "id": "X2DX2F",
                           "width": 40,
                           "height": 40,
-                          "fill": "\\$md-sys-color-surface-container-low",
+                          "fill": "#E5E9E2",
                           "cornerRadius": 9999
                         },
                         {
@@ -20369,7 +19781,7 @@
                               "id": "kh080",
                               "width": 200,
                               "height": 14,
-                              "fill": "\\$md-sys-color-surface-container-low",
+                              "fill": "#E5E9E2",
                               "cornerRadius": 9999
                             },
                             {
@@ -20377,7 +19789,7 @@
                               "id": "saqrY",
                               "width": 80,
                               "height": 10,
-                              "fill": "\\$md-sys-color-surface-container-low",
+                              "fill": "#E5E9E2",
                               "cornerRadius": 9999
                             }
                           ]
@@ -20400,7 +19812,7 @@
                           "id": "G4gXZL",
                           "width": 40,
                           "height": 40,
-                          "fill": "\\$md-sys-color-surface-container-low",
+                          "fill": "#E5E9E2",
                           "cornerRadius": 9999
                         },
                         {
@@ -20416,7 +19828,7 @@
                               "id": "QfD1Z",
                               "width": 140,
                               "height": 14,
-                              "fill": "\\$md-sys-color-surface-container-low",
+                              "fill": "#E5E9E2",
                               "cornerRadius": 9999
                             },
                             {
@@ -20424,7 +19836,7 @@
                               "id": "iJGig",
                               "width": 90,
                               "height": 10,
-                              "fill": "\\$md-sys-color-surface-container-low",
+                              "fill": "#E5E9E2",
                               "cornerRadius": 9999
                             }
                           ]
@@ -20696,7 +20108,7 @@
                           "height": 48,
                           "iconFontName": "wifi_off",
                           "iconFontFamily": "Material Symbols Rounded",
-                          "fill": "\\$md-sys-color-surface-container-low"
+                          "fill": "#E5E9E2"
                         }
                       ]
                     },
@@ -20734,7 +20146,7 @@
                       "stroke": {
                         "align": "inside",
                         "thickness": 1,
-                        "fill": "\\$md-sys-color-outline-variant"
+                        "fill": "#C2C9BE"
                       },
                       "padding": [
                         0,
