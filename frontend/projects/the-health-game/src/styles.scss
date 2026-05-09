@@ -190,6 +190,15 @@ lib-goal-list .goal-list__item:nth-child(4n + 4) .goal-card__icon-frame {
   background-color: #ffd7ee !important;
 }
 
+lib-goal-list mat-progress-bar .mdc-linear-progress__bar-inner {
+  border-top-color: #006d3f !important;
+  border-color: #006d3f !important;
+}
+lib-goal-list mat-progress-bar {
+  --mdc-linear-progress-active-indicator-color: #006d3f;
+  --mat-progress-bar-active-indicator-color: #006d3f;
+}
+
 hg-empty-state .empty-state__title {
   font-family:
     Inter,

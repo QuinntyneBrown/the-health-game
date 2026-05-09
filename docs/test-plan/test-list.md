@@ -159,7 +159,7 @@ and made green. The /loop process picks the first test with
 | 148 | 03 | TC-C-005 | Goal card background (default) | `#EBEFE7` (surface-container) | 2026-05-09T23:29:06Z |
 | 149 | 03 | TC-C-006 | Highlighted "ready" card | `#94F7B4` (primary container) | 2026-05-09T23:33:07Z |
 | 150 | 03 | TC-C-007 | Goal card icon backgrounds rotate through container palette | green / blue / orange / pink containers | 2026-05-09T23:36:24Z |
-| 151 | 03 | TC-C-008 | Progress bar fill | `#006D3F` | null |
+| 151 | 03 | TC-C-008 | Progress bar fill | `#006D3F` | 2026-05-09T23:38:53Z |
 | 152 | 03 | TC-C-009 | Progress bar track | `#E5E9E2` | null |
 | 153 | 03 | TC-C-010 | Primary "New goal" button | `#006D3F` bg, `#FFFFFF` label | null |
 | 154 | 03 | TC-C-011 | Destructive "Delete" button | `#BA1A1A` bg in confirm dialog, `#FFFFFF` label | null |
