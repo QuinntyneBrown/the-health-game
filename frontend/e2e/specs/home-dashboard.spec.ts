@@ -1,6 +1,7 @@
 // Acceptance Test
-// Traces to: 02-TC-V-001
+// Traces to: 02-TC-V-001..002
 // Description: Dashboard greeting renders with Inter font, weight 500, sizes 22/28/32 px (mobile/tablet/desktop).
+// Section labels render with Inter weight 500 at 18 px.
 import { expect, test } from '@playwright/test';
 
 async function authenticate(page: import('@playwright/test').Page): Promise<void> {
@@ -53,6 +54,29 @@ test.describe('Home Dashboard — greeting typography', () => {
       expect(computed.fontFamily.split(',')[0].replace(/['"]/g, '').trim()).toBe('Inter');
       expect(computed.fontWeight).toBe('500');
       expect(computed.fontSize).toBe('32px');
+    });
+
+    test('section labels use Inter weight 500 at 18 px (02-TC-V-002)', async ({ page }) => {
+      await authenticate(page);
+
+      const sectionTitles = page.locator('.section-header__title');
+      const count = await sectionTitles.count();
+      expect(count).toBeGreaterThan(0);
+
+      for (let i = 0; i < count; i++) {
+        const title = sectionTitles.nth(i);
+        const computed = await title.evaluate((el) => {
+          const style = getComputedStyle(el);
+          return {
+            fontFamily: style.fontFamily,
+            fontWeight: style.fontWeight,
+            fontSize: style.fontSize,
+          };
+        });
+        expect(computed.fontFamily.split(',')[0].replace(/['"]/g, '').trim()).toBe('Inter');
+        expect(computed.fontWeight).toBe('500');
+        expect(computed.fontSize).toBe('18px');
+      }
     });
   });
 
