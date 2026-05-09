@@ -1,3 +1,7 @@
+---
+status: Accepted
+---
+
 # Task 20 — Log activity (mobile bottom sheet)
 
 **Traces to:** L2-005, L2-016, L2-020, L2-021
