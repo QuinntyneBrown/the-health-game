@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 01-TC-V-001, 01-TC-V-002, 01-TC-V-003, 01-TC-V-004, 01-TC-V-005, 01-TC-V-006, 01-TC-V-007, 01-TC-V-008, 01-TC-V-009
+// Traces to: 01-TC-V-001..010
 // Description: Onboarding headline ("Make health a game") renders with font family Inter weight 500
 //              and the design-spec font-size at each breakpoint (mobile = 28 px, tablet = 45 px,
 //              desktop = 57 px with line-height 1.1). Body description paragraph renders at
@@ -120,6 +120,13 @@ test.describe('Onboarding — headline typography', () => {
       expect(computed.fontSize).toBe('14px');
       expect(computed.color).toBe('rgb(25, 29, 23)');
     });
+
+    test('brand wordmark is hidden on mobile (TC-V-010)', async ({ page }) => {
+      await page.goto('/onboarding');
+
+      const wordmark = page.getByTestId('onboarding-wordmark');
+      await expect(wordmark).toBeHidden();
+    });
   });
 
   test.describe('tablet viewport', () => {
@@ -176,6 +183,13 @@ test.describe('Onboarding — headline typography', () => {
       expect(computed.fontSize).toBe('16px');
       expect(computed.color).toBe('rgb(25, 29, 23)');
     });
+
+    test('brand wordmark is hidden on tablet (TC-V-010)', async ({ page }) => {
+      await page.goto('/onboarding');
+
+      const wordmark = page.getByTestId('onboarding-wordmark');
+      await expect(wordmark).toBeHidden();
+    });
   });
 
   test.describe('desktop viewport', () => {
@@ -211,6 +225,24 @@ test.describe('Onboarding — headline typography', () => {
 
       const fontSize = await description.evaluate((el) => getComputedStyle(el).fontSize);
       expect(fontSize).toBe('18px');
+    });
+
+    test('brand wordmark "HealthQuest" is visible on desktop with font 22 px weight 500 (TC-V-010)', async ({
+      page,
+    }) => {
+      await page.goto('/onboarding');
+
+      const wordmark = page.getByTestId('onboarding-wordmark');
+      await expect(wordmark).toBeVisible();
+      await expect(wordmark).toHaveText('HealthQuest');
+
+      const computed = await wordmark.evaluate((el) => {
+        const style = getComputedStyle(el);
+        return { fontSize: style.fontSize, fontWeight: style.fontWeight };
+      });
+
+      expect(computed.fontSize).toBe('22px');
+      expect(computed.fontWeight).toBe('500');
     });
   });
 });

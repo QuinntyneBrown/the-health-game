@@ -4,6 +4,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
   selector: 'app-onboarding',
   template: `
     <main class="onboarding" data-testid="onboarding">
+      <span class="onboarding__wordmark" data-testid="onboarding-wordmark">HealthQuest</span>
       <h1 class="onboarding__headline" data-testid="onboarding-headline">
         Make health a game
       </h1>
@@ -32,6 +33,13 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
         display: grid;
         gap: 24px;
         padding: 24px;
+      }
+
+      .onboarding__wordmark {
+        display: none;
+        font-family: Inter, Roboto, Arial, sans-serif;
+        font-size: 22px;
+        font-weight: 500;
       }
 
       .onboarding__headline {
@@ -94,6 +102,10 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
         .onboarding__headline {
           font-size: 57px;
           line-height: 1.1;
+        }
+
+        .onboarding__wordmark {
+          display: block;
         }
       }
     `,

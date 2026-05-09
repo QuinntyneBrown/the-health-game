@@ -18,7 +18,7 @@ and made green. The /loop process picks the first test with
 | 7 | 01 | TC-V-007 | Body description line-height | 1.5 | 2026-05-09T17:53:38Z |
 | 8 | 01 | TC-V-008 | Primary button label ("Get started") | Inter 14/16 px, weight 500, white | 2026-05-09T17:56:21Z |
 | 9 | 01 | TC-V-009 | Secondary button label ("I have an account") | Inter 14/16 px, weight 500, on-surface color | 2026-05-09T17:58:49Z |
-| 10 | 01 | TC-V-010 | Brand wordmark ("HealthQuest") visible at desktop only | font 22 px, weight 500 | null |
+| 10 | 01 | TC-V-010 | Brand wordmark ("HealthQuest") visible at desktop only | font 22 px, weight 500 | 2026-05-09T18:01:35Z |
 | 11 | 01 | TC-C-001 | Page background | `#F7FBF3` (md-sys-color-surface) | null |
 | 12 | 01 | TC-C-002 | Hero panel background | `#94F7B4` (primary container) | null |
 | 13 | 01 | TC-C-003 | Trophy icon color on hero | `#00210F` (on primary container) | null |
