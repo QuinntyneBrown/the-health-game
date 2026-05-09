@@ -1,5 +1,5 @@
 ---
-status: Accepted
+status: Complete
 ---
 
 # Task 15 — Create hourly, weekly, monthly, custom-interval goals
