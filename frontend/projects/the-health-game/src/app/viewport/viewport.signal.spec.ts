@@ -1,19 +1,16 @@
 // Acceptance Test
 // Traces to: L2-020, L2-021, L2-030
 // Description: Verifies the viewport signal returns the navigation variant.
-import { TestBed } from '@angular/core/testing';
+import { computeVariant } from './viewport.signal';
 
-import { VIEWPORT, provideViewport } from './viewport.signal';
-
-describe('viewport signal', () => {
-  beforeEach(() => {
-    TestBed.configureTestingModule({
-      providers: [provideViewport()],
-    });
+describe('computeVariant', () => {
+  it('returns "bottom" for mobile widths (<768)', () => {
+    expect(computeVariant(360)).toBe('bottom');
+    expect(computeVariant(767)).toBe('bottom');
   });
 
-  it('returns "bottom" by default for mobile-first behaviour', () => {
-    const variant = TestBed.inject(VIEWPORT);
-    expect(variant()).toBe('bottom');
+  it('returns "rail" for tablet widths (>=768)', () => {
+    expect(computeVariant(768)).toBe('rail');
+    expect(computeVariant(1024)).toBe('rail');
   });
 });

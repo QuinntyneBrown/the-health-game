@@ -19,8 +19,16 @@ export class AppShellPage {
     return this.page.locator('hg-navigation-bar.app-shell__navigation--rail');
   }
 
+  railItem(label: string): Locator {
+    return this.rail().getByRole('button', { name: label });
+  }
+
   drawer(): Locator {
     return this.page.locator('hg-navigation-bar.app-shell__navigation--drawer');
+  }
+
+  drawerItem(label: string): Locator {
+    return this.drawer().getByRole('button', { name: label });
   }
 
   async isBottomNavVisible(): Promise<boolean> {
@@ -37,5 +45,13 @@ export class AppShellPage {
 
   async clickBottomNavItem(label: string): Promise<void> {
     await this.bottomNavItem(label).click();
+  }
+
+  async clickRailItem(label: string): Promise<void> {
+    await this.railItem(label).click();
+  }
+
+  async clickDrawerItem(label: string): Promise<void> {
+    await this.drawerItem(label).click();
   }
 }
