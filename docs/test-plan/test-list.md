@@ -103,7 +103,7 @@ and made green. The /loop process picks the first test with
 | 92 | 02 | TC-L-008 | Mobile shows single-column stack | confirmed | 2026-05-09T21:10:16Z |
 | 93 | 02 | TC-L-009 | Tablet shows 1–2 columns where space allows | confirmed | 2026-05-09T21:11:32Z |
 | 94 | 02 | TC-L-010 | Desktop shows main + side panel grid | confirmed; main bounded by max content width | 2026-05-09T21:12:52Z |
-| 95 | 02 | TC-R-001 | 360 px viewport | Single-column; bottom nav visible | null |
+| 95 | 02 | TC-R-001 | 360 px viewport | Single-column; bottom nav visible | 2026-05-09T21:14:20Z |
 | 96 | 02 | TC-R-002 | 768 px viewport | Two columns where appropriate; rail variant | null |
 | 97 | 02 | TC-R-003 | 1200 px viewport | Drawer variant visible; bottom nav and rail hidden | null |
 | 98 | 02 | TC-R-004 | 1440 px viewport | Drawer + side panel; main `<main>` `max-width <= 1152 px` | null |
