@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 01-TC-V-001..010, 01-TC-C-001..010, 01-TC-L-001..010
+// Traces to: 01-TC-V-001..010, 01-TC-C-001..010, 01-TC-L-001..010, 01-TC-R-001
 // Description: Onboarding headline ("Make health a game") renders with font family Inter weight 500
 //              and the design-spec font-size at each breakpoint (mobile = 28 px, tablet = 45 px,
 //              desktop = 57 px with line-height 1.1). Body description paragraph renders at
@@ -316,6 +316,39 @@ test.describe('Onboarding — headline typography', () => {
       expect(rects[1].top).toBeGreaterThan(rects[0].bottom - 1);
       expect(Math.abs(rects[1].left - rects[0].left)).toBeLessThan(1);
       expect(rects[1].top - rects[0].bottom).toBeCloseTo(12, 0);
+    });
+
+    test('viewport 360x780 — single-column layout with no horizontal scrollbar (TC-R-001)', async ({
+      page,
+    }) => {
+      await page.setViewportSize({ width: 360, height: 780 });
+      await page.goto('/onboarding');
+
+      const root = page.getByTestId('onboarding');
+      await expect(root).toBeVisible();
+
+      const overflow = await page.evaluate(() => ({
+        scrollWidth: document.documentElement.scrollWidth,
+        clientWidth: document.documentElement.clientWidth,
+      }));
+      expect(overflow.scrollWidth).toBeLessThanOrEqual(overflow.clientWidth);
+
+      const ids = [
+        'onboarding-hero',
+        'onboarding-headline',
+        'onboarding-description',
+        'onboarding-page-dots',
+        'onboarding-buttons',
+      ];
+      const lefts = await Promise.all(
+        ids.map((id) =>
+          page.getByTestId(id).evaluate((el) => (el as HTMLElement).getBoundingClientRect().left),
+        ),
+      );
+      const minLeft = Math.min(...lefts);
+      const maxLeft = Math.max(...lefts);
+      // All left edges align (single column)
+      expect(maxLeft - minLeft).toBeLessThan(2);
     });
 
     test('body padding is 24 px on all sides (TC-L-001)', async ({ page }) => {
