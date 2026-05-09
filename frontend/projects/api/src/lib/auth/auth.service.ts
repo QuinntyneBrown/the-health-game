@@ -83,6 +83,10 @@ export class AuthService {
     return this.accessToken();
   }
 
+  isAuthenticated(): boolean {
+    return this.accessToken() !== null;
+  }
+
   signOut(): void {
     this.accessToken.set(null);
     sessionStorage.removeItem(VERIFIER_KEY);
