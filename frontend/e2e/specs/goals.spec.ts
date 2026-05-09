@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 03-TC-V-001..009
+// Traces to: 03-TC-V-001..009, 03-TC-C-001
 // Description: /goals page title "Goals" renders with Inter weight 500 at 22/32 px.
 // Subtitle is Inter 13 px weight 400 with computed counts.
 import { expect, test } from '@playwright/test';
@@ -236,6 +236,16 @@ test.describe('Goals page — header typography', () => {
 
   test.describe('goal form', () => {
     test.use({ viewport: { width: 1440, height: 900 } });
+
+    test('goals page background is #F1F5ED (03-TC-C-001)', async ({ page }) => {
+      await authenticate(page);
+      await page.goto('/goals');
+
+      const host = page.locator('lib-goal-list').first();
+      await expect(host).toBeVisible();
+      const bg = await host.evaluate((el) => getComputedStyle(el).backgroundColor);
+      expect(bg).toBe('rgb(241, 245, 237)');
+    });
 
     test('form helper text is Inter 12 px / weight 400 (03-TC-V-009)', async ({ page }) => {
       await authenticate(page);
