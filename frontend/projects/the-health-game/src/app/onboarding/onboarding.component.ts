@@ -9,7 +9,13 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
         class="onboarding__hero"
         data-testid="onboarding-hero"
         aria-hidden="true"
-      ></div>
+      >
+        <span
+          class="onboarding__trophy material-symbols-rounded"
+          data-testid="onboarding-trophy"
+          >emoji_events</span
+        >
+      </div>
       <h1 class="onboarding__headline" data-testid="onboarding-headline">
         Make health a game
       </h1>
@@ -53,6 +59,15 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
         background-color: #94f7b4;
         border-radius: 28px;
         min-height: 200px;
+        display: grid;
+        place-items: center;
+      }
+
+      .onboarding__trophy {
+        color: #00210f;
+        font-family: 'Material Symbols Rounded';
+        font-size: 120px;
+        line-height: 1;
       }
 
       .onboarding__headline {

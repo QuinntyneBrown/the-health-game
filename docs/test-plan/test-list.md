@@ -21,7 +21,7 @@ and made green. The /loop process picks the first test with
 | 10 | 01 | TC-V-010 | Brand wordmark ("HealthQuest") visible at desktop only | font 22 px, weight 500 | 2026-05-09T18:01:35Z |
 | 11 | 01 | TC-C-001 | Page background | `#F7FBF3` (md-sys-color-surface) | 2026-05-09T18:03:38Z |
 | 12 | 01 | TC-C-002 | Hero panel background | `#94F7B4` (primary container) | 2026-05-09T18:05:57Z |
-| 13 | 01 | TC-C-003 | Trophy icon color on hero | `#00210F` (on primary container) | null |
+| 13 | 01 | TC-C-003 | Trophy icon color on hero | `#00210F` (on primary container) | 2026-05-09T18:08:29Z |
 | 14 | 01 | TC-C-004 | Headline text color | `#191D17` (on surface) | null |
 | 15 | 01 | TC-C-005 | Primary button background | `#006D3F` (primary) | null |
 | 16 | 01 | TC-C-006 | Primary button label color | `#FFFFFF` | null |
