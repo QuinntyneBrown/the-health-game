@@ -1,3 +1,7 @@
+---
+status: Accepted
+---
+
 # Task 04 — Environment configuration and API base URL
 
 **Traces to:** L2-013, L2-017, L2-019
