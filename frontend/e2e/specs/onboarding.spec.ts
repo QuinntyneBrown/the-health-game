@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 01-TC-V-001..010, 01-TC-C-001..010, 01-TC-L-001..010, 01-TC-R-001..008, 01-TC-F-001..008
+// Traces to: 01-TC-V-001..010, 01-TC-C-001..010, 01-TC-L-001..010, 01-TC-R-001..008, 01-TC-F-001..008, 01-TC-B-001
 // Description: Onboarding headline ("Make health a game") renders with font family Inter weight 500
 //              and the design-spec font-size at each breakpoint (mobile = 28 px, tablet = 45 px,
 //              desktop = 57 px with line-height 1.1). Body description paragraph renders at
@@ -218,6 +218,38 @@ test.describe('Onboarding — headline typography', () => {
     expect(url.searchParams.get('code_challenge')).toBeTruthy();
     expect(url.searchParams.get('state')).toBeTruthy();
     expect(url.searchParams.get('client_id')).toBeTruthy();
+  });
+
+  test('Tab order: Get started → I have an account (TC-B-001)', async ({ page }) => {
+    await page.goto('/onboarding');
+    await expect(page.getByTestId('onboarding-headline')).toBeVisible();
+
+    // Click in a non-interactive area to seed focus on body
+    await page.locator('body').focus();
+
+    const trail: string[] = [];
+    let primaryIndex = -1;
+    let secondaryIndex = -1;
+
+    for (let i = 0; i < 20; i++) {
+      await page.keyboard.press('Tab');
+      const id = await page.evaluate(() =>
+        document.activeElement?.getAttribute('data-testid') ?? document.activeElement?.tagName ?? '',
+      );
+      trail.push(id);
+      if (id === 'onboarding-get-started' && primaryIndex < 0) primaryIndex = i;
+      if (id === 'onboarding-have-account' && secondaryIndex < 0) secondaryIndex = i;
+      if (primaryIndex >= 0 && secondaryIndex >= 0) break;
+    }
+
+    expect(primaryIndex).toBeGreaterThanOrEqual(0);
+    expect(secondaryIndex).toBeGreaterThan(primaryIndex);
+
+    // No interactive controls between primary and secondary except possibly the dots
+    const between = trail.slice(primaryIndex + 1, secondaryIndex);
+    for (const id of between) {
+      expect(id).toMatch(/onboarding-page-dots|onboarding-have-account|^$/);
+    }
   });
 
   test('page load leaks no auth tokens to console or network (TC-F-007)', async ({ page }) => {
