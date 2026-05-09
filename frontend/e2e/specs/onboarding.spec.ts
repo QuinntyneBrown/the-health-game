@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 01-TC-V-001..010, 01-TC-C-001..010, 01-TC-L-001..010, 01-TC-R-001..008, 01-TC-F-001..008, 01-TC-B-001..007, 01-TC-A-001..002
+// Traces to: 01-TC-V-001..010, 01-TC-C-001..010, 01-TC-L-001..010, 01-TC-R-001..008, 01-TC-F-001..008, 01-TC-B-001..007, 01-TC-A-001..003
 // Description: Onboarding headline ("Make health a game") renders with font family Inter weight 500
 //              and the design-spec font-size at each breakpoint (mobile = 28 px, tablet = 45 px,
 //              desktop = 57 px with line-height 1.1). Body description paragraph renders at
@@ -218,6 +218,27 @@ test.describe('Onboarding — headline typography', () => {
     expect(url.searchParams.get('code_challenge')).toBeTruthy();
     expect(url.searchParams.get('state')).toBeTruthy();
     expect(url.searchParams.get('client_id')).toBeTruthy();
+  });
+
+  test('trophy icon is decorative (aria-hidden via self or ancestor) (TC-A-003)', async ({
+    page,
+  }) => {
+    await page.goto('/onboarding');
+
+    const trophy = page.getByTestId('onboarding-trophy');
+    await expect(trophy).toBeVisible();
+
+    const hidden = await trophy.evaluate((el) => {
+      let cursor: Element | null = el;
+      while (cursor) {
+        if (cursor.getAttribute('aria-hidden') === 'true') {
+          return true;
+        }
+        cursor = cursor.parentElement;
+      }
+      return false;
+    });
+    expect(hidden).toBe(true);
   });
 
   test('headline is rendered as <h1> (TC-A-002)', async ({ page }) => {
