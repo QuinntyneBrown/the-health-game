@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 02-TC-V-001..007, 02-TC-C-001..010, 02-TC-L-001..004
+// Traces to: 02-TC-V-001..007, 02-TC-C-001..010, 02-TC-L-001..005
 // Description: Dashboard greeting renders with Inter font, weight 500, sizes 22/28/32 px (mobile/tablet/desktop).
 // Section labels render with Inter weight 500 at 18 px.
 import AxeBuilder from '@axe-core/playwright';
@@ -55,6 +55,26 @@ test.describe('Home Dashboard — greeting typography', () => {
       expect(computed.fontFamily.split(',')[0].replace(/['"]/g, '').trim()).toBe('Inter');
       expect(computed.fontWeight).toBe('500');
       expect(computed.fontSize).toBe('32px');
+    });
+
+    test('bar-chart bars are 4 viewBox units apart (02-TC-L-005)', async ({ page }) => {
+      await authenticate(page);
+
+      const bars = page.locator('[data-testid="dashboard-bar-chart"] .bar-chart__bar');
+      const count = await bars.count();
+      expect(count).toBeGreaterThanOrEqual(2);
+
+      const positions = await bars.evaluateAll((els) =>
+        els.map((el) => ({
+          x: parseFloat(el.getAttribute('x') ?? '0'),
+          width: parseFloat(el.getAttribute('width') ?? '0'),
+        })),
+      );
+
+      for (let i = 1; i < positions.length; i++) {
+        const gap = positions[i].x - (positions[i - 1].x + positions[i - 1].width);
+        expect(gap).toBe(4);
+      }
     });
 
     test('inter-card gap within metrics section is 12-16 px (02-TC-L-004)', async ({ page }) => {
