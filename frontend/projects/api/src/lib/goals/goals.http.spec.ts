@@ -88,4 +88,28 @@ describe('GoalsService.getGoals', () => {
     });
     expect((await promise).name).toBe('Hydrate');
   });
+
+  it('PUTs /api/goals/:id with the update input and returns the updated goal', async () => {
+    const input = {
+      name: 'Hydrate (revised)',
+      cadence: 'daily' as const,
+      target: { value: 10, unit: 'cups' },
+    };
+    const promise = firstValueFrom(service.updateGoal('g-1', input));
+    const req = controller.expectOne(`${config.apiBaseUrl}/api/goals/g-1`);
+    expect(req.request.method).toBe('PUT');
+    expect(req.request.body).toEqual(input);
+    req.flush({
+      id: 'g-1',
+      name: 'Hydrate (revised)',
+      description: '',
+      cadence: 'daily',
+      target: { value: 10, unit: 'cups' },
+      completedQuantity: 4,
+      currentStreak: 3,
+      longestStreak: 7,
+      rewardName: '',
+    });
+    expect((await promise).name).toBe('Hydrate (revised)');
+  });
 });
