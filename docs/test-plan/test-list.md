@@ -128,7 +128,7 @@ and made green. The /loop process picks the first test with
 | 117 | 02 | TC-B-003 | Bar chart has accessible `<svg role="img">` with summary text | Yes | 2026-05-09T22:04:10Z |
 | 118 | 02 | TC-B-004 | Hover/focus state on cards | Subtle elevation or state-layer | 2026-05-09T22:06:27Z |
 | 119 | 02 | TC-B-005 | Pull-to-refresh (mobile, optional) | Reloads dashboard data | 2026-05-09T22:08:06Z |
-| 120 | 02 | TC-B-006 | Reduced-motion preference | No bar entrance animation | null |
+| 120 | 02 | TC-B-006 | Reduced-motion preference | No bar entrance animation | 2026-05-09T22:09:51Z |
 | 121 | 02 | TC-A-001 | Greeting rendered as `<h1>` | Yes | null |
 | 122 | 02 | TC-A-002 | Sections wrapped in `<section aria-labelledby=...>` | Yes | null |
 | 123 | 02 | TC-A-003 | Bar chart exposes data via accessible name or table summary | Yes | null |
