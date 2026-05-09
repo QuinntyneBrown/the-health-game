@@ -12,7 +12,7 @@ and made green. The /loop process picks the first test with
 | 1 | 01 | TC-V-001 | Headline ("Make health a game") font family | `Inter`, weight 500 | 2026-05-09T17:43:00Z |
 | 2 | 01 | TC-V-002 | Headline size — mobile | 28 px | 2026-05-09T17:44:39Z |
 | 3 | 01 | TC-V-003 | Headline size — tablet | 45 px | 2026-05-09T17:46:24Z |
-| 4 | 01 | TC-V-004 | Headline size — desktop | 57 px, line-height 1.1 | null |
+| 4 | 01 | TC-V-004 | Headline size — desktop | 57 px, line-height 1.1 | 2026-05-09T17:47:55Z |
 | 5 | 01 | TC-V-005 | Body description font weight | 400 (normal) | null |
 | 6 | 01 | TC-V-006 | Body description size — mobile/tablet/desktop | 16 / 18 / 18 px | null |
 | 7 | 01 | TC-V-007 | Body description line-height | 1.5 | null |

@@ -1,7 +1,8 @@
 // Acceptance Test
-// Traces to: 01-TC-V-001, 01-TC-V-002, 01-TC-V-003
+// Traces to: 01-TC-V-001, 01-TC-V-002, 01-TC-V-003, 01-TC-V-004
 // Description: Onboarding headline ("Make health a game") renders with font family Inter weight 500
-//              and the design-spec font-size at each breakpoint (mobile = 28 px, tablet = 45 px).
+//              and the design-spec font-size at each breakpoint (mobile = 28 px, tablet = 45 px,
+//              desktop = 57 px with line-height 1.1).
 import { expect, test } from '@playwright/test';
 
 test.describe('Onboarding — headline typography', () => {
@@ -49,6 +50,32 @@ test.describe('Onboarding — headline typography', () => {
 
       const fontSize = await headline.evaluate((el) => getComputedStyle(el).fontSize);
       expect(fontSize).toBe('45px');
+    });
+  });
+
+  test.describe('desktop viewport', () => {
+    test.use({ viewport: { width: 1440, height: 900 } });
+
+    test('headline font-size is 57 px and line-height is 1.1 on desktop (TC-V-004)', async ({
+      page,
+    }) => {
+      await page.goto('/onboarding');
+
+      const headline = page.getByTestId('onboarding-headline');
+      await expect(headline).toBeVisible();
+
+      const metrics = await headline.evaluate((el) => {
+        const style = getComputedStyle(el);
+        return {
+          fontSize: style.fontSize,
+          lineHeight: style.lineHeight,
+        };
+      });
+
+      expect(metrics.fontSize).toBe('57px');
+      const fontSizePx = parseFloat(metrics.fontSize);
+      const lineHeightPx = parseFloat(metrics.lineHeight);
+      expect(lineHeightPx / fontSizePx).toBeCloseTo(1.1, 2);
     });
   });
 });
