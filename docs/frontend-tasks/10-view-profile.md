@@ -1,3 +1,7 @@
+---
+status: Accepted
+---
+
 # Task 10 — View current user profile
 
 **Traces to:** L2-014, L2-021
