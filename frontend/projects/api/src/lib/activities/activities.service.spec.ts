@@ -57,4 +57,15 @@ describe('ActivitiesService.logActivity', () => {
     expect(entry.id).toBe('a-1');
     expect(entry.quantity).toBe(2);
   });
+
+  it('GETs /api/goals/:goalId/activities and returns the entries', async () => {
+    const promise = firstValueFrom(service.getGoalActivities('g-1'));
+    const req = controller.expectOne(`${config.apiBaseUrl}/api/goals/g-1/activities`);
+    expect(req.request.method).toBe('GET');
+    req.flush([
+      { id: 'a-1', goalId: 'g-1', quantity: 2, notes: 'morning', recordedAt: '2026-05-09T10:00:00Z' },
+      { id: 'a-2', goalId: 'g-1', quantity: 4, notes: null, recordedAt: '2026-05-08T08:00:00Z' },
+    ]);
+    expect((await promise).length).toBe(2);
+  });
 });
