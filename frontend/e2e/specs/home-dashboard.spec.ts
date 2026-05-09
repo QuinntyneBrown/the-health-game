@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 02-TC-V-001..007, 02-TC-C-001..010, 02-TC-L-001..010, 02-TC-R-001..006, 02-TC-F-001..010
+// Traces to: 02-TC-V-001..007, 02-TC-C-001..010, 02-TC-L-001..010, 02-TC-R-001..006, 02-TC-F-001..011
 // Description: Dashboard greeting renders with Inter font, weight 500, sizes 22/28/32 px (mobile/tablet/desktop).
 // Section labels render with Inter weight 500 at 18 px.
 import AxeBuilder from '@axe-core/playwright';
@@ -46,6 +46,17 @@ async function authenticate(page: import('@playwright/test').Page): Promise<void
 }
 
 test.describe('Home Dashboard — greeting typography', () => {
+  test('empty state — no goals shows Create your first goal CTA (02-TC-F-011)', async ({
+    page,
+  }) => {
+    await authenticate(page); // authenticate stubs goals to []
+    await page.goto('/home');
+
+    const empty = page.getByTestId('dashboard-empty-goals');
+    await expect(empty).toBeVisible();
+    await expect(empty).toContainText(/create your first goal/i);
+  });
+
   test('switching accounts clears prior dashboard data (02-TC-F-010)', async ({ page }) => {
     // User A: greeting "Quinn" + goal "Walk"
     await authenticate(page);

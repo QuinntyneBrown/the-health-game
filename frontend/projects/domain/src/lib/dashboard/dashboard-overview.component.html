@@ -61,6 +61,17 @@
       />
 
       <div class="dashboard-overview__goal-list">
+        @if (overview().goals.length === 0) {
+          <hg-empty-state
+            data-testid="dashboard-empty-goals"
+            title="No goals yet"
+            description="Build healthy streaks — start by creating your first goal."
+            actionLabel="Create your first goal"
+            actionIcon="add"
+            icon="flag"
+            (actionSelected)="onNewGoal()"
+          />
+        }
         @for (goal of overview().goals; track goal.id) {
           <hg-goal-card
             actionLabel="Log"

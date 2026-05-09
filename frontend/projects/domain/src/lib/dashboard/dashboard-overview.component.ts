@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
 import {
+  EmptyStateComponent,
   GoalCardComponent,
   MetricCardComponent,
   PageHeaderComponent,
@@ -24,6 +25,7 @@ const emptyOverview: DashboardOverview = {
 @Component({
   selector: 'hg-dashboard-overview',
   imports: [
+    EmptyStateComponent,
     GoalCardComponent,
     MetricCardComponent,
     PageHeaderComponent,
