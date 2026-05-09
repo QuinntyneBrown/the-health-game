@@ -71,6 +71,10 @@
             icon="flag"
             (actionSelected)="onNewGoal()"
           />
+        } @else if (todayActivityTotal() === 0) {
+          <p class="dashboard-overview__no-activity" data-testid="dashboard-no-activity-today">
+            No activity yet today — log your first activity from any goal below.
+          </p>
         }
         @for (goal of overview().goals; track goal.id) {
           <hg-goal-card

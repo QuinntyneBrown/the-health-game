@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
 import {
@@ -43,6 +43,13 @@ export class DashboardOverviewComponent {
 
   readonly overview = toSignal(this.dashboardService.getOverview(), {
     initialValue: emptyOverview,
+  });
+
+  readonly todayActivityTotal = computed(() => {
+    const todayMetric = this.overview().metrics.find((m) => m.label === 'Today');
+    if (!todayMetric) return 0;
+    const parsed = parseFloat(todayMetric.value);
+    return Number.isFinite(parsed) ? parsed : 0;
   });
 
   onGoalActionSelected(goalId: string): void {
