@@ -2,6 +2,9 @@
  * Public API Surface of api
  */
 
+export * from './lib/activities/activities.service';
+export * from './lib/activities/activities.service.contract';
+export * from './lib/activities/activity-entry.model';
 export * from './lib/api.config';
 export * from './lib/api.providers';
 export * from './lib/auth/auth.guard';

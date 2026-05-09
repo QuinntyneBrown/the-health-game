@@ -47,3 +47,10 @@
   gap: var(--hg-space-3);
   padding: var(--hg-space-6);
 }
+
+.goal-detail__fab {
+  bottom: var(--hg-space-6);
+  position: fixed;
+  right: var(--hg-space-6);
+  z-index: var(--hg-z-toolbar);
+}

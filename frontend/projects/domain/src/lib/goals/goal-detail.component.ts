@@ -1,11 +1,17 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
+import { MatIconModule } from '@angular/material/icon';
 import { ActivatedRoute, Router } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 import { GOALS_SERVICE, GoalSummary } from 'api';
 import { PageHeaderComponent, StreakSummaryComponent } from 'components';
 
+import {
+  LogActivitySheetComponent,
+  LogActivitySheetData,
+} from '../activities/log-activity-sheet.component';
 import {
   DeleteGoalDialogComponent,
   DeleteGoalDialogData,
@@ -18,7 +24,7 @@ type DetailState =
 
 @Component({
   selector: 'lib-goal-detail',
-  imports: [MatButtonModule, PageHeaderComponent, StreakSummaryComponent],
+  imports: [MatButtonModule, MatIconModule, PageHeaderComponent, StreakSummaryComponent],
   templateUrl: './goal-detail.component.html',
   styleUrl: './goal-detail.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -28,6 +34,7 @@ export class GoalDetailComponent {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly dialog = inject(MatDialog);
+  private readonly bottomSheet = inject(MatBottomSheet);
 
   private readonly state = signal<DetailState>({ status: 'loading' });
   readonly goal = computed(() =>
@@ -78,5 +85,14 @@ export class GoalDetailComponent {
 
   onBack(): void {
     void this.router.navigateByUrl('/goals');
+  }
+
+  onLogActivity(): void {
+    const goal = this.goal();
+    if (!goal) return;
+    this.bottomSheet.open<LogActivitySheetComponent, LogActivitySheetData>(
+      LogActivitySheetComponent,
+      { data: { goalId: goal.id, unit: goal.target.unit } },
+    );
   }
 }
