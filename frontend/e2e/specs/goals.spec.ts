@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 03-TC-V-001..009, 03-TC-C-001..006
+// Traces to: 03-TC-V-001..009, 03-TC-C-001..007
 // Description: /goals page title "Goals" renders with Inter weight 500 at 22/32 px.
 // Subtitle is Inter 13 px weight 400 with computed counts.
 import { expect, test } from '@playwright/test';
@@ -236,6 +236,52 @@ test.describe('Goals page — header typography', () => {
 
   test.describe('goal form', () => {
     test.use({ viewport: { width: 1440, height: 900 } });
+
+    test('goal card icon backgrounds rotate through container palette (03-TC-C-007)', async ({
+      page,
+    }) => {
+      await authenticate(page);
+      await page.unroute('**/api/goals**');
+      const baseGoal = {
+        description: '',
+        cadence: 'daily' as const,
+        target: { value: 10, unit: 'min' },
+        completedQuantity: 0,
+        currentStreak: 0,
+        longestStreak: 0,
+        rewardName: '',
+      };
+      await page.route('**/api/goals**', (route) =>
+        route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify([
+            { id: 'g1', name: 'Walk', ...baseGoal },
+            { id: 'g2', name: 'Read', ...baseGoal },
+            { id: 'g3', name: 'Stretch', ...baseGoal },
+            { id: 'g4', name: 'Hydrate', ...baseGoal },
+          ]),
+        }),
+      );
+      await page.goto('/goals');
+
+      const frames = page.locator('lib-goal-list .goal-list__item .goal-card__icon-frame');
+      await expect(frames).toHaveCount(4);
+
+      const colors: string[] = [];
+      for (let i = 0; i < 4; i++) {
+        colors.push(
+          await frames.nth(i).evaluate((el) => getComputedStyle(el).backgroundColor),
+        );
+      }
+      const expected = [
+        'rgb(148, 247, 180)', // primary container (green)
+        'rgb(207, 228, 255)', // tertiary/blue container
+        'rgb(255, 220, 196)', // streak container (orange)
+        'rgb(255, 215, 238)', // reward container (pink)
+      ];
+      expect(colors).toEqual(expected);
+    });
 
     test('ready (complete) goal card background is #94F7B4 (03-TC-C-006)', async ({ page }) => {
       await authenticate(page);

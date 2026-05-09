@@ -177,6 +177,19 @@ lib-goal-list .goal-card:not(.goal-card--complete):not(.goal-card--streak) {
   background-color: #ebefe7 !important;
 }
 
+lib-goal-list .goal-list__item:nth-child(4n + 1) .goal-card__icon-frame {
+  background-color: #94f7b4 !important;
+}
+lib-goal-list .goal-list__item:nth-child(4n + 2) .goal-card__icon-frame {
+  background-color: #cfe4ff !important;
+}
+lib-goal-list .goal-list__item:nth-child(4n + 3) .goal-card__icon-frame {
+  background-color: #ffdcc4 !important;
+}
+lib-goal-list .goal-list__item:nth-child(4n + 4) .goal-card__icon-frame {
+  background-color: #ffd7ee !important;
+}
+
 hg-empty-state .empty-state__title {
   font-family:
     Inter,
