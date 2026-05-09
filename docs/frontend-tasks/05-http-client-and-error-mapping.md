@@ -1,5 +1,5 @@
 ---
-status: Accepted
+status: Complete
 ---
 
 # Task 05 — HttpClient and ProblemDetails error mapping
