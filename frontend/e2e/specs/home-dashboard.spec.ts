@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 02-TC-V-001..007, 02-TC-C-001..010, 02-TC-L-001..010, 02-TC-R-001..006, 02-TC-F-001..014, 02-TC-B-001..006, 02-TC-A-001..006, 02-TC-D-001
+// Traces to: 02-TC-V-001..007, 02-TC-C-001..010, 02-TC-L-001..010, 02-TC-R-001..006, 02-TC-F-001..014, 02-TC-B-001..006, 02-TC-A-001..006, 02-TC-D-001..002
 // Description: Dashboard greeting renders with Inter font, weight 500, sizes 22/28/32 px (mobile/tablet/desktop).
 // Section labels render with Inter weight 500 at 18 px.
 import AxeBuilder from '@axe-core/playwright';
@@ -46,6 +46,40 @@ async function authenticate(page: import('@playwright/test').Page): Promise<void
 }
 
 test.describe('Home Dashboard — greeting typography', () => {
+  test('newly earned reward surfaces on next dashboard load (02-TC-D-002)', async ({ page }) => {
+    let earned: Array<{ id: string; name: string; earnedAt: string }> = [];
+    await authenticate(page);
+    await page.route('**/api/rewards**', (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify(
+          earned.map((r) => ({
+            id: r.id,
+            userId: 'u',
+            goalId: 'g',
+            name: r.name,
+            description: '',
+            condition: { type: 'goal-target' },
+            status: 'earned',
+            earnedAt: r.earnedAt,
+          })),
+        ),
+      }),
+    );
+    await page.goto('/home');
+    expect(await page.locator('hg-reward-card').count()).toBe(0);
+
+    earned = [{ id: 'r-trophy', name: 'Trophy', earnedAt: '2026-05-09T11:00:00Z' }];
+    await page.reload();
+
+    // The rewards list is wrapped in @defer (on viewport); scroll the rewards
+    // section into view before asserting on the card.
+    await page.locator('[aria-labelledby="dashboard-rewards-title"]').scrollIntoViewIfNeeded();
+    const card = page.locator('hg-reward-card', { hasText: 'Trophy' });
+    await expect(card).toBeVisible();
+  });
+
   test('returning to dashboard refetches new totals (02-TC-D-001)', async ({ page }) => {
     let completedQuantity = 0;
     await authenticate(page);

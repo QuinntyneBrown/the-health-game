@@ -136,7 +136,7 @@ and made green. The /loop process picks the first test with
 | 125 | 02 | TC-A-005 | Streak chip text is not the sole conveyor of meaning (color + icon + label) | Yes | 2026-05-09T22:19:25Z |
 | 126 | 02 | TC-A-006 | axe-core scan | 0 critical / serious | 2026-05-09T22:22:30Z |
 | 127 | 02 | TC-D-001 | Logging an activity from elsewhere then returning to dashboard | New totals visible after refetch (cache-bust or revalidate) | 2026-05-09T22:23:58Z |
-| 128 | 02 | TC-D-002 | Earning a reward | Surfaces on next dashboard load (L2-010 §2) | null |
+| 128 | 02 | TC-D-002 | Earning a reward | Surfaces on next dashboard load (L2-010 §2) | 2026-05-09T22:26:14Z |
 | 129 | 02 | TC-D-003 | Sign out then sign in as different user | Old user's data is purged from in-memory store and cache | null |
 | 130 | 02 | TC-D-004 | Cadence rollover — daily goal at local midnight | "Today" totals reset (L2-011 §1) | null |
 | 131 | 02 | TC-D-005 | Network offline | Last cached snapshot shown with offline banner (no stale write attempts) | null |
