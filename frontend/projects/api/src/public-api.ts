@@ -9,6 +9,7 @@ export * from './lib/api.config';
 export * from './lib/api.providers';
 export * from './lib/auth/auth.guard';
 export * from './lib/auth/auth.service';
+export * from './lib/auth/role.guard';
 export * from './lib/errors/api-errors';
 export * from './lib/rewards/reward.model';
 export * from './lib/rewards/rewards.service';

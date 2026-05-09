@@ -29,6 +29,7 @@ export class AuthService {
   private readonly redirect = inject(OIDC_REDIRECTOR);
   private readonly http = inject(HttpClient);
   private readonly accessToken = signal<string | null>(null);
+  private readonly rolesSignal = signal<readonly string[]>([]);
 
   async signIn(returnUrl?: string): Promise<void> {
     const verifier = randomBase64Url(32);
@@ -85,6 +86,20 @@ export class AuthService {
 
   isAuthenticated(): boolean {
     return this.accessToken() !== null;
+  }
+
+  readonly roles = this.rolesSignal.asReadonly();
+
+  hasRole(role: string): boolean {
+    return this.rolesSignal().includes(role);
+  }
+
+  setRoles(roles: readonly string[]): void {
+    this.rolesSignal.set(roles);
+  }
+
+  setRolesForTest(roles: readonly string[]): void {
+    this.rolesSignal.set(roles);
   }
 
   signOut(): void {
