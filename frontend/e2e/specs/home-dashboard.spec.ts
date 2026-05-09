@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 02-TC-V-001..007, 02-TC-C-001..010, 02-TC-L-001..010, 02-TC-R-001..006, 02-TC-F-001..004
+// Traces to: 02-TC-V-001..007, 02-TC-C-001..010, 02-TC-L-001..010, 02-TC-R-001..006, 02-TC-F-001..005
 // Description: Dashboard greeting renders with Inter font, weight 500, sizes 22/28/32 px (mobile/tablet/desktop).
 // Section labels render with Inter weight 500 at 18 px.
 import AxeBuilder from '@axe-core/playwright';
@@ -46,6 +46,43 @@ async function authenticate(page: import('@playwright/test').Page): Promise<void
 }
 
 test.describe('Home Dashboard — greeting typography', () => {
+  test('Recent rewards shows up to 3 earned, newest first (02-TC-F-005)', async ({ page }) => {
+    await authenticate(page);
+    await page.route('**/api/rewards**', (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify([
+          { id: 'r1', userId: 'u', goalId: 'g', name: 'Old Earned', description: '',
+            condition: { type: 'goal-target' }, status: 'earned', earnedAt: '2026-01-01T00:00:00Z' },
+          { id: 'r2', userId: 'u', goalId: 'g', name: 'Newest Earned', description: '',
+            condition: { type: 'goal-target' }, status: 'earned', earnedAt: '2026-05-09T10:00:00Z' },
+          { id: 'r3', userId: 'u', goalId: 'g', name: 'Mid Earned', description: '',
+            condition: { type: 'goal-target' }, status: 'earned', earnedAt: '2026-03-15T00:00:00Z' },
+          { id: 'r4', userId: 'u', goalId: 'g', name: 'Older Earned', description: '',
+            condition: { type: 'goal-target' }, status: 'earned', earnedAt: '2025-12-01T00:00:00Z' },
+          { id: 'r5', userId: 'u', goalId: 'g', name: 'Oldest Earned', description: '',
+            condition: { type: 'goal-target' }, status: 'earned', earnedAt: '2025-10-01T00:00:00Z' },
+          { id: 'r6', userId: 'u', goalId: 'g', name: 'Pending', description: '',
+            condition: { type: 'goal-target' }, status: 'pending', earnedAt: null },
+        ]),
+      }),
+    );
+    await page.goto('/home');
+
+    const rewardCards = page.locator('hg-reward-card');
+    await expect(rewardCards.first()).toBeVisible();
+    expect(await rewardCards.count()).toBe(3);
+
+    // The first card should be the newest earned reward
+    const firstName = await rewardCards.first().locator('.reward-card__name').textContent();
+    expect(firstName?.trim()).toBe('Newest Earned');
+
+    // No pending reward should appear
+    const allText = await rewardCards.allTextContents();
+    expect(allText.join('|')).not.toContain('Pending');
+  });
+
   test('goal card streak chip shows current streak (02-TC-F-004)', async ({ page }) => {
     await authenticate(page);
     await page.route('**/api/goals**', (route) =>

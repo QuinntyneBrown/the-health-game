@@ -81,7 +81,11 @@ export class DashboardService implements IDashboardService {
               .filter((g) => g.cadence === 'daily')
               .reduce((sum, g) => sum + g.completedQuantity, 0),
           ),
-          rewards: rewards.map((reward) => this.toRewardItem(reward)),
+          rewards: [...rewards]
+            .filter((r) => r.status === 'earned' && r.earnedAt)
+            .sort((a, b) => (b.earnedAt ?? '').localeCompare(a.earnedAt ?? ''))
+            .slice(0, 3)
+            .map((reward) => this.toRewardItem(reward)),
         };
       }),
     );
