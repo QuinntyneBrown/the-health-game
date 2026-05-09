@@ -1,3 +1,7 @@
+---
+status: Accepted
+---
+
 # Task 28 — RBAC UI gating with `hgIfRole` and `roleGuard`
 
 **Traces to:** L2-015
