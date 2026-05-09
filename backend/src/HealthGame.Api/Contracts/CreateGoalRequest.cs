@@ -20,7 +20,12 @@ public sealed record CreateGoalRequest(
     string TargetUnit,
 
     [property: Required]
-    GoalCadenceRequest Cadence)
+    GoalCadenceRequest Cadence,
+
+    [property: StringLength(128)]
+    string? TimeZoneId = null,
+
+    DayOfWeek? WeekStartsOn = null)
 {
     public CreateGoalCommand ToCommand()
     {
@@ -29,6 +34,8 @@ public sealed record CreateGoalRequest(
             Description,
             TargetQuantity,
             TargetUnit,
-            new GoalCadenceDto(Cadence.Type, Cadence.Interval));
+            new GoalCadenceDto(Cadence.Type, Cadence.Interval),
+            TimeZoneId,
+            WeekStartsOn);
     }
 }

@@ -9,10 +9,13 @@ public sealed record GoalDto(
     decimal TargetQuantity,
     string TargetUnit,
     GoalCadenceDto Cadence,
+    string TimeZoneId,
+    DayOfWeek WeekStartsOn,
+    StreakSummaryDto Streak,
     DateTimeOffset CreatedAtUtc,
     DateTimeOffset? UpdatedAtUtc)
 {
-    public static GoalDto FromGoal(Goal goal)
+    public static GoalDto FromGoal(Goal goal, StreakSummaryDto? streak = null)
     {
         return new GoalDto(
             goal.Id,
@@ -21,6 +24,9 @@ public sealed record GoalDto(
             goal.TargetQuantity,
             goal.TargetUnit,
             new GoalCadenceDto(goal.Cadence.Type, goal.Cadence.Interval),
+            goal.TimeZoneId,
+            goal.WeekStartsOn,
+            streak ?? StreakSummaryDto.Empty,
             goal.CreatedAtUtc,
             goal.UpdatedAtUtc);
     }

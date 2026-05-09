@@ -12,6 +12,15 @@ public sealed class HttpCurrentUserContext(IHttpContextAccessor httpContextAcces
         httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier) ??
         httpContextAccessor.HttpContext?.User.FindFirstValue("sub");
 
+    public string? Email =>
+        httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.Email) ??
+        httpContextAccessor.HttpContext?.User.FindFirstValue("email");
+
+    public string? DisplayName =>
+        httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.Name) ??
+        httpContextAccessor.HttpContext?.User.FindFirstValue("name") ??
+        httpContextAccessor.HttpContext?.User.FindFirstValue("preferred_username");
+
     public IReadOnlyCollection<string> Roles
     {
         get

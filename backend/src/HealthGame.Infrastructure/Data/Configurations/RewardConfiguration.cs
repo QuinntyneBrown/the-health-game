@@ -53,5 +53,7 @@ internal sealed class RewardConfiguration : IEntityTypeConfiguration<Reward>
             reward.GoalId,
             reward.Name
         });
+
+        builder.HasIndex(reward => new { reward.UserId, reward.GoalId, reward.IsEarned });
     }
 }

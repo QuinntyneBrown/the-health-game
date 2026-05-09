@@ -73,7 +73,7 @@
               "name": "Component / Button / Filled",
               "reusable": true,
               "height": 40,
-              "fill": "\\$md-sys-color-surface-container-low",
+              "fill": "#006D3F",
               "cornerRadius": 9999,
               "gap": 8,
               "padding": [
@@ -86,7 +86,7 @@
                 {
                   "type": "text",
                   "id": "XP3hE",
-                  "fill": "\\$md-sys-color-on-surface",
+                  "fill": "#FFFFFF",
                   "content": "Filled button",
                   "fontFamily": "Inter",
                   "fontSize": 14,
@@ -100,7 +100,7 @@
               "name": "Component / Button / Tonal",
               "reusable": true,
               "height": 40,
-              "fill": "\\$md-sys-color-surface-container-low",
+              "fill": "#D2E8D4",
               "cornerRadius": 9999,
               "gap": 8,
               "padding": [
@@ -113,7 +113,7 @@
                 {
                   "type": "text",
                   "id": "cn1JT",
-                  "fill": "\\$md-sys-color-on-surface",
+                  "fill": "#0C1F13",
                   "content": "Tonal button",
                   "fontFamily": "Inter",
                   "fontSize": 14,
@@ -127,10 +127,11 @@
               "name": "Component / Button / Outlined",
               "reusable": true,
               "height": 40,
+              "fill": "#F1F5ED",
               "cornerRadius": 9999,
               "stroke": {
                 "thickness": 1,
-                "fill": "\\$md-sys-color-outline-variant"
+                "fill": "#727970"
               },
               "gap": 8,
               "padding": [
@@ -143,7 +144,7 @@
                 {
                   "type": "text",
                   "id": "FR0FE",
-                  "fill": "\\$md-sys-color-on-surface",
+                  "fill": "#006D3F",
                   "content": "Outlined button",
                   "fontFamily": "Inter",
                   "fontSize": 14,
@@ -157,6 +158,7 @@
               "name": "Component / Button / Text",
               "reusable": true,
               "height": 40,
+              "fill": "#F1F5ED",
               "cornerRadius": 9999,
               "gap": 8,
               "padding": [
@@ -169,7 +171,7 @@
                 {
                   "type": "text",
                   "id": "X9UVnZ",
-                  "fill": "\\$md-sys-color-on-surface",
+                  "fill": "#006D3F",
                   "content": "Text button",
                   "fontFamily": "Inter",
                   "fontSize": 14,
@@ -183,7 +185,7 @@
               "name": "Component / Button / Elevated",
               "reusable": true,
               "height": 40,
-              "fill": "\\$md-sys-color-surface-container-low",
+              "fill": "#FFFFFF",
               "cornerRadius": 9999,
               "effect": {
                 "type": "shadow",
@@ -206,7 +208,7 @@
                 {
                   "type": "text",
                   "id": "Q5Ek1",
-                  "fill": "\\$md-sys-color-on-surface",
+                  "fill": "#006D3F",
                   "content": "Elevated button",
                   "fontFamily": "Inter",
                   "fontSize": 14,
@@ -253,7 +255,7 @@
                   "reusable": true,
                   "width": 40,
                   "height": 40,
-                  "fill": "\\$md-sys-color-surface-container-low",
+                  "fill": "#94F7B4",
                   "cornerRadius": 12,
                   "effect": {
                     "type": "shadow",
@@ -275,7 +277,7 @@
                       "height": 24,
                       "iconFontName": "add",
                       "iconFontFamily": "Material Symbols Rounded",
-                      "fill": "\\$md-sys-color-surface-container-low"
+                      "fill": "#00210F"
                     }
                   ]
                 },
@@ -286,7 +288,7 @@
                   "reusable": true,
                   "width": 56,
                   "height": 56,
-                  "fill": "\\$md-sys-color-surface-container-low",
+                  "fill": "#94F7B4",
                   "cornerRadius": 16,
                   "effect": {
                     "type": "shadow",
@@ -308,7 +310,7 @@
                       "height": 24,
                       "iconFontName": "add",
                       "iconFontFamily": "Material Symbols Rounded",
-                      "fill": "\\$md-sys-color-surface-container-low"
+                      "fill": "#00210F"
                     }
                   ]
                 },
@@ -319,7 +321,7 @@
                   "reusable": true,
                   "width": 96,
                   "height": 96,
-                  "fill": "\\$md-sys-color-surface-container-low",
+                  "fill": "#94F7B4",
                   "cornerRadius": 28,
                   "effect": {
                     "type": "shadow",
@@ -341,7 +343,7 @@
                       "height": 36,
                       "iconFontName": "add",
                       "iconFontFamily": "Material Symbols Rounded",
-                      "fill": "\\$md-sys-color-surface-container-low"
+                      "fill": "#00210F"
                     }
                   ]
                 },
@@ -351,7 +353,7 @@
                   "name": "Component / FAB / Extended",
                   "reusable": true,
                   "height": 56,
-                  "fill": "\\$md-sys-color-surface-container-low",
+                  "fill": "#94F7B4",
                   "cornerRadius": 16,
                   "effect": {
                     "type": "shadow",
@@ -379,12 +381,12 @@
                       "height": 24,
                       "iconFontName": "add",
                       "iconFontFamily": "Material Symbols Rounded",
-                      "fill": "\\$md-sys-color-surface-container-low"
+                      "fill": "#00210F"
                     },
                     {
                       "type": "text",
                       "id": "BOj8C",
-                      "fill": "\\$md-sys-color-on-surface",
+                      "fill": "#00210F",
                       "content": "Log activity",
                       "fontFamily": "Inter",
                       "fontSize": 14,
@@ -409,7 +411,7 @@
                   "reusable": true,
                   "width": 40,
                   "height": 40,
-                  "fill": "\\$md-sys-color-surface-container-low",
+                  "fill": "#006D3F",
                   "cornerRadius": 9999,
                   "justifyContent": "center",
                   "alignItems": "center",
@@ -421,7 +423,7 @@
                       "height": 24,
                       "iconFontName": "check",
                       "iconFontFamily": "Material Symbols Rounded",
-                      "fill": "\\$md-sys-color-surface-container-low"
+                      "fill": "#FFFFFF"
                     }
                   ]
                 },
@@ -432,7 +434,7 @@
                   "reusable": true,
                   "width": 40,
                   "height": 40,
-                  "fill": "\\$md-sys-color-surface-container-low",
+                  "fill": "#D2E8D4",
                   "cornerRadius": 9999,
                   "justifyContent": "center",
                   "alignItems": "center",
@@ -444,7 +446,7 @@
                       "height": 24,
                       "iconFontName": "favorite",
                       "iconFontFamily": "Material Symbols Rounded",
-                      "fill": "\\$md-sys-color-surface-container-low"
+                      "fill": "#0C1F13"
                     }
                   ]
                 },
@@ -455,10 +457,11 @@
                   "reusable": true,
                   "width": 40,
                   "height": 40,
+                  "fill": "#F1F5ED",
                   "cornerRadius": 9999,
                   "stroke": {
                     "thickness": 1,
-                    "fill": "\\$md-sys-color-outline-variant"
+                    "fill": "#727970"
                   },
                   "justifyContent": "center",
                   "alignItems": "center",
@@ -470,7 +473,7 @@
                       "height": 24,
                       "iconFontName": "more_vert",
                       "iconFontFamily": "Material Symbols Rounded",
-                      "fill": "\\$md-sys-color-surface-container-low"
+                      "fill": "#424940"
                     }
                   ]
                 },
@@ -481,6 +484,7 @@
                   "reusable": true,
                   "width": 40,
                   "height": 40,
+                  "fill": "#F1F5ED",
                   "cornerRadius": 9999,
                   "justifyContent": "center",
                   "alignItems": "center",
@@ -492,7 +496,7 @@
                       "height": 24,
                       "iconFontName": "settings",
                       "iconFontFamily": "Material Symbols Rounded",
-                      "fill": "\\$md-sys-color-surface-container-low"
+                      "fill": "#424940"
                     }
                   ]
                 }
@@ -544,7 +548,7 @@
                       "name": "tfFilledBox",
                       "width": "fill_container",
                       "height": 56,
-                      "fill": "\\$md-sys-color-surface-container-low",
+                      "fill": "#E0E4DC",
                       "cornerRadius": [
                         4,
                         4,
@@ -567,7 +571,7 @@
                         {
                           "type": "text",
                           "id": "fRM0f",
-                          "fill": "\\$md-sys-color-on-surface",
+                          "fill": "#424940",
                           "content": "Label",
                           "fontFamily": "Inter",
                           "fontSize": 12,
@@ -576,7 +580,7 @@
                         {
                           "type": "text",
                           "id": "Y6QcVA",
-                          "fill": "\\$md-sys-color-on-surface",
+                          "fill": "#191D17",
                           "content": "Input value",
                           "fontFamily": "Inter",
                           "fontSize": 16,
@@ -587,7 +591,7 @@
                     {
                       "type": "text",
                       "id": "lufux",
-                      "fill": "\\$md-sys-color-on-surface",
+                      "fill": "#424940",
                       "textGrowth": "fixed-width",
                       "width": "fill_container",
                       "content": "Helper text",
@@ -612,12 +616,11 @@
                       "name": "tfOutlinedBox",
                       "width": "fill_container",
                       "height": 56,
-                      "fill": "\\$md-sys-color-surface-container-low",
+                      "fill": "#F7FBF3",
                       "cornerRadius": 4,
                       "stroke": {
-                        "align": "inside",
                         "thickness": 1,
-                        "fill": "\\$md-sys-color-outline-variant"
+                        "fill": "#727970"
                       },
                       "padding": 16,
                       "alignItems": "center",
@@ -625,7 +628,7 @@
                         {
                           "type": "text",
                           "id": "L9sjQd",
-                          "fill": "\\$md-sys-color-on-surface",
+                          "fill": "#191D17",
                           "content": "Input value",
                           "fontFamily": "Inter",
                           "fontSize": 16,
@@ -636,7 +639,7 @@
                     {
                       "type": "text",
                       "id": "neupq",
-                      "fill": "\\$md-sys-color-on-surface",
+                      "fill": "#424940",
                       "textGrowth": "fixed-width",
                       "width": "fill_container",
                       "content": "Helper text",
@@ -669,12 +672,11 @@
                       "name": "tfFocBox",
                       "width": "fill_container",
                       "height": 56,
-                      "fill": "\\$md-sys-color-surface-container-low",
+                      "fill": "#F7FBF3",
                       "cornerRadius": 4,
                       "stroke": {
-                        "align": "inside",
                         "thickness": 2,
-                        "fill": "\\$md-sys-color-outline-variant"
+                        "fill": "#006D3F"
                       },
                       "layout": "vertical",
                       "padding": [
@@ -685,7 +687,7 @@
                         {
                           "type": "text",
                           "id": "Nu3UP",
-                          "fill": "\\$md-sys-color-on-surface",
+                          "fill": "#006D3F",
                           "content": "Goal name",
                           "fontFamily": "Inter",
                           "fontSize": 12,
@@ -694,7 +696,7 @@
                         {
                           "type": "text",
                           "id": "VIOY0",
-                          "fill": "\\$md-sys-color-on-surface",
+                          "fill": "#191D17",
                           "content": "Drink water",
                           "fontFamily": "Inter",
                           "fontSize": 16,
@@ -718,12 +720,11 @@
                       "name": "tfErrBox",
                       "width": "fill_container",
                       "height": 56,
-                      "fill": "\\$md-sys-color-surface-container-low",
+                      "fill": "#F7FBF3",
                       "cornerRadius": 4,
                       "stroke": {
-                        "align": "inside",
                         "thickness": 2,
-                        "fill": "\\$md-sys-color-outline-variant"
+                        "fill": "#BA1A1A"
                       },
                       "layout": "vertical",
                       "padding": [
@@ -734,7 +735,7 @@
                         {
                           "type": "text",
                           "id": "zGPI9",
-                          "fill": "\\$md-sys-color-on-surface",
+                          "fill": "#BA1A1A",
                           "content": "Goal name",
                           "fontFamily": "Inter",
                           "fontSize": 12,
@@ -743,7 +744,7 @@
                         {
                           "type": "text",
                           "id": "nxajH",
-                          "fill": "\\$md-sys-color-on-surface",
+                          "fill": "#191D17",
                           "fontFamily": "Inter",
                           "fontSize": 16,
                           "fontWeight": "normal"
@@ -768,12 +769,12 @@
                           "height": 16,
                           "iconFontName": "error",
                           "iconFontFamily": "Material Symbols Rounded",
-                          "fill": "\\$md-sys-color-surface-container-low"
+                          "fill": "#BA1A1A"
                         },
                         {
                           "type": "text",
                           "id": "gQvgU",
-                          "fill": "\\$md-sys-color-on-surface",
+                          "fill": "#BA1A1A",
                           "content": "Goal name is required",
                           "fontFamily": "Inter",
                           "fontSize": 12,
@@ -799,7 +800,7 @@
                       "opacity": 0.04,
                       "width": "fill_container",
                       "height": 56,
-                      "fill": "\\$md-sys-color-surface-container-low",
+                      "fill": "#E0E4DC",
                       "cornerRadius": [
                         4,
                         4,
@@ -873,7 +874,7 @@
                   "name": "Component / Card / Elevated",
                   "reusable": true,
                   "width": 280,
-                  "fill": "\\$md-sys-color-surface-container-low",
+                  "fill": "#F1F5ED",
                   "cornerRadius": 12,
                   "effect": {
                     "type": "shadow",
@@ -919,7 +920,7 @@
                   "name": "Component / Card / Filled",
                   "reusable": true,
                   "width": 280,
-                  "fill": "\\$md-sys-color-surface-container-low",
+                  "fill": "#E0E4DC",
                   "cornerRadius": 12,
                   "layout": "vertical",
                   "gap": 12,
@@ -955,12 +956,11 @@
                   "name": "Component / Card / Outlined",
                   "reusable": true,
                   "width": 280,
-                  "fill": "\\$md-sys-color-surface-container-low",
+                  "fill": "#F7FBF3",
                   "cornerRadius": 12,
                   "stroke": {
-                    "align": "inside",
                     "thickness": 1,
-                    "fill": "\\$md-sys-color-outline-variant"
+                    "fill": "#C2C9BE"
                   },
                   "layout": "vertical",
                   "gap": 12,
@@ -1030,11 +1030,11 @@
                   "name": "Component / Chip / Assist",
                   "reusable": true,
                   "height": 32,
+                  "fill": "#F1F5ED",
                   "cornerRadius": 8,
                   "stroke": {
-                    "align": "inside",
                     "thickness": 1,
-                    "fill": "\\$md-sys-color-outline-variant"
+                    "fill": "#727970"
                   },
                   "gap": 8,
                   "padding": [
@@ -1052,12 +1052,12 @@
                       "height": 18,
                       "iconFontName": "event",
                       "iconFontFamily": "Material Symbols Rounded",
-                      "fill": "\\$md-sys-color-surface-container-low"
+                      "fill": "#006D3F"
                     },
                     {
                       "type": "text",
                       "id": "e2WX0",
-                      "fill": "\\$md-sys-color-on-surface",
+                      "fill": "#191D17",
                       "content": "Assist",
                       "fontFamily": "Inter",
                       "fontSize": 14,
@@ -1071,11 +1071,11 @@
                   "name": "Component / Chip / Filter",
                   "reusable": true,
                   "height": 32,
+                  "fill": "#F1F5ED",
                   "cornerRadius": 8,
                   "stroke": {
-                    "align": "inside",
                     "thickness": 1,
-                    "fill": "\\$md-sys-color-outline-variant"
+                    "fill": "#727970"
                   },
                   "gap": 8,
                   "padding": [
@@ -1087,7 +1087,7 @@
                     {
                       "type": "text",
                       "id": "Sgoyi",
-                      "fill": "\\$md-sys-color-on-surface",
+                      "fill": "#424940",
                       "content": "Filter",
                       "fontFamily": "Inter",
                       "fontSize": 14,
@@ -1101,7 +1101,7 @@
                   "name": "Component / Chip / FilterSelected",
                   "reusable": true,
                   "height": 32,
-                  "fill": "\\$md-sys-color-surface-container-low",
+                  "fill": "#D2E8D4",
                   "cornerRadius": 8,
                   "gap": 8,
                   "padding": [
@@ -1119,12 +1119,12 @@
                       "height": 18,
                       "iconFontName": "check",
                       "iconFontFamily": "Material Symbols Rounded",
-                      "fill": "\\$md-sys-color-surface-container-low"
+                      "fill": "#0C1F13"
                     },
                     {
                       "type": "text",
                       "id": "IDibe",
-                      "fill": "\\$md-sys-color-on-surface",
+                      "fill": "#0C1F13",
                       "content": "Daily",
                       "fontFamily": "Inter",
                       "fontSize": 14,
@@ -1138,7 +1138,7 @@
                   "name": "Component / Chip / Input",
                   "reusable": true,
                   "height": 32,
-                  "fill": "\\$md-sys-color-surface-container-low",
+                  "fill": "#D2E8D4",
                   "cornerRadius": 8,
                   "gap": 8,
                   "padding": [
@@ -1152,7 +1152,7 @@
                     {
                       "type": "text",
                       "id": "HAk6X",
-                      "fill": "\\$md-sys-color-on-surface",
+                      "fill": "#0C1F13",
                       "content": "Hydration",
                       "fontFamily": "Inter",
                       "fontSize": 14,
@@ -1165,7 +1165,7 @@
                       "height": 18,
                       "iconFontName": "close",
                       "iconFontFamily": "Material Symbols Rounded",
-                      "fill": "\\$md-sys-color-surface-container-low"
+                      "fill": "#0C1F13"
                     }
                   ]
                 },
@@ -1175,11 +1175,11 @@
                   "name": "Component / Chip / Suggestion",
                   "reusable": true,
                   "height": 32,
+                  "fill": "#F1F5ED",
                   "cornerRadius": 8,
                   "stroke": {
-                    "align": "inside",
                     "thickness": 1,
-                    "fill": "\\$md-sys-color-outline-variant"
+                    "fill": "#727970"
                   },
                   "gap": 8,
                   "padding": [
@@ -1191,7 +1191,7 @@
                     {
                       "type": "text",
                       "id": "N9qfvu",
-                      "fill": "\\$md-sys-color-on-surface",
+                      "fill": "#424940",
                       "content": "+10 min walk",
                       "fontFamily": "Inter",
                       "fontSize": 14,
@@ -1232,7 +1232,7 @@
               "reusable": true,
               "width": 412,
               "height": 64,
-              "fill": "\\$md-sys-color-surface-container-low",
+              "fill": "#F7FBF3",
               "gap": 8,
               "padding": [
                 0,
@@ -1256,7 +1256,7 @@
                       "height": 24,
                       "iconFontName": "menu",
                       "iconFontFamily": "Material Symbols Rounded",
-                      "fill": "\\$md-sys-color-surface-container-low"
+                      "fill": "#191D17"
                     }
                   ]
                 },
@@ -1270,7 +1270,7 @@
                     {
                       "type": "text",
                       "id": "pyHKf",
-                      "fill": "\\$md-sys-color-on-surface",
+                      "fill": "#191D17",
                       "content": "HealthQuest",
                       "fontFamily": "Inter",
                       "fontSize": 22,
@@ -1294,7 +1294,7 @@
                       "height": 24,
                       "iconFontName": "search",
                       "iconFontFamily": "Material Symbols Rounded",
-                      "fill": "\\$md-sys-color-surface-container-low"
+                      "fill": "#424940"
                     }
                   ]
                 },
@@ -1314,7 +1314,7 @@
                       "height": 24,
                       "iconFontName": "more_vert",
                       "iconFontFamily": "Material Symbols Rounded",
-                      "fill": "\\$md-sys-color-surface-container-low"
+                      "fill": "#424940"
                     }
                   ]
                 }
@@ -1327,7 +1327,7 @@
               "reusable": true,
               "width": 412,
               "height": 152,
-              "fill": "\\$md-sys-color-surface-container-low",
+              "fill": "#F7FBF3",
               "layout": "vertical",
               "children": [
                 {
@@ -1358,7 +1358,7 @@
                           "height": 24,
                           "iconFontName": "arrow_back",
                           "iconFontFamily": "Material Symbols Rounded",
-                          "fill": "\\$md-sys-color-surface-container-low"
+                          "fill": "#191D17"
                         }
                       ]
                     },
@@ -1384,7 +1384,7 @@
                           "height": 24,
                           "iconFontName": "more_vert",
                           "iconFontFamily": "Material Symbols Rounded",
-                          "fill": "\\$md-sys-color-surface-container-low"
+                          "fill": "#424940"
                         }
                       ]
                     }
@@ -1408,7 +1408,7 @@
                     {
                       "type": "text",
                       "id": "wpRJW",
-                      "fill": "\\$md-sys-color-on-surface",
+                      "fill": "#191D17",
                       "content": "Goals",
                       "fontFamily": "Inter",
                       "fontSize": 32,
@@ -1425,7 +1425,7 @@
               "reusable": true,
               "width": 412,
               "height": 80,
-              "fill": "\\$md-sys-color-surface-container-low",
+              "fill": "#EBEFE7",
               "padding": [
                 12,
                 8,
@@ -1449,7 +1449,7 @@
                       "name": "nbItem1Pill",
                       "width": 64,
                       "height": 32,
-                      "fill": "\\$md-sys-color-surface-container-low",
+                      "fill": "#D2E8D4",
                       "cornerRadius": 16,
                       "justifyContent": "center",
                       "alignItems": "center",
@@ -1462,14 +1462,14 @@
                           "iconFontName": "home",
                           "iconFontFamily": "Material Symbols Rounded",
                           "weight": 600,
-                          "fill": "\\$md-sys-color-surface-container-low"
+                          "fill": "#0C1F13"
                         }
                       ]
                     },
                     {
                       "type": "text",
                       "id": "RrAOi",
-                      "fill": "\\$md-sys-color-on-surface",
+                      "fill": "#191D17",
                       "content": "Home",
                       "fontFamily": "Inter",
                       "fontSize": 12,
@@ -1503,14 +1503,14 @@
                           "height": 24,
                           "iconFontName": "flag",
                           "iconFontFamily": "Material Symbols Rounded",
-                          "fill": "\\$md-sys-color-surface-container-low"
+                          "fill": "#424940"
                         }
                       ]
                     },
                     {
                       "type": "text",
                       "id": "GHhwY",
-                      "fill": "\\$md-sys-color-on-surface",
+                      "fill": "#424940",
                       "content": "Goals",
                       "fontFamily": "Inter",
                       "fontSize": 12,
@@ -1544,14 +1544,14 @@
                           "height": 24,
                           "iconFontName": "trophy",
                           "iconFontFamily": "Material Symbols Rounded",
-                          "fill": "\\$md-sys-color-surface-container-low"
+                          "fill": "#424940"
                         }
                       ]
                     },
                     {
                       "type": "text",
                       "id": "HjoVo",
-                      "fill": "\\$md-sys-color-on-surface",
+                      "fill": "#424940",
                       "content": "Rewards",
                       "fontFamily": "Inter",
                       "fontSize": 12,
@@ -1585,14 +1585,14 @@
                           "height": 24,
                           "iconFontName": "bar_chart",
                           "iconFontFamily": "Material Symbols Rounded",
-                          "fill": "\\$md-sys-color-surface-container-low"
+                          "fill": "#424940"
                         }
                       ]
                     },
                     {
                       "type": "text",
                       "id": "tTugW",
-                      "fill": "\\$md-sys-color-on-surface",
+                      "fill": "#424940",
                       "content": "Stats",
                       "fontFamily": "Inter",
                       "fontSize": 12,
@@ -1626,14 +1626,14 @@
                           "height": 24,
                           "iconFontName": "person",
                           "iconFontFamily": "Material Symbols Rounded",
-                          "fill": "\\$md-sys-color-surface-container-low"
+                          "fill": "#424940"
                         }
                       ]
                     },
                     {
                       "type": "text",
                       "id": "X0erEY",
-                      "fill": "\\$md-sys-color-on-surface",
+                      "fill": "#424940",
                       "content": "Profile",
                       "fontFamily": "Inter",
                       "fontSize": 12,

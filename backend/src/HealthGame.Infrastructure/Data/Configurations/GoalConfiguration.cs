@@ -58,7 +58,9 @@ internal sealed class GoalConfiguration : IEntityTypeConfiguration<Goal>
                 .IsRequired();
         });
 
-        builder.HasIndex(goal => new { goal.UserId, goal.Name });
+        builder.Ignore(goal => goal.IsDeleted);
+
+        builder.HasIndex(goal => new { goal.UserId, goal.DeletedAtUtc, goal.Name });
 
         builder.HasMany(goal => goal.ActivityEntries)
             .WithOne()

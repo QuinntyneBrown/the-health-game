@@ -44,5 +44,7 @@ internal sealed class ActivityEntryConfiguration : IEntityTypeConfiguration<Acti
             activityEntry.GoalId,
             activityEntry.OccurredAtUtc
         });
+
+        builder.HasIndex(activityEntry => activityEntry.DeletedAtUtc);
     }
 }

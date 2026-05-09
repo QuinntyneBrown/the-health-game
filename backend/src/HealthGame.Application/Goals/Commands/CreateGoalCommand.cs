@@ -7,4 +7,6 @@ public sealed record CreateGoalCommand(
     string? Description,
     decimal TargetQuantity,
     string TargetUnit,
-    GoalCadenceDto Cadence) : IRequest<GoalDto>;
+    GoalCadenceDto Cadence,
+    string? TimeZoneId = null,
+    DayOfWeek? WeekStartsOn = null) : IRequest<GoalDto>;

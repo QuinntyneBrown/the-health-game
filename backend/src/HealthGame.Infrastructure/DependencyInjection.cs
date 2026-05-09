@@ -23,6 +23,7 @@ public static class DependencyInjection
         services.AddScoped<IHealthGameContext>(serviceProvider =>
             serviceProvider.GetRequiredService<HealthGameContext>());
         services.AddSingleton<IClock, SystemClock>();
+        services.AddSingleton<ITimeZoneResolver, SystemTimeZoneResolver>();
 
         return services;
     }

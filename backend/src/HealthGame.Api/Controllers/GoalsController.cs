@@ -47,4 +47,30 @@ public sealed class GoalsController(IMediator mediator) : ControllerBase
 
         return CreatedAtAction(nameof(GetGoal), new { id = goal.Id }, goal);
     }
+
+    [HttpPut("{id:guid}")]
+    [ProducesResponseType<GoalDto>(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<GoalDto>> UpdateGoal(
+        Guid id,
+        UpdateGoalRequest request,
+        CancellationToken cancellationToken)
+    {
+        var goal = await mediator.Send(request.ToCommand(id), cancellationToken);
+
+        return goal is null ? NotFound() : Ok(goal);
+    }
+
+    [HttpDelete("{id:guid}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> DeleteGoal(Guid id, CancellationToken cancellationToken)
+    {
+        var deleted = await mediator.Send(new DeleteGoalCommand(id), cancellationToken);
+
+        return deleted ? NoContent() : NotFound();
+    }
 }

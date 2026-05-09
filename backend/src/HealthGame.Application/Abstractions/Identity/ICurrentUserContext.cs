@@ -6,5 +6,9 @@ public interface ICurrentUserContext
 
     string? UserId { get; }
 
+    string? Email { get; }
+
+    string? DisplayName { get; }
+
     IReadOnlyCollection<string> Roles { get; }
 }
