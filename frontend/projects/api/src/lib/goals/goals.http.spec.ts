@@ -70,4 +70,22 @@ describe('GoalsService.getGoals', () => {
     });
     expect((await promise).id).toBe('g-1');
   });
+
+  it('GETs /api/goals/:id and returns the matching goal', async () => {
+    const promise = firstValueFrom(service.getGoal('g-1'));
+    const req = controller.expectOne(`${config.apiBaseUrl}/api/goals/g-1`);
+    expect(req.request.method).toBe('GET');
+    req.flush({
+      id: 'g-1',
+      name: 'Hydrate',
+      description: 'Drink water',
+      cadence: 'daily',
+      target: { value: 8, unit: 'cups' },
+      completedQuantity: 6,
+      currentStreak: 12,
+      longestStreak: 18,
+      rewardName: '',
+    });
+    expect((await promise).name).toBe('Hydrate');
+  });
 });
