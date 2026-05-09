@@ -63,3 +63,15 @@
 .profile__signout {
   justify-self: start;
 }
+
+.profile__form {
+  display: grid;
+  gap: var(--hg-space-4);
+}
+
+.profile__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--hg-space-3);
+  justify-content: flex-start;
+}

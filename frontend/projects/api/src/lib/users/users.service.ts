@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 
 import { API_CONFIG } from '../api.config';
 import { UserProfile } from './user-profile.model';
-import { IUsersService } from './users.service.contract';
+import { IUsersService, UpdateUserProfileInput } from './users.service.contract';
 
 @Injectable({ providedIn: 'root' })
 export class UsersService implements IUsersService {
@@ -13,5 +13,9 @@ export class UsersService implements IUsersService {
 
   getCurrentUser(): Observable<UserProfile> {
     return this.http.get<UserProfile>(`${this.apiBaseUrl}/api/users/me`);
+  }
+
+  updateCurrentUser(input: UpdateUserProfileInput): Observable<UserProfile> {
+    return this.http.put<UserProfile>(`${this.apiBaseUrl}/api/users/me`, input);
   }
 }

@@ -22,8 +22,47 @@
       </ul>
     }
 
-    <button mat-flat-button type="button" class="profile__signout" (click)="onSignOut()">
-      Sign out
-    </button>
+    @if (editing()) {
+      <form class="profile__form" (ngSubmit)="save()" data-testid="profile-form">
+        <hg-health-text-field
+          label="Display name"
+          [value]="displayName()"
+          [errorText]="displayNameError()"
+          (valueChange)="displayName.set($event)"
+        />
+        <hg-health-text-field
+          label="Email"
+          type="email"
+          [value]="email()"
+          [errorText]="emailError()"
+          (valueChange)="email.set($event)"
+        />
+        <div class="profile__actions">
+          <button mat-stroked-button type="button" (click)="cancelEdit()">Cancel</button>
+          <button
+            mat-flat-button
+            type="submit"
+            data-testid="profile-save"
+            [disabled]="!canSave()"
+          >
+            Save
+          </button>
+        </div>
+      </form>
+    } @else {
+      <div class="profile__actions">
+        <button
+          mat-stroked-button
+          type="button"
+          data-testid="profile-edit"
+          (click)="startEdit()"
+        >
+          Edit profile
+        </button>
+        <button mat-flat-button type="button" class="profile__signout" (click)="onSignOut()">
+          Sign out
+        </button>
+      </div>
+    }
   </section>
 }
