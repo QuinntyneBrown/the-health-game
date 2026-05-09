@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 01-TC-V-001..010, 01-TC-C-001..010, 01-TC-L-001..005
+// Traces to: 01-TC-V-001..010, 01-TC-C-001..010, 01-TC-L-001..006
 // Description: Onboarding headline ("Make health a game") renders with font family Inter weight 500
 //              and the design-spec font-size at each breakpoint (mobile = 28 px, tablet = 45 px,
 //              desktop = 57 px with line-height 1.1). Body description paragraph renders at
@@ -297,6 +297,16 @@ test.describe('Onboarding — headline typography', () => {
       expect(fontSize).toBe('16px');
     });
 
+    test('trophy icon size is 120 px on mobile (TC-L-006)', async ({ page }) => {
+      await page.goto('/onboarding');
+
+      const trophy = page.getByTestId('onboarding-trophy');
+      await expect(trophy).toBeVisible();
+
+      const fontSize = await trophy.evaluate((el) => getComputedStyle(el).fontSize);
+      expect(fontSize).toBe('120px');
+    });
+
     test('hero corner radius is 28 px on mobile (TC-L-005)', async ({ page }) => {
       await page.goto('/onboarding');
 
@@ -418,6 +428,16 @@ test.describe('Onboarding — headline typography', () => {
       expect(fontSize).toBe('18px');
     });
 
+    test('trophy icon size is 180 px on tablet (TC-L-006)', async ({ page }) => {
+      await page.goto('/onboarding');
+
+      const trophy = page.getByTestId('onboarding-trophy');
+      await expect(trophy).toBeVisible();
+
+      const fontSize = await trophy.evaluate((el) => getComputedStyle(el).fontSize);
+      expect(fontSize).toBe('180px');
+    });
+
     test('hero corner radius is 36 px on tablet (TC-L-005)', async ({ page }) => {
       await page.goto('/onboarding');
 
@@ -491,6 +511,16 @@ test.describe('Onboarding — headline typography', () => {
       const fontSizePx = parseFloat(metrics.fontSize);
       const lineHeightPx = parseFloat(metrics.lineHeight);
       expect(lineHeightPx / fontSizePx).toBeCloseTo(1.1, 2);
+    });
+
+    test('trophy icon size is 280 px on desktop (TC-L-006)', async ({ page }) => {
+      await page.goto('/onboarding');
+
+      const trophy = page.getByTestId('onboarding-trophy');
+      await expect(trophy).toBeVisible();
+
+      const fontSize = await trophy.evaluate((el) => getComputedStyle(el).fontSize);
+      expect(fontSize).toBe('280px');
     });
 
     test('description font-size is 18 px on desktop (TC-V-006)', async ({ page }) => {

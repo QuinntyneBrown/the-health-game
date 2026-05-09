@@ -150,6 +150,10 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
           border-radius: 36px;
         }
 
+        .onboarding__trophy {
+          font-size: 180px;
+        }
+
         .onboarding__headline {
           font-size: 45px;
         }
@@ -172,6 +176,10 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 
         .onboarding__wordmark {
           display: block;
+        }
+
+        .onboarding__trophy {
+          font-size: 280px;
         }
       }
     `,
