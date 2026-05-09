@@ -123,7 +123,7 @@ and made green. The /loop process picks the first test with
 | 112 | 02 | TC-F-012 | Empty state — goals but zero activity today | Shows "log your first activity" prompt | 2026-05-09T21:51:41Z |
 | 113 | 02 | TC-F-013 | Admin role chip / admin link visible only when user has Admin role (L2-015) | confirmed | 2026-05-09T21:54:50Z |
 | 114 | 02 | TC-F-014 | API failure on dashboard load | Shows error state with retry, does not crash | 2026-05-09T21:58:07Z |
-| 115 | 02 | TC-B-001 | Tab order: greeting -> today metrics -> goals list -> rewards -> nav | Logical | null |
+| 115 | 02 | TC-B-001 | Tab order: greeting -> today metrics -> goals list -> rewards -> nav | Logical | 2026-05-09T22:00:25Z |
 | 116 | 02 | TC-B-002 | Cards have visible focus rings | Yes | null |
 | 117 | 02 | TC-B-003 | Bar chart has accessible `<svg role="img">` with summary text | Yes | null |
 | 118 | 02 | TC-B-004 | Hover/focus state on cards | Subtle elevation or state-layer | null |

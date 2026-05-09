@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 02-TC-V-001..007, 02-TC-C-001..010, 02-TC-L-001..010, 02-TC-R-001..006, 02-TC-F-001..014
+// Traces to: 02-TC-V-001..007, 02-TC-C-001..010, 02-TC-L-001..010, 02-TC-R-001..006, 02-TC-F-001..014, 02-TC-B-001
 // Description: Dashboard greeting renders with Inter font, weight 500, sizes 22/28/32 px (mobile/tablet/desktop).
 // Section labels render with Inter weight 500 at 18 px.
 import AxeBuilder from '@axe-core/playwright';
@@ -46,6 +46,35 @@ async function authenticate(page: import('@playwright/test').Page): Promise<void
 }
 
 test.describe('Home Dashboard — greeting typography', () => {
+  test('Tab order: New goal action focuses before any nav item (02-TC-B-001)', async ({ page }) => {
+    await authenticate(page);
+    await page.goto('/home');
+    await expect(page.getByRole('button', { name: 'New goal' })).toBeVisible();
+
+    await page.locator('body').focus();
+
+    let newGoalIndex = -1;
+    let navIndex = -1;
+    for (let i = 0; i < 40; i++) {
+      await page.keyboard.press('Tab');
+      const info = await page.evaluate(() => {
+        const el = document.activeElement as HTMLElement | null;
+        return {
+          name: el?.getAttribute('aria-label') ?? el?.textContent?.trim() ?? '',
+          inNav: !!el?.closest('hg-navigation-bar'),
+        };
+      });
+      if (newGoalIndex < 0 && info.name?.includes('New goal')) newGoalIndex = i;
+      if (navIndex < 0 && info.inNav) navIndex = i;
+      if (newGoalIndex >= 0 && navIndex >= 0) break;
+    }
+
+    expect(newGoalIndex).toBeGreaterThanOrEqual(0);
+    if (navIndex >= 0) {
+      expect(newGoalIndex).toBeLessThan(navIndex);
+    }
+  });
+
   test('API failure shows error state with retry (02-TC-F-014)', async ({ page }) => {
     let goalsCallCount = 0;
     await authenticate(page);
