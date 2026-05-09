@@ -1,3 +1,7 @@
+---
+status: Accepted
+---
+
 # Task 24 — Define reward (goal-target and streak-milestone)
 
 **Traces to:** L2-009, L2-016
