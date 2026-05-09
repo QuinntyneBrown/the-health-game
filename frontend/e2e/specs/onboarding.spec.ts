@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 01-TC-V-001..010, 01-TC-C-001..010, 01-TC-L-001..008
+// Traces to: 01-TC-V-001..010, 01-TC-C-001..010, 01-TC-L-001..009
 // Description: Onboarding headline ("Make health a game") renders with font family Inter weight 500
 //              and the design-spec font-size at each breakpoint (mobile = 28 px, tablet = 45 px,
 //              desktop = 57 px with line-height 1.1). Body description paragraph renders at
@@ -176,6 +176,36 @@ test.describe('Onboarding — headline typography', () => {
     );
     for (const bg of backgrounds) {
       expect(bg).toBe('rgb(241, 245, 237)');
+    }
+  });
+
+  test('primary and secondary buttons are full pills (TC-L-009)', async ({ page }) => {
+    await page.goto('/onboarding');
+
+    for (const id of ['onboarding-get-started', 'onboarding-have-account']) {
+      const button = page.getByTestId(id);
+      await expect(button).toBeVisible();
+
+      const measurements = await button.evaluate((el) => {
+        const style = getComputedStyle(el);
+        const rect = (el as HTMLElement).getBoundingClientRect();
+        return {
+          radius: parseFloat(style.borderTopLeftRadius),
+          height: rect.height,
+          allCorners: [
+            style.borderTopLeftRadius,
+            style.borderTopRightRadius,
+            style.borderBottomLeftRadius,
+            style.borderBottomRightRadius,
+          ],
+        };
+      });
+
+      // All four corners share the same radius
+      const unique = new Set(measurements.allCorners);
+      expect(unique.size).toBe(1);
+      // Pill: radius >= half the button height
+      expect(measurements.radius).toBeGreaterThanOrEqual(measurements.height / 2);
     }
   });
 

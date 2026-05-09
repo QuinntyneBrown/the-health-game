@@ -37,7 +37,7 @@ and made green. The /loop process picks the first test with
 | 26 | 01 | TC-L-006 | Trophy icon size — mobile/tablet/desktop | 120 / 180 / 280 px | 2026-05-09T18:31:18Z |
 | 27 | 01 | TC-L-007 | Buttons stacked vertically with 12 px gap on mobile | confirmed via DOM bounding boxes | 2026-05-09T18:35:06Z |
 | 28 | 01 | TC-L-008 | Buttons inline with 16 px gap on tablet/desktop | confirmed | 2026-05-09T18:39:07Z |
-| 29 | 01 | TC-L-009 | Pill button corner radius | 9999 (full) | null |
+| 29 | 01 | TC-L-009 | Pill button corner radius | 9999 (full) | 2026-05-09T18:40:27Z |
 | 30 | 01 | TC-L-010 | Desktop split — left column ~50% width, right hero ~50% | left contains copy + actions, right contains trophy hero | null |
 | 31 | 01 | TC-R-001 | Viewport 360x780 | Single-column mobile layout, no horizontal scrollbar | null |
 | 32 | 01 | TC-R-002 | Viewport 375x812 | Same layout as 360 (mobile) | null |
