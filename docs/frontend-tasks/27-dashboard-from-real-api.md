@@ -1,3 +1,7 @@
+---
+status: Accepted
+---
+
 # Task 27 — Dashboard from real API data
 
 **Traces to:** L2-002, L2-008, L2-010, L2-020
