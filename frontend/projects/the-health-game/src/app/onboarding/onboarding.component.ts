@@ -231,12 +231,21 @@ import { AuthService } from 'api';
 })
 export class OnboardingComponent {
   private readonly auth = inject(AuthService);
+  private busy = false;
 
   onGetStarted(): void {
-    void this.auth.signIn('/home');
+    this.signInOnce('/home');
   }
 
   onHaveAccount(): void {
-    void this.auth.signIn('/home', { prompt: 'login' });
+    this.signInOnce('/home', { prompt: 'login' });
+  }
+
+  private signInOnce(returnUrl: string, options?: { prompt: 'login' | 'none' }): void {
+    if (this.busy) return;
+    this.busy = true;
+    void this.auth.signIn(returnUrl, options).catch(() => {
+      this.busy = false;
+    });
   }
 }

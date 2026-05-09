@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 01-TC-V-001..010, 01-TC-C-001..010, 01-TC-L-001..010, 01-TC-R-001..008, 01-TC-F-001..008, 01-TC-B-001..005
+// Traces to: 01-TC-V-001..010, 01-TC-C-001..010, 01-TC-L-001..010, 01-TC-R-001..008, 01-TC-F-001..008, 01-TC-B-001..006
 // Description: Onboarding headline ("Make health a game") renders with font family Inter weight 500
 //              and the design-spec font-size at each breakpoint (mobile = 28 px, tablet = 45 px,
 //              desktop = 57 px with line-height 1.1). Body description paragraph renders at
@@ -218,6 +218,35 @@ test.describe('Onboarding — headline typography', () => {
     expect(url.searchParams.get('code_challenge')).toBeTruthy();
     expect(url.searchParams.get('state')).toBeTruthy();
     expect(url.searchParams.get('client_id')).toBeTruthy();
+  });
+
+  test('double-clicking "Get started" emits only one OIDC redirect (TC-B-006)', async ({
+    page,
+  }) => {
+    let authorizeCount = 0;
+    await page.route('**/connect/authorize**', async (route) => {
+      authorizeCount += 1;
+      await route.fulfill({
+        status: 200,
+        contentType: 'text/html',
+        body: '<html><body>ok</body></html>',
+      });
+    });
+
+    await page.goto('/onboarding');
+    const button = page.getByTestId('onboarding-get-started');
+    await expect(button).toBeVisible();
+
+    await Promise.all([
+      page.waitForURL(/\/connect\/authorize/),
+      button.dispatchEvent('click'),
+      button.dispatchEvent('click'),
+    ]);
+
+    // Give the browser a moment to settle any second redirect that might still race in
+    await page.waitForLoadState('networkidle').catch(() => undefined);
+
+    expect(authorizeCount).toBe(1);
   });
 
   test('hover on primary button shows pointer cursor and elevation (TC-B-005)', async ({

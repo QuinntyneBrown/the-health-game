@@ -60,7 +60,7 @@ and made green. The /loop process picks the first test with
 | 49 | 01 | TC-B-003 | Enter on focused button activates it | Yes | 2026-05-09T19:26:08Z |
 | 50 | 01 | TC-B-004 | Space on focused button activates it | Yes | 2026-05-09T19:27:28Z |
 | 51 | 01 | TC-B-005 | Hover on primary button | Slight elevation / state-layer overlay; cursor pointer | 2026-05-09T19:29:09Z |
-| 52 | 01 | TC-B-006 | Click during in-flight redirect (double click "Get started") | Only one OIDC redirect emitted | null |
+| 52 | 01 | TC-B-006 | Click during in-flight redirect (double click "Get started") | Only one OIDC redirect emitted | 2026-05-09T19:32:16Z |
 | 53 | 01 | TC-B-007 | Reduced-motion preference honored | No animated dot transitions | null |
 | 54 | 01 | TC-A-001 | `<main>` landmark wraps content | Yes | null |
 | 55 | 01 | TC-A-002 | Headline rendered as `<h1>` | Yes | null |
