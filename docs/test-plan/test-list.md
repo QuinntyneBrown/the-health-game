@@ -96,7 +96,7 @@ and made green. The /loop process picks the first test with
 | 85 | 02 | TC-L-001 | Page padding — mobile/tablet/desktop | 16 / 24 / 32 px | 2026-05-09T20:57:18Z |
 | 86 | 02 | TC-L-002 | Card corner radius | 16 px (xl) | 2026-05-09T20:59:03Z |
 | 87 | 02 | TC-L-003 | Card padding | 20 px | 2026-05-09T21:01:59Z |
-| 88 | 02 | TC-L-004 | Inter-card gap (within section) | 12–16 px | null |
+| 88 | 02 | TC-L-004 | Inter-card gap (within section) | 12–16 px | 2026-05-09T21:03:20Z |
 | 89 | 02 | TC-L-005 | Bar-chart bar gap | 4 px | null |
 | 90 | 02 | TC-L-006 | Section vertical rhythm | 24 px between sections | null |
 | 91 | 02 | TC-L-007 | Avatar size — header | 32 / 40 / 48 px | null |
