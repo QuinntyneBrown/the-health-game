@@ -141,6 +141,10 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
       }
 
       @media (min-width: 768px) {
+        .onboarding {
+          padding: 40px 80px;
+        }
+
         .onboarding__headline {
           font-size: 45px;
         }
