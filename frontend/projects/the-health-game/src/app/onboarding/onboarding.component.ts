@@ -142,6 +142,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 
       @media (min-width: 768px) {
         .onboarding {
+          gap: 32px;
           padding: 40px 80px;
         }
 

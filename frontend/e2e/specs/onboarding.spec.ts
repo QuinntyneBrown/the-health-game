@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 01-TC-V-001..010, 01-TC-C-001..010, 01-TC-L-001..003
+// Traces to: 01-TC-V-001..010, 01-TC-C-001..010, 01-TC-L-001..004
 // Description: Onboarding headline ("Make health a game") renders with font family Inter weight 500
 //              and the design-spec font-size at each breakpoint (mobile = 28 px, tablet = 45 px,
 //              desktop = 57 px with line-height 1.1). Body description paragraph renders at
@@ -362,6 +362,16 @@ test.describe('Onboarding — headline typography', () => {
 
       const fontSize = await headline.evaluate((el) => getComputedStyle(el).fontSize);
       expect(fontSize).toBe('45px');
+    });
+
+    test('content vertical gap on tablet is 32 px (TC-L-004)', async ({ page }) => {
+      await page.goto('/onboarding');
+
+      const root = page.getByTestId('onboarding');
+      await expect(root).toBeVisible();
+
+      const rowGap = await root.evaluate((el) => getComputedStyle(el).rowGap);
+      expect(rowGap).toBe('32px');
     });
 
     test('body padding on tablet is 40 px vertical / 80 px horizontal (TC-L-003)', async ({
