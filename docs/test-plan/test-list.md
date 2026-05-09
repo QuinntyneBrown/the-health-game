@@ -75,7 +75,7 @@ and made green. The /loop process picks the first test with
 | 64 | 01 | TC-D-005 | After successful sign-in, refresh token (if used) stored only as httpOnly cookie | Confirmed via DevTools | 2026-05-09T19:57:38Z |
 | 65 | 01 | TC-P-001 | Cold load LCP on simulated 4G (Lighthouse) | <= 2.5 s (L2-019 §1) | 2026-05-09T20:00:46Z |
 | 66 | 01 | TC-P-002 | Initial JS payload split — onboarding chunk does not pull in dashboard code | Confirmed via bundle analyzer | 2026-05-09T20:03:17Z |
-| 67 | 01 | TC-P-003 | TBT under interaction | <= 200 ms | null |
+| 67 | 01 | TC-P-003 | TBT under interaction | <= 200 ms | 2026-05-09T20:04:55Z |
 | 68 | 02 | TC-V-001 | Greeting ("Good morning, {name}") | Inter 32/28/22 (desktop/tablet/mobile), weight 500 | null |
 | 69 | 02 | TC-V-002 | Section labels ("Today", "Recent rewards", "Live a goal") | Inter 18 px, weight 500 | null |
 | 70 | 02 | TC-V-003 | Stat numbers (e.g., "12", "3 / 6", "Lvl 8", "87%") | Inter 28–32 px, weight 600 or 500 | null |

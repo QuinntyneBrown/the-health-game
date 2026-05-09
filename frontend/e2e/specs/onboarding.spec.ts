@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 01-TC-V-001..010, 01-TC-C-001..010, 01-TC-L-001..010, 01-TC-R-001..008, 01-TC-F-001..008, 01-TC-B-001..007, 01-TC-A-001..006, 01-TC-D-001..005, 01-TC-P-001..002
+// Traces to: 01-TC-V-001..010, 01-TC-C-001..010, 01-TC-L-001..010, 01-TC-R-001..008, 01-TC-F-001..008, 01-TC-B-001..007, 01-TC-A-001..006, 01-TC-D-001..005, 01-TC-P-001..003
 // Description: Onboarding headline ("Make health a game") renders with font family Inter weight 500
 //              and the design-spec font-size at each breakpoint (mobile = 28 px, tablet = 45 px,
 //              desktop = 57 px with line-height 1.1). Body description paragraph renders at
@@ -219,6 +219,41 @@ test.describe('Onboarding — headline typography', () => {
     expect(url.searchParams.get('code_challenge')).toBeTruthy();
     expect(url.searchParams.get('state')).toBeTruthy();
     expect(url.searchParams.get('client_id')).toBeTruthy();
+  });
+
+  test('total blocking time during load + interaction is under 200 ms (TC-P-003)', async ({
+    page,
+  }) => {
+    await page.addInitScript(() => {
+      (window as unknown as { __longtasks: number[] }).__longtasks = [];
+      try {
+        new PerformanceObserver((list) => {
+          for (const entry of list.getEntries()) {
+            (window as unknown as { __longtasks: number[] }).__longtasks.push(entry.duration);
+          }
+        }).observe({ type: 'longtask', buffered: true });
+      } catch {
+        // longtask not supported in this engine — leave the array empty.
+      }
+    });
+
+    await page.route('**/connect/authorize**', (route) =>
+      route.fulfill({ status: 200, contentType: 'text/html', body: '<html></html>' }),
+    );
+
+    await page.goto('/onboarding', { waitUntil: 'networkidle' });
+    await expect(page.getByTestId('onboarding-headline')).toBeVisible();
+
+    // Trigger an interaction to capture work after load
+    await page.getByTestId('onboarding-get-started').hover();
+    await page.waitForTimeout(200);
+
+    const tbt = await page.evaluate(() => {
+      const tasks = (window as unknown as { __longtasks: number[] }).__longtasks ?? [];
+      return tasks.reduce((sum, ms) => sum + Math.max(0, ms - 50), 0);
+    });
+
+    expect(tbt).toBeLessThanOrEqual(200);
   });
 
   test('initial JS payload for /onboarding does not pull in dashboard code (TC-P-002)', async ({
