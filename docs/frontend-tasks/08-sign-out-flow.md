@@ -1,3 +1,7 @@
+---
+status: Accepted
+---
+
 # Task 08 — Sign-out flow
 
 **Traces to:** L2-013, L2-014
