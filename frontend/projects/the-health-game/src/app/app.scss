@@ -90,3 +90,10 @@
   grid-area: nav;
   width: var(--hg-size-drawer);
 }
+
+@media print {
+  .app-shell__toolbar,
+  .app-shell__navigation {
+    display: none !important;
+  }
+}
