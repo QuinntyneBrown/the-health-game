@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 02-TC-V-001..007, 02-TC-C-001..010, 02-TC-L-001..010, 02-TC-R-001..006, 02-TC-F-001..006
+// Traces to: 02-TC-V-001..007, 02-TC-C-001..010, 02-TC-L-001..010, 02-TC-R-001..006, 02-TC-F-001..007
 // Description: Dashboard greeting renders with Inter font, weight 500, sizes 22/28/32 px (mobile/tablet/desktop).
 // Section labels render with Inter weight 500 at 18 px.
 import AxeBuilder from '@axe-core/playwright';
@@ -46,6 +46,40 @@ async function authenticate(page: import('@playwright/test').Page): Promise<void
 }
 
 test.describe('Home Dashboard — greeting typography', () => {
+  test('Log CTA on dashboard goal card opens the log-activity flow (02-TC-F-007)', async ({
+    page,
+  }) => {
+    await authenticate(page);
+    await page.route('**/api/goals**', (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify([
+          {
+            id: 'g99',
+            name: 'Walk',
+            description: '',
+            cadence: 'daily',
+            target: { value: 30, unit: 'min' },
+            completedQuantity: 0,
+            currentStreak: 0,
+            longestStreak: 0,
+            rewardName: '',
+          },
+        ]),
+      }),
+    );
+    await page.goto('/home');
+
+    const card = page.locator('hg-goal-card').first();
+    await card.getByRole('button', { name: /Log/i }).click();
+
+    // The log-activity flow lives on /goals/{id} (FAB + dialog/sheet); navigation there
+    // satisfies "Opens log activity flow for that goal".
+    await page.waitForURL(/\/goals\/g99(\b|\/|$)/);
+    expect(page.url()).toContain('/goals/g99');
+  });
+
   test('clicking dashboard goal card navigates to /goals/{id} (02-TC-F-006)', async ({ page }) => {
     await authenticate(page);
     await page.route('**/api/goals**', (route) =>

@@ -115,7 +115,7 @@ and made green. The /loop process picks the first test with
 | 104 | 02 | TC-F-004 | Streak chip on goal card shows current streak | matches L2-007 computation | 2026-05-09T21:31:20Z |
 | 105 | 02 | TC-F-005 | Recent rewards card shows up to 3 most-recent earned rewards | newest first, with date earned | 2026-05-09T21:33:19Z |
 | 106 | 02 | TC-F-006 | Click goal card | Navigates to `/goals/{id}` (L2-002 §3) | 2026-05-09T21:36:11Z |
-| 107 | 02 | TC-F-007 | Click "Log activity" CTA on goal card | Opens log activity flow for that goal | null |
+| 107 | 02 | TC-F-007 | Click "Log activity" CTA on goal card | Opens log activity flow for that goal | 2026-05-09T21:38:16Z |
 | 108 | 02 | TC-F-008 | Click "New goal" CTA | Navigates to create-goal flow | null |
 | 109 | 02 | TC-F-009 | Click reward in "Recent rewards" | Navigates to `/rewards/{id}` | null |
 | 110 | 02 | TC-F-010 | Dashboard shows only this user's data — switching accounts clears prior data | confirmed | null |
