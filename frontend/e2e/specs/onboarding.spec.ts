@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 01-TC-V-001..010, 01-TC-C-001..010, 01-TC-L-001..010, 01-TC-R-001..008, 01-TC-F-001..008, 01-TC-B-001..007
+// Traces to: 01-TC-V-001..010, 01-TC-C-001..010, 01-TC-L-001..010, 01-TC-R-001..008, 01-TC-F-001..008, 01-TC-B-001..007, 01-TC-A-001
 // Description: Onboarding headline ("Make health a game") renders with font family Inter weight 500
 //              and the design-spec font-size at each breakpoint (mobile = 28 px, tablet = 45 px,
 //              desktop = 57 px with line-height 1.1). Body description paragraph renders at
@@ -218,6 +218,20 @@ test.describe('Onboarding — headline typography', () => {
     expect(url.searchParams.get('code_challenge')).toBeTruthy();
     expect(url.searchParams.get('state')).toBeTruthy();
     expect(url.searchParams.get('client_id')).toBeTruthy();
+  });
+
+  test('exactly one <main> landmark wraps the onboarding content (TC-A-001)', async ({ page }) => {
+    await page.goto('/onboarding');
+    await expect(page.getByTestId('onboarding-headline')).toBeVisible();
+
+    const mainCount = await page.locator('main').count();
+    expect(mainCount).toBe(1);
+
+    const headlineInsideMain = await page
+      .locator('main')
+      .getByTestId('onboarding-headline')
+      .count();
+    expect(headlineInsideMain).toBe(1);
   });
 
   test('reduced-motion preference suppresses dot transitions (TC-B-007)', async ({ page }) => {

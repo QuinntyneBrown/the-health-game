@@ -4,7 +4,7 @@ import { AuthService } from 'api';
 @Component({
   selector: 'app-onboarding',
   template: `
-    <main class="onboarding" data-testid="onboarding">
+    <section class="onboarding" data-testid="onboarding" aria-labelledby="onboarding-headline-id">
       <span class="onboarding__wordmark" data-testid="onboarding-wordmark">HealthQuest</span>
       <div
         class="onboarding__hero"
@@ -17,7 +17,7 @@ import { AuthService } from 'api';
           >emoji_events</span
         >
       </div>
-      <h1 class="onboarding__headline" data-testid="onboarding-headline">
+      <h1 id="onboarding-headline-id" class="onboarding__headline" data-testid="onboarding-headline">
         Make health a game
       </h1>
       <p class="onboarding__description" data-testid="onboarding-description">
@@ -50,7 +50,7 @@ import { AuthService } from 'api';
           I have an account
         </button>
       </div>
-    </main>
+    </section>
   `,
   styles: [
     `
