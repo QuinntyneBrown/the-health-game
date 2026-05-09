@@ -17,6 +17,13 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
       >
         Get started
       </button>
+      <button
+        class="onboarding__secondary"
+        type="button"
+        data-testid="onboarding-have-account"
+      >
+        I have an account
+      </button>
     </main>
   `,
   styles: [
@@ -55,6 +62,19 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
         justify-self: start;
       }
 
+      .onboarding__secondary {
+        font-family: Inter, Roboto, Arial, sans-serif;
+        font-weight: 500;
+        font-size: 14px;
+        color: #191d17;
+        background: transparent;
+        border: 1px solid #c2c9be;
+        border-radius: 9999px;
+        padding: 12px 24px;
+        cursor: pointer;
+        justify-self: start;
+      }
+
       @media (min-width: 768px) {
         .onboarding__headline {
           font-size: 45px;
@@ -64,7 +84,8 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
           font-size: 18px;
         }
 
-        .onboarding__primary {
+        .onboarding__primary,
+        .onboarding__secondary {
           font-size: 16px;
         }
       }
