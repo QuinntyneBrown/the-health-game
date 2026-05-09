@@ -1,3 +1,7 @@
+---
+status: Accepted
+---
+
 # Task 32 — Module-boundary lint and convention enforcement
 
 **Traces to:** L2-024, L2-031, L2-032, L2-033
