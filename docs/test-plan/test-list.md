@@ -47,7 +47,7 @@ and made green. The /loop process picks the first test with
 | 36 | 01 | TC-R-006 | Viewport >= 1920 wide | Content max-width respected (no edge-to-edge stretching) | 2026-05-09T18:53:13Z |
 | 37 | 01 | TC-R-007 | Window resize during render | Layout recomputes without flicker | 2026-05-09T18:54:28Z |
 | 38 | 01 | TC-R-008 | Page-dot indicator visible at all breakpoints | yes | 2026-05-09T18:55:35Z |
-| 39 | 01 | TC-F-001 | Click "Get started" | Browser navigates to OIDC `/authorize` URL (PKCE flow) | null |
+| 39 | 01 | TC-F-001 | Click "Get started" | Browser navigates to OIDC `/authorize` URL (PKCE flow) | 2026-05-09T18:58:55Z |
 | 40 | 01 | TC-F-002 | Click "I have an account" | Same OIDC `/authorize` URL with `prompt=login` (or equivalent) | null |
 | 41 | 01 | TC-F-003 | OIDC state and code_verifier generated | Random per click; state echoed back in callback | null |
 | 42 | 01 | TC-F-004 | Code verifier stored in `sessionStorage` only | Not in localStorage; cleared after exchange | null |

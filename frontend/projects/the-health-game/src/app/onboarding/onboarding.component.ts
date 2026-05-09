@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { AuthService } from 'api';
 
 @Component({
   selector: 'app-onboarding',
@@ -36,6 +37,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
           class="onboarding__primary"
           type="button"
           data-testid="onboarding-get-started"
+          (click)="onGetStarted()"
         >
           Get started
         </button>
@@ -220,4 +222,10 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class OnboardingComponent {}
+export class OnboardingComponent {
+  private readonly auth = inject(AuthService);
+
+  onGetStarted(): void {
+    void this.auth.signIn('/');
+  }
+}
