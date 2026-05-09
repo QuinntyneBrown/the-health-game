@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 01-TC-V-001..010, 01-TC-C-001..010, 01-TC-L-001..010, 01-TC-R-001..008, 01-TC-F-001..008, 01-TC-B-001..004
+// Traces to: 01-TC-V-001..010, 01-TC-C-001..010, 01-TC-L-001..010, 01-TC-R-001..008, 01-TC-F-001..008, 01-TC-B-001..005
 // Description: Onboarding headline ("Make health a game") renders with font family Inter weight 500
 //              and the design-spec font-size at each breakpoint (mobile = 28 px, tablet = 45 px,
 //              desktop = 57 px with line-height 1.1). Body description paragraph renders at
@@ -218,6 +218,26 @@ test.describe('Onboarding — headline typography', () => {
     expect(url.searchParams.get('code_challenge')).toBeTruthy();
     expect(url.searchParams.get('state')).toBeTruthy();
     expect(url.searchParams.get('client_id')).toBeTruthy();
+  });
+
+  test('hover on primary button shows pointer cursor and elevation (TC-B-005)', async ({
+    page,
+  }) => {
+    await page.goto('/onboarding');
+    const button = page.getByTestId('onboarding-get-started');
+    await expect(button).toBeVisible();
+
+    const cursor = await button.evaluate((el) => getComputedStyle(el).cursor);
+    expect(cursor).toBe('pointer');
+
+    const before = await button.evaluate((el) => getComputedStyle(el).boxShadow);
+    await button.hover();
+    const after = await button.evaluate((el) => getComputedStyle(el).boxShadow);
+
+    // Hover state introduces an elevation / state-layer change
+    expect(after).not.toBe('none');
+    expect(after).not.toBe('');
+    expect(after).not.toBe(before);
   });
 
   test('Space on focused "Get started" button activates it (TC-B-004)', async ({ page }) => {

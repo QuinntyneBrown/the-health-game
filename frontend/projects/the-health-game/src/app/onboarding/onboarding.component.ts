@@ -136,6 +136,12 @@ import { AuthService } from 'api';
         padding: 12px 24px;
         cursor: pointer;
         justify-self: start;
+        box-shadow: none;
+        transition: box-shadow 0.15s ease;
+      }
+
+      .onboarding__primary:hover {
+        box-shadow: 0 2px 8px rgba(0, 33, 15, 0.18);
       }
 
       .onboarding__secondary {
