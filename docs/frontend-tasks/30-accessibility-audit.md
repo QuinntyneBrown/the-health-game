@@ -1,5 +1,5 @@
 ---
-status: Accepted
+status: Complete
 ---
 
 # Task 30 — Accessibility (WCAG 2.1 AA) audit pass
