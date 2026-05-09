@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 02-TC-V-001..007, 02-TC-C-001..010, 02-TC-L-001..010, 02-TC-R-001..006, 02-TC-F-001..013
+// Traces to: 02-TC-V-001..007, 02-TC-C-001..010, 02-TC-L-001..010, 02-TC-R-001..006, 02-TC-F-001..014
 // Description: Dashboard greeting renders with Inter font, weight 500, sizes 22/28/32 px (mobile/tablet/desktop).
 // Section labels render with Inter weight 500 at 18 px.
 import AxeBuilder from '@axe-core/playwright';
@@ -46,6 +46,31 @@ async function authenticate(page: import('@playwright/test').Page): Promise<void
 }
 
 test.describe('Home Dashboard — greeting typography', () => {
+  test('API failure shows error state with retry (02-TC-F-014)', async ({ page }) => {
+    let goalsCallCount = 0;
+    await authenticate(page);
+    await page.route('**/api/goals**', (route) => {
+      goalsCallCount += 1;
+      if (goalsCallCount === 1) {
+        return route.fulfill({ status: 500, contentType: 'text/plain', body: 'oops' });
+      }
+      return route.fulfill({ status: 200, contentType: 'application/json', body: '[]' });
+    });
+    await page.goto('/home');
+
+    const error = page.getByTestId('dashboard-error');
+    await expect(error).toBeVisible();
+
+    const retry = page.getByRole('button', { name: /retry/i });
+    await expect(retry).toBeVisible();
+    await retry.click();
+
+    // After retry the error state goes away and the dashboard renders normally
+    await expect(error).toBeHidden();
+    await expect(page.getByTestId('dashboard-empty-goals')).toBeVisible();
+    expect(goalsCallCount).toBeGreaterThanOrEqual(2);
+  });
+
   test('admin chip is hidden for non-admin users (02-TC-F-013)', async ({ page }) => {
     await authenticate(page); // default profile has roles: []
     await page.goto('/home');

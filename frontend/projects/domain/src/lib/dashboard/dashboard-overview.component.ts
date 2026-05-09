@@ -1,6 +1,8 @@
-import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
+import { catchError, defer, of, repeat, Subject, switchMap } from 'rxjs';
+import { MatButtonModule } from '@angular/material/button';
 import {
   EmptyStateComponent,
   GoalCardComponent,
@@ -30,6 +32,7 @@ const emptyOverview: DashboardOverview = {
     EmptyStateComponent,
     GoalCardComponent,
     IfRoleDirective,
+    MatButtonModule,
     MetricCardComponent,
     PageHeaderComponent,
     RewardCardComponent,
@@ -43,10 +46,24 @@ const emptyOverview: DashboardOverview = {
 export class DashboardOverviewComponent {
   private readonly dashboardService = inject(DASHBOARD_SERVICE);
   private readonly router = inject(Router);
+  private readonly retry$ = new Subject<void>();
+  readonly hasError = signal(false);
 
-  readonly overview = toSignal(this.dashboardService.getOverview(), {
-    initialValue: emptyOverview,
-  });
+  readonly overview = toSignal(
+    defer(() => this.dashboardService.getOverview()).pipe(
+      catchError(() => {
+        this.hasError.set(true);
+        return of(emptyOverview);
+      }),
+      repeat({ delay: () => this.retry$ }),
+    ),
+    { initialValue: emptyOverview },
+  );
+
+  retry(): void {
+    this.hasError.set(false);
+    this.retry$.next();
+  }
 
   readonly todayActivityTotal = computed(() => {
     const todayMetric = this.overview().metrics.find((m) => m.label === 'Today');

@@ -1,4 +1,10 @@
 <section class="dashboard-overview" aria-labelledby="dashboard-overview-title">
+  @if (hasError()) {
+    <div class="dashboard-overview__error" data-testid="dashboard-error" role="alert">
+      <p>We couldn't load your dashboard.</p>
+      <button mat-stroked-button type="button" (click)="retry()">Retry</button>
+    </div>
+  }
   <div class="dashboard-overview__avatar" data-testid="dashboard-avatar">
     <hg-user-avatar size="medium" name="You" />
   </div>
