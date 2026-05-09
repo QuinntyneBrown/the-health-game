@@ -10,7 +10,14 @@ import { provideViewport } from './viewport/viewport.signal';
 export const appConfig: ApplicationConfig = {
   providers: [
     provideAnimations(),
-    provideApiServices({ apiBaseUrl: environment.apiBaseUrl }),
+    provideApiServices({
+      apiBaseUrl: environment.apiBaseUrl,
+      oidcAuthority: environment.oidcAuthority,
+      oidcClientId: environment.oidcClientId,
+      oidcScopes: environment.oidcScopes,
+      oidcRedirectUri: environment.oidcRedirectUri,
+      oidcPostLogoutRedirectUri: environment.oidcPostLogoutRedirectUri,
+    }),
     provideBrowserGlobalErrorListeners(),
     provideRouter(routes),
     provideViewport(),

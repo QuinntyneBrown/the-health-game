@@ -8,7 +8,14 @@ import { provideApiServices } from './api.providers';
 
 describe('API_CONFIG', () => {
   it('is registered with the value passed to provideApiServices', () => {
-    const config: ApiConfig = { apiBaseUrl: 'https://api.example.test' };
+    const config: ApiConfig = {
+      apiBaseUrl: 'https://api.example.test',
+      oidcAuthority: 'https://auth.example.test',
+      oidcClientId: 'health-game-web-test',
+      oidcScopes: 'openid profile email',
+      oidcRedirectUri: 'http://localhost:4200/auth/callback',
+      oidcPostLogoutRedirectUri: 'http://localhost:4200/',
+    };
 
     TestBed.configureTestingModule({ providers: [provideApiServices(config)] });
 

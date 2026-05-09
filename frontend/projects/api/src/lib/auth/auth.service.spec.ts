@@ -4,7 +4,7 @@
 import { TestBed } from '@angular/core/testing';
 
 import { API_CONFIG, ApiConfig } from '../api.config';
-import { AuthService } from './auth.service';
+import { AuthService, OIDC_REDIRECTOR, VERIFIER_KEY } from './auth.service';
 
 describe('AuthService.signIn', () => {
   const config: ApiConfig = {
@@ -18,14 +18,12 @@ describe('AuthService.signIn', () => {
   let assignedUrl: string | null;
 
   beforeEach(() => {
+    sessionStorage.clear();
     assignedUrl = null;
     TestBed.configureTestingModule({
       providers: [
         { provide: API_CONFIG, useValue: config },
-        {
-          provide: AuthService,
-          useFactory: () => new AuthService(config, (url) => (assignedUrl = url)),
-        },
+        { provide: OIDC_REDIRECTOR, useValue: (url: string) => (assignedUrl = url) },
       ],
     });
   });
@@ -55,6 +53,6 @@ describe('AuthService.signIn', () => {
 
     await service.signIn();
 
-    expect(sessionStorage.getItem('hg.oidc.verifier')).toMatch(/^[A-Za-z0-9_-]{43,}$/);
+    expect(sessionStorage.getItem(VERIFIER_KEY)).toMatch(/^[A-Za-z0-9_-]{43,}$/);
   });
 });
