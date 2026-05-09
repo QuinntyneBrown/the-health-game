@@ -3,6 +3,7 @@
  */
 
 export * from './lib/auth/if-role.directive';
+export * from './lib/state/loadable';
 export * from './lib/dashboard/dashboard-overview.component';
 export * from './lib/dashboard/dashboard-overview.model';
 export * from './lib/dashboard/dashboard.providers';
