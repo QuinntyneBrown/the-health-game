@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 02-TC-V-001..007, 02-TC-C-001..010, 02-TC-L-001..010, 02-TC-R-001..006, 02-TC-F-001..014, 02-TC-B-001..006, 02-TC-A-001..006
+// Traces to: 02-TC-V-001..007, 02-TC-C-001..010, 02-TC-L-001..010, 02-TC-R-001..006, 02-TC-F-001..014, 02-TC-B-001..006, 02-TC-A-001..006, 02-TC-D-001
 // Description: Dashboard greeting renders with Inter font, weight 500, sizes 22/28/32 px (mobile/tablet/desktop).
 // Section labels render with Inter weight 500 at 18 px.
 import AxeBuilder from '@axe-core/playwright';
@@ -46,6 +46,47 @@ async function authenticate(page: import('@playwright/test').Page): Promise<void
 }
 
 test.describe('Home Dashboard — greeting typography', () => {
+  test('returning to dashboard refetches new totals (02-TC-D-001)', async ({ page }) => {
+    let completedQuantity = 0;
+    await authenticate(page);
+    await page.route('**/api/goals**', (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify([
+          {
+            id: 'g1',
+            name: 'Walk',
+            description: '',
+            cadence: 'daily',
+            target: { value: 10, unit: 'min' },
+            completedQuantity,
+            currentStreak: 0,
+            longestStreak: 0,
+            rewardName: '',
+          },
+        ]),
+      }),
+    );
+    await page.goto('/home');
+
+    let todayCard = page.locator('mat-card.metric-card', { hasText: /today/i }).first();
+    await expect(todayCard).toBeVisible();
+    let value = await todayCard.locator('.metric-card__value').textContent();
+    expect(value?.trim()).toBe('0');
+
+    // Simulate logging activity elsewhere by changing the stub data
+    completedQuantity = 5;
+
+    // Return to dashboard via reload (or navigation) — fresh data should appear
+    await page.reload();
+
+    todayCard = page.locator('mat-card.metric-card', { hasText: /today/i }).first();
+    await expect(todayCard).toBeVisible();
+    value = await todayCard.locator('.metric-card__value').textContent();
+    expect(value?.trim()).toBe('5');
+  });
+
   test('axe-core a11y scan reports 0 critical / serious violations (02-TC-A-006)', async ({
     page,
   }) => {
