@@ -1,0 +1,65 @@
+:host {
+  display: block;
+}
+
+.profile {
+  display: grid;
+  gap: var(--hg-space-6);
+  padding: var(--hg-space-6);
+}
+
+.profile__header {
+  align-items: center;
+  display: grid;
+  gap: var(--hg-space-4);
+  grid-template-columns: auto minmax(0, 1fr);
+}
+
+.profile__avatar {
+  border-radius: var(--hg-radius-full);
+  height: var(--hg-size-avatar-lg);
+  object-fit: cover;
+  width: var(--hg-size-avatar-lg);
+}
+
+.profile__avatar--initial {
+  align-items: center;
+  background: var(--hg-color-primary-container);
+  color: var(--hg-color-on-primary-container);
+  display: inline-flex;
+  font-size: var(--hg-font-size-headline-sm);
+  font-weight: var(--hg-font-weight-semibold);
+  justify-content: center;
+}
+
+.profile__name {
+  font-size: var(--hg-font-size-headline-sm);
+  line-height: var(--hg-line-height-tight);
+  margin: 0;
+}
+
+.profile__email {
+  color: var(--hg-color-on-surface-variant);
+  margin: 0;
+}
+
+.profile__roles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--hg-space-2);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.profile__role {
+  background: var(--hg-color-secondary-container);
+  border-radius: var(--hg-radius-full);
+  color: var(--hg-color-on-secondary-container);
+  font-size: var(--hg-font-size-label-md);
+  padding: var(--hg-space-1) var(--hg-space-3);
+}
+
+.profile__signout {
+  justify-self: start;
+}

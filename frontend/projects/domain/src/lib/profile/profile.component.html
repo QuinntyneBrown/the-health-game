@@ -1,0 +1,29 @@
+@if (profile(); as user) {
+  <section class="profile" data-testid="profile">
+    <header class="profile__header">
+      @if (user.avatarUrl) {
+        <img class="profile__avatar" [src]="user.avatarUrl" [alt]="user.displayName" />
+      } @else {
+        <span class="profile__avatar profile__avatar--initial" aria-hidden="true">
+          {{ user.displayName.charAt(0) }}
+        </span>
+      }
+      <div class="profile__identity">
+        <h1 class="profile__name" data-testid="profile-display-name">{{ user.displayName }}</h1>
+        <p class="profile__email" data-testid="profile-email">{{ user.email }}</p>
+      </div>
+    </header>
+
+    @if (user.roles.length) {
+      <ul class="profile__roles" aria-label="Roles" data-testid="profile-roles">
+        @for (role of user.roles; track role) {
+          <li class="profile__role">{{ role }}</li>
+        }
+      </ul>
+    }
+
+    <button mat-flat-button type="button" class="profile__signout" (click)="onSignOut()">
+      Sign out
+    </button>
+  </section>
+}

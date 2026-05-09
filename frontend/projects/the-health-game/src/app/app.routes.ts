@@ -4,7 +4,6 @@ import { authGuard } from 'api';
 import { CallbackComponent } from './auth/callback.component';
 import { SignedOutComponent } from './auth/signed-out.component';
 import { PlaceholderComponent } from './placeholder/placeholder.component';
-import { ProfileComponent } from './profile/profile.component';
 
 export const routes: Routes = [
   { path: 'auth/callback', component: CallbackComponent },
@@ -17,7 +16,11 @@ export const routes: Routes = [
   },
   { path: 'goals', canMatch: [authGuard], component: PlaceholderComponent },
   { path: 'rewards', canMatch: [authGuard], component: PlaceholderComponent },
-  { path: 'profile', canMatch: [authGuard], component: ProfileComponent },
+  {
+    path: 'profile',
+    canMatch: [authGuard],
+    loadChildren: () => import('domain').then((module) => module.PROFILE_ROUTES),
+  },
   {
     path: '**',
     redirectTo: '',
