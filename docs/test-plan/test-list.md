@@ -88,7 +88,7 @@ and made green. The /loop process picks the first test with
 | 77 | 02 | TC-C-003 | Streak card background | `#FFDCC4` (streak-container) | 2026-05-09T20:34:27Z |
 | 78 | 02 | TC-C-004 | Streak icon/text | `#E76A0C` (streak) | 2026-05-09T20:36:18Z |
 | 79 | 02 | TC-C-005 | Reward card background | `#FFD7EE` (reward-container) | 2026-05-09T20:38:08Z |
-| 80 | 02 | TC-C-006 | Reward accent | `#9B2680` (reward) | null |
+| 80 | 02 | TC-C-006 | Reward accent | `#9B2680` (reward) | 2026-05-09T20:39:47Z |
 | 81 | 02 | TC-C-007 | Success/level cards | `#94F7B4` background, `#00210F` text | null |
 | 82 | 02 | TC-C-008 | "Add" / "Log activity" primary CTA | `#006D3F` background, white label | null |
 | 83 | 02 | TC-C-009 | Card outline (when outlined variant) | `#C2C9BE` (outline-variant), 1 px | null |
