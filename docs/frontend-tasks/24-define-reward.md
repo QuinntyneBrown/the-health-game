@@ -1,5 +1,5 @@
 ---
-status: Accepted
+status: Complete
 ---
 
 # Task 24 — Define reward (goal-target and streak-milestone)
