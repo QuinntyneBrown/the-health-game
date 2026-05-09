@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 02-TC-V-001..007, 02-TC-C-001..010, 02-TC-L-001..010, 02-TC-R-001..006, 02-TC-F-001..014, 02-TC-B-001..006, 02-TC-A-001
+// Traces to: 02-TC-V-001..007, 02-TC-C-001..010, 02-TC-L-001..010, 02-TC-R-001..006, 02-TC-F-001..014, 02-TC-B-001..006, 02-TC-A-001..002
 // Description: Dashboard greeting renders with Inter font, weight 500, sizes 22/28/32 px (mobile/tablet/desktop).
 // Section labels render with Inter weight 500 at 18 px.
 import AxeBuilder from '@axe-core/playwright';
@@ -46,6 +46,39 @@ async function authenticate(page: import('@playwright/test').Page): Promise<void
 }
 
 test.describe('Home Dashboard — greeting typography', () => {
+  test('every dashboard <section> has aria-labelledby pointing to a heading (02-TC-A-002)', async ({
+    page,
+  }) => {
+    await authenticate(page);
+    await page.goto('/home');
+
+    const audit = await page.evaluate(() => {
+      // Only the section elements owned directly by the dashboard component
+      // (not those inside descendant sub-components like hg-empty-state).
+      const sections = Array.from(
+        document.querySelectorAll(
+          'hg-dashboard-overview > section, hg-dashboard-overview > section > div > section',
+        ),
+      );
+      return sections.map((section) => {
+        const labelId = section.getAttribute('aria-labelledby');
+        const target = labelId ? document.getElementById(labelId) : null;
+        return {
+          hasLabelledBy: labelId !== null && labelId.length > 0,
+          targetExists: target !== null,
+          targetHasText: !!target?.textContent?.trim(),
+        };
+      });
+    });
+
+    expect(audit.length).toBeGreaterThan(0);
+    for (const entry of audit) {
+      expect(entry.hasLabelledBy).toBe(true);
+      expect(entry.targetExists).toBe(true);
+      expect(entry.targetHasText).toBe(true);
+    }
+  });
+
   test('greeting renders as <h1> (02-TC-A-001)', async ({ page }) => {
     await authenticate(page);
     await page.goto('/home');

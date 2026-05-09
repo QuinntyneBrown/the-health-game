@@ -130,7 +130,7 @@ and made green. The /loop process picks the first test with
 | 119 | 02 | TC-B-005 | Pull-to-refresh (mobile, optional) | Reloads dashboard data | 2026-05-09T22:08:06Z |
 | 120 | 02 | TC-B-006 | Reduced-motion preference | No bar entrance animation | 2026-05-09T22:09:51Z |
 | 121 | 02 | TC-A-001 | Greeting rendered as `<h1>` | Yes | 2026-05-09T22:11:09Z |
-| 122 | 02 | TC-A-002 | Sections wrapped in `<section aria-labelledby=...>` | Yes | null |
+| 122 | 02 | TC-A-002 | Sections wrapped in `<section aria-labelledby=...>` | Yes | 2026-05-09T22:14:45Z |
 | 123 | 02 | TC-A-003 | Bar chart exposes data via accessible name or table summary | Yes | null |
 | 124 | 02 | TC-A-004 | Icon-only "Add" button has `aria-label="New goal"` | Yes | null |
 | 125 | 02 | TC-A-005 | Streak chip text is not the sole conveyor of meaning (color + icon + label) | Yes | null |
