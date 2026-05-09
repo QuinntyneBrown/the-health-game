@@ -1,10 +1,34 @@
 // Acceptance Test
-// Traces to: 01-TC-V-001..010, 01-TC-C-001..009
+// Traces to: 01-TC-V-001..010, 01-TC-C-001..010
 // Description: Onboarding headline ("Make health a game") renders with font family Inter weight 500
 //              and the design-spec font-size at each breakpoint (mobile = 28 px, tablet = 45 px,
 //              desktop = 57 px with line-height 1.1). Body description paragraph renders at
 //              font-weight 400.
 import { expect, test } from '@playwright/test';
+
+function parseRgb(value: string): [number, number, number] {
+  const match = value.match(/rgba?\(([^)]+)\)/);
+  if (!match) {
+    throw new Error(`Cannot parse rgb from: ${value}`);
+  }
+  const parts = match[1].split(',').map((p) => parseFloat(p.trim()));
+  return [parts[0], parts[1], parts[2]];
+}
+
+function relativeLuminance([r, g, b]: [number, number, number]): number {
+  const linear = (channel: number): number => {
+    const s = channel / 255;
+    return s <= 0.03928 ? s / 12.92 : Math.pow((s + 0.055) / 1.055, 2.4);
+  };
+  return 0.2126 * linear(r) + 0.7152 * linear(g) + 0.0722 * linear(b);
+}
+
+function contrastRatio(fg: string, bg: string): number {
+  const lf = relativeLuminance(parseRgb(fg));
+  const lb = relativeLuminance(parseRgb(bg));
+  const [light, dark] = lf > lb ? [lf, lb] : [lb, lf];
+  return (light + 0.05) / (dark + 0.05);
+}
 
 test.describe('Onboarding — headline typography', () => {
   test('headline uses Inter font family with weight 500', async ({ page }) => {
@@ -107,6 +131,35 @@ test.describe('Onboarding — headline typography', () => {
 
     const background = await active.evaluate((el) => getComputedStyle(el).backgroundColor);
     expect(background).toBe('rgb(0, 109, 63)');
+  });
+
+  test('text/background contrast meets WCAG AA (TC-C-010)', async ({ page }) => {
+    await page.goto('/onboarding');
+
+    const root = page.getByTestId('onboarding');
+    const headline = page.getByTestId('onboarding-headline');
+    const description = page.getByTestId('onboarding-description');
+    const trophy = page.getByTestId('onboarding-trophy');
+    const hero = page.getByTestId('onboarding-hero');
+    const primary = page.getByTestId('onboarding-get-started');
+    const secondary = page.getByTestId('onboarding-have-account');
+
+    const pageBg = await root.evaluate((el) => getComputedStyle(el).backgroundColor);
+    const heroBg = await hero.evaluate((el) => getComputedStyle(el).backgroundColor);
+    const headlineFg = await headline.evaluate((el) => getComputedStyle(el).color);
+    const descriptionFg = await description.evaluate((el) => getComputedStyle(el).color);
+    const trophyFg = await trophy.evaluate((el) => getComputedStyle(el).color);
+    const primaryFg = await primary.evaluate((el) => getComputedStyle(el).color);
+    const primaryBg = await primary.evaluate((el) => getComputedStyle(el).backgroundColor);
+    const secondaryFg = await secondary.evaluate((el) => getComputedStyle(el).color);
+
+    // Large text (>= 24 px or >= 18.66 px bold): >= 3:1
+    expect(contrastRatio(headlineFg, pageBg)).toBeGreaterThanOrEqual(3);
+    expect(contrastRatio(trophyFg, heroBg)).toBeGreaterThanOrEqual(3);
+    // Normal text: >= 4.5:1
+    expect(contrastRatio(descriptionFg, pageBg)).toBeGreaterThanOrEqual(4.5);
+    expect(contrastRatio(primaryFg, primaryBg)).toBeGreaterThanOrEqual(4.5);
+    expect(contrastRatio(secondaryFg, pageBg)).toBeGreaterThanOrEqual(4.5);
   });
 
   test('inactive page-dot background is #F1F5ED (TC-C-009)', async ({ page }) => {
