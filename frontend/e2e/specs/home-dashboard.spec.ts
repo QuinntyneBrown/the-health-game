@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 02-TC-V-001..006
+// Traces to: 02-TC-V-001..007
 // Description: Dashboard greeting renders with Inter font, weight 500, sizes 22/28/32 px (mobile/tablet/desktop).
 // Section labels render with Inter weight 500 at 18 px.
 import { expect, test } from '@playwright/test';
@@ -54,6 +54,26 @@ test.describe('Home Dashboard — greeting typography', () => {
       expect(computed.fontFamily.split(',')[0].replace(/['"]/g, '').trim()).toBe('Inter');
       expect(computed.fontWeight).toBe('500');
       expect(computed.fontSize).toBe('32px');
+    });
+
+    test('bar-chart axis text is Inter 11 px / weight 400 (02-TC-V-007)', async ({ page }) => {
+      await authenticate(page);
+
+      const axisLabels = page.locator('[data-testid="dashboard-bar-chart"] .bar-chart__axis-label');
+      const count = await axisLabels.count();
+      expect(count).toBeGreaterThan(0);
+
+      const computed = await axisLabels.first().evaluate((el) => {
+        const style = getComputedStyle(el);
+        return {
+          fontFamily: style.fontFamily,
+          fontWeight: parseFloat(style.fontWeight),
+          fontSize: parseFloat(style.fontSize),
+        };
+      });
+      expect(computed.fontFamily.split(',')[0].replace(/['"]/g, '').trim()).toBe('Inter');
+      expect(computed.fontSize).toBe(11);
+      expect(computed.fontWeight).toBe(400);
     });
 
     test('goal-card streak chip text is Inter 13 px / weight 500-600 (02-TC-V-006)', async ({

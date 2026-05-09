@@ -8,6 +8,31 @@
     [title]="overview().greeting"
   />
 
+  <svg
+    class="dashboard-overview__bar-chart bar-chart"
+    data-testid="dashboard-bar-chart"
+    role="img"
+    aria-label="Weekly activity"
+    viewBox="0 0 280 80"
+  >
+    @for (day of weeklyChart; track day.label; let i = $index) {
+      <rect
+        class="bar-chart__bar"
+        [attr.x]="i * 40 + 4"
+        [attr.y]="60 - day.value * 0.5"
+        width="36"
+        [attr.height]="day.value * 0.5"
+        rx="6"
+      />
+      <text
+        class="bar-chart__axis-label"
+        [attr.x]="i * 40 + 22"
+        y="76"
+        text-anchor="middle"
+      >{{ day.label }}</text>
+    }
+  </svg>
+
   <div class="dashboard-overview__metrics" aria-label="Progress summary">
     @for (metric of overview().metrics; track metric.label) {
       <hg-metric-card

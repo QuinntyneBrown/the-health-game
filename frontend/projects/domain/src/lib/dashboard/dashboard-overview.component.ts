@@ -38,4 +38,14 @@ export class DashboardOverviewComponent {
   readonly overview = toSignal(this.dashboardService.getOverview(), {
     initialValue: emptyOverview,
   });
+
+  readonly weeklyChart: readonly { label: string; value: number }[] = [
+    { label: 'Mon', value: 60 },
+    { label: 'Tue', value: 80 },
+    { label: 'Wed', value: 45 },
+    { label: 'Thu', value: 95 },
+    { label: 'Fri', value: 70 },
+    { label: 'Sat', value: 55 },
+    { label: 'Sun', value: 30 },
+  ];
 }

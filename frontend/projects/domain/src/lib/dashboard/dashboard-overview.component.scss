@@ -17,6 +17,24 @@
   grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--hg-size-card-min)), 1fr));
 }
 
+.dashboard-overview__bar-chart {
+  display: block;
+  width: 100%;
+  max-width: 360px;
+  height: auto;
+}
+
+.bar-chart__bar {
+  fill: #006d3f;
+}
+
+.bar-chart__axis-label {
+  fill: var(--hg-color-on-surface-variant);
+  font-family: Inter, Roboto, Arial, sans-serif;
+  font-size: 11px;
+  font-weight: 400;
+}
+
 .dashboard-overview__section {
   display: grid;
   gap: var(--hg-space-3);
