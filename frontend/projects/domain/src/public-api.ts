@@ -7,6 +7,8 @@ export * from './lib/dashboard/dashboard-overview.model';
 export * from './lib/dashboard/dashboard.providers';
 export * from './lib/dashboard/dashboard.routes';
 export * from './lib/dashboard/dashboard.service';
+export * from './lib/activities/log-activity-container';
+export * from './lib/activities/log-activity-dialog.component';
 export * from './lib/activities/log-activity-sheet.component';
 export * from './lib/dashboard/dashboard.service.contract';
 export * from './lib/goals/goal-detail.component';

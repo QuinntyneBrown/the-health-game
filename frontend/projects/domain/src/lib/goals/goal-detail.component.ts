@@ -8,14 +8,17 @@ import { firstValueFrom } from 'rxjs';
 import { GOALS_SERVICE, GoalSummary } from 'api';
 import { PageHeaderComponent, StreakSummaryComponent } from 'components';
 
+import { LogActivityDialogComponent } from '../activities/log-activity-dialog.component';
 import {
   LogActivitySheetComponent,
   LogActivitySheetData,
 } from '../activities/log-activity-sheet.component';
+import { pickLogActivityContainer } from '../activities/log-activity-container';
 import {
   DeleteGoalDialogComponent,
   DeleteGoalDialogData,
 } from './delete-goal-dialog.component';
+import type { NavigationBarVariant } from 'components';
 
 type DetailState =
   | { readonly status: 'loading' }
@@ -90,9 +93,12 @@ export class GoalDetailComponent {
   onLogActivity(): void {
     const goal = this.goal();
     if (!goal) return;
-    this.bottomSheet.open<LogActivitySheetComponent, LogActivitySheetData>(
-      LogActivitySheetComponent,
-      { data: { goalId: goal.id, unit: goal.target.unit } },
-    );
+    const data: LogActivitySheetData = { goalId: goal.id, unit: goal.target.unit };
+    const variant: NavigationBarVariant = window.innerWidth >= 768 ? 'rail' : 'bottom';
+    if (pickLogActivityContainer(variant) === 'sheet') {
+      this.bottomSheet.open(LogActivitySheetComponent, { data });
+    } else {
+      this.dialog.open(LogActivityDialogComponent, { data, width: '35rem' });
+    }
   }
 }
