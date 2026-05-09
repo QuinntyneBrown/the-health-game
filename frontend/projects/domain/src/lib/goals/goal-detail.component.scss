@@ -54,3 +54,26 @@
   right: var(--hg-space-6);
   z-index: var(--hg-z-toolbar);
 }
+
+.goal-detail__history {
+  display: grid;
+  gap: var(--hg-space-3);
+}
+
+.goal-detail__history-title {
+  font-size: var(--hg-font-size-title-md);
+  margin: 0;
+}
+
+.goal-detail__activities {
+  display: grid;
+  gap: var(--hg-space-2);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.goal-detail__placeholder {
+  color: var(--hg-color-on-surface-variant);
+  margin: 0;
+}

@@ -5,8 +5,13 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { ActivatedRoute, Router } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
-import { GOALS_SERVICE, GoalSummary } from 'api';
-import { PageHeaderComponent, StreakSummaryComponent } from 'components';
+import { ACTIVITIES_SERVICE, ActivityEntry, GOALS_SERVICE, GoalSummary } from 'api';
+import {
+  ActivityListItemComponent,
+  EmptyStateComponent,
+  PageHeaderComponent,
+  StreakSummaryComponent,
+} from 'components';
 
 import { LogActivityDialogComponent } from '../activities/log-activity-dialog.component';
 import {
@@ -27,13 +32,21 @@ type DetailState =
 
 @Component({
   selector: 'lib-goal-detail',
-  imports: [MatButtonModule, MatIconModule, PageHeaderComponent, StreakSummaryComponent],
+  imports: [
+    ActivityListItemComponent,
+    EmptyStateComponent,
+    MatButtonModule,
+    MatIconModule,
+    PageHeaderComponent,
+    StreakSummaryComponent,
+  ],
   templateUrl: './goal-detail.component.html',
   styleUrl: './goal-detail.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GoalDetailComponent {
   private readonly goalsService = inject(GOALS_SERVICE);
+  private readonly activitiesService = inject(ACTIVITIES_SERVICE);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly dialog = inject(MatDialog);
@@ -44,6 +57,10 @@ export class GoalDetailComponent {
     this.state().status === 'loaded' ? (this.state() as { goal: GoalSummary }).goal : null,
   );
   readonly notFound = computed(() => this.state().status === 'not-found');
+  readonly activities = signal<readonly ActivityEntry[]>([]);
+  readonly sortedActivities = computed(() =>
+    [...this.activities()].sort((a, b) => b.recordedAt.localeCompare(a.recordedAt)),
+  );
 
   constructor() {
     const id = this.route.snapshot.paramMap.get('id') ?? '';
@@ -55,6 +72,18 @@ export class GoalDetailComponent {
       next: (goal) => this.state.set({ status: 'loaded', goal }),
       error: () => this.state.set({ status: 'not-found' }),
     });
+    this.activitiesService.getGoalActivities(id).subscribe({
+      next: (entries) => this.activities.set(entries),
+      error: () => this.activities.set([]),
+    });
+  }
+
+  activityTitle(entry: ActivityEntry, goal: GoalSummary): string {
+    return `${entry.quantity} ${goal.target.unit}`;
+  }
+
+  activityMeta(entry: ActivityEntry): string {
+    return new Date(entry.recordedAt).toLocaleString();
   }
 
   cadenceLabel(goal: GoalSummary): string {

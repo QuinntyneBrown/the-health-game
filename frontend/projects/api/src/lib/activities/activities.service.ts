@@ -17,4 +17,10 @@ export class ActivitiesService implements IActivitiesService {
       input,
     );
   }
+
+  getGoalActivities(goalId: string): Observable<readonly ActivityEntry[]> {
+    return this.http.get<readonly ActivityEntry[]>(
+      `${this.apiBaseUrl}/api/goals/${goalId}/activities`,
+    );
+  }
 }

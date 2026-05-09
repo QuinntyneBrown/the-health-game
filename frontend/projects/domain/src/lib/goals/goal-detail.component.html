@@ -60,6 +60,33 @@
         Delete
       </button>
     </div>
+
+    <section class="goal-detail__history" aria-label="Activity history">
+      <h2 class="goal-detail__history-title">Activity history</h2>
+      @defer (on viewport) {
+        @if (sortedActivities().length === 0) {
+          <hg-empty-state
+            title="No activity yet"
+            description="Tap Log to record your first entry."
+            icon="check_circle"
+          />
+        } @else {
+          <ol class="goal-detail__activities" data-testid="activity-list">
+            @for (entry of sortedActivities(); track entry.id) {
+              <li>
+                <hg-activity-list-item
+                  [title]="activityTitle(entry, g)"
+                  [detail]="entry.notes ?? ''"
+                  [metaLabel]="activityMeta(entry)"
+                />
+              </li>
+            }
+          </ol>
+        }
+      } @placeholder {
+        <p class="goal-detail__placeholder">Loading activity…</p>
+      }
+    </section>
   </section>
 
   <button

@@ -11,6 +11,7 @@ export interface LogActivityInput {
 
 export interface IActivitiesService {
   logActivity(goalId: string, input: LogActivityInput): Observable<ActivityEntry>;
+  getGoalActivities(goalId: string): Observable<readonly ActivityEntry[]>;
 }
 
 export const ACTIVITIES_SERVICE = new InjectionToken<IActivitiesService>('ACTIVITIES_SERVICE');
