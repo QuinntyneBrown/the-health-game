@@ -9,6 +9,19 @@
   border-radius: var(--hg-radius-card);
   color: var(--hg-color-on-surface);
   height: 100%;
+  box-shadow: none;
+  transition: box-shadow 0.15s ease;
+}
+
+.metric-card:hover,
+.metric-card:focus-within {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .metric-card {
+    transition-duration: 0s;
+  }
 }
 
 .metric-card--primary {
