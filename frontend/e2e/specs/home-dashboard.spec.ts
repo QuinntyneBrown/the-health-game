@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 02-TC-V-001..007, 02-TC-C-001..002
+// Traces to: 02-TC-V-001..007, 02-TC-C-001..003
 // Description: Dashboard greeting renders with Inter font, weight 500, sizes 22/28/32 px (mobile/tablet/desktop).
 // Section labels render with Inter weight 500 at 18 px.
 import { expect, test } from '@playwright/test';
@@ -54,6 +54,16 @@ test.describe('Home Dashboard — greeting typography', () => {
       expect(computed.fontFamily.split(',')[0].replace(/['"]/g, '').trim()).toBe('Inter');
       expect(computed.fontWeight).toBe('500');
       expect(computed.fontSize).toBe('32px');
+    });
+
+    test('streak metric card background is #FFDCC4 (02-TC-C-003)', async ({ page }) => {
+      await authenticate(page);
+
+      const streakCard = page.locator('mat-card.metric-card--streak').first();
+      await expect(streakCard).toBeVisible();
+
+      const bg = await streakCard.evaluate((el) => getComputedStyle(el).backgroundColor);
+      expect(bg).toBe('rgb(255, 220, 196)');
     });
 
     test('bar-chart bars fill is #006D3F (02-TC-C-002)', async ({ page }) => {
