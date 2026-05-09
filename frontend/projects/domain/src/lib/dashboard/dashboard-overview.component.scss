@@ -1,0 +1,30 @@
+:host {
+  display: block;
+}
+
+.dashboard-overview {
+  color: var(--hg-color-on-surface);
+  display: grid;
+  gap: var(--hg-space-6);
+  margin-inline: auto;
+  max-width: var(--hg-size-content-max);
+}
+
+.dashboard-overview__metrics,
+.dashboard-overview__sections {
+  display: grid;
+  gap: var(--hg-space-4);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--hg-size-card-min)), 1fr));
+}
+
+.dashboard-overview__section {
+  display: grid;
+  gap: var(--hg-space-3);
+  min-width: 0;
+}
+
+.dashboard-overview__goal-list,
+.dashboard-overview__reward-list {
+  display: grid;
+  gap: var(--hg-space-3);
+}

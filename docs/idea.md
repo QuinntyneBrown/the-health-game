@@ -1,0 +1,4 @@
+- health game where I create  goals, log activity
+- app tracks streaks
+- I can create rewards for defined goals being reached
+- goals can be hourly daily, weekly monthly or anything

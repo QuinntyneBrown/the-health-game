@@ -1,0 +1,30 @@
+:host {
+  display: block;
+}
+
+.app-top-bar {
+  background: var(--hg-color-surface);
+  border-bottom: var(--hg-border-subtle);
+  color: var(--hg-color-on-surface);
+  gap: var(--hg-space-2);
+  min-height: var(--hg-size-toolbar);
+  padding-inline: var(--hg-space-4);
+}
+
+.app-top-bar__brand,
+.app-top-bar__icon-button {
+  flex: none;
+}
+
+.app-top-bar__title {
+  font-size: var(--hg-font-size-title-md);
+  font-weight: var(--hg-font-weight-semibold);
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.app-top-bar__spacer {
+  flex: 1 1 auto;
+}

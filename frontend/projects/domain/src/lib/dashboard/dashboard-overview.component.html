@@ -1,0 +1,70 @@
+<section class="dashboard-overview" aria-labelledby="dashboard-overview-title">
+  <hg-page-header
+    actionIcon="add"
+    actionLabel="New goal"
+    description="Build streaks with goals, activity, and personal rewards."
+    [eyebrow]="overview().dateLabel"
+    headingId="dashboard-overview-title"
+    [title]="overview().greeting"
+  />
+
+  <div class="dashboard-overview__metrics" aria-label="Progress summary">
+    @for (metric of overview().metrics; track metric.label) {
+      <hg-metric-card
+        [ariaLabel]="metric.ariaLabel"
+        [icon]="metric.icon"
+        [label]="metric.label"
+        [progressValue]="metric.progressValue"
+        [supportText]="metric.supportText"
+        [tone]="metric.tone"
+        [value]="metric.value"
+      />
+    }
+  </div>
+
+  <div class="dashboard-overview__sections">
+    <section class="dashboard-overview__section" aria-labelledby="dashboard-goals-title">
+      <hg-section-header
+        headingId="dashboard-goals-title"
+        note="Static scaffold data"
+        title="Today's goals"
+      />
+
+      <div class="dashboard-overview__goal-list">
+        @for (goal of overview().goals; track goal.id) {
+          <hg-goal-card
+            actionLabel="Log"
+            [cadenceLabel]="goal.cadenceLabel"
+            [currentStreakLabel]="goal.currentStreakLabel"
+            [description]="goal.description"
+            [longestStreakLabel]="goal.longestStreakLabel"
+            [progressLabel]="goal.progressLabel"
+            [progressValue]="goal.progressValue"
+            [rewardName]="goal.rewardName"
+            [title]="goal.name"
+          />
+        }
+      </div>
+    </section>
+
+    <section class="dashboard-overview__section" aria-labelledby="dashboard-rewards-title">
+      <hg-section-header
+        headingId="dashboard-rewards-title"
+        note="Preview only"
+        title="Rewards"
+      />
+
+      <div class="dashboard-overview__reward-list">
+        @for (reward of overview().rewards; track reward.id) {
+          <hg-reward-card
+            [description]="reward.description"
+            [earnedDateLabel]="reward.earnedDateLabel"
+            [isEarned]="reward.isEarned"
+            [name]="reward.name"
+            [statusLabel]="reward.statusLabel"
+          />
+        }
+      </div>
+    </section>
+  </div>
+</section>

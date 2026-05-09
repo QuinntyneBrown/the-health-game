@@ -1,0 +1,30 @@
+:host {
+  display: inline-flex;
+}
+
+.action-button {
+  min-height: var(--hg-size-touch-target);
+}
+
+.action-button--tonal {
+  --mdc-filled-button-container-color: var(--hg-color-secondary-container);
+  --mdc-filled-button-label-text-color: var(--hg-color-on-secondary-container);
+}
+
+.action-button--icon,
+.action-button--fab,
+.action-button--mini-fab {
+  flex: none;
+}
+
+.action-button__icon {
+  font-size: var(--hg-icon-size-md);
+  height: var(--hg-icon-size-md);
+  width: var(--hg-icon-size-md);
+}
+
+.action-button__label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

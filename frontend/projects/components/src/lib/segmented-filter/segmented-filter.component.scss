@@ -1,0 +1,25 @@
+:host {
+  display: block;
+  min-width: 0;
+}
+
+.segmented-filter {
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+.segmented-filter__option {
+  min-height: var(--hg-size-touch-target);
+}
+
+.segmented-filter__icon {
+  font-size: var(--hg-icon-size-md);
+  height: var(--hg-icon-size-md);
+  width: var(--hg-icon-size-md);
+}
+
+.segmented-filter__label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

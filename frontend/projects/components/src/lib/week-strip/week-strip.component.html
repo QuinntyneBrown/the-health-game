@@ -1,0 +1,14 @@
+<mat-chip-set class="week-strip" [attr.aria-label]="ariaLabel()">
+  @for (day of days(); track day.label) {
+    <mat-chip
+      class="week-strip__day"
+      [class.week-strip__day--done]="day.status === 'done'"
+      [class.week-strip__day--idle]="day.status === 'idle'"
+      [class.week-strip__day--missed]="day.status === 'missed'"
+      [class.week-strip__day--today]="day.status === 'today'"
+      [attr.aria-label]="day.ariaLabel ?? day.label"
+    >
+      {{ day.label }}
+    </mat-chip>
+  }
+</mat-chip-set>

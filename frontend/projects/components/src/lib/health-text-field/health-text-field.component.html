@@ -1,0 +1,26 @@
+<mat-form-field class="health-text-field" [appearance]="appearance()">
+  <mat-label>{{ label() }}</mat-label>
+
+  @if (icon()) {
+    <mat-icon class="health-text-field__icon" fontSet="material-symbols-rounded" matPrefix aria-hidden="true">
+      {{ icon() }}
+    </mat-icon>
+  }
+
+  <input
+    class="health-text-field__input"
+    matInput
+    [attr.readonly]="readonly() ? '' : null"
+    [disabled]="disabled()"
+    [placeholder]="placeholder()"
+    [type]="type()"
+    [value]="value()"
+    (input)="onInput($event)"
+  />
+
+  @if (errorText()) {
+    <mat-error>{{ errorText() }}</mat-error>
+  } @else if (helperText()) {
+    <mat-hint>{{ helperText() }}</mat-hint>
+  }
+</mat-form-field>

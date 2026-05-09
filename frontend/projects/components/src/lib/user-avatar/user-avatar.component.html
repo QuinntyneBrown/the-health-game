@@ -1,0 +1,15 @@
+<span
+  class="user-avatar"
+  [class.user-avatar--small]="size() === 'small'"
+  [class.user-avatar--medium]="size() === 'medium'"
+  [class.user-avatar--large]="size() === 'large'"
+  [attr.aria-label]="name()"
+>
+  @if (imageUrl()) {
+    <img class="user-avatar__image" [src]="imageUrl()" [alt]="name()" />
+  } @else if (initials()) {
+    <span class="user-avatar__initials" aria-hidden="true">{{ initials() }}</span>
+  } @else {
+    <mat-icon class="user-avatar__icon" fontSet="material-symbols-rounded" aria-hidden="true">person</mat-icon>
+  }
+</span>

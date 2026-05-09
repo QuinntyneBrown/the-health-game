@@ -1,0 +1,40 @@
+{
+  "name": "frontend",
+  "version": "0.0.0",
+  "scripts": {
+    "ng": "ng",
+    "start": "npm run build:libs && ng serve the-health-game",
+    "build": "npm run build:libs && ng build the-health-game",
+    "build:api": "ng build api",
+    "build:components": "ng build components",
+    "build:domain": "ng build domain",
+    "build:libs": "npm run build:api && npm run build:components && npm run build:domain",
+    "watch": "ng build --watch --configuration development",
+    "test": "npm run build:libs && ng test"
+  },
+  "private": true,
+  "packageManager": "npm@10.9.4",
+  "dependencies": {
+    "@angular/animations": "^21.2.12",
+    "@angular/cdk": "^21.2.10",
+    "@angular/common": "^21.2.0",
+    "@angular/compiler": "^21.2.0",
+    "@angular/core": "^21.2.0",
+    "@angular/forms": "^21.2.0",
+    "@angular/material": "^21.2.10",
+    "@angular/platform-browser": "^21.2.0",
+    "@angular/router": "^21.2.0",
+    "rxjs": "~7.8.0",
+    "tslib": "^2.3.0"
+  },
+  "devDependencies": {
+    "@angular/build": "^21.2.10",
+    "@angular/cli": "^21.2.7",
+    "@angular/compiler-cli": "^21.2.0",
+    "jsdom": "^28.0.0",
+    "ng-packagr": "^21.2.0",
+    "prettier": "^3.8.1",
+    "typescript": "~5.9.2",
+    "vitest": "^4.0.8"
+  }
+}

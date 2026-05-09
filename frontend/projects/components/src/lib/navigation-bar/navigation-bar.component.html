@@ -1,0 +1,29 @@
+<nav
+  class="navigation-bar"
+  [class.navigation-bar--bottom]="variant() === 'bottom'"
+  [class.navigation-bar--rail]="variant() === 'rail'"
+  [class.navigation-bar--drawer]="variant() === 'drawer'"
+  [attr.aria-label]="ariaLabel()"
+>
+  @for (item of items(); track item.id) {
+    <button
+      class="navigation-bar__item"
+      [class.navigation-bar__item--active]="item.id === activeItemId()"
+      mat-button
+      type="button"
+      [attr.aria-current]="item.id === activeItemId() ? 'page' : null"
+      [disabled]="item.disabled"
+      (click)="selectItem(item)"
+    >
+      <mat-icon
+        class="navigation-bar__icon" fontSet="material-symbols-rounded"
+        [matBadge]="item.badgeLabel ?? ''"
+        [matBadgeHidden]="!item.badgeLabel"
+        aria-hidden="true"
+      >
+        {{ item.icon }}
+      </mat-icon>
+      <span class="navigation-bar__label">{{ item.label }}</span>
+    </button>
+  }
+</nav>

@@ -1,0 +1,28 @@
+:host {
+  display: block;
+}
+
+.section-header {
+  align-items: end;
+  display: flex;
+  gap: var(--hg-space-3);
+  justify-content: space-between;
+}
+
+.section-header__copy {
+  display: grid;
+  gap: var(--hg-space-1);
+  min-width: 0;
+}
+
+.section-header__title {
+  font-size: var(--hg-font-size-title-md);
+  font-weight: var(--hg-font-weight-semibold);
+  margin: 0;
+}
+
+.section-header__note {
+  color: var(--hg-color-on-surface-variant);
+  font-size: var(--hg-font-size-body-sm);
+  font-weight: var(--hg-font-weight-medium);
+}

@@ -1,0 +1,37 @@
+<mat-toolbar class="app-top-bar">
+  @if (showBrand()) {
+    <hg-app-brand class="app-top-bar__brand" />
+  }
+
+  @if (title()) {
+    <h1 class="app-top-bar__title">{{ title() }}</h1>
+  }
+
+  <span class="app-top-bar__spacer" aria-hidden="true"></span>
+
+  <ng-content select="[hgAppTopBarAction]" />
+
+  <button
+    class="app-top-bar__icon-button"
+    mat-icon-button
+    type="button"
+    aria-label="Notifications"
+    (click)="notificationsSelected.emit()"
+  >
+    <mat-icon fontSet="material-symbols-rounded">notifications</mat-icon>
+  </button>
+
+  <button
+    class="app-top-bar__icon-button"
+    mat-icon-button
+    type="button"
+    aria-label="Settings"
+    (click)="settingsSelected.emit()"
+  >
+    <mat-icon fontSet="material-symbols-rounded">settings</mat-icon>
+  </button>
+
+  @if (avatarInitials()) {
+    <hg-user-avatar [initials]="avatarInitials()" [name]="avatarName()" size="small" />
+  }
+</mat-toolbar>

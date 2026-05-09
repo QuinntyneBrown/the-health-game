@@ -1,0 +1,135 @@
+// Include theming for Angular Material with `mat.theme()`.
+// This Sass mixin will define CSS variables that are used for styling Angular Material
+// components according to the Material 3 design spec.
+// Learn more about theming and how to use it for your application's
+// custom components at https://material.angular.dev/guide/theming
+@use '@angular/material' as mat;
+
+html {
+  height: 100%;
+  @include mat.theme(
+    (
+      color: (
+        primary: mat.$azure-palette,
+        tertiary: mat.$blue-palette,
+      ),
+      typography: Roboto,
+      density: 0,
+    )
+  );
+}
+
+body {
+  // Default the application to a light color theme. This can be changed to
+  // `dark` to enable the dark color theme, or to `light dark` to defer to the
+  // user's system settings.
+  color-scheme: light;
+
+  // Set a default background, font and text colors for the application using
+  // Angular Material's system-level CSS variables. Learn more about these
+  // variables at https://material.angular.dev/guide/system-variables
+  background-color: var(--mat-sys-surface);
+  color: var(--mat-sys-on-surface);
+  font: var(--mat-sys-body-medium);
+
+  // Reset the user agent margin.
+  margin: 0;
+  height: 100%;
+}
+@import '@angular/material/prebuilt-themes/azure-blue.css';
+
+:root {
+  --hg-color-app-background: #f6faf7;
+  --hg-color-error-container: #ffdad6;
+  --hg-color-focus: #006b58;
+  --hg-color-on-error-container: #410002;
+  --hg-color-on-primary-container: #062019;
+  --hg-color-on-reward-container: #271900;
+  --hg-color-on-secondary-container: #0d1f13;
+  --hg-color-on-surface: #171d1b;
+  --hg-color-on-surface-variant: #53605b;
+  --hg-color-on-success-container: #00210f;
+  --hg-color-on-streak-container: #2d1600;
+  --hg-color-on-tertiary-container: #001f26;
+  --hg-color-on-warning-container: #281900;
+  --hg-color-outline: #d4ddd8;
+  --hg-color-primary: #006d3f;
+  --hg-color-primary-container: #bfe9dc;
+  --hg-color-reward-container: #ffe0a3;
+  --hg-color-secondary-container: #d2e8d4;
+  --hg-color-streak-container: #ffdcc2;
+  --hg-color-success-container: #94f7b4;
+  --hg-color-surface: #ffffff;
+  --hg-color-surface-container: #edf4f0;
+  --hg-color-surface-container-high: #fff8ec;
+  --hg-color-tertiary-container: #beeaf6;
+  --hg-color-warning-container: #ffe0a3;
+
+  --hg-space-1: 0.25rem;
+  --hg-space-2: 0.5rem;
+  --hg-space-3: 0.75rem;
+  --hg-space-4: 1rem;
+  --hg-space-5: 1.25rem;
+  --hg-space-6: 1.5rem;
+
+  --hg-radius-card: 0.5rem;
+  --hg-radius-control: 0.5rem;
+  --hg-radius-full: 999rem;
+
+  --hg-border-subtle: 0.0625rem solid var(--hg-color-outline);
+  --hg-focus-ring: 0 0 0 0.1875rem var(--hg-color-focus);
+
+  --hg-font-size-body-sm: 0.875rem;
+  --hg-font-size-display-sm: clamp(2rem, 8vw, 3.5rem);
+  --hg-font-size-headline-sm: 2rem;
+  --hg-font-size-label-md: 0.75rem;
+  --hg-font-size-title-md: 1.25rem;
+  --hg-font-size-title-sm: 1rem;
+  --hg-font-weight-medium: 500;
+  --hg-font-weight-semibold: 600;
+  --hg-line-height-tight: 1.1;
+
+  --hg-icon-size-lg: 2rem;
+  --hg-icon-size-md: 1.5rem;
+  --hg-size-avatar-lg: 4rem;
+  --hg-size-avatar-md: 2.5rem;
+  --hg-size-avatar-sm: 2rem;
+  --hg-size-brand-mark: 2.5rem;
+  --hg-size-card-min: 14rem;
+  --hg-size-content-max: 72rem;
+  --hg-size-empty-icon-frame: 4rem;
+  --hg-size-icon-frame: 2.5rem;
+  --hg-size-input: 2.75rem;
+  --hg-size-list-item: 4.5rem;
+  --hg-size-navigation: 15rem;
+  --hg-size-readable-max: 36rem;
+  --hg-size-readable-min: 18rem;
+  --hg-size-streak-icon-frame: 3.5rem;
+  --hg-size-toolbar: 4rem;
+  --hg-size-touch-target: 2.75rem;
+  --hg-z-toolbar: 10;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  min-height: 100%;
+}
+
+body {
+  background: var(--hg-color-app-background);
+  color: var(--hg-color-on-surface);
+  font-family:
+    Inter,
+    Roboto,
+    Arial,
+    sans-serif;
+  margin: 0;
+}
+
+.cdk-keyboard-focused {
+  box-shadow: var(--hg-focus-ring);
+}

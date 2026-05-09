@@ -1,0 +1,18 @@
+<section class="empty-state">
+  <span class="empty-state__icon-frame" aria-hidden="true">
+    <mat-icon class="empty-state__icon" fontSet="material-symbols-rounded">{{ icon() }}</mat-icon>
+  </span>
+  <h2 class="empty-state__title">{{ title() }}</h2>
+  @if (description()) {
+    <p class="empty-state__description">{{ description() }}</p>
+  }
+  @if (actionLabel()) {
+    <hg-action-button
+      class="empty-state__action"
+      variant="filled"
+      [icon]="actionIcon()"
+      [label]="actionLabel()"
+      (action)="actionSelected.emit()"
+    />
+  }
+</section>

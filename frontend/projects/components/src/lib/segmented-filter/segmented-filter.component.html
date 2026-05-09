@@ -1,0 +1,21 @@
+<mat-button-toggle-group
+  class="segmented-filter"
+  [attr.aria-label]="ariaLabel()"
+  [value]="value()"
+  (change)="onValueChange($event)"
+>
+  @for (option of options(); track option.value) {
+    <mat-button-toggle
+      class="segmented-filter__option"
+      [disabled]="option.disabled"
+      [value]="option.value"
+    >
+      @if (option.icon) {
+        <mat-icon class="segmented-filter__icon" fontSet="material-symbols-rounded" aria-hidden="true">
+          {{ option.icon }}
+        </mat-icon>
+      }
+      <span class="segmented-filter__label">{{ option.label }}</span>
+    </mat-button-toggle>
+  }
+</mat-button-toggle-group>

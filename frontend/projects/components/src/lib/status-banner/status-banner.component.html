@@ -1,0 +1,33 @@
+<mat-card
+  class="status-banner"
+  [class.status-banner--error]="tone() === 'error'"
+  [class.status-banner--info]="tone() === 'info'"
+  [class.status-banner--success]="tone() === 'success'"
+  [class.status-banner--warning]="tone() === 'warning'"
+  appearance="outlined"
+>
+  <mat-card-content class="status-banner__content">
+    <mat-icon class="status-banner__icon" fontSet="material-symbols-rounded" aria-hidden="true">
+      {{ icon() }}
+    </mat-icon>
+    <p class="status-banner__message">{{ message() }}</p>
+
+    @if (actionLabel()) {
+      <hg-action-button
+        class="status-banner__action"
+        variant="text"
+        [label]="actionLabel()"
+        (action)="actionSelected.emit()"
+      />
+    }
+
+    @if (dismissLabel()) {
+      <hg-action-button
+        class="status-banner__dismiss"
+        variant="text"
+        [label]="dismissLabel()"
+        (action)="dismissed.emit()"
+      />
+    }
+  </mat-card-content>
+</mat-card>

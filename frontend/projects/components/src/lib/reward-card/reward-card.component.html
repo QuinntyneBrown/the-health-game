@@ -1,0 +1,36 @@
+<mat-card
+  class="reward-card"
+  [class.reward-card--earned]="isEarned()"
+  appearance="outlined"
+>
+  <mat-card-content class="reward-card__content">
+    <span class="reward-card__icon-frame" aria-hidden="true">
+      <mat-icon class="reward-card__icon" fontSet="material-symbols-rounded">{{ icon() }}</mat-icon>
+    </span>
+
+    <div class="reward-card__copy">
+      <h3 class="reward-card__name">{{ name() }}</h3>
+      @if (description()) {
+        <p class="reward-card__description">{{ description() }}</p>
+      }
+      @if (earnedDateLabel()) {
+        <span class="reward-card__date">{{ earnedDateLabel() }}</span>
+      }
+    </div>
+
+    @if (statusLabel()) {
+      <mat-chip-set class="reward-card__status" aria-label="Reward status">
+        <mat-chip>{{ statusLabel() }}</mat-chip>
+      </mat-chip-set>
+    }
+
+    @if (actionLabel()) {
+      <hg-action-button
+        class="reward-card__action"
+        variant="text"
+        [label]="actionLabel()"
+        (action)="actionSelected.emit()"
+      />
+    }
+  </mat-card-content>
+</mat-card>

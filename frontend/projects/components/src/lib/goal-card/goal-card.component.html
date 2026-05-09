@@ -1,0 +1,62 @@
+<mat-card
+  class="goal-card"
+  [class.goal-card--complete]="tone() === 'complete'"
+  [class.goal-card--streak]="tone() === 'streak'"
+  appearance="outlined"
+>
+  <mat-card-content class="goal-card__content">
+    <div class="goal-card__top">
+      <span class="goal-card__icon-frame" aria-hidden="true">
+        <mat-icon class="goal-card__icon" fontSet="material-symbols-rounded">{{ icon() }}</mat-icon>
+      </span>
+
+      <div class="goal-card__copy">
+        <h3 class="goal-card__title">{{ title() }}</h3>
+        @if (description()) {
+          <p class="goal-card__description">{{ description() }}</p>
+        }
+      </div>
+    </div>
+
+    <mat-chip-set class="goal-card__chips" aria-label="Goal metadata">
+      @if (cadenceLabel()) {
+        <mat-chip>{{ cadenceLabel() }}</mat-chip>
+      }
+      @if (currentStreakLabel()) {
+        <mat-chip>{{ currentStreakLabel() }}</mat-chip>
+      }
+      @if (longestStreakLabel()) {
+        <mat-chip>{{ longestStreakLabel() }}</mat-chip>
+      }
+    </mat-chip-set>
+
+    @if (progressLabel()) {
+      <div class="goal-card__progress">
+        <span class="goal-card__progress-label">{{ progressLabel() }}</span>
+        <mat-progress-bar mode="determinate" [value]="progressValue()" />
+      </div>
+    }
+
+    @if (rewardName() || actionLabel()) {
+      <div class="goal-card__footer">
+        @if (rewardName()) {
+          <span class="goal-card__reward">
+            <mat-icon class="goal-card__reward-icon" fontSet="material-symbols-rounded" aria-hidden="true">
+              emoji_events
+            </mat-icon>
+            <span>{{ rewardName() }}</span>
+          </span>
+        }
+
+        @if (actionLabel()) {
+          <hg-action-button
+            variant="tonal"
+            icon="add"
+            [label]="actionLabel()"
+            (action)="actionSelected.emit()"
+          />
+        }
+      </div>
+    }
+  </mat-card-content>
+</mat-card>

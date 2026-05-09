@@ -1,0 +1,56 @@
+<div class="app-shell">
+  <mat-toolbar class="app-shell__toolbar">
+    <hg-app-brand />
+
+    <span class="app-shell__toolbar-spacer" aria-hidden="true"></span>
+
+    <button
+      class="app-shell__toolbar-action"
+      mat-icon-button
+      type="button"
+      aria-label="Notifications"
+      disabled
+    >
+      <mat-icon fontSet="material-symbols-rounded">notifications</mat-icon>
+    </button>
+
+    <button
+      class="app-shell__toolbar-action"
+      mat-icon-button
+      type="button"
+      aria-label="Settings"
+      disabled
+    >
+      <mat-icon fontSet="material-symbols-rounded">settings</mat-icon>
+    </button>
+  </mat-toolbar>
+
+  <div class="app-shell__body">
+    <aside class="app-shell__navigation" aria-label="Primary navigation">
+      <nav class="app-shell__navigation-list">
+        @for (item of navigationItems; track item.route) {
+          <a class="app-shell__navigation-link" mat-button [routerLink]="item.route">
+            <mat-icon fontSet="material-symbols-rounded" aria-hidden="true">{{ item.icon }}</mat-icon>
+            <span>{{ item.label }}</span>
+          </a>
+        }
+      </nav>
+    </aside>
+
+    <main class="app-shell__main">
+      <router-outlet />
+    </main>
+  </div>
+
+  <nav
+    class="app-shell__bottom-navigation"
+    aria-label="Primary navigation"
+  >
+    @for (item of navigationItems; track item.route) {
+      <a class="app-shell__bottom-navigation-link" mat-button [routerLink]="item.route">
+        <mat-icon fontSet="material-symbols-rounded" aria-hidden="true">{{ item.icon }}</mat-icon>
+        <span>{{ item.label }}</span>
+      </a>
+    }
+  </nav>
+</div>
