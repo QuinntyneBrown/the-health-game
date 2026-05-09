@@ -35904,7 +35904,117 @@
                   "fill": "#94F7B4",
                   "layout": "vertical",
                   "padding": 64,
-                  "justifyContent": "space_between"
+                  "justifyContent": "space_between",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "tqKaC",
+                      "name": "siDeskBrand",
+                      "gap": 12,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "jlEcz",
+                          "name": "siDeskBrIco",
+                          "width": 44,
+                          "height": 44,
+                          "fill": "#006D3F",
+                          "cornerRadius": 12,
+                          "justifyContent": "center",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "icon_font",
+                              "id": "crLq4",
+                              "name": "dBrIcoIc",
+                              "width": 24,
+                              "height": 24,
+                              "iconFontName": "local_fire_department",
+                              "iconFontFamily": "Material Symbols Rounded",
+                              "fill": "#FFFFFF"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "id": "dGXGr",
+                          "name": "dBrTx",
+                          "fill": "#00210F",
+                          "content": "HealthQuest",
+                          "fontFamily": "Inter",
+                          "fontSize": 24,
+                          "fontWeight": "500"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "UWTqj",
+                      "name": "siDeskHero",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 24,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "WMkEa",
+                          "name": "dHTitle",
+                          "fill": "#00210F",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "Welcome back.",
+                          "lineHeight": 1.05,
+                          "fontFamily": "Inter",
+                          "fontSize": 57,
+                          "fontWeight": "500"
+                        },
+                        {
+                          "type": "text",
+                          "id": "JLgKs",
+                          "name": "dHDesc",
+                          "fill": "#00210F",
+                          "textGrowth": "fixed-width",
+                          "width": 480,
+                          "content": "Pick up your streaks where you left off. Sign in with your account or continue with single sign-on.",
+                          "lineHeight": 1.5,
+                          "fontFamily": "Inter",
+                          "fontSize": 18,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "EBpEV",
+                      "name": "siDeskQuote",
+                      "layout": "vertical",
+                      "gap": 8,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "BkUzL",
+                          "name": "dQt",
+                          "fill": "#00210F",
+                          "content": "“Small, daily wins. That's the whole game.”",
+                          "fontFamily": "Inter",
+                          "fontSize": 14,
+                          "fontWeight": "normal",
+                          "fontStyle": "italic"
+                        },
+                        {
+                          "type": "text",
+                          "id": "L4JgYb",
+                          "name": "dQa",
+                          "fill": "#424940",
+                          "content": "— a HealthQuest user",
+                          "fontFamily": "Inter",
+                          "fontSize": 12,
+                          "fontWeight": "500"
+                        }
+                      ]
+                    }
+                  ]
                 },
                 {
                   "type": "frame",
@@ -35916,7 +36026,361 @@
                   "layout": "vertical",
                   "padding": 64,
                   "justifyContent": "center",
-                  "alignItems": "center"
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "jI0y4",
+                      "name": "siDeskCard",
+                      "width": 440,
+                      "layout": "vertical",
+                      "gap": 24,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "hYOGM",
+                          "name": "siDeskCHead",
+                          "width": "fill_container",
+                          "layout": "vertical",
+                          "gap": 8,
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "c90n5",
+                              "name": "dCTitle",
+                              "fill": "#191D17",
+                              "textGrowth": "fixed-width",
+                              "width": "fill_container",
+                              "content": "Sign in",
+                              "fontFamily": "Inter",
+                              "fontSize": 32,
+                              "fontWeight": "500"
+                            },
+                            {
+                              "type": "text",
+                              "id": "HLc97",
+                              "name": "dCDesc",
+                              "fill": "#424940",
+                              "textGrowth": "fixed-width",
+                              "width": "fill_container",
+                              "content": "Use your email and password.",
+                              "fontFamily": "Inter",
+                              "fontSize": 14,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "K74IJq",
+                          "name": "siDeskCFields",
+                          "width": "fill_container",
+                          "layout": "vertical",
+                          "gap": 14,
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "CBVs6",
+                              "name": "siDeskCUser",
+                              "width": "fill_container",
+                              "fill": "#EBEFE7",
+                              "cornerRadius": [
+                                12,
+                                12,
+                                0,
+                                0
+                              ],
+                              "stroke": {
+                                "align": "inside",
+                                "thickness": {
+                                  "bottom": 1
+                                },
+                                "fill": "#191D17"
+                              },
+                              "layout": "vertical",
+                              "gap": 6,
+                              "padding": [
+                                12,
+                                16
+                              ],
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "H6dAS",
+                                  "name": "dCULab",
+                                  "fill": "#424940",
+                                  "content": "Email or username",
+                                  "fontFamily": "Inter",
+                                  "fontSize": 11,
+                                  "fontWeight": "500"
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "C61SJ",
+                                  "name": "dCUVal",
+                                  "fill": "#191D17",
+                                  "content": "jordan@example.com",
+                                  "fontFamily": "Inter",
+                                  "fontSize": 14,
+                                  "fontWeight": "normal"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "Jf8rE",
+                              "name": "siDeskCPass",
+                              "width": "fill_container",
+                              "fill": "#EBEFE7",
+                              "cornerRadius": [
+                                12,
+                                12,
+                                0,
+                                0
+                              ],
+                              "stroke": {
+                                "align": "inside",
+                                "thickness": {
+                                  "bottom": 1
+                                },
+                                "fill": "#C2C9BE"
+                              },
+                              "layout": "vertical",
+                              "gap": 6,
+                              "padding": [
+                                12,
+                                16
+                              ],
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "mpDVI",
+                                  "name": "dCPLab",
+                                  "fill": "#424940",
+                                  "content": "Password",
+                                  "fontFamily": "Inter",
+                                  "fontSize": 11,
+                                  "fontWeight": "500"
+                                },
+                                {
+                                  "type": "frame",
+                                  "id": "sJtLz",
+                                  "name": "siDeskCPRow",
+                                  "width": "fill_container",
+                                  "justifyContent": "space_between",
+                                  "alignItems": "center",
+                                  "children": [
+                                    {
+                                      "type": "text",
+                                      "id": "KTOqG",
+                                      "name": "dCPVal",
+                                      "fill": "#191D17",
+                                      "content": "••••••••••••",
+                                      "fontFamily": "Inter",
+                                      "fontSize": 14,
+                                      "fontWeight": "normal"
+                                    },
+                                    {
+                                      "type": "icon_font",
+                                      "id": "Dj81Y",
+                                      "name": "dCPEye",
+                                      "width": 20,
+                                      "height": 20,
+                                      "iconFontName": "visibility",
+                                      "iconFontFamily": "Material Symbols Rounded",
+                                      "fill": "#424940"
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "DMybN",
+                          "name": "siDeskCRowFR",
+                          "width": "fill_container",
+                          "justifyContent": "space_between",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "r12nIm",
+                              "name": "siDeskCRem",
+                              "gap": 8,
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "frame",
+                                  "id": "K47Ca",
+                                  "name": "siDeskCRBox",
+                                  "width": 18,
+                                  "height": 18,
+                                  "cornerRadius": 4,
+                                  "stroke": {
+                                    "align": "inside",
+                                    "thickness": 1.5,
+                                    "fill": "#424940"
+                                  },
+                                  "justifyContent": "center",
+                                  "alignItems": "center"
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "DsWrF",
+                                  "name": "dCRTx",
+                                  "fill": "#191D17",
+                                  "content": "Remember me",
+                                  "fontFamily": "Inter",
+                                  "fontSize": 13,
+                                  "fontWeight": "normal"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "text",
+                              "id": "AOfPw",
+                              "name": "dCForg",
+                              "fill": "#006D3F",
+                              "content": "Forgot password?",
+                              "fontFamily": "Inter",
+                              "fontSize": 14,
+                              "fontWeight": "500"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "hCcqq",
+                          "name": "siDeskCPrim",
+                          "width": "fill_container",
+                          "height": 52,
+                          "fill": "#006D3F",
+                          "cornerRadius": 9999,
+                          "justifyContent": "center",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "NLQOJ",
+                              "name": "dCPrimT",
+                              "fill": "#FFFFFF",
+                              "content": "Sign in",
+                              "fontFamily": "Inter",
+                              "fontSize": 15,
+                              "fontWeight": "500"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "bWjpi",
+                          "name": "siDeskCDiv",
+                          "width": "fill_container",
+                          "gap": 14,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "qLdzm",
+                              "name": "siDeskCDivL",
+                              "width": "fill_container",
+                              "height": 1,
+                              "fill": "#C2C9BE"
+                            },
+                            {
+                              "type": "text",
+                              "id": "d9n1r",
+                              "name": "dCDivT",
+                              "fill": "#424940",
+                              "content": "or",
+                              "fontFamily": "Inter",
+                              "fontSize": 12,
+                              "fontWeight": "normal"
+                            },
+                            {
+                              "type": "frame",
+                              "id": "FrivP",
+                              "name": "siDeskCDivR",
+                              "width": "fill_container",
+                              "height": 1,
+                              "fill": "#C2C9BE"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "Wgqwt",
+                          "name": "siDeskCOidc",
+                          "width": "fill_container",
+                          "height": 52,
+                          "cornerRadius": 9999,
+                          "stroke": {
+                            "align": "inside",
+                            "thickness": 1,
+                            "fill": "#C2C9BE"
+                          },
+                          "gap": 10,
+                          "justifyContent": "center",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "icon_font",
+                              "id": "HZBvF",
+                              "name": "dCOidcI",
+                              "width": 18,
+                              "height": 18,
+                              "iconFontName": "key",
+                              "iconFontFamily": "Material Symbols Rounded",
+                              "fill": "#191D17"
+                            },
+                            {
+                              "type": "text",
+                              "id": "me3Gd",
+                              "name": "dCOidcT",
+                              "fill": "#191D17",
+                              "content": "Continue with SSO",
+                              "fontFamily": "Inter",
+                              "fontSize": 15,
+                              "fontWeight": "500"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "AiLQY",
+                          "name": "siDeskCFoot",
+                          "width": "fill_container",
+                          "gap": 6,
+                          "justifyContent": "center",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "pEYGw",
+                              "name": "dCFt1",
+                              "fill": "#424940",
+                              "content": "New here?",
+                              "fontFamily": "Inter",
+                              "fontSize": 14,
+                              "fontWeight": "normal"
+                            },
+                            {
+                              "type": "text",
+                              "id": "h0gdv9",
+                              "name": "dCFt2",
+                              "fill": "#006D3F",
+                              "content": "Create account",
+                              "fontFamily": "Inter",
+                              "fontSize": 14,
+                              "fontWeight": "500"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
                 }
               ]
             }
