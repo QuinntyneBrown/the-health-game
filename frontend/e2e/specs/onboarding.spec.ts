@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 01-TC-V-001..010, 01-TC-C-001..010, 01-TC-L-001..010, 01-TC-R-001..006
+// Traces to: 01-TC-V-001..010, 01-TC-C-001..010, 01-TC-L-001..010, 01-TC-R-001..007
 // Description: Onboarding headline ("Make health a game") renders with font family Inter weight 500
 //              and the design-spec font-size at each breakpoint (mobile = 28 px, tablet = 45 px,
 //              desktop = 57 px with line-height 1.1). Body description paragraph renders at
@@ -197,6 +197,50 @@ test.describe('Onboarding — headline typography', () => {
 
     const background = await active.evaluate((el) => getComputedStyle(el).backgroundColor);
     expect(background).toBe('rgb(0, 109, 63)');
+  });
+
+  test('layout recomputes on window resize without overflow (TC-R-007)', async ({ page }) => {
+    await page.setViewportSize({ width: 360, height: 780 });
+    await page.goto('/onboarding');
+
+    const root = page.getByTestId('onboarding');
+    await expect(root).toBeVisible();
+
+    const measure = async (): Promise<{ scroll: number; client: number; heroLeft: number; rootLeft: number; rootWidth: number; }> => {
+      const overflow = await page.evaluate(() => ({
+        scroll: document.documentElement.scrollWidth,
+        client: document.documentElement.clientWidth,
+      }));
+      const rootRect = await root.evaluate((el) => {
+        const r = (el as HTMLElement).getBoundingClientRect();
+        return { left: r.left, width: r.width };
+      });
+      const heroLeft = await page
+        .getByTestId('onboarding-hero')
+        .evaluate((el) => (el as HTMLElement).getBoundingClientRect().left);
+      return {
+        scroll: overflow.scroll,
+        client: overflow.client,
+        heroLeft,
+        rootLeft: rootRect.left,
+        rootWidth: rootRect.width,
+      };
+    };
+
+    const sizes = [
+      { width: 1440, height: 900, expectSplit: true },
+      { width: 768, height: 1024, expectSplit: false },
+      { width: 360, height: 780, expectSplit: false },
+    ];
+
+    for (const size of sizes) {
+      await page.setViewportSize({ width: size.width, height: size.height });
+      const m = await measure();
+      expect(m.scroll).toBeLessThanOrEqual(m.client);
+      if (size.expectSplit) {
+        expect(m.heroLeft).toBeGreaterThan(m.rootLeft + m.rootWidth / 2 - 4);
+      }
+    }
   });
 
   test('text/background contrast meets WCAG AA (TC-C-010)', async ({ page }) => {
