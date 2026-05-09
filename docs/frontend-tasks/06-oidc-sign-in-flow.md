@@ -1,3 +1,7 @@
+---
+status: Accepted
+---
+
 # Task 06 — OIDC sign-in redirect flow
 
 **Traces to:** L2-013, L2-017
