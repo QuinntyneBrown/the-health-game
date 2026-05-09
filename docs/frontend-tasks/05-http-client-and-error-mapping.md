@@ -1,3 +1,7 @@
+---
+status: Accepted
+---
+
 # Task 05 — HttpClient and ProblemDetails error mapping
 
 **Traces to:** L2-016, L2-022 (correlation), L2-013 (no token logging)
