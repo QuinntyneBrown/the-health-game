@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 01-TC-V-001..010, 01-TC-C-001..010, 01-TC-L-001..010, 01-TC-R-001..008, 01-TC-F-001..008, 01-TC-B-001..007, 01-TC-A-001..006
+// Traces to: 01-TC-V-001..010, 01-TC-C-001..010, 01-TC-L-001..010, 01-TC-R-001..008, 01-TC-F-001..008, 01-TC-B-001..007, 01-TC-A-001..006, 01-TC-D-001
 // Description: Onboarding headline ("Make health a game") renders with font family Inter weight 500
 //              and the design-spec font-size at each breakpoint (mobile = 28 px, tablet = 45 px,
 //              desktop = 57 px with line-height 1.1). Body description paragraph renders at
@@ -219,6 +219,28 @@ test.describe('Onboarding — headline typography', () => {
     expect(url.searchParams.get('code_challenge')).toBeTruthy();
     expect(url.searchParams.get('state')).toBeTruthy();
     expect(url.searchParams.get('client_id')).toBeTruthy();
+  });
+
+  test('verifier persists in sessionStorage until callback exchange (TC-D-001)', async ({
+    page,
+  }) => {
+    await page.route('**/connect/authorize**', (route) =>
+      route.fulfill({ status: 200, contentType: 'text/html', body: '<html></html>' }),
+    );
+
+    await page.goto('/onboarding');
+
+    const navigation = page.waitForURL(/\/connect\/authorize/);
+    await page.getByTestId('onboarding-get-started').click();
+    await navigation;
+
+    // Return to the app origin without invoking the callback exchange
+    await page.goto('/onboarding');
+    const verifier = await page.evaluate(() =>
+      sessionStorage.getItem('hg.oidc.verifier'),
+    );
+    expect(verifier).not.toBeNull();
+    expect((verifier ?? '').length).toBeGreaterThan(20);
   });
 
   test('axe-core scan reports 0 critical / serious violations (TC-A-006)', async ({ page }) => {

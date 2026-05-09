@@ -68,7 +68,7 @@ and made green. The /loop process picks the first test with
 | 57 | 01 | TC-A-004 | Buttons have descriptive accessible names ("Get started", "I have an account") | Yes | 2026-05-09T19:46:33Z |
 | 58 | 01 | TC-A-005 | Page-dot indicator exposes `aria-current="step"` on the active dot | Yes | 2026-05-09T19:47:48Z |
 | 59 | 01 | TC-A-006 | axe-core scan returns 0 critical / serious violations | Yes | 2026-05-09T19:49:41Z |
-| 60 | 01 | TC-D-001 | OIDC `code_verifier` written to `sessionStorage` on click | Present until callback exchange | null |
+| 60 | 01 | TC-D-001 | OIDC `code_verifier` written to `sessionStorage` on click | Present until callback exchange | 2026-05-09T19:51:05Z |
 | 61 | 01 | TC-D-002 | OIDC `code_verifier` cleared after successful token exchange | Removed from sessionStorage | null |
 | 62 | 01 | TC-D-003 | No persistent identifiers (PII, tokens) written to localStorage | Confirmed | null |
 | 63 | 01 | TC-D-004 | Reload before completing OIDC redirect | Code verifier preserved; flow resumable | null |
