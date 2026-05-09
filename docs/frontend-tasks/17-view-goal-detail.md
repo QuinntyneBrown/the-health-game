@@ -1,5 +1,5 @@
 ---
-status: Accepted
+status: Complete
 ---
 
 # Task 17 — View goal detail
