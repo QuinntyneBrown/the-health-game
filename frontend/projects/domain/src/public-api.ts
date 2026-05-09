@@ -8,6 +8,7 @@ export * from './lib/dashboard/dashboard.providers';
 export * from './lib/dashboard/dashboard.routes';
 export * from './lib/dashboard/dashboard.service';
 export * from './lib/dashboard/dashboard.service.contract';
+export * from './lib/goals/goal-detail.component';
 export * from './lib/goals/goal-form.component';
 export * from './lib/goals/goal-list.component';
 export * from './lib/goals/goals.routes';

@@ -1,0 +1,64 @@
+@if (notFound()) {
+  <section class="goal-detail__missing" data-testid="goal-detail-not-found">
+    <h1>Goal not found</h1>
+    <p>The goal you're looking for doesn't exist or was deleted.</p>
+    <button mat-stroked-button type="button" (click)="onBack()">Back to goals</button>
+  </section>
+} @else if (goal(); as g) {
+  <section class="goal-detail" data-testid="goal-detail">
+    <hg-page-header
+      [eyebrow]="cadenceLabel(g)"
+      [title]="g.name"
+      [description]="g.description"
+    />
+
+    <div class="goal-detail__streaks">
+      <hg-streak-summary
+        label="Current streak"
+        tone="streak"
+        [value]="g.currentStreak"
+        unit="days"
+        data-testid="goal-detail-current-streak"
+      />
+      <hg-streak-summary
+        label="Longest streak"
+        tone="primary"
+        [value]="g.longestStreak"
+        unit="days"
+        data-testid="goal-detail-longest-streak"
+      />
+    </div>
+
+    <dl class="goal-detail__meta">
+      <div class="goal-detail__row">
+        <dt>Target</dt>
+        <dd data-testid="goal-detail-target">{{ targetLabel(g) }}</dd>
+      </div>
+      <div class="goal-detail__row">
+        <dt>Cadence</dt>
+        <dd>{{ cadenceLabel(g) }}</dd>
+      </div>
+      @if (g.rewardName) {
+        <div class="goal-detail__row">
+          <dt>Reward</dt>
+          <dd>{{ g.rewardName }}</dd>
+        </div>
+      }
+    </dl>
+
+    <div class="goal-detail__actions">
+      <button mat-stroked-button type="button" data-testid="goal-detail-edit" (click)="onEdit()">
+        Edit
+      </button>
+      <button
+        mat-stroked-button
+        color="warn"
+        type="button"
+        data-testid="goal-detail-delete"
+        (click)="onDelete()"
+      >
+        Delete
+      </button>
+    </div>
+  </section>
+}

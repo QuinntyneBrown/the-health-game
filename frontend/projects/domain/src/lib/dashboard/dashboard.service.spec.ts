@@ -26,6 +26,7 @@ const goalsService: IGoalsService = {
       },
     ]),
   getGoals: () => EMPTY,
+  getGoal: () => EMPTY,
   createGoal: () => EMPTY,
 };
 

@@ -30,6 +30,7 @@ export interface CreateGoalInput {
 export interface IGoalsService {
   getGoalSummaries(): Observable<readonly GoalSummary[]>;
   getGoals(): Observable<readonly GoalSummary[]>;
+  getGoal(id: string): Observable<GoalSummary>;
   createGoal(input: CreateGoalInput): Observable<GoalSummary>;
 }
 

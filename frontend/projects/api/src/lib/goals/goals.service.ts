@@ -64,6 +64,10 @@ export class GoalsService implements IGoalsService {
     return this.http.get<readonly GoalSummary[]>(`${this.apiBaseUrl}/api/goals`);
   }
 
+  getGoal(id: string): Observable<GoalSummary> {
+    return this.http.get<GoalSummary>(`${this.apiBaseUrl}/api/goals/${id}`);
+  }
+
   createGoal(input: CreateGoalInput): Observable<GoalSummary> {
     return this.http.post<GoalSummary>(`${this.apiBaseUrl}/api/goals`, input);
   }
