@@ -1,3 +1,7 @@
+---
+status: Accepted
+---
+
 # Task 07 — OIDC callback handling and token attachment
 
 **Traces to:** L2-013, L2-017
