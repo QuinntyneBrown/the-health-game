@@ -1,3 +1,7 @@
+---
+status: Accepted
+---
+
 # Task 18 — Edit goal
 
 **Traces to:** L2-003, L2-016
