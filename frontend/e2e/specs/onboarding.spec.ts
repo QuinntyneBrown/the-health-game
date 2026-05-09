@@ -1,9 +1,10 @@
 // Acceptance Test
-// Traces to: 01-TC-V-001..010, 01-TC-C-001..010, 01-TC-L-001..010, 01-TC-R-001..008, 01-TC-F-001..008, 01-TC-B-001..007, 01-TC-A-001..005
+// Traces to: 01-TC-V-001..010, 01-TC-C-001..010, 01-TC-L-001..010, 01-TC-R-001..008, 01-TC-F-001..008, 01-TC-B-001..007, 01-TC-A-001..006
 // Description: Onboarding headline ("Make health a game") renders with font family Inter weight 500
 //              and the design-spec font-size at each breakpoint (mobile = 28 px, tablet = 45 px,
 //              desktop = 57 px with line-height 1.1). Body description paragraph renders at
 //              font-weight 400.
+import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
 
 function parseRgb(value: string): [number, number, number] {
@@ -218,6 +219,27 @@ test.describe('Onboarding — headline typography', () => {
     expect(url.searchParams.get('code_challenge')).toBeTruthy();
     expect(url.searchParams.get('state')).toBeTruthy();
     expect(url.searchParams.get('client_id')).toBeTruthy();
+  });
+
+  test('axe-core scan reports 0 critical / serious violations (TC-A-006)', async ({ page }) => {
+    await page.goto('/onboarding');
+    await expect(page.getByTestId('onboarding-headline')).toBeVisible();
+
+    const results = await new AxeBuilder({ page })
+      .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'])
+      .analyze();
+
+    const blocking = results.violations.filter(
+      (v) => v.impact === 'critical' || v.impact === 'serious',
+    );
+
+    if (blocking.length > 0) {
+      console.warn(
+        'axe violations:',
+        blocking.map((v) => ({ id: v.id, impact: v.impact, nodes: v.nodes.length })),
+      );
+    }
+    expect(blocking).toEqual([]);
   });
 
   test('exactly one page-dot exposes aria-current="step" (TC-A-005)', async ({ page }) => {
