@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 03-TC-V-001..007
+// Traces to: 03-TC-V-001..008
 // Description: /goals page title "Goals" renders with Inter weight 500 at 22/32 px.
 // Subtitle is Inter 13 px weight 400 with computed counts.
 import { expect, test } from '@playwright/test';
@@ -231,6 +231,37 @@ test.describe('Goals page — header typography', () => {
       expect(computed.fontFamily.split(',')[0].replace(/['"]/g, '').trim()).toBe('Inter');
       expect(computed.fontWeight).toBe('500');
       expect(computed.fontSize).toBe('22px');
+    });
+  });
+
+  test.describe('goal form', () => {
+    test.use({ viewport: { width: 1440, height: 900 } });
+
+    test('form field labels are Inter 13 px / weight 500 (03-TC-V-008)', async ({ page }) => {
+      await authenticate(page);
+      await page.goto('/goals/new');
+
+      const labels = page.locator(
+        'form[data-testid="goal-form"] mat-form-field mat-label, ' +
+          'form[data-testid="goal-form"] mat-form-field .mat-mdc-floating-label, ' +
+          'form[data-testid="goal-form"] mat-form-field .mdc-floating-label',
+      );
+      const count = await labels.count();
+      expect(count).toBeGreaterThan(0);
+
+      for (let i = 0; i < count; i++) {
+        const computed = await labels.nth(i).evaluate((el) => {
+          const style = getComputedStyle(el);
+          return {
+            fontFamily: style.fontFamily,
+            fontWeight: style.fontWeight,
+            fontSize: style.fontSize,
+          };
+        });
+        expect(computed.fontFamily.split(',')[0].replace(/['"]/g, '').trim()).toBe('Inter');
+        expect(computed.fontWeight).toBe('500');
+        expect(computed.fontSize).toBe('13px');
+      }
     });
   });
 

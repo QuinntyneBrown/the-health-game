@@ -156,3 +156,15 @@ hg-empty-state .empty-state__title {
   font-size: 22px !important;
   font-weight: 500 !important;
 }
+
+mat-form-field mat-label,
+mat-form-field .mat-mdc-floating-label,
+mat-form-field .mdc-floating-label {
+  font-family:
+    Inter,
+    Roboto,
+    Arial,
+    sans-serif !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+}
