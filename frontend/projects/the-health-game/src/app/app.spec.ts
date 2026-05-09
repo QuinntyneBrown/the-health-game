@@ -33,6 +33,18 @@ describe('App', () => {
     expect(compiled.querySelector('hg-app-brand')?.textContent).toContain('HealthQuest');
   });
 
+  it('renders a skip-link as the first focusable element pointing at main content', async () => {
+    const fixture = TestBed.createComponent(App);
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    const skip = compiled.querySelector<HTMLAnchorElement>('a.app-shell__skip-link');
+    expect(skip).not.toBeNull();
+    expect(skip?.getAttribute('href')).toBe('#main');
+    expect(compiled.querySelector('#main')).not.toBeNull();
+  });
+
   it('should render the bottom navigation with the four primary destinations', async () => {
     const fixture = TestBed.createComponent(App);
     fixture.detectChanges();
