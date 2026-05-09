@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 01-TC-V-001..010, 01-TC-C-001..010, 01-TC-L-001..007
+// Traces to: 01-TC-V-001..010, 01-TC-C-001..010, 01-TC-L-001..008
 // Description: Onboarding headline ("Make health a game") renders with font family Inter weight 500
 //              and the design-spec font-size at each breakpoint (mobile = 28 px, tablet = 45 px,
 //              desktop = 57 px with line-height 1.1). Body description paragraph renders at
@@ -417,6 +417,27 @@ test.describe('Onboarding — headline typography', () => {
       expect(rowGap).toBe('32px');
     });
 
+    test('buttons inline on tablet with 16 px gap (TC-L-008)', async ({ page }) => {
+      await page.goto('/onboarding');
+
+      const primary = page.getByTestId('onboarding-get-started');
+      const secondary = page.getByTestId('onboarding-have-account');
+
+      const rects = await Promise.all(
+        [primary, secondary].map((loc) =>
+          loc.evaluate((el) => {
+            const rect = (el as HTMLElement).getBoundingClientRect();
+            return { top: rect.top, bottom: rect.bottom, left: rect.left, right: rect.right };
+          }),
+        ),
+      );
+
+      // Inline: same row (top alignment within rounding tolerance), secondary right of primary
+      expect(Math.abs(rects[0].top - rects[1].top)).toBeLessThan(2);
+      expect(rects[1].left).toBeGreaterThan(rects[0].right - 1);
+      expect(rects[1].left - rects[0].right).toBeCloseTo(16, 0);
+    });
+
     test('body padding on tablet is 40 px vertical / 80 px horizontal (TC-L-003)', async ({
       page,
     }) => {
@@ -534,6 +555,25 @@ test.describe('Onboarding — headline typography', () => {
       const fontSizePx = parseFloat(metrics.fontSize);
       const lineHeightPx = parseFloat(metrics.lineHeight);
       expect(lineHeightPx / fontSizePx).toBeCloseTo(1.1, 2);
+    });
+
+    test('buttons inline on desktop with 16 px gap (TC-L-008)', async ({ page }) => {
+      await page.goto('/onboarding');
+
+      const primary = page.getByTestId('onboarding-get-started');
+      const secondary = page.getByTestId('onboarding-have-account');
+
+      const rects = await Promise.all(
+        [primary, secondary].map((loc) =>
+          loc.evaluate((el) => {
+            const rect = (el as HTMLElement).getBoundingClientRect();
+            return { top: rect.top, bottom: rect.bottom, left: rect.left, right: rect.right };
+          }),
+        ),
+      );
+
+      expect(Math.abs(rects[0].top - rects[1].top)).toBeLessThan(2);
+      expect(rects[1].left - rects[0].right).toBeCloseTo(16, 0);
     });
 
     test('trophy icon size is 280 px on desktop (TC-L-006)', async ({ page }) => {

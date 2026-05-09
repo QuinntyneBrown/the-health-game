@@ -162,6 +162,12 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
           font-size: 180px;
         }
 
+        .onboarding__buttons {
+          grid-auto-flow: column;
+          gap: 16px;
+          justify-content: start;
+        }
+
         .onboarding__headline {
           font-size: 45px;
         }
