@@ -79,7 +79,7 @@ and made green. The /loop process picks the first test with
 | 68 | 02 | TC-V-001 | Greeting ("Good morning, {name}") | Inter 32/28/22 (desktop/tablet/mobile), weight 500 | 2026-05-09T20:09:26Z |
 | 69 | 02 | TC-V-002 | Section labels ("Today", "Recent rewards", "Live a goal") | Inter 18 px, weight 500 | 2026-05-09T20:12:43Z |
 | 70 | 02 | TC-V-003 | Stat numbers (e.g., "12", "3 / 6", "Lvl 8", "87%") | Inter 28–32 px, weight 600 or 500 | 2026-05-09T20:14:20Z |
-| 71 | 02 | TC-V-004 | Goal/reward card titles | Inter 14 px, weight 500 | null |
+| 71 | 02 | TC-V-004 | Goal/reward card titles | Inter 14 px, weight 500 | 2026-05-09T20:20:44Z |
 | 72 | 02 | TC-V-005 | Card subtitles / metadata | Inter 12–13 px, weight 400 | null |
 | 73 | 02 | TC-V-006 | Streak label "Trophy" / streak count | Inter 13 px, weight 500–600 | null |
 | 74 | 02 | TC-V-007 | Bar-chart axis text | Inter 11 px, weight 400 | null |
@@ -446,3 +446,114 @@ and made green. The /loop process picks the first test with
 | 435 | 06 | TC-P-001 | Stats summary endpoint p95 | <= 300 ms (L2-018 §1) | null |
 | 436 | 06 | TC-P-002 | Profile update endpoint p95 | <= 500 ms (L2-018 §2) | null |
 | 437 | 06 | TC-P-003 | Bar chart renders without layout shift (CLS ~ 0) | Yes | null |
+| 438 | 07 | TC-V-001 | Title ("Welcome back.") font family | `Inter`, weight 500 | null |
+| 439 | 07 | TC-V-002 | Title size — mobile | 28 px, line-height 1.2 | null |
+| 440 | 07 | TC-V-003 | Title size — tablet | 36 px, line-height 1.2 | null |
+| 441 | 07 | TC-V-004 | Title size — desktop hero panel | 57 px, line-height 1.1 | null |
+| 442 | 07 | TC-V-005 | Subtitle font weight | 400 (normal) | null |
+| 443 | 07 | TC-V-006 | Subtitle size — mobile/tablet/desktop | 14 / 16 / 16 px | null |
+| 444 | 07 | TC-V-007 | Field label font | Inter 13 px, weight 500 | null |
+| 445 | 07 | TC-V-008 | Field input text font | Inter 14 px, weight 400 | null |
+| 446 | 07 | TC-V-009 | Helper / error text font | Inter 12 px, weight 500, error color | null |
+| 447 | 07 | TC-V-010 | Primary button label ("Sign in") | Inter 14/16 px, weight 500, white | null |
+| 448 | 07 | TC-V-011 | OIDC alternative button label | Inter 14/16 px, weight 500, on-surface | null |
+| 449 | 07 | TC-V-012 | "or" divider label | Inter 11 px, weight 500, uppercase, letter-spacing 1.5 px | null |
+| 450 | 07 | TC-V-013 | Sign-up link ("Get started") | Inter 13 px, weight 500, primary color, underlined | null |
+| 451 | 07 | TC-V-014 | Brand wordmark visibility — desktop hero | Visible (Inter 22 px, weight 500) | null |
+| 452 | 07 | TC-C-001 | Page background | `#F1F5ED` (surface-container-low) | null |
+| 453 | 07 | TC-C-002 | Form card surface | `#F7FBF3` (surface) | null |
+| 454 | 07 | TC-C-003 | Form card border | none on mobile, 1 px `#C2C9BE` on tablet+ when outlined | null |
+| 455 | 07 | TC-C-004 | Title text color | `#191D17` (on surface) | null |
+| 456 | 07 | TC-C-005 | Subtitle text color | `#424940` (on surface variant) | null |
+| 457 | 07 | TC-C-006 | Field outline (default) | `#C2C9BE` (outline-variant), 1 px | null |
+| 458 | 07 | TC-C-007 | Field outline (focused) | `#006D3F` (primary), 2 px | null |
+| 459 | 07 | TC-C-008 | Field outline (error) | `#BA1A1A` (error), 2 px | null |
+| 460 | 07 | TC-C-009 | Primary button background | `#006D3F` (primary) | null |
+| 461 | 07 | TC-C-010 | Primary button label color | `#FFFFFF` | null |
+| 462 | 07 | TC-C-011 | OIDC button border | `#C2C9BE` (outline-variant), 1 px; transparent fill | null |
+| 463 | 07 | TC-C-012 | OIDC button label color | `#191D17` (on surface) | null |
+| 464 | 07 | TC-C-013 | Inline error banner background | `#FFEDEA` (error container) | null |
+| 465 | 07 | TC-C-014 | Inline error banner text | `#410002` (on error container) | null |
+| 466 | 07 | TC-C-015 | Desktop hero panel background | `#94F7B4` (primary container) | null |
+| 467 | 07 | TC-C-016 | Desktop hero text color | `#00210F` (on primary container) | null |
+| 468 | 07 | TC-C-017 | Sign-up link color | `#006D3F` (primary) | null |
+| 469 | 07 | TC-C-018 | Text/background contrast meets WCAG AA | >= 4.5:1 normal, >= 3:1 large | null |
+| 470 | 07 | TC-L-001 | Mobile body padding | 24 px on all sides | null |
+| 471 | 07 | TC-L-002 | Tablet body padding | 40 px top/bottom, 80 px left/right | null |
+| 472 | 07 | TC-L-003 | Desktop split — hero ~50% / form ~50% | hero on left, form on right | null |
+| 473 | 07 | TC-L-004 | Form card corner radius | 24 px | null |
+| 474 | 07 | TC-L-005 | Form card max-width | 440 px (mobile/tablet) / 480 px (desktop) | null |
+| 475 | 07 | TC-L-006 | Form card padding | 32 px (mobile) / 40 px (tablet/desktop) | null |
+| 476 | 07 | TC-L-007 | Inter-element vertical gap inside card | 20 px | null |
+| 477 | 07 | TC-L-008 | Inter-field gap inside form | 16 px | null |
+| 478 | 07 | TC-L-009 | Field height | 56 px | null |
+| 479 | 07 | TC-L-010 | Submit button height | 48 px (mobile) / 56 px (tablet/desktop), full width | null |
+| 480 | 07 | TC-L-011 | Pill button corner radius | 9999 (full) | null |
+| 481 | 07 | TC-L-012 | Brand mark size on form panel | 56 px square; centered | null |
+| 482 | 07 | TC-L-013 | "or" divider | full-width 1 px line broken by centered "or" label | null |
+| 483 | 07 | TC-L-014 | Desktop hero corner radius | 0 on outer edges; matches split panel | null |
+| 484 | 07 | TC-R-001 | Viewport 360x780 | Single-column mobile layout, no horizontal scrollbar | null |
+| 485 | 07 | TC-R-002 | Viewport 375x812 | Same layout as 360 (mobile) | null |
+| 486 | 07 | TC-R-003 | Viewport 768x1024 | Centered card with brand and form fields, no hero panel | null |
+| 487 | 07 | TC-R-004 | Viewport 1024x768 | Centered card; rail-variant app shell may apply | null |
+| 488 | 07 | TC-R-005 | Viewport 1440x900 | Desktop split layout — hero left, form right | null |
+| 489 | 07 | TC-R-006 | Viewport >= 1920 wide | Content max-width respected (no edge-to-edge stretching) | null |
+| 490 | 07 | TC-R-007 | Window resize during render | Layout recomputes without flicker; inputs preserve focus and value | null |
+| 491 | 07 | TC-R-008 | Soft keyboard on mobile | Card scrolls; submit button stays accessible above the keyboard | null |
+| 492 | 07 | TC-F-001 | `/sign-in` route renders the page | brand + "Welcome back." heading visible (L2-036 §1) | 2026-05-09T19:45:30Z |
+| 493 | 07 | TC-F-002 | Submit disabled until both fields have non-empty trimmed values | Yes | 2026-05-09T19:46:00Z |
+| 494 | 07 | TC-F-003 | Valid credentials POST `/api/auth/sign-in` | Body `{usernameOrEmail, password}` (L2-036 §2) | 2026-05-09T19:46:30Z |
+| 495 | 07 | TC-F-004 | Successful sign-in stores access token in `sessionStorage` only | Key `hg.oidc.access-token`; not in localStorage (L2-013 §3, L2-022) | null |
+| 496 | 07 | TC-F-005 | Successful sign-in routes to `/home` (or consumed return URL) | Yes | 2026-05-09T19:47:00Z |
+| 497 | 07 | TC-F-006 | 401 Unauthorized response | Generic "Invalid username or password." inline; no field-level disclosure (L2-036 §3) | 2026-05-09T20:00:30Z |
+| 498 | 07 | TC-F-007 | 401 response clears the password field; preserves username | Yes | 2026-05-09T20:00:30Z |
+| 499 | 07 | TC-F-008 | 401 response leaves user on `/sign-in` | URL unchanged | 2026-05-09T20:00:30Z |
+| 500 | 07 | TC-F-009 | Click "Continue with Single Sign-On" | Browser navigates to OIDC `/authorize` URL with PKCE (L2-013) | 2026-05-09T20:01:30Z |
+| 501 | 07 | TC-F-010 | OIDC alternative generates fresh `state` and `code_challenge` per click | Random per click (L2-013 §2) | null |
+| 502 | 07 | TC-F-011 | Authenticated user visiting `/sign-in` directly | Redirects to `/home` (notAuthenticatedGuard) | 2026-05-09T20:02:30Z |
+| 503 | 07 | TC-F-012 | Sign-in for a deleted or disabled account | 401; UI shows generic error (L2-036 §8) | null |
+| 504 | 07 | TC-F-013 | Lockout — repeated failed attempts beyond threshold | 401; generic error; no leak of lockout state to non-locked users (L2-036 §7) | null |
+| 505 | 07 | TC-F-014 | Click "New to HealthQuest? Get started" | Navigates to `/onboarding` | null |
+| 506 | 07 | TC-F-015 | Network failure during submit | Submit re-enables; values preserved; non-disclosing error | null |
+| 507 | 07 | TC-F-016 | Whitespace-only credentials | Submit remains disabled (trim before evaluating) | null |
+| 508 | 07 | TC-F-017 | Username over 254 chars | Client blocks submit; backend rejects as 400 | null |
+| 509 | 07 | TC-F-018 | Password over 256 chars | Client blocks submit; backend rejects as 400 | null |
+| 510 | 07 | TC-B-001 | Tab order: username -> password -> toggle -> submit -> OIDC -> "Get started" | Logical, no skipped controls | null |
+| 511 | 07 | TC-B-002 | Visible focus ring on every interactive element | Yes, contrast >= 3:1 | null |
+| 512 | 07 | TC-B-003 | Enter inside any field submits the form | Yes | null |
+| 513 | 07 | TC-B-004 | Space on focused button activates it | Yes | null |
+| 514 | 07 | TC-B-005 | Hover on primary button | Slight elevation / state-layer overlay; cursor pointer | null |
+| 515 | 07 | TC-B-006 | Click during in-flight submit (double click "Sign in") | Only one POST emitted | null |
+| 516 | 07 | TC-B-007 | Submit button shows busy state while in-flight | Label "Signing in..."; disabled | null |
+| 517 | 07 | TC-B-008 | Password toggle reveals and re-masks the password | Eye icon toggles `type=password` <-> `type=text` | null |
+| 518 | 07 | TC-B-009 | Reduced-motion preference honored | No animated transitions on submit / state change | null |
+| 519 | 07 | TC-B-010 | Browser autofill populates fields and re-evaluates submit-disabled | Submit becomes enabled | null |
+| 520 | 07 | TC-B-011 | Pasting credentials with leading/trailing whitespace | Whitespace is trimmed before submit | null |
+| 521 | 07 | TC-A-001 | Page rendered inside the app-shell `<main>`; no nested `<main>` | Exactly one `<main>` | 2026-05-09T19:45:30Z |
+| 522 | 07 | TC-A-002 | Title rendered as `<h1>` | Yes | null |
+| 523 | 07 | TC-A-003 | Brand mark has accessible name or `aria-hidden="true"` | Decorative — `aria-hidden` | null |
+| 524 | 07 | TC-A-004 | Each input has a programmatically associated `<label for>` | Yes | null |
+| 525 | 07 | TC-A-005 | Password field exposes `type=password` and is announced as masked | Yes | 2026-05-09T19:45:45Z |
+| 526 | 07 | TC-A-006 | Validation errors associated via `aria-describedby` and `aria-live="polite"` | Yes | null |
+| 527 | 07 | TC-A-007 | Inline 401 error has `role="alert"` and `aria-live="assertive"` | Yes | null |
+| 528 | 07 | TC-A-008 | Buttons have descriptive accessible names | "Sign in", "Continue with Single Sign-On", "Get started" | null |
+| 529 | 07 | TC-A-009 | Password toggle has accessible name | "Show password" / "Hide password" | null |
+| 530 | 07 | TC-A-010 | axe-core scan returns 0 critical / serious violations | Yes | null |
+| 531 | 07 | TC-D-001 | Successful sign-in writes access token to `sessionStorage` only | Key `hg.oidc.access-token`; not in localStorage | null |
+| 532 | 07 | TC-D-002 | Reload after sign-in keeps the user authenticated | Token persists for the tab session | null |
+| 533 | 07 | TC-D-003 | Closing the tab clears the access token | `sessionStorage` is per-tab; new tab is unauthenticated | null |
+| 534 | 07 | TC-D-004 | Sign-out clears the token from `sessionStorage` | Yes | null |
+| 535 | 07 | TC-D-005 | Failed sign-in does not write any auth artifact | `sessionStorage` and `localStorage` unchanged | 2026-05-09T20:03:30Z |
+| 536 | 07 | TC-D-006 | Refresh token (if used) only stored as httpOnly cookie | Confirmed (L2-013 §3) | null |
+| 537 | 07 | TC-S-001 | Submitted password is never logged at any level | No `password` value in console / network / server logs (L2-017 §3, L2-036 §4) | 2026-05-09T20:03:30Z |
+| 538 | 07 | TC-S-002 | Issued JWT is never logged at any level | No bearer/JWT in console or server logs (L2-022) | 2026-05-09T20:03:30Z |
+| 539 | 07 | TC-S-003 | Sign-in request sent over HTTPS in non-dev environments | Confirmed (L2-036 §5) | null |
+| 540 | 07 | TC-S-004 | Backend never reveals whether username or password was wrong | 401 with generic message; constant-time-ish response (L2-036 §3) | null |
+| 541 | 07 | TC-S-005 | XSS payload in username field | Escaped on render; nothing executes (L2-016 §3) | null |
+| 542 | 07 | TC-S-006 | CSRF protection on `POST /api/auth/sign-in` (cookie-bearing) | Yes (L2-016 §4) | null |
+| 543 | 07 | TC-S-007 | Repeated failed attempts trigger lockout / throttle | Configured threshold; security event logged at Information+ without password (L2-036 §7) | null |
+| 544 | 07 | TC-S-008 | Sign-in attempt for deleted / disabled account | 401 regardless of credential correctness (L2-036 §8) | null |
+| 545 | 07 | TC-P-001 | Cold load LCP on simulated 4G | <= 2.5 s (L2-019 §1) | null |
+| 546 | 07 | TC-P-002 | Sign-in route lazy-loaded — no dashboard / goals code in chunk | Confirmed via bundle analyzer (L2-019 §2) | null |
+| 547 | 07 | TC-P-003 | Submit p95 server time | <= 500 ms (L2-018 §2) | null |
+| 548 | 07 | TC-P-004 | TBT under interaction | <= 200 ms | null |

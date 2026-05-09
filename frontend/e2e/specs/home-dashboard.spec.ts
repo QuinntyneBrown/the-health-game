@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 02-TC-V-001..003
+// Traces to: 02-TC-V-001..004
 // Description: Dashboard greeting renders with Inter font, weight 500, sizes 22/28/32 px (mobile/tablet/desktop).
 // Section labels render with Inter weight 500 at 18 px.
 import { expect, test } from '@playwright/test';
@@ -54,6 +54,80 @@ test.describe('Home Dashboard — greeting typography', () => {
       expect(computed.fontFamily.split(',')[0].replace(/['"]/g, '').trim()).toBe('Inter');
       expect(computed.fontWeight).toBe('500');
       expect(computed.fontSize).toBe('32px');
+    });
+
+    test('goal and reward card titles are Inter 14 px / weight 500 (02-TC-V-004)', async ({
+      page,
+    }) => {
+      await authenticate(page);
+
+      // Override the empty fixtures from authenticate() so /goals + /rewards render at least one card.
+      // Playwright runs the most-recently-registered matching route first, so these win.
+      await page.route('**/api/goals**', (route) =>
+        route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify([
+            {
+              id: 'g1',
+              name: 'Drink water',
+              description: 'Stay hydrated',
+              cadence: 'daily',
+              target: { value: 8, unit: 'glasses' },
+              completedQuantity: 4,
+              currentStreak: 3,
+              longestStreak: 5,
+              rewardName: '',
+            },
+          ]),
+        }),
+      );
+      await page.route('**/api/rewards**', (route) =>
+        route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify([
+            {
+              id: 'r1',
+              userId: 'u1',
+              goalId: 'g1',
+              name: 'Movie night',
+              description: 'Treat',
+              condition: { type: 'goal-target' },
+              status: 'pending',
+              earnedAt: null,
+            },
+          ]),
+        }),
+      );
+
+      await page.goto('/goals');
+      await expect(page.locator('.goal-card__title').first()).toBeVisible();
+
+      const titleSpec = async (selector: string): Promise<void> => {
+        const elements = page.locator(selector);
+        const count = await elements.count();
+        for (let i = 0; i < count; i++) {
+          const computed = await elements.nth(i).evaluate((el) => {
+            const style = getComputedStyle(el);
+            return {
+              fontFamily: style.fontFamily,
+              fontWeight: style.fontWeight,
+              fontSize: style.fontSize,
+            };
+          });
+          expect(computed.fontFamily.split(',')[0].replace(/['"]/g, '').trim()).toBe('Inter');
+          expect(computed.fontWeight).toBe('500');
+          expect(computed.fontSize).toBe('14px');
+        }
+        return undefined;
+      };
+
+      await titleSpec('.goal-card__title');
+
+      await page.goto('/rewards');
+      await expect(page.locator('.reward-card__name').first()).toBeVisible();
+      await titleSpec('.reward-card__name');
     });
 
     test('stat number values are Inter 28-32 px, weight 500-600 (02-TC-V-003)', async ({ page }) => {
