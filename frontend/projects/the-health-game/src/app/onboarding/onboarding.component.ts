@@ -22,6 +22,15 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
       <p class="onboarding__description" data-testid="onboarding-description">
         Build streaks with goals, activity, and personal rewards.
       </p>
+      <ol
+        class="onboarding__dots"
+        data-testid="onboarding-page-dots"
+        aria-label="Onboarding step"
+      >
+        <li class="onboarding__dot onboarding__dot--active" aria-current="step"></li>
+        <li class="onboarding__dot"></li>
+        <li class="onboarding__dot"></li>
+      </ol>
       <button
         class="onboarding__primary"
         type="button"
@@ -84,6 +93,25 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
         line-height: 1.5;
         font-size: 16px;
         margin: 0;
+      }
+
+      .onboarding__dots {
+        display: flex;
+        gap: 8px;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+
+      .onboarding__dot {
+        background-color: #f1f5ed;
+        border-radius: 9999px;
+        height: 8px;
+        width: 8px;
+      }
+
+      .onboarding__dot--active {
+        background-color: #006d3f;
       }
 
       .onboarding__primary {
