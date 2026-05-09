@@ -1,3 +1,7 @@
+---
+status: Accepted
+---
+
 # Task 17 — View goal detail
 
 **Traces to:** L2-002, L2-007, L2-008, L2-020
