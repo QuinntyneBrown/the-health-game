@@ -1,3 +1,7 @@
+---
+status: Accepted
+---
+
 # Task 12 — Delete account
 
 **Traces to:** L2-014, L2-021
