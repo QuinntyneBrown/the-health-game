@@ -227,10 +227,10 @@ export class OnboardingComponent {
   private readonly auth = inject(AuthService);
 
   onGetStarted(): void {
-    void this.auth.signIn('/');
+    void this.auth.signIn('/home');
   }
 
   onHaveAccount(): void {
-    void this.auth.signIn('/', { prompt: 'login' });
+    void this.auth.signIn('/home', { prompt: 'login' });
   }
 }

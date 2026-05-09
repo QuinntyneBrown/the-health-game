@@ -18,7 +18,7 @@ export class CallbackComponent {
     const state = params.get('state');
     if (code && state) {
       void this.auth.handleRedirect(code, state).then(() => {
-        const target = this.auth.consumeReturnUrl() ?? '/';
+        const target = this.auth.consumeReturnUrl() ?? '/home';
         void this.router.navigateByUrl(target);
       });
     }

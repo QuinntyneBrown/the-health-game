@@ -17,6 +17,12 @@ export const routes: Routes = [
     loadChildren: () => import('domain').then((module) => module.DASHBOARD_ROUTES),
   },
   {
+    path: 'home',
+    canMatch: [authGuard],
+    title: 'Home — HealthQuest',
+    loadChildren: () => import('domain').then((module) => module.DASHBOARD_ROUTES),
+  },
+  {
     path: 'goals',
     canMatch: [authGuard],
     title: 'Goals — HealthQuest',

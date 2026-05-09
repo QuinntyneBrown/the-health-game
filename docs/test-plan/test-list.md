@@ -51,7 +51,7 @@ and made green. The /loop process picks the first test with
 | 40 | 01 | TC-F-002 | Click "I have an account" | Same OIDC `/authorize` URL with `prompt=login` (or equivalent) | 2026-05-09T19:03:48Z |
 | 41 | 01 | TC-F-003 | OIDC state and code_verifier generated | Random per click; state echoed back in callback | 2026-05-09T19:05:06Z |
 | 42 | 01 | TC-F-004 | Code verifier stored in `sessionStorage` only | Not in localStorage; cleared after exchange | 2026-05-09T19:09:49Z |
-| 43 | 01 | TC-F-005 | After OIDC callback success | App routes to `/home` | null |
+| 43 | 01 | TC-F-005 | After OIDC callback success | App routes to `/home` | 2026-05-09T19:13:17Z |
 | 44 | 01 | TC-F-006 | OIDC callback with mismatched `state` | Reject; route to `/onboarding` with toast (L2-013 §3) | null |
 | 45 | 01 | TC-F-007 | Page loads with no auth tokens leaked to console / network logs | Confirmed via DevTools | null |
 | 46 | 01 | TC-F-008 | Direct visit to `/onboarding` while authenticated | Redirect to `/home` | null |
