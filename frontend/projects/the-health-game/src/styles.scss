@@ -159,6 +159,20 @@ lib-goal-list mat-button-toggle.mat-button-toggle-checked .segmented-filter__lab
   color: #0c1f13 !important;
 }
 
+lib-goal-list mat-button-toggle:not(.mat-button-toggle-checked) {
+  border-color: #c2c9be !important;
+  border-width: 1px !important;
+  border-style: solid !important;
+}
+
+lib-goal-list mat-button-toggle:not(.mat-button-toggle-checked) .mat-button-toggle-button {
+  background-color: transparent !important;
+}
+
+lib-goal-list mat-button-toggle:not(.mat-button-toggle-checked) .segmented-filter__label {
+  color: #191d17 !important;
+}
+
 hg-empty-state .empty-state__title {
   font-family:
     Inter,

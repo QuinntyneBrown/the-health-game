@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 03-TC-V-001..009, 03-TC-C-001..003
+// Traces to: 03-TC-V-001..009, 03-TC-C-001..004
 // Description: /goals page title "Goals" renders with Inter weight 500 at 22/32 px.
 // Subtitle is Inter 13 px weight 400 with computed counts.
 import { expect, test } from '@playwright/test';
@@ -236,6 +236,35 @@ test.describe('Goals page — header typography', () => {
 
   test.describe('goal form', () => {
     test.use({ viewport: { width: 1440, height: 900 } });
+
+    test('inactive filter chip is transparent / outline #C2C9BE / label #191D17 (03-TC-C-004)', async ({
+      page,
+    }) => {
+      await authenticate(page);
+      await page.goto('/goals');
+
+      const inactive = page
+        .locator('lib-goal-list mat-button-toggle:not(.mat-button-toggle-checked)')
+        .first();
+      await expect(inactive).toBeVisible();
+      const label = inactive.locator('.segmented-filter__label');
+
+      const bg = await inactive.evaluate((el) => {
+        const inner = el.querySelector('.mat-button-toggle-button') ?? el;
+        return getComputedStyle(inner).backgroundColor;
+      });
+      expect(bg).toBe('rgba(0, 0, 0, 0)');
+
+      const outline = await inactive.evaluate((el) => {
+        const s = getComputedStyle(el);
+        return { color: s.borderColor, width: s.borderWidth };
+      });
+      expect(outline.color).toBe('rgb(194, 201, 190)');
+      expect(outline.width).toBe('1px');
+
+      const labelColor = await label.evaluate((el) => getComputedStyle(el).color);
+      expect(labelColor).toBe('rgb(25, 29, 23)');
+    });
 
     test('active filter chip is #D2E8D4 bg / #0C1F13 label (03-TC-C-003)', async ({ page }) => {
       await authenticate(page);
