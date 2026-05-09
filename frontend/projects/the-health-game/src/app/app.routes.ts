@@ -19,7 +19,11 @@ export const routes: Routes = [
     canMatch: [authGuard],
     loadChildren: () => import('domain').then((module) => module.GOALS_ROUTES),
   },
-  { path: 'rewards', canMatch: [authGuard], component: PlaceholderComponent },
+  {
+    path: 'rewards',
+    canMatch: [authGuard],
+    loadChildren: () => import('domain').then((module) => module.REWARDS_ROUTES),
+  },
   {
     path: 'profile',
     canMatch: [authGuard],
