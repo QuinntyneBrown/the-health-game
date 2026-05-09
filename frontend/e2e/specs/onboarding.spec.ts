@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 01-TC-V-001..010, 01-TC-C-001..010, 01-TC-L-001..010, 01-TC-R-001..008, 01-TC-F-001..008, 01-TC-B-001..007, 01-TC-A-001..006, 01-TC-D-001..002
+// Traces to: 01-TC-V-001..010, 01-TC-C-001..010, 01-TC-L-001..010, 01-TC-R-001..008, 01-TC-F-001..008, 01-TC-B-001..007, 01-TC-A-001..006, 01-TC-D-001..003
 // Description: Onboarding headline ("Make health a game") renders with font family Inter weight 500
 //              and the design-spec font-size at each breakpoint (mobile = 28 px, tablet = 45 px,
 //              desktop = 57 px with line-height 1.1). Body description paragraph renders at
@@ -219,6 +219,53 @@ test.describe('Onboarding — headline typography', () => {
     expect(url.searchParams.get('code_challenge')).toBeTruthy();
     expect(url.searchParams.get('state')).toBeTruthy();
     expect(url.searchParams.get('client_id')).toBeTruthy();
+  });
+
+  test('no tokens or PII are persisted to localStorage across sign-in (TC-D-003)', async ({
+    page,
+  }) => {
+    await page.route('**/connect/authorize**', (route) =>
+      route.fulfill({ status: 200, contentType: 'text/html', body: '<html></html>' }),
+    );
+    await page.route('**/connect/token', (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({
+          access_token: 'test-access-token',
+          token_type: 'Bearer',
+          expires_in: 3600,
+        }),
+      }),
+    );
+
+    await page.goto('/onboarding');
+
+    // Click sign-in (writes verifier/state to sessionStorage, redirects)
+    const navigation = page.waitForURL(/\/connect\/authorize/);
+    await page.getByTestId('onboarding-get-started').click();
+    await navigation;
+
+    // Return to the app, complete the callback exchange
+    await page.goto('/onboarding');
+    const expectedState =
+      (await page.evaluate(() => sessionStorage.getItem('hg.oidc.state'))) ?? 'test-state';
+    await page.goto(`/auth/callback?code=test-code&state=${encodeURIComponent(expectedState)}`);
+    await page.waitForURL(/\/home(\b|\/|$)/);
+
+    const localItems = await page.evaluate(() => {
+      const out: Record<string, string> = {};
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key !== null) out[key] = localStorage.getItem(key) ?? '';
+      }
+      return out;
+    });
+
+    const tokenPattern = /access[_-]?token|refresh[_-]?token|id[_-]?token|bearer\s|verifier|email|@/i;
+    for (const [key, value] of Object.entries(localItems)) {
+      expect(`${key}=${value}`).not.toMatch(tokenPattern);
+    }
   });
 
   test('verifier and state are cleared after a successful callback exchange (TC-D-002)', async ({
