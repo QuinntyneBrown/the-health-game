@@ -6,6 +6,25 @@
   min-height: 100dvh;
 }
 
+// Visually hidden until focused; the first focusable element of the shell.
+.app-shell__skip-link {
+  background: var(--hg-color-surface);
+  border-radius: var(--hg-radius-control);
+  color: var(--hg-color-on-surface);
+  left: var(--hg-space-2);
+  padding: var(--hg-space-2) var(--hg-space-3);
+  position: absolute;
+  top: var(--hg-space-2);
+  transform: translateY(-150%);
+  transition: transform 120ms ease-out;
+  z-index: var(--hg-z-toolbar);
+}
+
+.app-shell__skip-link:focus {
+  box-shadow: var(--hg-focus-ring);
+  transform: translateY(0);
+}
+
 // Side-nav layout (rail or drawer): toolbar on top, nav on left, main on right.
 .app-shell:has(.app-shell__navigation--rail),
 .app-shell:has(.app-shell__navigation--drawer) {

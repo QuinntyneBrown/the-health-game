@@ -1,9 +1,10 @@
 <div class="app-shell">
+  <a class="app-shell__skip-link" href="#main">Skip to main content</a>
   <mat-toolbar class="app-shell__toolbar">
     <hg-app-brand />
   </mat-toolbar>
 
-  <main class="app-shell__main">
+  <main id="main" class="app-shell__main" tabindex="-1">
     <router-outlet />
   </main>
 
