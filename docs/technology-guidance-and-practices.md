@@ -24,7 +24,6 @@
 - A MediatR pipeline behavior runs validators before the handler; failures throw `ValidationException` and the API maps them to HTTP 400 `ValidationProblemDetails`.
 - Register validators by assembly scanning so new ones are picked up automatically.
 - HTTP request DTOs are pure transport shapes — no validation attributes; map to commands and let the Application layer validate.
-- Reference: https://github.com/QuinntyneBrown/Commitments/blob/9eb0a58f670bb8fd385ba41153a52987e6c29283/backend/src/Modules/Commitments/Features/Tag/Commands/SaveTag.cs#L10
 
 ## Authentication & User Management
 - PKCE authorization
