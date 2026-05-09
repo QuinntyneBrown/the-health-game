@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 02-TC-V-001..007, 02-TC-C-001..010, 02-TC-L-001..010, 02-TC-R-001..006, 02-TC-F-001..014, 02-TC-B-001
+// Traces to: 02-TC-V-001..007, 02-TC-C-001..010, 02-TC-L-001..010, 02-TC-R-001..006, 02-TC-F-001..014, 02-TC-B-001..002
 // Description: Dashboard greeting renders with Inter font, weight 500, sizes 22/28/32 px (mobile/tablet/desktop).
 // Section labels render with Inter weight 500 at 18 px.
 import AxeBuilder from '@axe-core/playwright';
@@ -46,6 +46,66 @@ async function authenticate(page: import('@playwright/test').Page): Promise<void
 }
 
 test.describe('Home Dashboard — greeting typography', () => {
+  test('dashboard goal-card Log button shows a visible focus ring (02-TC-B-002)', async ({
+    page,
+  }) => {
+    await authenticate(page);
+    await page.route('**/api/goals**', (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify([
+          {
+            id: 'g1',
+            name: 'Walk',
+            description: '',
+            cadence: 'daily',
+            target: { value: 1, unit: 'walks' },
+            completedQuantity: 0,
+            currentStreak: 0,
+            longestStreak: 0,
+            rewardName: '',
+          },
+        ]),
+      }),
+    );
+    await page.goto('/home');
+
+    const card = page.locator('hg-goal-card').first();
+    await card.scrollIntoViewIfNeeded();
+    const logButton = card.getByRole('button', { name: /Log/i });
+
+    // Tab through the page so the CDK detects keyboard focus and applies its focus ring.
+    await page.locator('body').focus();
+    let attempts = 0;
+    while (attempts < 50) {
+      await page.keyboard.press('Tab');
+      const focused = await page.evaluate(() => {
+        const el = document.activeElement as HTMLElement | null;
+        return el?.textContent?.trim() ?? '';
+      });
+      if (focused.includes('Log')) break;
+      attempts++;
+    }
+    expect(attempts).toBeLessThan(50);
+
+    const indicator = await logButton.evaluate((el) => {
+      const style = getComputedStyle(el);
+      return {
+        outlineStyle: style.outlineStyle,
+        outlineWidth: style.outlineWidth,
+        boxShadow: style.boxShadow,
+      };
+    });
+
+    const hasOutline =
+      indicator.outlineStyle !== 'none' &&
+      indicator.outlineStyle !== '' &&
+      parseFloat(indicator.outlineWidth) > 0;
+    const hasBoxShadow = indicator.boxShadow !== '' && indicator.boxShadow !== 'none';
+    expect(hasOutline || hasBoxShadow).toBe(true);
+  });
+
   test('Tab order: New goal action focuses before any nav item (02-TC-B-001)', async ({ page }) => {
     await authenticate(page);
     await page.goto('/home');
