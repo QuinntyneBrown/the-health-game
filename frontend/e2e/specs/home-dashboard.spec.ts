@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 02-TC-V-001..007, 02-TC-C-001..010, 02-TC-L-001..010, 02-TC-R-001..006, 02-TC-F-001..003
+// Traces to: 02-TC-V-001..007, 02-TC-C-001..010, 02-TC-L-001..010, 02-TC-R-001..006, 02-TC-F-001..004
 // Description: Dashboard greeting renders with Inter font, weight 500, sizes 22/28/32 px (mobile/tablet/desktop).
 // Section labels render with Inter weight 500 at 18 px.
 import AxeBuilder from '@axe-core/playwright';
@@ -46,6 +46,40 @@ async function authenticate(page: import('@playwright/test').Page): Promise<void
 }
 
 test.describe('Home Dashboard — greeting typography', () => {
+  test('goal card streak chip shows current streak (02-TC-F-004)', async ({ page }) => {
+    await authenticate(page);
+    await page.route('**/api/goals**', (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify([
+          {
+            id: 'g1',
+            name: 'Drink water',
+            description: 'Stay hydrated',
+            cadence: 'daily',
+            target: { value: 8, unit: 'glasses' },
+            completedQuantity: 4,
+            currentStreak: 7,
+            longestStreak: 12,
+            rewardName: '',
+          },
+        ]),
+      }),
+    );
+    await page.goto('/home');
+
+    const card = page.locator('hg-goal-card').first();
+    await expect(card).toBeVisible();
+
+    const streakChip = card
+      .locator('.mdc-evolution-chip__text-label')
+      .filter({ hasText: /current/i })
+      .first();
+    await expect(streakChip).toBeVisible();
+    await expect(streakChip).toContainText('7');
+  });
+
   test('today metric sums activity for daily goals (02-TC-F-003)', async ({ page }) => {
     await authenticate(page);
     await page.route('**/api/goals**', (route) =>
