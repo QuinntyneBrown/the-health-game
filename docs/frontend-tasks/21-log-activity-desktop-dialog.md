@@ -1,3 +1,7 @@
+---
+status: Accepted
+---
+
 # Task 21 — Log activity (tablet/desktop dialog)
 
 **Traces to:** L2-005, L2-016, L2-020, L2-021
