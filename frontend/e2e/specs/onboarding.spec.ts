@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 01-TC-V-001..010, 01-TC-C-001..010, 01-TC-L-001..010, 01-TC-R-001..008, 01-TC-F-001..007
+// Traces to: 01-TC-V-001..010, 01-TC-C-001..010, 01-TC-L-001..010, 01-TC-R-001..008, 01-TC-F-001..008
 // Description: Onboarding headline ("Make health a game") renders with font family Inter weight 500
 //              and the design-spec font-size at each breakpoint (mobile = 28 px, tablet = 45 px,
 //              desktop = 57 px with line-height 1.1). Body description paragraph renders at
@@ -260,6 +260,37 @@ test.describe('Onboarding — headline typography', () => {
     const toast = page.locator('mat-snack-bar-container, .mat-mdc-snack-bar-container');
     await expect(toast).toBeVisible();
     await expect(toast).toContainText(/sign[-\s]?in|couldn't|state/i);
+  });
+
+  test('authenticated user visiting /onboarding is redirected to /home (TC-F-008)', async ({
+    page,
+  }) => {
+    await page.route('**/connect/token', (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({
+          access_token: 'test-access-token',
+          token_type: 'Bearer',
+          expires_in: 3600,
+        }),
+      }),
+    );
+
+    // Authenticate via the callback flow
+    await page.goto('/onboarding');
+    await page.evaluate(() => {
+      sessionStorage.setItem('hg.oidc.verifier', 'test-verifier');
+      sessionStorage.setItem('hg.oidc.state', 'test-state');
+    });
+    await page.goto('/auth/callback?code=test-code&state=test-state');
+    await page.waitForURL(/\/home(\b|\/|$)/);
+
+    // Now go directly to /onboarding while authenticated
+    await page.goto('/onboarding');
+    await page.waitForURL(/\/home(\b|\/|$)/);
+    expect(page.url()).toContain('/home');
+    expect(page.url()).not.toContain('/onboarding');
   });
 
   test('successful OIDC callback routes the app to /home (TC-F-005)', async ({ page }) => {

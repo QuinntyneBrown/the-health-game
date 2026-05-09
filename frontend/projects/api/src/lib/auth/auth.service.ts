@@ -7,6 +7,7 @@ import { API_CONFIG } from '../api.config';
 export const VERIFIER_KEY = 'hg.oidc.verifier';
 export const STATE_KEY = 'hg.oidc.state';
 export const RETURN_URL_KEY = 'hg.oidc.return-url';
+export const ACCESS_TOKEN_KEY = 'hg.oidc.access-token';
 
 export type Redirector = (url: string) => void;
 
@@ -28,7 +29,7 @@ export class AuthService {
   private readonly config = inject(API_CONFIG);
   private readonly redirect = inject(OIDC_REDIRECTOR);
   private readonly http = inject(HttpClient);
-  private readonly accessToken = signal<string | null>(null);
+  private readonly accessToken = signal<string | null>(readPersistedAccessToken());
   private readonly rolesSignal = signal<readonly string[]>([]);
 
   async signIn(returnUrl?: string, options?: { prompt?: 'login' | 'none' }): Promise<void> {
@@ -79,6 +80,7 @@ export class AuthService {
     );
 
     this.accessToken.set(tokens.access_token);
+    sessionStorage.setItem(ACCESS_TOKEN_KEY, tokens.access_token);
     sessionStorage.removeItem(VERIFIER_KEY);
     sessionStorage.removeItem(STATE_KEY);
   }
@@ -110,6 +112,7 @@ export class AuthService {
     sessionStorage.removeItem(VERIFIER_KEY);
     sessionStorage.removeItem(STATE_KEY);
     sessionStorage.removeItem(RETURN_URL_KEY);
+    sessionStorage.removeItem(ACCESS_TOKEN_KEY);
 
     const url = new URL('/connect/endsession', this.config.oidcAuthority);
     url.searchParams.set('client_id', this.config.oidcClientId);
@@ -129,6 +132,13 @@ export class AuthService {
     }
     return url;
   }
+}
+
+function readPersistedAccessToken(): string | null {
+  if (typeof sessionStorage === 'undefined') {
+    return null;
+  }
+  return sessionStorage.getItem(ACCESS_TOKEN_KEY);
 }
 
 function randomBase64Url(byteLength: number): string {
