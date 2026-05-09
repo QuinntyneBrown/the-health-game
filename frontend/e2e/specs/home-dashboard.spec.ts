@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 02-TC-V-001..007, 02-TC-C-001..010, 02-TC-L-001..010, 02-TC-R-001..006, 02-TC-F-001
+// Traces to: 02-TC-V-001..007, 02-TC-C-001..010, 02-TC-L-001..010, 02-TC-R-001..006, 02-TC-F-001..002
 // Description: Dashboard greeting renders with Inter font, weight 500, sizes 22/28/32 px (mobile/tablet/desktop).
 // Section labels render with Inter weight 500 at 18 px.
 import AxeBuilder from '@axe-core/playwright';
@@ -23,6 +23,18 @@ async function authenticate(page: import('@playwright/test').Page): Promise<void
   await page.route('**/api/rewards**', (route) =>
     route.fulfill({ status: 200, contentType: 'application/json', body: '[]' }),
   );
+  await page.route('**/api/users/me**', (route) =>
+    route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: JSON.stringify({
+        displayName: 'Quinn',
+        email: 'quinn@example.com',
+        avatarUrl: null,
+        roles: [],
+      }),
+    }),
+  );
 
   await page.goto('/onboarding');
   await page.evaluate(() => {
@@ -34,6 +46,12 @@ async function authenticate(page: import('@playwright/test').Page): Promise<void
 }
 
 test.describe('Home Dashboard — greeting typography', () => {
+  test('greeting includes the user display name (02-TC-F-002)', async ({ page }) => {
+    await authenticate(page);
+    const greeting = page.locator('.page-header__title').first();
+    await expect(greeting).toContainText('Quinn');
+  });
+
   test('greeting reflects time of day (02-TC-F-001)', async ({ page }) => {
     const cases: Array<{ hour: number; expected: string }> = [
       { hour: 8, expected: 'Good morning' },

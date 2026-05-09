@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import { GOALS_SERVICE, GoalCadence, REWARDS_SERVICE, Reward } from 'api';
+import { GOALS_SERVICE, GoalCadence, REWARDS_SERVICE, Reward, USERS_SERVICE } from 'api';
 import { Observable, combineLatest, map } from 'rxjs';
 
 import {
@@ -29,13 +29,15 @@ const cadenceLabels: Record<GoalCadence, string> = {
 export class DashboardService implements IDashboardService {
   private readonly goalsService = inject(GOALS_SERVICE);
   private readonly rewardsService = inject(REWARDS_SERVICE);
+  private readonly usersService = inject(USERS_SERVICE);
 
   getOverview(): Observable<DashboardOverview> {
     return combineLatest([
       this.goalsService.getGoals(),
       this.rewardsService.getRewards(),
+      this.usersService.getCurrentUser(),
     ]).pipe(
-      map(([goals, rewards]) => {
+      map(([goals, rewards, user]) => {
         const completedGoals = goals.filter(
           (goal) => goal.completedQuantity >= goal.target.value,
         );
@@ -48,7 +50,7 @@ export class DashboardService implements IDashboardService {
 
         return {
           dateLabel: 'Today',
-          greeting: greetingFor(new Date().getHours()),
+          greeting: `${greetingFor(new Date().getHours())}, ${user.displayName}`,
           goals: goals.map((goal): DashboardGoalItem => {
             const progressValue =
               goal.target.value === 0
