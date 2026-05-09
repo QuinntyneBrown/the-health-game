@@ -3,7 +3,7 @@
 // Description: Verifies the domain service consumes the API through its injection token.
 import { TestBed } from '@angular/core/testing';
 import { GOALS_SERVICE, IGoalsService } from 'api';
-import { firstValueFrom, of } from 'rxjs';
+import { EMPTY, firstValueFrom, of } from 'rxjs';
 
 import { DashboardService } from './dashboard.service';
 
@@ -25,6 +25,8 @@ const goalsService: IGoalsService = {
         rewardName: 'Slow morning',
       },
     ]),
+  getGoals: () => EMPTY,
+  createGoal: () => EMPTY,
 };
 
 describe('DashboardService', () => {

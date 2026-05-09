@@ -1,0 +1,23 @@
+:host {
+  display: block;
+  padding: var(--hg-space-6);
+}
+
+.goal-form {
+  display: grid;
+  gap: var(--hg-space-4);
+  max-width: var(--hg-size-readable-max);
+}
+
+.goal-form__target,
+.goal-form__custom {
+  display: grid;
+  gap: var(--hg-space-3);
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+}
+
+.goal-form__actions {
+  display: flex;
+  gap: var(--hg-space-3);
+  justify-content: flex-end;
+}

@@ -1,0 +1,85 @@
+<form class="goal-form" (ngSubmit)="submit()" data-testid="goal-form">
+  <hg-health-text-field
+    label="Name"
+    [value]="name()"
+    [errorText]="nameError()"
+    (valueChange)="name.set($event)"
+  />
+  <div class="goal-form__target">
+    <hg-health-text-field
+      label="Target"
+      type="number"
+      [value]="targetValue()"
+      [errorText]="targetValueError()"
+      (valueChange)="targetValue.set($event)"
+    />
+    <hg-health-text-field
+      label="Unit"
+      [value]="targetUnit()"
+      (valueChange)="targetUnit.set($event)"
+    />
+  </div>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Cadence</mat-label>
+    <mat-select [value]="cadence()" (valueChange)="cadence.set($event)">
+      @for (option of cadences; track option.id) {
+        <mat-option [value]="option.id">{{ option.label }}</mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+
+  @if (cadence() === 'weekly') {
+    <mat-form-field appearance="outline">
+      <mat-label>Week start</mat-label>
+      <mat-select
+        [value]="weekStart()"
+        data-testid="goal-form-week-start"
+        (valueChange)="weekStart.set($event)"
+      >
+        @for (day of weekDays; track day.id) {
+          <mat-option [value]="day.id">{{ day.label }}</mat-option>
+        }
+      </mat-select>
+      @if (weekStartError()) {
+        <mat-error>{{ weekStartError() }}</mat-error>
+      }
+    </mat-form-field>
+  }
+
+  @if (cadence() === 'custom') {
+    <div class="goal-form__custom">
+      <hg-health-text-field
+        label="Every"
+        type="number"
+        [value]="customCount()"
+        [errorText]="customCountError()"
+        (valueChange)="customCount.set($event)"
+      />
+      <mat-form-field appearance="outline">
+        <mat-label>Unit</mat-label>
+        <mat-select
+          [value]="customUnit()"
+          data-testid="goal-form-custom-unit"
+          (valueChange)="customUnit.set($event)"
+        >
+          @for (unit of customUnits; track unit.id) {
+            <mat-option [value]="unit.id">{{ unit.label }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </div>
+  }
+
+  <div class="goal-form__actions">
+    <button mat-stroked-button type="button" (click)="cancel()">Cancel</button>
+    <button
+      mat-flat-button
+      type="submit"
+      data-testid="goal-form-save"
+      [disabled]="!canSave()"
+    >
+      Create goal
+    </button>
+  </div>
+</form>

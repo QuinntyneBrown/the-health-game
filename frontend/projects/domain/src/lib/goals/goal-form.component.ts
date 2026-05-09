@@ -3,8 +3,16 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { Router } from '@angular/router';
-import { GOALS_SERVICE, GoalCadence } from 'api';
+import {
+  CreateGoalInput,
+  CustomIntervalUnit,
+  GOALS_SERVICE,
+  GoalCadence,
+  WeekDay,
+} from 'api';
 import { HealthTextFieldComponent } from 'components';
+
+import { GoalFormState, validateGoalForm } from './goal-form.validate';
 
 const cadences: readonly { id: GoalCadence; label: string }[] = [
   { id: 'hourly', label: 'Hourly' },
@@ -12,6 +20,21 @@ const cadences: readonly { id: GoalCadence; label: string }[] = [
   { id: 'weekly', label: 'Weekly' },
   { id: 'monthly', label: 'Monthly' },
   { id: 'custom', label: 'Custom' },
+];
+
+const weekDays: readonly { id: WeekDay; label: string }[] = [
+  { id: 'sunday', label: 'Sunday' },
+  { id: 'monday', label: 'Monday' },
+  { id: 'tuesday', label: 'Tuesday' },
+  { id: 'wednesday', label: 'Wednesday' },
+  { id: 'thursday', label: 'Thursday' },
+  { id: 'friday', label: 'Friday' },
+  { id: 'saturday', label: 'Saturday' },
+];
+
+const customUnits: readonly { id: CustomIntervalUnit; label: string }[] = [
+  { id: 'hours', label: 'Hours' },
+  { id: 'days', label: 'Days' },
 ];
 
 @Component({
@@ -22,75 +45,8 @@ const cadences: readonly { id: GoalCadence; label: string }[] = [
     MatFormFieldModule,
     MatSelectModule,
   ],
-  template: `
-    <form class="goal-form" (ngSubmit)="submit()" data-testid="goal-form">
-      <hg-health-text-field
-        label="Name"
-        [value]="name()"
-        [errorText]="nameError()"
-        (valueChange)="name.set($event)"
-      />
-      <div class="goal-form__target">
-        <hg-health-text-field
-          label="Target"
-          type="number"
-          [value]="targetValue()"
-          [errorText]="targetValueError()"
-          (valueChange)="targetValue.set($event)"
-        />
-        <hg-health-text-field
-          label="Unit"
-          [value]="targetUnit()"
-          (valueChange)="targetUnit.set($event)"
-        />
-      </div>
-      <mat-form-field appearance="outline">
-        <mat-label>Cadence</mat-label>
-        <mat-select [value]="cadence()" (valueChange)="cadence.set($event)">
-          @for (option of cadences; track option.id) {
-            <mat-option [value]="option.id">{{ option.label }}</mat-option>
-          }
-        </mat-select>
-      </mat-form-field>
-      <div class="goal-form__actions">
-        <button mat-stroked-button type="button" (click)="cancel()">Cancel</button>
-        <button
-          mat-flat-button
-          type="submit"
-          data-testid="goal-form-save"
-          [disabled]="!canSave()"
-        >
-          Create goal
-        </button>
-      </div>
-    </form>
-  `,
-  styles: [
-    `
-      :host {
-        display: block;
-        padding: var(--hg-space-6);
-      }
-
-      .goal-form {
-        display: grid;
-        gap: var(--hg-space-4);
-        max-width: var(--hg-size-readable-max);
-      }
-
-      .goal-form__target {
-        display: grid;
-        gap: var(--hg-space-3);
-        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-      }
-
-      .goal-form__actions {
-        display: flex;
-        gap: var(--hg-space-3);
-        justify-content: flex-end;
-      }
-    `,
-  ],
+  templateUrl: './goal-form.component.html',
+  styleUrl: './goal-form.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GoalFormComponent {
@@ -98,24 +54,42 @@ export class GoalFormComponent {
   private readonly router = inject(Router);
 
   readonly cadences = cadences;
+  readonly weekDays = weekDays;
+  readonly customUnits = customUnits;
 
   readonly name = signal('');
   readonly targetValue = signal('');
   readonly targetUnit = signal('');
   readonly cadence = signal<GoalCadence>('daily');
+  readonly weekStart = signal<GoalFormState['weekStart']>('monday');
+  readonly customCount = signal('1');
+  readonly customUnit = signal<CustomIntervalUnit>('days');
   private readonly attemptedSubmit = signal(false);
 
+  readonly state = computed<GoalFormState>(() => ({
+    name: this.name(),
+    targetValue: this.targetValue(),
+    targetUnit: this.targetUnit(),
+    cadence: this.cadence(),
+    weekStart: this.weekStart(),
+    customCount: this.customCount(),
+    customUnit: this.customUnit(),
+  }));
+
+  readonly errors = computed(() => validateGoalForm(this.state()));
   readonly nameError = computed(() =>
-    this.attemptedSubmit() && this.name().trim() === '' ? 'Name is required' : '',
+    this.attemptedSubmit() ? this.errors().name ?? '' : '',
   );
   readonly targetValueError = computed(() =>
-    this.attemptedSubmit() && !(Number(this.targetValue()) > 0)
-      ? 'Target must be greater than zero'
-      : '',
+    this.attemptedSubmit() ? this.errors().targetValue ?? '' : '',
   );
-  readonly canSave = computed(
-    () => this.name().trim() !== '' && Number(this.targetValue()) > 0,
+  readonly weekStartError = computed(() =>
+    this.attemptedSubmit() ? this.errors().weekStart ?? '' : '',
   );
+  readonly customCountError = computed(() =>
+    this.attemptedSubmit() ? this.errors().customCount ?? '' : '',
+  );
+  readonly canSave = computed(() => Object.keys(this.errors()).length === 0);
 
   cancel(): void {
     void this.router.navigateByUrl('/goals');
@@ -124,14 +98,25 @@ export class GoalFormComponent {
   submit(): void {
     this.attemptedSubmit.set(true);
     if (!this.canSave()) return;
-    this.goalsService
-      .createGoal({
-        name: this.name().trim(),
-        cadence: this.cadence(),
-        target: { value: Number(this.targetValue()), unit: this.targetUnit().trim() },
-      })
-      .subscribe((goal) => {
-        void this.router.navigateByUrl(`/goals/${goal.id}`);
-      });
+    const state = this.state();
+    const input: CreateGoalInput = {
+      name: state.name.trim(),
+      cadence: state.cadence,
+      target: { value: Number(state.targetValue), unit: state.targetUnit.trim() },
+      ...(state.cadence === 'weekly' && state.weekStart !== ''
+        ? { weekStart: state.weekStart }
+        : {}),
+      ...(state.cadence === 'custom'
+        ? {
+            customInterval: {
+              count: Number(state.customCount),
+              unit: state.customUnit,
+            },
+          }
+        : {}),
+    };
+    this.goalsService.createGoal(input).subscribe((goal) => {
+      void this.router.navigateByUrl(`/goals/${goal.id}`);
+    });
   }
 }
