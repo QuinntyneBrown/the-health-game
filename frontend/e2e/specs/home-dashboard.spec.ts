@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 02-TC-V-001..007, 02-TC-C-001..010, 02-TC-L-001..010, 02-TC-R-001..006, 02-TC-F-001..014, 02-TC-B-001..006, 02-TC-A-001..006, 02-TC-D-001..005, 02-TC-P-001..002
+// Traces to: 02-TC-V-001..007, 02-TC-C-001..010, 02-TC-L-001..010, 02-TC-R-001..006, 02-TC-F-001..014, 02-TC-B-001..006, 02-TC-A-001..006, 02-TC-D-001..005, 02-TC-P-001..003
 // Description: Dashboard greeting renders with Inter font, weight 500, sizes 22/28/32 px (mobile/tablet/desktop).
 // Section labels render with Inter weight 500 at 18 px.
 import AxeBuilder from '@axe-core/playwright';
@@ -46,6 +46,36 @@ async function authenticate(page: import('@playwright/test').Page): Promise<void
 }
 
 test.describe('Home Dashboard — greeting typography', () => {
+  test('dashboard total blocking time stays under 200 ms (02-TC-P-003)', async ({ page }) => {
+    await page.addInitScript(() => {
+      (window as unknown as { __longtasks: number[] }).__longtasks = [];
+      try {
+        new PerformanceObserver((list) => {
+          for (const entry of list.getEntries()) {
+            (window as unknown as { __longtasks: number[] }).__longtasks.push(entry.duration);
+          }
+        }).observe({ type: 'longtask', buffered: true });
+      } catch {
+        // longtask not supported in this engine — leave the array empty.
+      }
+    });
+
+    await authenticate(page);
+    await page.goto('/home', { waitUntil: 'networkidle' });
+    await expect(page.locator('.page-header__title')).toBeVisible();
+
+    // Drive a typical interaction
+    await page.getByRole('button', { name: 'New goal' }).hover();
+    await page.waitForTimeout(200);
+
+    const tbt = await page.evaluate(() => {
+      const tasks = (window as unknown as { __longtasks: number[] }).__longtasks ?? [];
+      return tasks.reduce((sum, ms) => sum + Math.max(0, ms - 50), 0);
+    });
+
+    expect(tbt).toBeLessThanOrEqual(200);
+  });
+
   test('dashboard data API timings are <= 300 ms each (02-TC-P-002)', async ({ page }) => {
     const timings: { url: string; ms: number }[] = [];
     page.on('request', (req) => {
