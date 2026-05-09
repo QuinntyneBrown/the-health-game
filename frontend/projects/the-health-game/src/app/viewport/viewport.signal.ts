@@ -1,4 +1,4 @@
-import { InjectionToken, Provider, Signal, inject, signal } from '@angular/core';
+import { InjectionToken, Provider, Signal, signal } from '@angular/core';
 
 import type { NavigationBarVariant } from 'components';
 
@@ -7,10 +7,6 @@ export const VIEWPORT = new InjectionToken<Signal<NavigationBarVariant>>('VIEWPO
 export function provideViewport(): Provider {
   return {
     provide: VIEWPORT,
-    useFactory: () => signal<NavigationBarVariant>('bottom').asReadonly(),
+    useValue: signal<NavigationBarVariant>('bottom').asReadonly(),
   };
-}
-
-export function viewport(): NavigationBarVariant {
-  return inject(VIEWPORT)();
 }

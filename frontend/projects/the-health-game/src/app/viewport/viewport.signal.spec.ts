@@ -3,7 +3,7 @@
 // Description: Verifies the viewport signal returns the navigation variant.
 import { TestBed } from '@angular/core/testing';
 
-import { provideViewport, viewport } from './viewport.signal';
+import { VIEWPORT, provideViewport } from './viewport.signal';
 
 describe('viewport signal', () => {
   beforeEach(() => {
@@ -13,9 +13,7 @@ describe('viewport signal', () => {
   });
 
   it('returns "bottom" by default for mobile-first behaviour', () => {
-    TestBed.runInInjectionContext(() => {
-      const variant = viewport();
-      expect(variant).toBe('bottom');
-    });
+    const variant = TestBed.inject(VIEWPORT);
+    expect(variant()).toBe('bottom');
   });
 });
