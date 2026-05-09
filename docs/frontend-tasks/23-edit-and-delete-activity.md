@@ -1,3 +1,7 @@
+---
+status: Accepted
+---
+
 # Task 23 — Edit and delete activity entries
 
 **Traces to:** L2-006, L2-016, L2-021
