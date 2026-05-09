@@ -1,3 +1,7 @@
+---
+status: Accepted
+---
+
 # Task 14 — Create daily goal
 
 **Traces to:** L2-001, L2-011, L2-016, L2-020, L2-021, L2-030, L2-031
