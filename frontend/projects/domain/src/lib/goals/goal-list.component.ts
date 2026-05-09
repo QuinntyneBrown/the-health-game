@@ -5,6 +5,7 @@ import { GOALS_SERVICE, GoalSummary } from 'api';
 import {
   EmptyStateComponent,
   GoalCardComponent,
+  PageHeaderComponent,
   SegmentedFilterComponent,
   SegmentedFilterOption,
 } from 'components';
@@ -22,7 +23,7 @@ const cadenceOptions: readonly SegmentedFilterOption[] = [
 
 @Component({
   selector: 'lib-goal-list',
-  imports: [EmptyStateComponent, GoalCardComponent, SegmentedFilterComponent],
+  imports: [EmptyStateComponent, GoalCardComponent, PageHeaderComponent, SegmentedFilterComponent],
   templateUrl: './goal-list.component.html',
   styleUrl: './goal-list.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

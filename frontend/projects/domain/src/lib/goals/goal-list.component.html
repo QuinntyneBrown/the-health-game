@@ -1,3 +1,12 @@
+<hg-page-header
+  actionIcon="add"
+  actionLabel="New goal"
+  description=""
+  headingId="goals-page-title"
+  title="Goals"
+  (actionSelected)="onCreate()"
+/>
+
 @if (isEmpty()) {
   <hg-empty-state
     title="No goals yet"
