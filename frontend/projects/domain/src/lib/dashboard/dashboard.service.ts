@@ -1,6 +1,6 @@
-import { inject, Injectable } from '@angular/core';
-import { GoalCadence, GOALS_SERVICE, IGoalsService } from 'api';
-import { map, Observable } from 'rxjs';
+import { Injectable, inject } from '@angular/core';
+import { GOALS_SERVICE, GoalCadence, REWARDS_SERVICE, Reward } from 'api';
+import { Observable, combineLatest, map } from 'rxjs';
 
 import {
   DashboardGoalItem,
@@ -20,25 +20,36 @@ const cadenceLabels: Record<GoalCadence, string> = {
 
 @Injectable()
 export class DashboardService implements IDashboardService {
-  private readonly goalsService: IGoalsService = inject(GOALS_SERVICE);
+  private readonly goalsService = inject(GOALS_SERVICE);
+  private readonly rewardsService = inject(REWARDS_SERVICE);
 
   getOverview(): Observable<DashboardOverview> {
-    return this.goalsService.getGoalSummaries().pipe(
-      map((goals) => {
-        const completedGoals = goals.filter((goal) => goal.completedQuantity >= goal.target.value);
+    return combineLatest([
+      this.goalsService.getGoals(),
+      this.rewardsService.getRewards(),
+    ]).pipe(
+      map(([goals, rewards]) => {
+        const completedGoals = goals.filter(
+          (goal) => goal.completedQuantity >= goal.target.value,
+        );
         const longestStreak = goals.reduce(
           (best, goal) => Math.max(best, goal.longestStreak),
           0,
         );
+        const earnedRewards = rewards.filter((r) => r.status === 'earned');
+        const pendingRewards = rewards.filter((r) => r.status === 'pending');
 
         return {
           dateLabel: 'Today',
+          greeting: 'Good morning',
           goals: goals.map((goal): DashboardGoalItem => {
-            const progressValue = Math.min(
-              100,
-              Math.round((goal.completedQuantity / goal.target.value) * 100),
-            );
-
+            const progressValue =
+              goal.target.value === 0
+                ? 0
+                : Math.min(
+                    100,
+                    Math.round((goal.completedQuantity / goal.target.value) * 100),
+                  );
             return {
               cadenceLabel: cadenceLabels[goal.cadence],
               currentStreakLabel: `${goal.currentStreak} current`,
@@ -51,9 +62,14 @@ export class DashboardService implements IDashboardService {
               rewardName: goal.rewardName,
             };
           }),
-          greeting: 'Good morning',
-          metrics: this.buildMetrics(goals.length, completedGoals.length, longestStreak),
-          rewards: this.buildRewards(),
+          metrics: this.buildMetrics(
+            goals.length,
+            completedGoals.length,
+            longestStreak,
+            earnedRewards.length,
+            pendingRewards.length,
+          ),
+          rewards: rewards.map((reward) => this.toRewardItem(reward)),
         };
       }),
     );
@@ -63,6 +79,8 @@ export class DashboardService implements IDashboardService {
     activeGoalCount: number,
     completedGoalCount: number,
     longestStreak: number,
+    earnedCount: number,
+    pendingCount: number,
   ): readonly DashboardMetric[] {
     const completionValue =
       activeGoalCount === 0 ? 0 : Math.round((completedGoalCount / activeGoalCount) * 100);
@@ -87,35 +105,27 @@ export class DashboardService implements IDashboardService {
         value: `${longestStreak} days`,
       },
       {
-        ariaLabel: 'Two rewards in progress',
+        ariaLabel: `${earnedCount} earned, ${pendingCount} pending rewards`,
         icon: 'emoji_events',
         label: 'Rewards',
         progressValue: null,
-        supportText: 'One earned, one pending',
+        supportText: `${earnedCount} earned, ${pendingCount} pending`,
         tone: 'reward',
-        value: '2',
+        value: `${earnedCount + pendingCount}`,
       },
     ];
   }
 
-  private buildRewards(): readonly DashboardRewardItem[] {
-    return [
-      {
-        description: 'Unlocked by keeping hydration consistent.',
-        earnedDateLabel: 'Earned today',
-        id: 'trail-breakfast',
-        isEarned: true,
-        name: 'Trail breakfast',
-        statusLabel: 'Earned',
-      },
-      {
-        description: 'Reach the next mobility streak milestone.',
-        earnedDateLabel: '',
-        id: 'recovery-hour',
-        isEarned: false,
-        name: 'Recovery hour',
-        statusLabel: 'Pending',
-      },
-    ];
+  private toRewardItem(reward: Reward): DashboardRewardItem {
+    return {
+      description: reward.description,
+      earnedDateLabel: reward.earnedAt
+        ? `Earned ${new Date(reward.earnedAt).toLocaleDateString()}`
+        : '',
+      id: reward.id,
+      isEarned: reward.status === 'earned',
+      name: reward.name,
+      statusLabel: reward.status === 'earned' ? 'Earned' : 'Pending',
+    };
   }
 }
