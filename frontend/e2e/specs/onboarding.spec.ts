@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 01-TC-V-001, 01-TC-V-002, 01-TC-V-003, 01-TC-V-004, 01-TC-V-005
+// Traces to: 01-TC-V-001, 01-TC-V-002, 01-TC-V-003, 01-TC-V-004, 01-TC-V-005, 01-TC-V-006
 // Description: Onboarding headline ("Make health a game") renders with font family Inter weight 500
 //              and the design-spec font-size at each breakpoint (mobile = 28 px, tablet = 45 px,
 //              desktop = 57 px with line-height 1.1). Body description paragraph renders at
@@ -48,6 +48,16 @@ test.describe('Onboarding — headline typography', () => {
       const fontSize = await headline.evaluate((el) => getComputedStyle(el).fontSize);
       expect(fontSize).toBe('28px');
     });
+
+    test('description font-size is 16 px on mobile (TC-V-006)', async ({ page }) => {
+      await page.goto('/onboarding');
+
+      const description = page.getByTestId('onboarding-description');
+      await expect(description).toBeVisible();
+
+      const fontSize = await description.evaluate((el) => getComputedStyle(el).fontSize);
+      expect(fontSize).toBe('16px');
+    });
   });
 
   test.describe('tablet viewport', () => {
@@ -61,6 +71,16 @@ test.describe('Onboarding — headline typography', () => {
 
       const fontSize = await headline.evaluate((el) => getComputedStyle(el).fontSize);
       expect(fontSize).toBe('45px');
+    });
+
+    test('description font-size is 18 px on tablet (TC-V-006)', async ({ page }) => {
+      await page.goto('/onboarding');
+
+      const description = page.getByTestId('onboarding-description');
+      await expect(description).toBeVisible();
+
+      const fontSize = await description.evaluate((el) => getComputedStyle(el).fontSize);
+      expect(fontSize).toBe('18px');
     });
   });
 
@@ -87,6 +107,16 @@ test.describe('Onboarding — headline typography', () => {
       const fontSizePx = parseFloat(metrics.fontSize);
       const lineHeightPx = parseFloat(metrics.lineHeight);
       expect(lineHeightPx / fontSizePx).toBeCloseTo(1.1, 2);
+    });
+
+    test('description font-size is 18 px on desktop (TC-V-006)', async ({ page }) => {
+      await page.goto('/onboarding');
+
+      const description = page.getByTestId('onboarding-description');
+      await expect(description).toBeVisible();
+
+      const fontSize = await description.evaluate((el) => getComputedStyle(el).fontSize);
+      expect(fontSize).toBe('18px');
     });
   });
 });

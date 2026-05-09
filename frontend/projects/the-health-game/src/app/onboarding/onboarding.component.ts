@@ -27,9 +27,21 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
         margin: 0;
       }
 
+      .onboarding__description {
+        font-family: Inter, Roboto, Arial, sans-serif;
+        font-weight: 400;
+        line-height: 1.5;
+        font-size: 16px;
+        margin: 0;
+      }
+
       @media (min-width: 768px) {
         .onboarding__headline {
           font-size: 45px;
+        }
+
+        .onboarding__description {
+          font-size: 18px;
         }
       }
 
@@ -38,14 +50,6 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
           font-size: 57px;
           line-height: 1.1;
         }
-      }
-
-      .onboarding__description {
-        font-family: Inter, Roboto, Arial, sans-serif;
-        font-weight: 400;
-        line-height: 1.5;
-        font-size: 16px;
-        margin: 0;
       }
     `,
   ],
