@@ -12,7 +12,7 @@
     "watch": "ng build --watch --configuration development",
     "test": "npm run build:libs && ng test the-health-game && ng test api && ng test domain",
     "e2e": "playwright test",
-    "lint": "ng lint"
+    "lint": "node tools/check-boundaries.mjs && node --test tools/check-boundaries.spec.mjs"
   },
   "private": true,
   "packageManager": "npm@10.9.4",
