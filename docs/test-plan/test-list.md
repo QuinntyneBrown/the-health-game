@@ -42,7 +42,7 @@ and made green. The /loop process picks the first test with
 | 31 | 01 | TC-R-001 | Viewport 360x780 | Single-column mobile layout, no horizontal scrollbar | 2026-05-09T18:46:49Z |
 | 32 | 01 | TC-R-002 | Viewport 375x812 | Same layout as 360 (mobile) | 2026-05-09T18:48:12Z |
 | 33 | 01 | TC-R-003 | Viewport 768x1024 | Tablet layout — buttons inline, larger hero | 2026-05-09T18:49:19Z |
-| 34 | 01 | TC-R-004 | Viewport 1024x768 | Tablet layout still applies (rail variant for app shell when signed in) | null |
+| 34 | 01 | TC-R-004 | Viewport 1024x768 | Tablet layout still applies (rail variant for app shell when signed in) | 2026-05-09T18:50:40Z |
 | 35 | 01 | TC-R-005 | Viewport 1440x900 | Desktop layout — split hero with brand wordmark visible | null |
 | 36 | 01 | TC-R-006 | Viewport >= 1920 wide | Content max-width respected (no edge-to-edge stretching) | null |
 | 37 | 01 | TC-R-007 | Window resize during render | Layout recomputes without flicker | null |
