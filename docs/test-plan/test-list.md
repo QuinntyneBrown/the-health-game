@@ -91,7 +91,7 @@ and made green. The /loop process picks the first test with
 | 80 | 02 | TC-C-006 | Reward accent | `#9B2680` (reward) | 2026-05-09T20:39:47Z |
 | 81 | 02 | TC-C-007 | Success/level cards | `#94F7B4` background, `#00210F` text | 2026-05-09T20:41:32Z |
 | 82 | 02 | TC-C-008 | "Add" / "Log activity" primary CTA | `#006D3F` background, white label | 2026-05-09T20:45:41Z |
-| 83 | 02 | TC-C-009 | Card outline (when outlined variant) | `#C2C9BE` (outline-variant), 1 px | null |
+| 83 | 02 | TC-C-009 | Card outline (when outlined variant) | `#C2C9BE` (outline-variant), 1 px | 2026-05-09T20:48:12Z |
 | 84 | 02 | TC-C-010 | Color contrast — all text | WCAG AA 4.5:1 / 3:1 | null |
 | 85 | 02 | TC-L-001 | Page padding — mobile/tablet/desktop | 16 / 24 / 32 px | null |
 | 86 | 02 | TC-L-002 | Card corner radius | 16 px (xl) | null |

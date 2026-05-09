@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 02-TC-V-001..007, 02-TC-C-001..008
+// Traces to: 02-TC-V-001..007, 02-TC-C-001..009
 // Description: Dashboard greeting renders with Inter font, weight 500, sizes 22/28/32 px (mobile/tablet/desktop).
 // Section labels render with Inter weight 500 at 18 px.
 import { expect, test } from '@playwright/test';
@@ -54,6 +54,23 @@ test.describe('Home Dashboard — greeting typography', () => {
       expect(computed.fontFamily.split(',')[0].replace(/['"]/g, '').trim()).toBe('Inter');
       expect(computed.fontWeight).toBe('500');
       expect(computed.fontSize).toBe('32px');
+    });
+
+    test('outlined metric card border is 1 px #C2C9BE (02-TC-C-009)', async ({ page }) => {
+      await authenticate(page);
+
+      const card = page.locator('mat-card.metric-card').first();
+      await expect(card).toBeVisible();
+
+      const border = await card.evaluate((el) => {
+        const style = getComputedStyle(el);
+        return {
+          width: style.borderTopWidth,
+          color: style.borderTopColor,
+        };
+      });
+      expect(border.width).toBe('1px');
+      expect(border.color).toBe('rgb(194, 201, 190)');
     });
 
     test('primary CTA on dashboard is #006D3F bg with white label (02-TC-C-008)', async ({
