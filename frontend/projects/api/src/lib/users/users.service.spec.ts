@@ -78,4 +78,12 @@ describe('UsersService', () => {
     expect(profile.displayName).toBe('Grace Hopper');
     expect(profile.email).toBe('grace@example.test');
   });
+
+  it('DELETEs /api/users/me to remove the current user', async () => {
+    const promise = firstValueFrom(service.deleteCurrentUser());
+    const req = controller.expectOne(`${config.apiBaseUrl}/api/users/me`);
+    expect(req.request.method).toBe('DELETE');
+    req.flush(null, { status: 204, statusText: 'No Content' });
+    await promise;
+  });
 });
