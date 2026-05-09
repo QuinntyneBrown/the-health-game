@@ -1,3 +1,7 @@
+---
+status: Accepted
+---
+
 # Task 11 — Edit display name and email
 
 **Traces to:** L2-014, L2-016, L2-021
