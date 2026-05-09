@@ -4,6 +4,10 @@ namespace HealthGame.Domain.Users;
 
 public sealed class UserProfile
 {
+    private const int UsernameMaxLength = 64;
+    private const int UsernameMinLength = 3;
+    private const int PasswordHashMaxLength = 512;
+
     private readonly List<UserRole> _roles = [];
 
     private UserProfile()
@@ -14,11 +18,21 @@ public sealed class UserProfile
 
     public string SubjectId { get; private set; } = string.Empty;
 
+    public string? Username { get; private set; }
+
     public string DisplayName { get; private set; } = string.Empty;
 
     public string Email { get; private set; } = string.Empty;
 
     public string TimeZoneId { get; private set; } = "UTC";
+
+    public string? PasswordHash { get; private set; }
+
+    public int FailedSignInCount { get; private set; }
+
+    public DateTimeOffset? LockoutEndsAtUtc { get; private set; }
+
+    public DateTimeOffset? LastSignInAtUtc { get; private set; }
 
     public IReadOnlyCollection<UserRole> Roles => _roles.AsReadOnly();
 
@@ -28,7 +42,13 @@ public sealed class UserProfile
 
     public DateTimeOffset? DeletedAtUtc { get; private set; }
 
+    public DateTimeOffset? DisabledAtUtc { get; private set; }
+
     public bool IsDeleted => DeletedAtUtc.HasValue;
+
+    public bool IsDisabled => DisabledAtUtc.HasValue;
+
+    public bool CanSignIn => !IsDeleted && !IsDisabled;
 
     public static UserProfile Create(
         string subjectId,
@@ -52,6 +72,21 @@ public sealed class UserProfile
         return profile;
     }
 
+    public static UserProfile CreateLocal(
+        string subjectId,
+        string username,
+        string displayName,
+        string email,
+        string passwordHash,
+        string timeZoneId,
+        DateTimeOffset createdAtUtc)
+    {
+        var profile = Create(subjectId, displayName, email, timeZoneId, createdAtUtc);
+        profile.Username = ValidateUsername(username);
+        profile.PasswordHash = ValidatePasswordHash(passwordHash);
+        return profile;
+    }
+
     public void UpdateProfile(
         string displayName,
         string email,
@@ -64,6 +99,59 @@ public sealed class UserProfile
         Email = ValidateEmail(email);
         TimeZoneId = Guard.Required(timeZoneId, nameof(timeZoneId), 128);
         UpdatedAtUtc = updatedAtUtc.ToUniversalTime();
+    }
+
+    public void SetUsername(string username, DateTimeOffset updatedAtUtc)
+    {
+        EnsureActive();
+
+        Username = ValidateUsername(username);
+        UpdatedAtUtc = updatedAtUtc.ToUniversalTime();
+    }
+
+    public void SetPasswordHash(string passwordHash, DateTimeOffset updatedAtUtc)
+    {
+        EnsureActive();
+
+        PasswordHash = ValidatePasswordHash(passwordHash);
+        FailedSignInCount = 0;
+        LockoutEndsAtUtc = null;
+        UpdatedAtUtc = updatedAtUtc.ToUniversalTime();
+    }
+
+    public bool IsLockedOut(DateTimeOffset now)
+    {
+        return LockoutEndsAtUtc.HasValue && LockoutEndsAtUtc.Value > now.ToUniversalTime();
+    }
+
+    public void RegisterFailedSignIn(DateTimeOffset now, int failureThreshold, TimeSpan lockoutDuration)
+    {
+        if (failureThreshold <= 0)
+        {
+            throw new ArgumentOutOfRangeException(nameof(failureThreshold), "Failure threshold must be greater than zero.");
+        }
+
+        if (lockoutDuration <= TimeSpan.Zero)
+        {
+            throw new ArgumentOutOfRangeException(nameof(lockoutDuration), "Lockout duration must be greater than zero.");
+        }
+
+        var nowUtc = now.ToUniversalTime();
+        FailedSignInCount += 1;
+
+        if (FailedSignInCount >= failureThreshold)
+        {
+            LockoutEndsAtUtc = nowUtc + lockoutDuration;
+            FailedSignInCount = 0;
+        }
+    }
+
+    public void RegisterSuccessfulSignIn(DateTimeOffset now)
+    {
+        var nowUtc = now.ToUniversalTime();
+        FailedSignInCount = 0;
+        LockoutEndsAtUtc = null;
+        LastSignInAtUtc = nowUtc;
     }
 
     public bool HasRole(UserRole role)
@@ -99,6 +187,27 @@ public sealed class UserProfile
         UpdatedAtUtc = updatedAtUtc.ToUniversalTime();
     }
 
+    public void Disable(DateTimeOffset disabledAtUtc)
+    {
+        if (IsDisabled)
+        {
+            return;
+        }
+
+        DisabledAtUtc = disabledAtUtc.ToUniversalTime();
+    }
+
+    public void Enable(DateTimeOffset updatedAtUtc)
+    {
+        if (!IsDisabled)
+        {
+            return;
+        }
+
+        DisabledAtUtc = null;
+        UpdatedAtUtc = updatedAtUtc.ToUniversalTime();
+    }
+
     public void Delete(DateTimeOffset deletedAtUtc)
     {
         if (IsDeleted)
@@ -119,6 +228,34 @@ public sealed class UserProfile
         }
 
         return trimmed;
+    }
+
+    private static string ValidateUsername(string username)
+    {
+        var trimmed = Guard.Required(username, nameof(username), UsernameMaxLength);
+
+        if (trimmed.Length < UsernameMinLength)
+        {
+            throw new ArgumentException($"Username must be at least {UsernameMinLength} characters.", nameof(username));
+        }
+
+        foreach (var ch in trimmed)
+        {
+            if (!(char.IsLetterOrDigit(ch) || ch is '_' or '-' or '.'))
+            {
+                throw new ArgumentException("Username may only contain letters, digits, '.', '_', or '-'.", nameof(username));
+            }
+        }
+
+        return trimmed;
+    }
+
+    private static string ValidatePasswordHash(string passwordHash)
+    {
+        // Stored value is the opaque encoded output of a modern password hasher
+        // (e.g., Argon2id, PBKDF2, bcrypt). Hashing and verification are caller concerns;
+        // the domain only enforces presence and a length bound.
+        return Guard.Required(passwordHash, nameof(passwordHash), PasswordHashMaxLength);
     }
 
     private static void EnsureDefinedRole(UserRole role)
