@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 01-TC-V-001..010, 01-TC-C-001..010, 01-TC-L-001..010, 01-TC-R-001..002
+// Traces to: 01-TC-V-001..010, 01-TC-C-001..010, 01-TC-L-001..010, 01-TC-R-001..003
 // Description: Onboarding headline ("Make health a game") renders with font family Inter weight 500
 //              and the design-spec font-size at each breakpoint (mobile = 28 px, tablet = 45 px,
 //              desktop = 57 px with line-height 1.1). Body description paragraph renders at
@@ -479,6 +479,36 @@ test.describe('Onboarding — headline typography', () => {
 
       const fontSize = await headline.evaluate((el) => getComputedStyle(el).fontSize);
       expect(fontSize).toBe('45px');
+    });
+
+    test('viewport 768x1024 — tablet layout, buttons inline, larger hero (TC-R-003)', async ({
+      page,
+    }) => {
+      await page.setViewportSize({ width: 768, height: 1024 });
+      await page.goto('/onboarding');
+
+      const overflow = await page.evaluate(() => ({
+        scrollWidth: document.documentElement.scrollWidth,
+        clientWidth: document.documentElement.clientWidth,
+      }));
+      expect(overflow.scrollWidth).toBeLessThanOrEqual(overflow.clientWidth);
+
+      const primary = page.getByTestId('onboarding-get-started');
+      const secondary = page.getByTestId('onboarding-have-account');
+      const rects = await Promise.all(
+        [primary, secondary].map((loc) =>
+          loc.evaluate((el) => {
+            const rect = (el as HTMLElement).getBoundingClientRect();
+            return { top: rect.top, left: rect.left, right: rect.right };
+          }),
+        ),
+      );
+      expect(Math.abs(rects[0].top - rects[1].top)).toBeLessThan(2);
+      expect(rects[1].left).toBeGreaterThan(rects[0].right);
+
+      const trophy = page.getByTestId('onboarding-trophy');
+      const trophyFontSize = await trophy.evaluate((el) => getComputedStyle(el).fontSize);
+      expect(trophyFontSize).toBe('180px');
     });
 
     test('content vertical gap on tablet is 32 px (TC-L-004)', async ({ page }) => {
