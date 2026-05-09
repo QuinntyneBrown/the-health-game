@@ -1,3 +1,7 @@
+---
+status: Accepted
+---
+
 # Task 22 — View chronological activity history
 
 **Traces to:** L2-005, L2-006, L2-021
