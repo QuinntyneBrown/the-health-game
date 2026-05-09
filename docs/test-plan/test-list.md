@@ -165,7 +165,7 @@ and made green. The /loop process picks the first test with
 | 154 | 03 | TC-C-011 | Destructive "Delete" button | `#BA1A1A` bg in confirm dialog, `#FFFFFF` label | 2026-05-09T23:45:02Z |
 | 155 | 03 | TC-L-001 | Top bar height — desktop/tablet/mobile | 80 / 80 / 64 px | 2026-05-09T23:50:34Z |
 | 156 | 03 | TC-L-002 | Top bar horizontal padding | 32 / 32 / 8 px | 2026-05-09T23:53:00Z |
-| 157 | 03 | TC-L-003 | Filter row gap between chips | 8 px | null |
+| 157 | 03 | TC-L-003 | Filter row gap between chips | 8 px | 2026-05-09T23:56:28Z |
 | 158 | 03 | TC-L-004 | Filter chip height | 32 px (mobile), 36 px (tablet/desktop) | null |
 | 159 | 03 | TC-L-005 | Goal card corner radius | 16 px | null |
 | 160 | 03 | TC-L-006 | Goal card padding | 12 px (mobile), 20 px (tablet/desktop) | null |

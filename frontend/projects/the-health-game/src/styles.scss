@@ -159,6 +159,16 @@ lib-goal-list mat-button-toggle.mat-button-toggle-checked .segmented-filter__lab
   color: #0c1f13 !important;
 }
 
+lib-goal-list mat-button-toggle-group.mat-button-toggle-group {
+  gap: 8px !important;
+  border: none !important;
+}
+
+lib-goal-list mat-button-toggle.mat-button-toggle {
+  border-radius: var(--hg-radius-control, 8px) !important;
+  border-left: 1px solid #c2c9be !important;
+}
+
 lib-goal-list mat-button-toggle:not(.mat-button-toggle-checked) {
   border-color: #c2c9be !important;
   border-width: 1px !important;

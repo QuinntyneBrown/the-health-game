@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 03-TC-V-001..009, 03-TC-C-001..011, 03-TC-L-001..002
+// Traces to: 03-TC-V-001..009, 03-TC-C-001..011, 03-TC-L-001..003
 // Description: /goals page title "Goals" renders with Inter weight 500 at 22/32 px.
 // Subtitle is Inter 13 px weight 400 with computed counts.
 import { expect, test } from '@playwright/test';
@@ -554,6 +554,31 @@ test.describe('Goals page — header typography', () => {
         expect(computed.fontWeight).toBe('500');
         expect(computed.fontSize).toBe('13px');
       }
+    });
+  });
+
+  test.describe('filter chip layout', () => {
+    test.use({ viewport: { width: 1440, height: 900 } });
+
+    test('gap between filter chips is 8 px (03-TC-L-003)', async ({ page }) => {
+      await authenticate(page);
+      await page.goto('/goals');
+
+      const chips = page.locator('lib-goal-list mat-button-toggle');
+      await expect(chips.first()).toBeVisible();
+      const count = await chips.count();
+      expect(count).toBeGreaterThanOrEqual(2);
+      const rects = await chips.evaluateAll((els) =>
+        els.map((el) => {
+          const r = el.getBoundingClientRect();
+          return { left: r.left, right: r.right };
+        }),
+      );
+      const gaps: number[] = [];
+      for (let i = 1; i < rects.length; i++) {
+        gaps.push(Math.round(rects[i].left - rects[i - 1].right));
+      }
+      gaps.forEach((g) => expect(g).toBe(8));
     });
   });
 
