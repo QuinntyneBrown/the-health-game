@@ -30,7 +30,7 @@ and made green. The /loop process picks the first test with
 | 19 | 01 | TC-C-009 | Inactive page-dot color | `#F1F5ED` (surface-container-low) | 2026-05-09T18:17:22Z |
 | 20 | 01 | TC-C-010 | Text/background contrast meets WCAG AA | >= 4.5:1 normal text, >= 3:1 large text | 2026-05-09T18:19:44Z |
 | 21 | 01 | TC-L-001 | Mobile body padding | 24 px on all sides | 2026-05-09T18:20:40Z |
-| 22 | 01 | TC-L-002 | Mobile vertical gap between hero, title, dots, buttons | 24 px | null |
+| 22 | 01 | TC-L-002 | Mobile vertical gap between hero, title, dots, buttons | 24 px | 2026-05-09T18:22:21Z |
 | 23 | 01 | TC-L-003 | Tablet body padding | 40 px top/bottom, 80 px left/right | null |
 | 24 | 01 | TC-L-004 | Tablet content vertical gap | 32 px | null |
 | 25 | 01 | TC-L-005 | Hero corner radius — mobile/tablet | 28 / 36 px | null |
