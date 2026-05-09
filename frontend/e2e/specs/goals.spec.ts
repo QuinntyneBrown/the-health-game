@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 03-TC-V-001..008
+// Traces to: 03-TC-V-001..009
 // Description: /goals page title "Goals" renders with Inter weight 500 at 22/32 px.
 // Subtitle is Inter 13 px weight 400 with computed counts.
 import { expect, test } from '@playwright/test';
@@ -236,6 +236,47 @@ test.describe('Goals page — header typography', () => {
 
   test.describe('goal form', () => {
     test.use({ viewport: { width: 1440, height: 900 } });
+
+    test('form helper text is Inter 12 px / weight 400 (03-TC-V-009)', async ({ page }) => {
+      await authenticate(page);
+      await page.route('**/api/goals/g1', (route) =>
+        route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify({
+            id: 'g1',
+            name: 'Walk',
+            description: '',
+            cadence: 'daily',
+            target: { value: 10, unit: 'min' },
+            completedQuantity: 0,
+            currentStreak: 0,
+            longestStreak: 0,
+            rewardName: '',
+          }),
+        }),
+      );
+      await page.goto('/goals/g1/edit');
+
+      const cadenceField = page.locator('mat-form-field').filter({ hasText: 'Cadence' });
+      await cadenceField.locator('mat-select').click();
+      await page.locator('mat-option').filter({ hasText: 'Weekly' }).click();
+
+      const hint = page.locator('mat-hint[data-testid="goal-form-cadence-note"]');
+      await expect(hint).toBeVisible();
+
+      const computed = await hint.evaluate((el) => {
+        const style = getComputedStyle(el);
+        return {
+          fontFamily: style.fontFamily,
+          fontWeight: style.fontWeight,
+          fontSize: style.fontSize,
+        };
+      });
+      expect(computed.fontFamily.split(',')[0].replace(/['"]/g, '').trim()).toBe('Inter');
+      expect(computed.fontWeight).toBe('400');
+      expect(computed.fontSize).toBe('12px');
+    });
 
     test('form field labels are Inter 13 px / weight 500 (03-TC-V-008)', async ({ page }) => {
       await authenticate(page);

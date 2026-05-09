@@ -151,7 +151,7 @@ and made green. The /loop process picks the first test with
 | 140 | 03 | TC-V-006 | "New goal" button label | Inter 14 px, weight 500, white | 2026-05-09T23:05:03Z |
 | 141 | 03 | TC-V-007 | Empty state heading | Inter 22 px, weight 500 | 2026-05-09T23:10:35Z |
 | 142 | 03 | TC-V-008 | Form field labels | Inter 13 px, weight 500 | 2026-05-09T23:13:55Z |
-| 143 | 03 | TC-V-009 | Form helper text | Inter 12 px, weight 400 | null |
+| 143 | 03 | TC-V-009 | Form helper text | Inter 12 px, weight 400 | 2026-05-09T23:16:41Z |
 | 144 | 03 | TC-C-001 | Page background | `#F1F5ED` (surface-container-low) | null |
 | 145 | 03 | TC-C-002 | Top bar background | `#F7FBF3` (surface) | null |
 | 146 | 03 | TC-C-003 | Active filter chip | `#D2E8D4` background, `#0C1F13` label | null |
