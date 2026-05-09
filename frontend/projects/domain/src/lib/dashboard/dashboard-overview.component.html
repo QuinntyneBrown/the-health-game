@@ -94,6 +94,8 @@
               [isEarned]="reward.isEarned"
               [name]="reward.name"
               [statusLabel]="reward.statusLabel"
+              (click)="onRewardSelected(reward.id)"
+              style="cursor: pointer"
             />
           }
         </div>

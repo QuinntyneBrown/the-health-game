@@ -51,6 +51,10 @@ export class DashboardOverviewComponent {
     void this.router.navigateByUrl('/goals/new');
   }
 
+  onRewardSelected(rewardId: string): void {
+    void this.router.navigateByUrl(`/rewards/${rewardId}`);
+  }
+
   readonly weeklyChart: readonly { label: string; value: number }[] = [
     { label: 'Mon', value: 60 },
     { label: 'Tue', value: 80 },
