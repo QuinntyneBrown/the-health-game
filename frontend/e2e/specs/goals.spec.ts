@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 03-TC-V-001..009, 03-TC-C-001
+// Traces to: 03-TC-V-001..009, 03-TC-C-001..002
 // Description: /goals page title "Goals" renders with Inter weight 500 at 22/32 px.
 // Subtitle is Inter 13 px weight 400 with computed counts.
 import { expect, test } from '@playwright/test';
@@ -236,6 +236,16 @@ test.describe('Goals page — header typography', () => {
 
   test.describe('goal form', () => {
     test.use({ viewport: { width: 1440, height: 900 } });
+
+    test('top bar background is #F7FBF3 (03-TC-C-002)', async ({ page }) => {
+      await authenticate(page);
+      await page.goto('/goals');
+
+      const toolbar = page.locator('mat-toolbar.app-shell__toolbar').first();
+      await expect(toolbar).toBeVisible();
+      const bg = await toolbar.evaluate((el) => getComputedStyle(el).backgroundColor);
+      expect(bg).toBe('rgb(247, 251, 243)');
+    });
 
     test('goals page background is #F1F5ED (03-TC-C-001)', async ({ page }) => {
       await authenticate(page);
