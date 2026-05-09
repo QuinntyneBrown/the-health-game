@@ -56,4 +56,26 @@ describe('UsersService', () => {
     expect(profile.avatarUrl).toBe('https://cdn.example.test/ada.png');
     expect(profile.roles).toEqual(['user', 'beta-tester']);
   });
+
+  it('PUTs displayName and email to /api/users/me and returns the updated profile', async () => {
+    const promise = firstValueFrom(
+      service.updateCurrentUser({ displayName: 'Grace Hopper', email: 'grace@example.test' }),
+    );
+    const req = controller.expectOne(`${config.apiBaseUrl}/api/users/me`);
+    expect(req.request.method).toBe('PUT');
+    expect(req.request.body).toEqual({
+      displayName: 'Grace Hopper',
+      email: 'grace@example.test',
+    });
+    req.flush({
+      displayName: 'Grace Hopper',
+      email: 'grace@example.test',
+      avatarUrl: null,
+      roles: ['user'],
+    });
+
+    const profile = await promise;
+    expect(profile.displayName).toBe('Grace Hopper');
+    expect(profile.email).toBe('grace@example.test');
+  });
 });
