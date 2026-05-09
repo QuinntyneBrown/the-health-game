@@ -9,6 +9,11 @@
   max-width: var(--hg-size-readable-max);
 }
 
+.goal-form__title {
+  font-size: var(--hg-font-size-headline-sm);
+  margin: 0;
+}
+
 .goal-form__target,
 .goal-form__custom {
   display: grid;

@@ -4,7 +4,7 @@ import { Observable, of } from 'rxjs';
 
 import { API_CONFIG } from '../api.config';
 import { GoalSummary } from '../models/goal-summary.model';
-import { CreateGoalInput, IGoalsService } from './goals.service.contract';
+import { CreateGoalInput, IGoalsService, UpdateGoalInput } from './goals.service.contract';
 
 const goalSummaries: readonly GoalSummary[] = [
   {
@@ -70,5 +70,9 @@ export class GoalsService implements IGoalsService {
 
   createGoal(input: CreateGoalInput): Observable<GoalSummary> {
     return this.http.post<GoalSummary>(`${this.apiBaseUrl}/api/goals`, input);
+  }
+
+  updateGoal(id: string, input: UpdateGoalInput): Observable<GoalSummary> {
+    return this.http.put<GoalSummary>(`${this.apiBaseUrl}/api/goals/${id}`, input);
   }
 }

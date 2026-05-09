@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@a
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import {
   CreateGoalInput,
   CustomIntervalUnit,
@@ -52,10 +52,15 @@ const customUnits: readonly { id: CustomIntervalUnit; label: string }[] = [
 export class GoalFormComponent {
   private readonly goalsService = inject(GOALS_SERVICE);
   private readonly router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
 
   readonly cadences = cadences;
   readonly weekDays = weekDays;
   readonly customUnits = customUnits;
+
+  private readonly editingId = this.route.snapshot.paramMap.get('id');
+  readonly isEditing = this.editingId !== null;
+  readonly title = this.isEditing ? 'Edit goal' : 'Create goal';
 
   readonly name = signal('');
   readonly targetValue = signal('');
@@ -65,6 +70,9 @@ export class GoalFormComponent {
   readonly customCount = signal('1');
   readonly customUnit = signal<CustomIntervalUnit>('days');
   private readonly attemptedSubmit = signal(false);
+  private readonly initialCadence = signal<GoalCadence>('daily');
+
+  readonly cadenceChanged = computed(() => this.cadence() !== this.initialCadence());
 
   readonly state = computed<GoalFormState>(() => ({
     name: this.name(),
@@ -91,8 +99,20 @@ export class GoalFormComponent {
   );
   readonly canSave = computed(() => Object.keys(this.errors()).length === 0);
 
+  constructor() {
+    if (this.editingId) {
+      this.goalsService.getGoal(this.editingId).subscribe((goal) => {
+        this.name.set(goal.name);
+        this.targetValue.set(String(goal.target.value));
+        this.targetUnit.set(goal.target.unit);
+        this.cadence.set(goal.cadence);
+        this.initialCadence.set(goal.cadence);
+      });
+    }
+  }
+
   cancel(): void {
-    void this.router.navigateByUrl('/goals');
+    void this.router.navigateByUrl(this.editingId ? `/goals/${this.editingId}` : '/goals');
   }
 
   submit(): void {
@@ -115,7 +135,10 @@ export class GoalFormComponent {
           }
         : {}),
     };
-    this.goalsService.createGoal(input).subscribe((goal) => {
+    const request$ = this.editingId
+      ? this.goalsService.updateGoal(this.editingId, input)
+      : this.goalsService.createGoal(input);
+    request$.subscribe((goal) => {
       void this.router.navigateByUrl(`/goals/${goal.id}`);
     });
   }

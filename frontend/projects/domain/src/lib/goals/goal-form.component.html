@@ -1,4 +1,5 @@
 <form class="goal-form" (ngSubmit)="submit()" data-testid="goal-form">
+  <h1 class="goal-form__title">{{ title }}</h1>
   <hg-health-text-field
     label="Name"
     [value]="name()"
@@ -27,6 +28,11 @@
         <mat-option [value]="option.id">{{ option.label }}</mat-option>
       }
     </mat-select>
+    @if (isEditing && cadenceChanged()) {
+      <mat-hint data-testid="goal-form-cadence-note">
+        Streak windows recompute from now; existing entries kept.
+      </mat-hint>
+    }
   </mat-form-field>
 
   @if (cadence() === 'weekly') {
@@ -79,7 +85,7 @@
       data-testid="goal-form-save"
       [disabled]="!canSave()"
     >
-      Create goal
+      {{ isEditing ? 'Save changes' : 'Create goal' }}
     </button>
   </div>
 </form>

@@ -27,11 +27,14 @@ export interface CreateGoalInput {
   readonly customInterval?: CustomInterval;
 }
 
+export type UpdateGoalInput = CreateGoalInput;
+
 export interface IGoalsService {
   getGoalSummaries(): Observable<readonly GoalSummary[]>;
   getGoals(): Observable<readonly GoalSummary[]>;
   getGoal(id: string): Observable<GoalSummary>;
   createGoal(input: CreateGoalInput): Observable<GoalSummary>;
+  updateGoal(id: string, input: UpdateGoalInput): Observable<GoalSummary>;
 }
 
 export const GOALS_SERVICE = new InjectionToken<IGoalsService>('GOALS_SERVICE');
