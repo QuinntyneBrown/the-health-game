@@ -10,7 +10,7 @@
     "build:domain": "ng build domain",
     "build:libs": "npm run build:api && npm run build:components && npm run build:domain",
     "watch": "ng build --watch --configuration development",
-    "test": "npm run build:libs && ng test",
+    "test": "npm run build:libs && ng test the-health-game && ng test api",
     "e2e": "playwright test",
     "lint": "ng lint"
   },
