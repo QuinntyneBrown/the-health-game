@@ -46,4 +46,28 @@ describe('GoalsService.getGoals', () => {
     req.flush([]);
     expect(await promise).toEqual([]);
   });
+
+  it('POSTs /api/goals with the create input and returns the created goal', async () => {
+    const input = {
+      name: 'Hydrate',
+      cadence: 'daily' as const,
+      target: { value: 8, unit: 'cups' },
+    };
+    const promise = firstValueFrom(service.createGoal(input));
+    const req = controller.expectOne(`${config.apiBaseUrl}/api/goals`);
+    expect(req.request.method).toBe('POST');
+    expect(req.request.body).toEqual(input);
+    req.flush({
+      id: 'g-1',
+      name: 'Hydrate',
+      description: '',
+      cadence: 'daily',
+      target: { value: 8, unit: 'cups' },
+      completedQuantity: 0,
+      currentStreak: 0,
+      longestStreak: 0,
+      rewardName: '',
+    });
+    expect((await promise).id).toBe('g-1');
+  });
 });
