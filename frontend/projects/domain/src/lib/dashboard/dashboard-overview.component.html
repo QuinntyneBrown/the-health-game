@@ -3,6 +3,12 @@
     <hg-user-avatar size="medium" name="You" />
   </div>
 
+  <span
+    *hgIfRole="'admin'"
+    class="dashboard-overview__admin"
+    data-testid="dashboard-admin-chip"
+  >Admin</span>
+
   <hg-page-header
     actionIcon="add"
     actionLabel="New goal"

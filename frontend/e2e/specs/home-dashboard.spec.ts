@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 02-TC-V-001..007, 02-TC-C-001..010, 02-TC-L-001..010, 02-TC-R-001..006, 02-TC-F-001..012
+// Traces to: 02-TC-V-001..007, 02-TC-C-001..010, 02-TC-L-001..010, 02-TC-R-001..006, 02-TC-F-001..013
 // Description: Dashboard greeting renders with Inter font, weight 500, sizes 22/28/32 px (mobile/tablet/desktop).
 // Section labels render with Inter weight 500 at 18 px.
 import AxeBuilder from '@axe-core/playwright';
@@ -46,6 +46,32 @@ async function authenticate(page: import('@playwright/test').Page): Promise<void
 }
 
 test.describe('Home Dashboard — greeting typography', () => {
+  test('admin chip is hidden for non-admin users (02-TC-F-013)', async ({ page }) => {
+    await authenticate(page); // default profile has roles: []
+    await page.goto('/home');
+    await expect(page.getByTestId('dashboard-admin-chip')).toBeHidden();
+  });
+
+  test('admin chip is visible for admin users (02-TC-F-013)', async ({ page }) => {
+    await authenticate(page);
+    await page.route('**/api/users/me**', (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({
+          displayName: 'Quinn',
+          email: 'quinn@example.com',
+          avatarUrl: null,
+          roles: ['admin'],
+        }),
+      }),
+    );
+    await page.goto('/home');
+    const adminChip = page.getByTestId('dashboard-admin-chip');
+    await expect(adminChip).toBeVisible();
+    await expect(adminChip).toContainText(/admin/i);
+  });
+
   test('zero-activity prompt — goals exist but no activity today (02-TC-F-012)', async ({
     page,
   }) => {

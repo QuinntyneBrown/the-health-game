@@ -11,6 +11,8 @@ import {
   UserAvatarComponent,
 } from 'components';
 
+import { IfRoleDirective } from '../auth/if-role.directive';
+
 import { DashboardOverview } from './dashboard-overview.model';
 import { DASHBOARD_SERVICE } from './dashboard.service.contract';
 
@@ -27,6 +29,7 @@ const emptyOverview: DashboardOverview = {
   imports: [
     EmptyStateComponent,
     GoalCardComponent,
+    IfRoleDirective,
     MetricCardComponent,
     PageHeaderComponent,
     RewardCardComponent,

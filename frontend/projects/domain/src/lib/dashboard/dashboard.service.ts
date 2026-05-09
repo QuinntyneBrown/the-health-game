@@ -1,6 +1,13 @@
 import { Injectable, inject } from '@angular/core';
-import { GOALS_SERVICE, GoalCadence, REWARDS_SERVICE, Reward, USERS_SERVICE } from 'api';
-import { Observable, combineLatest, map } from 'rxjs';
+import {
+  AuthService,
+  GOALS_SERVICE,
+  GoalCadence,
+  REWARDS_SERVICE,
+  Reward,
+  USERS_SERVICE,
+} from 'api';
+import { Observable, combineLatest, map, tap } from 'rxjs';
 
 import {
   DashboardGoalItem,
@@ -30,12 +37,15 @@ export class DashboardService implements IDashboardService {
   private readonly goalsService = inject(GOALS_SERVICE);
   private readonly rewardsService = inject(REWARDS_SERVICE);
   private readonly usersService = inject(USERS_SERVICE);
+  private readonly authService = inject(AuthService);
 
   getOverview(): Observable<DashboardOverview> {
     return combineLatest([
       this.goalsService.getGoals(),
       this.rewardsService.getRewards(),
-      this.usersService.getCurrentUser(),
+      this.usersService.getCurrentUser().pipe(
+        tap((user) => this.authService.setRoles(user.roles)),
+      ),
     ]).pipe(
       map(([goals, rewards, user]) => {
         const completedGoals = goals.filter(
