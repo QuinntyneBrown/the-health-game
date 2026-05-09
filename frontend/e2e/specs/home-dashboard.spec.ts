@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 02-TC-V-001..007, 02-TC-C-001..010, 02-TC-L-001..010, 02-TC-R-001..006, 02-TC-F-001..014, 02-TC-B-001..006, 02-TC-A-001..006, 02-TC-D-001..005, 02-TC-P-001
+// Traces to: 02-TC-V-001..007, 02-TC-C-001..010, 02-TC-L-001..010, 02-TC-R-001..006, 02-TC-F-001..014, 02-TC-B-001..006, 02-TC-A-001..006, 02-TC-D-001..005, 02-TC-P-001..002
 // Description: Dashboard greeting renders with Inter font, weight 500, sizes 22/28/32 px (mobile/tablet/desktop).
 // Section labels render with Inter weight 500 at 18 px.
 import AxeBuilder from '@axe-core/playwright';
@@ -46,6 +46,26 @@ async function authenticate(page: import('@playwright/test').Page): Promise<void
 }
 
 test.describe('Home Dashboard — greeting typography', () => {
+  test('dashboard data API timings are <= 300 ms each (02-TC-P-002)', async ({ page }) => {
+    const timings: { url: string; ms: number }[] = [];
+    page.on('request', (req) => {
+      if (!/\/api\/(goals|rewards|users\/me)/.test(req.url())) return;
+      const startedAt = Date.now();
+      void req
+        .response()
+        .then(() => timings.push({ url: req.url(), ms: Date.now() - startedAt }))
+        .catch(() => undefined);
+    });
+
+    await authenticate(page);
+    await page.goto('/home', { waitUntil: 'networkidle' });
+
+    expect(timings.length).toBeGreaterThan(0);
+    for (const t of timings) {
+      expect(t.ms).toBeLessThanOrEqual(300);
+    }
+  });
+
   test('dashboard render uses a route-level chunk only (02-TC-P-001)', async ({ page }) => {
     const jsRequests: { url: string; mainJs: boolean; hasDashboard: boolean }[] = [];
     page.on('response', async (response) => {
