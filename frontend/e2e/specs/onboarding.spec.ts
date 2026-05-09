@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 01-TC-V-001..010, 01-TC-C-001..010, 01-TC-L-001..010, 01-TC-R-001..008, 01-TC-F-001..006
+// Traces to: 01-TC-V-001..010, 01-TC-C-001..010, 01-TC-L-001..010, 01-TC-R-001..008, 01-TC-F-001..007
 // Description: Onboarding headline ("Make health a game") renders with font family Inter weight 500
 //              and the design-spec font-size at each breakpoint (mobile = 28 px, tablet = 45 px,
 //              desktop = 57 px with line-height 1.1). Body description paragraph renders at
@@ -218,6 +218,30 @@ test.describe('Onboarding — headline typography', () => {
     expect(url.searchParams.get('code_challenge')).toBeTruthy();
     expect(url.searchParams.get('state')).toBeTruthy();
     expect(url.searchParams.get('client_id')).toBeTruthy();
+  });
+
+  test('page load leaks no auth tokens to console or network (TC-F-007)', async ({ page }) => {
+    const consoleMessages: string[] = [];
+    page.on('console', (msg) => consoleMessages.push(`${msg.type()}:${msg.text()}`));
+
+    const requestsWithAuth: string[] = [];
+    page.on('request', (req) => {
+      const auth = req.headers()['authorization'];
+      if (auth) {
+        requestsWithAuth.push(`${req.method()} ${req.url()} -> ${auth.slice(0, 16)}…`);
+      }
+    });
+
+    await page.goto('/onboarding');
+    await expect(page.getByTestId('onboarding-headline')).toBeVisible();
+    await page.waitForLoadState('networkidle');
+
+    expect(requestsWithAuth).toEqual([]);
+
+    const tokenPattern =
+      /\b(access[_-]?token|refresh[_-]?token|id[_-]?token|bearer\s+[a-z0-9._-]{16,})\b/i;
+    const leaks = consoleMessages.filter((m) => tokenPattern.test(m));
+    expect(leaks).toEqual([]);
   });
 
   test('OIDC callback with mismatched state rejects and routes to /onboarding (TC-F-006)', async ({

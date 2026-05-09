@@ -53,7 +53,7 @@ and made green. The /loop process picks the first test with
 | 42 | 01 | TC-F-004 | Code verifier stored in `sessionStorage` only | Not in localStorage; cleared after exchange | 2026-05-09T19:09:49Z |
 | 43 | 01 | TC-F-005 | After OIDC callback success | App routes to `/home` | 2026-05-09T19:13:17Z |
 | 44 | 01 | TC-F-006 | OIDC callback with mismatched `state` | Reject; route to `/onboarding` with toast (L2-013 §3) | 2026-05-09T19:15:55Z |
-| 45 | 01 | TC-F-007 | Page loads with no auth tokens leaked to console / network logs | Confirmed via DevTools | null |
+| 45 | 01 | TC-F-007 | Page loads with no auth tokens leaked to console / network logs | Confirmed via DevTools | 2026-05-09T19:17:11Z |
 | 46 | 01 | TC-F-008 | Direct visit to `/onboarding` while authenticated | Redirect to `/home` | null |
 | 47 | 01 | TC-B-001 | Tab order: Get started -> I have an account -> page-dot? -> Get started | Logical, single-row, no skipped controls | null |
 | 48 | 01 | TC-B-002 | Visible focus ring on every interactive element | Yes, color contrast >= 3:1 | null |
