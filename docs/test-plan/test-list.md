@@ -25,7 +25,7 @@ and made green. The /loop process picks the first test with
 | 14 | 01 | TC-C-004 | Headline text color | `#191D17` (on surface) | 2026-05-09T18:10:41Z |
 | 15 | 01 | TC-C-005 | Primary button background | `#006D3F` (primary) | 2026-05-09T18:11:42Z |
 | 16 | 01 | TC-C-006 | Primary button label color | `#FFFFFF` | 2026-05-09T18:12:51Z |
-| 17 | 01 | TC-C-007 | Secondary button border | `#C2C9BE` (outline-variant), 1 px | null |
+| 17 | 01 | TC-C-007 | Secondary button border | `#C2C9BE` (outline-variant), 1 px | 2026-05-09T18:13:54Z |
 | 18 | 01 | TC-C-008 | Active page-dot color | `#006D3F` | null |
 | 19 | 01 | TC-C-009 | Inactive page-dot color | `#F1F5ED` (surface-container-low) | null |
 | 20 | 01 | TC-C-010 | Text/background contrast meets WCAG AA | >= 4.5:1 normal text, >= 3:1 large text | null |
