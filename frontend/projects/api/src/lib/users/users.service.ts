@@ -18,4 +18,8 @@ export class UsersService implements IUsersService {
   updateCurrentUser(input: UpdateUserProfileInput): Observable<UserProfile> {
     return this.http.put<UserProfile>(`${this.apiBaseUrl}/api/users/me`, input);
   }
+
+  deleteCurrentUser(): Observable<void> {
+    return this.http.delete<void>(`${this.apiBaseUrl}/api/users/me`);
+  }
 }

@@ -1,7 +1,14 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
+import { MatDialog } from '@angular/material/dialog';
+import { firstValueFrom } from 'rxjs';
 import { HealthTextFieldComponent } from 'components';
 import { AuthService, USERS_SERVICE, UserProfile } from 'api';
+
+import {
+  DeleteAccountDialogComponent,
+  DeleteAccountDialogData,
+} from './delete-account-dialog.component';
 
 @Component({
   selector: 'lib-profile',
@@ -13,6 +20,7 @@ import { AuthService, USERS_SERVICE, UserProfile } from 'api';
 export class ProfileComponent {
   private readonly auth = inject(AuthService);
   private readonly users = inject(USERS_SERVICE);
+  private readonly dialog = inject(MatDialog);
 
   readonly profile = signal<UserProfile | undefined>(undefined);
   readonly editing = signal(false);
@@ -53,6 +61,20 @@ export class ProfileComponent {
         this.profile.set(updated);
         this.editing.set(false);
       });
+  }
+
+  async onDeleteAccount(): Promise<void> {
+    const current = this.profile();
+    if (!current) return;
+    const ref = this.dialog.open<
+      DeleteAccountDialogComponent,
+      DeleteAccountDialogData,
+      boolean
+    >(DeleteAccountDialogComponent, { data: { email: current.email } });
+    const confirmed = await firstValueFrom(ref.afterClosed());
+    if (!confirmed) return;
+    await firstValueFrom(this.users.deleteCurrentUser());
+    this.auth.signOut();
   }
 
   onSignOut(): void {

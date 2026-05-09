@@ -62,6 +62,16 @@
         <button mat-flat-button type="button" class="profile__signout" (click)="onSignOut()">
           Sign out
         </button>
+        <button
+          mat-stroked-button
+          color="warn"
+          type="button"
+          class="profile__delete"
+          data-testid="profile-delete"
+          (click)="onDeleteAccount()"
+        >
+          Delete account
+        </button>
       </div>
     }
   </section>

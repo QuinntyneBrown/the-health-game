@@ -11,6 +11,7 @@ export interface UpdateUserProfileInput {
 export interface IUsersService {
   getCurrentUser(): Observable<UserProfile>;
   updateCurrentUser(input: UpdateUserProfileInput): Observable<UserProfile>;
+  deleteCurrentUser(): Observable<void>;
 }
 
 export const USERS_SERVICE = new InjectionToken<IUsersService>('USERS_SERVICE');
