@@ -112,4 +112,12 @@ describe('GoalsService.getGoals', () => {
     });
     expect((await promise).name).toBe('Hydrate (revised)');
   });
+
+  it('DELETEs /api/goals/:id', async () => {
+    const promise = firstValueFrom(service.deleteGoal('g-1'));
+    const req = controller.expectOne(`${config.apiBaseUrl}/api/goals/g-1`);
+    expect(req.request.method).toBe('DELETE');
+    req.flush(null, { status: 204, statusText: 'No Content' });
+    await promise;
+  });
 });
