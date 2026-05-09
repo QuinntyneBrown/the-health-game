@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 02-TC-V-001..007, 02-TC-C-001..010, 02-TC-L-001..010, 02-TC-R-001..002
+// Traces to: 02-TC-V-001..007, 02-TC-C-001..010, 02-TC-L-001..010, 02-TC-R-001..003
 // Description: Dashboard greeting renders with Inter font, weight 500, sizes 22/28/32 px (mobile/tablet/desktop).
 // Section labels render with Inter weight 500 at 18 px.
 import AxeBuilder from '@axe-core/playwright';
@@ -62,6 +62,18 @@ test.describe('Home Dashboard — greeting typography', () => {
       const root = page.locator('hg-dashboard-overview .dashboard-overview').first();
       const rowGap = await root.evaluate((el) => getComputedStyle(el).rowGap);
       expect(rowGap).toBe('24px');
+    });
+
+    test('desktop shows drawer nav, hides bottom and rail (02-TC-R-003)', async ({ page }) => {
+      await authenticate(page);
+
+      const drawer = page.locator('hg-navigation-bar.app-shell__navigation--drawer');
+      const rail = page.locator('hg-navigation-bar.app-shell__navigation--rail');
+      const bottom = page.locator('hg-navigation-bar.app-shell__navigation--bottom');
+
+      await expect(drawer).toBeVisible();
+      await expect(rail).toBeHidden();
+      await expect(bottom).toBeHidden();
     });
 
     test('desktop main content is bounded by max content width (02-TC-L-010)', async ({
