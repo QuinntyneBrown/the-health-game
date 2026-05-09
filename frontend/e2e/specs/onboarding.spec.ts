@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 01-TC-V-001..010, 01-TC-C-001..010, 01-TC-L-001..010, 01-TC-R-001..004
+// Traces to: 01-TC-V-001..010, 01-TC-C-001..010, 01-TC-L-001..010, 01-TC-R-001..005
 // Description: Onboarding headline ("Make health a game") renders with font family Inter weight 500
 //              and the design-spec font-size at each breakpoint (mobile = 28 px, tablet = 45 px,
 //              desktop = 57 px with line-height 1.1). Body description paragraph renders at
@@ -690,6 +690,37 @@ test.describe('Onboarding — headline typography', () => {
 
       expect(Math.abs(rects[0].top - rects[1].top)).toBeLessThan(2);
       expect(rects[1].left - rects[0].right).toBeCloseTo(16, 0);
+    });
+
+    test('viewport 1440x900 — desktop split layout with brand wordmark visible (TC-R-005)', async ({
+      page,
+    }) => {
+      await page.setViewportSize({ width: 1440, height: 900 });
+      await page.goto('/onboarding');
+
+      const overflow = await page.evaluate(() => ({
+        scrollWidth: document.documentElement.scrollWidth,
+        clientWidth: document.documentElement.clientWidth,
+      }));
+      expect(overflow.scrollWidth).toBeLessThanOrEqual(overflow.clientWidth);
+
+      await expect(page.getByTestId('onboarding-wordmark')).toBeVisible();
+
+      const root = page.getByTestId('onboarding');
+      const hero = page.getByTestId('onboarding-hero');
+      const headline = page.getByTestId('onboarding-headline');
+      const rootRect = await root.evaluate((el) =>
+        (el as HTMLElement).getBoundingClientRect(),
+      );
+      const heroRect = await hero.evaluate((el) =>
+        (el as HTMLElement).getBoundingClientRect(),
+      );
+      const headlineRect = await headline.evaluate((el) =>
+        (el as HTMLElement).getBoundingClientRect(),
+      );
+      const center = rootRect.left + rootRect.width / 2;
+      expect(heroRect.left).toBeGreaterThanOrEqual(center - 4);
+      expect(headlineRect.right).toBeLessThanOrEqual(center + 4);
     });
 
     test('desktop layout splits ~50/50 with hero on the right (TC-L-010)', async ({ page }) => {
