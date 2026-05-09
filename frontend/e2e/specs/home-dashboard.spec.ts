@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 02-TC-V-001..007, 02-TC-C-001..010, 02-TC-L-001..009
+// Traces to: 02-TC-V-001..007, 02-TC-C-001..010, 02-TC-L-001..010
 // Description: Dashboard greeting renders with Inter font, weight 500, sizes 22/28/32 px (mobile/tablet/desktop).
 // Section labels render with Inter weight 500 at 18 px.
 import AxeBuilder from '@axe-core/playwright';
@@ -62,6 +62,15 @@ test.describe('Home Dashboard — greeting typography', () => {
       const root = page.locator('hg-dashboard-overview .dashboard-overview').first();
       const rowGap = await root.evaluate((el) => getComputedStyle(el).rowGap);
       expect(rowGap).toBe('24px');
+    });
+
+    test('desktop main content is bounded by max content width (02-TC-L-010)', async ({
+      page,
+    }) => {
+      await authenticate(page);
+      const root = page.locator('hg-dashboard-overview .dashboard-overview').first();
+      const width = await root.evaluate((el) => el.getBoundingClientRect().width);
+      expect(width).toBeLessThanOrEqual(1152);
     });
 
     test('dashboard header avatar is 48 px on desktop (02-TC-L-007)', async ({ page }) => {
