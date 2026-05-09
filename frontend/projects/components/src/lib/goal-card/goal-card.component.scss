@@ -67,7 +67,9 @@
 .goal-card__description,
 .goal-card__progress-label {
   color: var(--hg-color-on-surface-variant);
-  font-size: var(--hg-font-size-body-sm);
+  font-family: Inter, Roboto, Arial, sans-serif;
+  font-size: 13px;
+  font-weight: 400;
   margin: 0;
 }
 

@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 02-TC-V-001..004
+// Traces to: 02-TC-V-001..005
 // Description: Dashboard greeting renders with Inter font, weight 500, sizes 22/28/32 px (mobile/tablet/desktop).
 // Section labels render with Inter weight 500 at 18 px.
 import { expect, test } from '@playwright/test';
@@ -54,6 +54,72 @@ test.describe('Home Dashboard — greeting typography', () => {
       expect(computed.fontFamily.split(',')[0].replace(/['"]/g, '').trim()).toBe('Inter');
       expect(computed.fontWeight).toBe('500');
       expect(computed.fontSize).toBe('32px');
+    });
+
+    test('goal/reward card descriptions are Inter 12-13 px / weight 400 (02-TC-V-005)', async ({
+      page,
+    }) => {
+      await authenticate(page);
+      await page.route('**/api/goals**', (route) =>
+        route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify([
+            {
+              id: 'g1',
+              name: 'Drink water',
+              description: 'Stay hydrated',
+              cadence: 'daily',
+              target: { value: 8, unit: 'glasses' },
+              completedQuantity: 4,
+              currentStreak: 3,
+              longestStreak: 5,
+              rewardName: '',
+            },
+          ]),
+        }),
+      );
+      await page.route('**/api/rewards**', (route) =>
+        route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify([
+            {
+              id: 'r1',
+              userId: 'u1',
+              goalId: 'g1',
+              name: 'Movie night',
+              description: 'Treat',
+              condition: { type: 'goal-target' },
+              status: 'pending',
+              earnedAt: null,
+            },
+          ]),
+        }),
+      );
+
+      const checkRange = async (selector: string): Promise<void> => {
+        const el = page.locator(selector).first();
+        await expect(el).toBeVisible();
+        const computed = await el.evaluate((node) => {
+          const style = getComputedStyle(node);
+          return {
+            fontFamily: style.fontFamily,
+            fontWeight: parseFloat(style.fontWeight),
+            fontSize: parseFloat(style.fontSize),
+          };
+        });
+        expect(computed.fontFamily.split(',')[0].replace(/['"]/g, '').trim()).toBe('Inter');
+        expect(computed.fontWeight).toBe(400);
+        expect(computed.fontSize).toBeGreaterThanOrEqual(12);
+        expect(computed.fontSize).toBeLessThanOrEqual(13);
+      };
+
+      await page.goto('/goals');
+      await checkRange('.goal-card__description');
+
+      await page.goto('/rewards');
+      await checkRange('.reward-card__description');
     });
 
     test('goal and reward card titles are Inter 14 px / weight 500 (02-TC-V-004)', async ({
