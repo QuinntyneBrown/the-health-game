@@ -1,3 +1,7 @@
+---
+status: Accepted
+---
+
 # Task 26 — Reward-earned in-app notification
 
 **Traces to:** L2-010, L2-021
