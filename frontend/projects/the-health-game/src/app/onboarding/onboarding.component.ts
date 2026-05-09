@@ -74,6 +74,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
         font-family: Inter, Roboto, Arial, sans-serif;
         font-weight: 500;
         font-size: 28px;
+        color: #191d17;
         margin: 0;
       }
 
