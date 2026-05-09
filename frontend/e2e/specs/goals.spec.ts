@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 03-TC-V-001..006
+// Traces to: 03-TC-V-001..007
 // Description: /goals page title "Goals" renders with Inter weight 500 at 22/32 px.
 // Subtitle is Inter 13 px weight 400 with computed counts.
 import { expect, test } from '@playwright/test';
@@ -202,6 +202,35 @@ test.describe('Goals page — header typography', () => {
       expect(computed.fontFamily.split(',')[0].replace(/['"]/g, '').trim()).toBe('Inter');
       expect(computed.fontWeight).toBe('500');
       expect(computed.fontSize).toBe('32px');
+    });
+  });
+
+  test.describe('empty state', () => {
+    test.use({ viewport: { width: 1440, height: 900 } });
+
+    test('empty state heading is Inter 22 px / weight 500 (03-TC-V-007)', async ({ page }) => {
+      await authenticate(page);
+      await page.unroute('**/api/goals**');
+      await page.route('**/api/goals**', (route) =>
+        route.fulfill({ status: 200, contentType: 'application/json', body: '[]' }),
+      );
+      await page.goto('/goals');
+
+      const heading = page.locator('lib-goal-list hg-empty-state .empty-state__title').first();
+      await expect(heading).toBeVisible();
+      await expect(heading).toHaveText('No goals yet');
+
+      const computed = await heading.evaluate((el) => {
+        const style = getComputedStyle(el);
+        return {
+          fontFamily: style.fontFamily,
+          fontWeight: style.fontWeight,
+          fontSize: style.fontSize,
+        };
+      });
+      expect(computed.fontFamily.split(',')[0].replace(/['"]/g, '').trim()).toBe('Inter');
+      expect(computed.fontWeight).toBe('500');
+      expect(computed.fontSize).toBe('22px');
     });
   });
 
