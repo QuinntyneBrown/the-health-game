@@ -44,7 +44,7 @@ and made green. The /loop process picks the first test with
 | 33 | 01 | TC-R-003 | Viewport 768x1024 | Tablet layout — buttons inline, larger hero | 2026-05-09T18:49:19Z |
 | 34 | 01 | TC-R-004 | Viewport 1024x768 | Tablet layout still applies (rail variant for app shell when signed in) | 2026-05-09T18:50:40Z |
 | 35 | 01 | TC-R-005 | Viewport 1440x900 | Desktop layout — split hero with brand wordmark visible | 2026-05-09T18:51:53Z |
-| 36 | 01 | TC-R-006 | Viewport >= 1920 wide | Content max-width respected (no edge-to-edge stretching) | null |
+| 36 | 01 | TC-R-006 | Viewport >= 1920 wide | Content max-width respected (no edge-to-edge stretching) | 2026-05-09T18:53:13Z |
 | 37 | 01 | TC-R-007 | Window resize during render | Layout recomputes without flicker | null |
 | 38 | 01 | TC-R-008 | Page-dot indicator visible at all breakpoints | yes | null |
 | 39 | 01 | TC-F-001 | Click "Get started" | Browser navigates to OIDC `/authorize` URL (PKCE flow) | null |

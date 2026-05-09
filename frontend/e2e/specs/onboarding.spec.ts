@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 01-TC-V-001..010, 01-TC-C-001..010, 01-TC-L-001..010, 01-TC-R-001..005
+// Traces to: 01-TC-V-001..010, 01-TC-C-001..010, 01-TC-L-001..010, 01-TC-R-001..006
 // Description: Onboarding headline ("Make health a game") renders with font family Inter weight 500
 //              and the design-spec font-size at each breakpoint (mobile = 28 px, tablet = 45 px,
 //              desktop = 57 px with line-height 1.1). Body description paragraph renders at
@@ -690,6 +690,26 @@ test.describe('Onboarding — headline typography', () => {
 
       expect(Math.abs(rects[0].top - rects[1].top)).toBeLessThan(2);
       expect(rects[1].left - rects[0].right).toBeCloseTo(16, 0);
+    });
+
+    test('viewport >= 1920 — content max-width is respected (TC-R-006)', async ({ page }) => {
+      await page.setViewportSize({ width: 1920, height: 1080 });
+      await page.goto('/onboarding');
+
+      const root = page.getByTestId('onboarding');
+      await expect(root).toBeVisible();
+
+      const rect = await root.evaluate((el) => {
+        const r = (el as HTMLElement).getBoundingClientRect();
+        return { left: r.left, right: r.right, width: r.width };
+      });
+
+      // Content does not span edge-to-edge: at least one side has visible inset
+      const leftInset = rect.left;
+      const rightInset = 1920 - rect.right;
+      expect(leftInset + rightInset).toBeGreaterThan(0);
+      // Content max-width capped well below the viewport
+      expect(rect.width).toBeLessThanOrEqual(1440);
     });
 
     test('viewport 1440x900 — desktop split layout with brand wordmark visible (TC-R-005)', async ({
