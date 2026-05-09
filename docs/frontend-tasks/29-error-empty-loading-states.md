@@ -1,3 +1,7 @@
+---
+status: Accepted
+---
+
 # Task 29 — Error, empty, and loading states baseline
 
 **Traces to:** L2-016, L2-021
