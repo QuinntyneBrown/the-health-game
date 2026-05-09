@@ -71,6 +71,7 @@
             [progressValue]="goal.progressValue"
             [rewardName]="goal.rewardName"
             [title]="goal.name"
+            (actionSelected)="onGoalActionSelected(goal.id)"
           />
         }
       </div>

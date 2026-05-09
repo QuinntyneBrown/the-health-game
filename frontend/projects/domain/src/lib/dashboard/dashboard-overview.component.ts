@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { Router } from '@angular/router';
 import {
   GoalCardComponent,
   MetricCardComponent,
@@ -36,10 +37,15 @@ const emptyOverview: DashboardOverview = {
 })
 export class DashboardOverviewComponent {
   private readonly dashboardService = inject(DASHBOARD_SERVICE);
+  private readonly router = inject(Router);
 
   readonly overview = toSignal(this.dashboardService.getOverview(), {
     initialValue: emptyOverview,
   });
+
+  onGoalActionSelected(goalId: string): void {
+    void this.router.navigateByUrl(`/goals/${goalId}`);
+  }
 
   readonly weeklyChart: readonly { label: string; value: number }[] = [
     { label: 'Mon', value: 60 },

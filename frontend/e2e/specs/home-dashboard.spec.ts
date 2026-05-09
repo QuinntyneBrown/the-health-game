@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 02-TC-V-001..007, 02-TC-C-001..010, 02-TC-L-001..010, 02-TC-R-001..006, 02-TC-F-001..005
+// Traces to: 02-TC-V-001..007, 02-TC-C-001..010, 02-TC-L-001..010, 02-TC-R-001..006, 02-TC-F-001..006
 // Description: Dashboard greeting renders with Inter font, weight 500, sizes 22/28/32 px (mobile/tablet/desktop).
 // Section labels render with Inter weight 500 at 18 px.
 import AxeBuilder from '@axe-core/playwright';
@@ -46,6 +46,38 @@ async function authenticate(page: import('@playwright/test').Page): Promise<void
 }
 
 test.describe('Home Dashboard — greeting typography', () => {
+  test('clicking dashboard goal card navigates to /goals/{id} (02-TC-F-006)', async ({ page }) => {
+    await authenticate(page);
+    await page.route('**/api/goals**', (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify([
+          {
+            id: 'g42',
+            name: 'Drink water',
+            description: '',
+            cadence: 'daily',
+            target: { value: 8, unit: 'glasses' },
+            completedQuantity: 4,
+            currentStreak: 0,
+            longestStreak: 0,
+            rewardName: '',
+          },
+        ]),
+      }),
+    );
+    await page.goto('/home');
+
+    const card = page.locator('hg-goal-card').first();
+    await expect(card).toBeVisible();
+    // Click the action button on the card (the test plan's "click goal card" action)
+    await card.getByRole('button', { name: /Log/i }).click();
+
+    await page.waitForURL(/\/goals\/g42(\b|\/|$)/);
+    expect(page.url()).toContain('/goals/g42');
+  });
+
   test('Recent rewards shows up to 3 earned, newest first (02-TC-F-005)', async ({ page }) => {
     await authenticate(page);
     await page.route('**/api/rewards**', (route) =>
