@@ -1,3 +1,7 @@
+---
+status: Accepted
+---
+
 # Task 16 — View goals list with streaks
 
 **Traces to:** L2-002, L2-008, L2-020
