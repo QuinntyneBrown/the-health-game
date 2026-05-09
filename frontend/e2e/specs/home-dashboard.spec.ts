@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 02-TC-V-001..007, 02-TC-C-001..010, 02-TC-L-001..010, 02-TC-R-001..006, 02-TC-F-001..014, 02-TC-B-001..006, 02-TC-A-001..004
+// Traces to: 02-TC-V-001..007, 02-TC-C-001..010, 02-TC-L-001..010, 02-TC-R-001..006, 02-TC-F-001..014, 02-TC-B-001..006, 02-TC-A-001..005
 // Description: Dashboard greeting renders with Inter font, weight 500, sizes 22/28/32 px (mobile/tablet/desktop).
 // Section labels render with Inter weight 500 at 18 px.
 import AxeBuilder from '@axe-core/playwright';
@@ -46,6 +46,28 @@ async function authenticate(page: import('@playwright/test').Page): Promise<void
 }
 
 test.describe('Home Dashboard — greeting typography', () => {
+  test('streak meaning is not color-only — icon + label + color (02-TC-A-005)', async ({ page }) => {
+    await authenticate(page);
+    await page.goto('/home');
+
+    const streakCard = page.locator('mat-card.metric-card--streak').first();
+    await expect(streakCard).toBeVisible();
+
+    const icon = streakCard.locator('.metric-card__icon');
+    const label = streakCard.locator('.metric-card__label');
+
+    await expect(icon).toBeVisible();
+    const iconText = await icon.textContent();
+    expect(iconText?.trim().length ?? 0).toBeGreaterThan(0);
+
+    await expect(label).toBeVisible();
+    const labelText = await label.textContent();
+    expect(labelText?.trim().length ?? 0).toBeGreaterThan(0);
+
+    const ariaLabel = await streakCard.evaluate((el) => el.getAttribute('aria-label'));
+    expect(ariaLabel ?? '').not.toBe('');
+  });
+
   test('"New goal" CTA exposes accessible name "New goal" (02-TC-A-004)', async ({ page }) => {
     await authenticate(page);
     await page.goto('/home');

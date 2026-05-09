@@ -133,7 +133,7 @@ and made green. The /loop process picks the first test with
 | 122 | 02 | TC-A-002 | Sections wrapped in `<section aria-labelledby=...>` | Yes | 2026-05-09T22:14:45Z |
 | 123 | 02 | TC-A-003 | Bar chart exposes data via accessible name or table summary | Yes | 2026-05-09T22:16:55Z |
 | 124 | 02 | TC-A-004 | Icon-only "Add" button has `aria-label="New goal"` | Yes | 2026-05-09T22:18:09Z |
-| 125 | 02 | TC-A-005 | Streak chip text is not the sole conveyor of meaning (color + icon + label) | Yes | null |
+| 125 | 02 | TC-A-005 | Streak chip text is not the sole conveyor of meaning (color + icon + label) | Yes | 2026-05-09T22:19:25Z |
 | 126 | 02 | TC-A-006 | axe-core scan | 0 critical / serious | null |
 | 127 | 02 | TC-D-001 | Logging an activity from elsewhere then returning to dashboard | New totals visible after refetch (cache-bust or revalidate) | null |
 | 128 | 02 | TC-D-002 | Earning a reward | Surfaces on next dashboard load (L2-010 §2) | null |
