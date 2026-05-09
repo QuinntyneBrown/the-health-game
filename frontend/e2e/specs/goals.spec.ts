@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 03-TC-V-001..009, 03-TC-C-001..009
+// Traces to: 03-TC-V-001..009, 03-TC-C-001..010
 // Description: /goals page title "Goals" renders with Inter weight 500 at 22/32 px.
 // Subtitle is Inter 13 px weight 400 with computed counts.
 import { expect, test } from '@playwright/test';
@@ -236,6 +236,23 @@ test.describe('Goals page — header typography', () => {
 
   test.describe('goal form', () => {
     test.use({ viewport: { width: 1440, height: 900 } });
+
+    test('"New goal" button bg #006D3F / label #FFFFFF (03-TC-C-010)', async ({ page }) => {
+      await authenticate(page);
+      await page.goto('/goals');
+
+      const btn = page
+        .locator('lib-goal-list .page-header__action button')
+        .filter({ hasText: 'New goal' })
+        .first();
+      await expect(btn).toBeVisible();
+      const styles = await btn.evaluate((el) => {
+        const s = getComputedStyle(el);
+        return { bg: s.backgroundColor, color: s.color };
+      });
+      expect(styles.bg).toBe('rgb(0, 109, 63)');
+      expect(styles.color).toBe('rgb(255, 255, 255)');
+    });
 
     test('progress bar track is #E5E9E2 (03-TC-C-009)', async ({ page }) => {
       await authenticate(page);
