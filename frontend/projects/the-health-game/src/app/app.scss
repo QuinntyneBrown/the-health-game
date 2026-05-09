@@ -6,6 +6,23 @@
   min-height: 100dvh;
 }
 
+// Tablet rail layout: toolbar on top, rail on the left, main on the right.
+.app-shell:has(.app-shell__navigation--rail) {
+  grid-template-columns: auto minmax(0, 1fr);
+  grid-template-rows: auto minmax(0, 1fr);
+  grid-template-areas:
+    'toolbar toolbar'
+    'nav main';
+}
+
+.app-shell:has(.app-shell__navigation--rail) .app-shell__toolbar {
+  grid-area: toolbar;
+}
+
+.app-shell:has(.app-shell__navigation--rail) .app-shell__main {
+  grid-area: main;
+}
+
 .app-shell__toolbar {
   background: var(--hg-color-surface);
   border-bottom: var(--hg-border-subtle);
@@ -31,4 +48,10 @@
   position: sticky;
   bottom: 0;
   z-index: var(--hg-z-toolbar);
+}
+
+.app-shell__navigation--rail {
+  border-right: var(--hg-border-subtle);
+  grid-area: nav;
+  width: var(--hg-size-rail);
 }

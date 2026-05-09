@@ -2,17 +2,21 @@
 // Traces to: L2-020, L2-021, L2-030, L2-031, L2-033
 // Description: Verifies the root shell renders the library-based Material scaffold
 // and a Material bottom navigation with Home, Goals, Rewards, and Profile items.
+import { signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 
 import { App } from './app';
-import { provideViewport } from './viewport/viewport.signal';
+import { VIEWPORT } from './viewport/viewport.signal';
 
 describe('App', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [App],
-      providers: [provideRouter([]), provideViewport()],
+      providers: [
+        provideRouter([]),
+        { provide: VIEWPORT, useValue: signal('bottom').asReadonly() },
+      ],
     }).compileComponents();
   });
 
