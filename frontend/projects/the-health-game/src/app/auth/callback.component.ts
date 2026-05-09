@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from 'api';
 
@@ -11,16 +12,25 @@ export class CallbackComponent {
   private readonly auth = inject(AuthService);
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
+  private readonly snackBar = inject(MatSnackBar);
 
   constructor() {
     const params = this.route.snapshot.queryParamMap;
     const code = params.get('code');
     const state = params.get('state');
     if (code && state) {
-      void this.auth.handleRedirect(code, state).then(() => {
-        const target = this.auth.consumeReturnUrl() ?? '/home';
-        void this.router.navigateByUrl(target);
-      });
+      void this.auth.handleRedirect(code, state).then(
+        () => {
+          const target = this.auth.consumeReturnUrl() ?? '/home';
+          void this.router.navigateByUrl(target);
+        },
+        () => {
+          this.snackBar.open("We couldn't sign you in. Please try again.", 'Dismiss', {
+            duration: 6000,
+          });
+          void this.router.navigateByUrl('/onboarding');
+        },
+      );
     }
   }
 }
