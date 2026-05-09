@@ -3,6 +3,7 @@
   [class.user-avatar--small]="size() === 'small'"
   [class.user-avatar--medium]="size() === 'medium'"
   [class.user-avatar--large]="size() === 'large'"
+  role="img"
   [attr.aria-label]="name()"
 >
   @if (imageUrl()) {

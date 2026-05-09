@@ -23,6 +23,7 @@
       <mat-progress-bar
         class="metric-card__progress"
         mode="determinate"
+        [attr.aria-label]="label() + ' progress'"
         [value]="progressValue() ?? 0"
       />
     }

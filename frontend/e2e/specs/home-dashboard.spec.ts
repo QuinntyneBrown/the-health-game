@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 02-TC-V-001..007, 02-TC-C-001..010, 02-TC-L-001..010, 02-TC-R-001..006, 02-TC-F-001..014, 02-TC-B-001..006, 02-TC-A-001..005
+// Traces to: 02-TC-V-001..007, 02-TC-C-001..010, 02-TC-L-001..010, 02-TC-R-001..006, 02-TC-F-001..014, 02-TC-B-001..006, 02-TC-A-001..006
 // Description: Dashboard greeting renders with Inter font, weight 500, sizes 22/28/32 px (mobile/tablet/desktop).
 // Section labels render with Inter weight 500 at 18 px.
 import AxeBuilder from '@axe-core/playwright';
@@ -46,6 +46,29 @@ async function authenticate(page: import('@playwright/test').Page): Promise<void
 }
 
 test.describe('Home Dashboard — greeting typography', () => {
+  test('axe-core a11y scan reports 0 critical / serious violations (02-TC-A-006)', async ({
+    page,
+  }) => {
+    await authenticate(page);
+    await page.goto('/home');
+
+    const results = await new AxeBuilder({ page })
+      .include('hg-dashboard-overview')
+      .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'])
+      .analyze();
+
+    const blocking = results.violations.filter(
+      (v) => v.impact === 'critical' || v.impact === 'serious',
+    );
+    if (blocking.length > 0) {
+      console.warn(
+        'dashboard a11y violations:',
+        blocking.map((v) => ({ id: v.id, impact: v.impact, nodeCount: v.nodes.length })),
+      );
+    }
+    expect(blocking).toEqual([]);
+  });
+
   test('streak meaning is not color-only — icon + label + color (02-TC-A-005)', async ({ page }) => {
     await authenticate(page);
     await page.goto('/home');
