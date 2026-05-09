@@ -1,4 +1,5 @@
 using System.Security.Claims;
+using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HealthGame.Api.Middleware;
@@ -26,13 +27,6 @@ public sealed class ExceptionHandlingMiddleware(
 
     private async Task HandleExceptionAsync(HttpContext context, Exception exception)
     {
-        var statusCode = exception switch
-        {
-            ArgumentException => StatusCodes.Status400BadRequest,
-            UnauthorizedAccessException => StatusCodes.Status401Unauthorized,
-            _ => StatusCodes.Status500InternalServerError
-        };
-
         var userId =
             context.User.FindFirstValue(ClaimTypes.NameIdentifier) ??
             context.User.FindFirstValue("sub");
@@ -43,6 +37,19 @@ public sealed class ExceptionHandlingMiddleware(
             context.Request.Method,
             context.Request.Path.Value,
             userId);
+
+        if (exception is ValidationException validationException)
+        {
+            await WriteValidationProblemAsync(context, validationException);
+            return;
+        }
+
+        var statusCode = exception switch
+        {
+            ArgumentException => StatusCodes.Status400BadRequest,
+            UnauthorizedAccessException => StatusCodes.Status401Unauthorized,
+            _ => StatusCodes.Status500InternalServerError
+        };
 
         context.Response.Clear();
         context.Response.StatusCode = statusCode;
@@ -58,12 +65,43 @@ public sealed class ExceptionHandlingMiddleware(
             Instance = context.TraceIdentifier
         };
 
+        AttachCorrelationId(context, problem);
+
+        await context.Response.WriteAsJsonAsync(problem);
+    }
+
+    private static async Task WriteValidationProblemAsync(
+        HttpContext context,
+        ValidationException validationException)
+    {
+        var errors = validationException.Errors
+            .GroupBy(failure => failure.PropertyName)
+            .ToDictionary(
+                group => group.Key,
+                group => group.Select(failure => failure.ErrorMessage).ToArray());
+
+        context.Response.Clear();
+        context.Response.StatusCode = StatusCodes.Status400BadRequest;
+        context.Response.ContentType = "application/problem+json";
+
+        var problem = new ValidationProblemDetails(errors)
+        {
+            Status = StatusCodes.Status400BadRequest,
+            Title = "One or more validation errors occurred.",
+            Instance = context.TraceIdentifier
+        };
+
+        AttachCorrelationId(context, problem);
+
+        await context.Response.WriteAsJsonAsync(problem);
+    }
+
+    private static void AttachCorrelationId(HttpContext context, ProblemDetails problem)
+    {
         if (context.Items.TryGetValue(CorrelationIdMiddleware.HeaderName, out var correlationId))
         {
             problem.Extensions["correlationId"] = correlationId;
         }
-
-        await context.Response.WriteAsJsonAsync(problem);
     }
 
     private static string GetTitle(int statusCode)
