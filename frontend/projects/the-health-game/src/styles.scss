@@ -151,6 +151,14 @@ lib-goal-list {
   background-color: #f1f5ed;
 }
 
+lib-goal-list mat-button-toggle.mat-button-toggle-checked .mat-button-toggle-button {
+  background-color: #d2e8d4 !important;
+}
+
+lib-goal-list mat-button-toggle.mat-button-toggle-checked .segmented-filter__label {
+  color: #0c1f13 !important;
+}
+
 hg-empty-state .empty-state__title {
   font-family:
     Inter,

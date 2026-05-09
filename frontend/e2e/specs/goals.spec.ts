@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 03-TC-V-001..009, 03-TC-C-001..002
+// Traces to: 03-TC-V-001..009, 03-TC-C-001..003
 // Description: /goals page title "Goals" renders with Inter weight 500 at 22/32 px.
 // Subtitle is Inter 13 px weight 400 with computed counts.
 import { expect, test } from '@playwright/test';
@@ -236,6 +236,25 @@ test.describe('Goals page — header typography', () => {
 
   test.describe('goal form', () => {
     test.use({ viewport: { width: 1440, height: 900 } });
+
+    test('active filter chip is #D2E8D4 bg / #0C1F13 label (03-TC-C-003)', async ({ page }) => {
+      await authenticate(page);
+      await page.goto('/goals');
+
+      const active = page
+        .locator('lib-goal-list mat-button-toggle.mat-button-toggle-checked')
+        .first();
+      await expect(active).toBeVisible();
+      const label = active.locator('.segmented-filter__label');
+      const styles = await active.evaluate((el) => {
+        const inner = el.querySelector('.mat-button-toggle-button') ?? el;
+        return getComputedStyle(inner).backgroundColor;
+      });
+      expect(styles).toBe('rgb(210, 232, 212)');
+
+      const labelColor = await label.evaluate((el) => getComputedStyle(el).color);
+      expect(labelColor).toBe('rgb(12, 31, 19)');
+    });
 
     test('top bar background is #F7FBF3 (03-TC-C-002)', async ({ page }) => {
       await authenticate(page);
