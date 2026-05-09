@@ -157,7 +157,7 @@ and made green. The /loop process picks the first test with
 | 146 | 03 | TC-C-003 | Active filter chip | `#D2E8D4` background, `#0C1F13` label | 2026-05-09T23:24:42Z |
 | 147 | 03 | TC-C-004 | Inactive filter chip | transparent fill, `#C2C9BE` 1 px outline, `#191D17` label | 2026-05-09T23:26:51Z |
 | 148 | 03 | TC-C-005 | Goal card background (default) | `#EBEFE7` (surface-container) | 2026-05-09T23:29:06Z |
-| 149 | 03 | TC-C-006 | Highlighted "ready" card | `#94F7B4` (primary container) | null |
+| 149 | 03 | TC-C-006 | Highlighted "ready" card | `#94F7B4` (primary container) | 2026-05-09T23:33:07Z |
 | 150 | 03 | TC-C-007 | Goal card icon backgrounds rotate through container palette | green / blue / orange / pink containers | null |
 | 151 | 03 | TC-C-008 | Progress bar fill | `#006D3F` | null |
 | 152 | 03 | TC-C-009 | Progress bar track | `#E5E9E2` | null |

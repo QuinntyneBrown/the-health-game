@@ -38,6 +38,7 @@
           [currentStreakLabel]="currentStreakLabel(goal)"
           [longestStreakLabel]="longestStreakLabel(goal)"
           [rewardName]="goal.rewardName"
+          [tone]="toneFor(goal)"
           actionLabel="Open"
           (actionSelected)="onCardSelected(goal)"
         />

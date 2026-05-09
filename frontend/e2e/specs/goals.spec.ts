@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 03-TC-V-001..009, 03-TC-C-001..005
+// Traces to: 03-TC-V-001..009, 03-TC-C-001..006
 // Description: /goals page title "Goals" renders with Inter weight 500 at 22/32 px.
 // Subtitle is Inter 13 px weight 400 with computed counts.
 import { expect, test } from '@playwright/test';
@@ -236,6 +236,36 @@ test.describe('Goals page — header typography', () => {
 
   test.describe('goal form', () => {
     test.use({ viewport: { width: 1440, height: 900 } });
+
+    test('ready (complete) goal card background is #94F7B4 (03-TC-C-006)', async ({ page }) => {
+      await authenticate(page);
+      await page.unroute('**/api/goals**');
+      await page.route('**/api/goals**', (route) =>
+        route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify([
+            {
+              id: 'g1',
+              name: 'Walk',
+              description: '',
+              cadence: 'daily',
+              target: { value: 10, unit: 'min' },
+              completedQuantity: 10,
+              currentStreak: 0,
+              longestStreak: 0,
+              rewardName: '',
+            },
+          ]),
+        }),
+      );
+      await page.goto('/goals');
+
+      const card = page.locator('lib-goal-list .goal-card--complete').first();
+      await expect(card).toBeVisible();
+      const bg = await card.evaluate((el) => getComputedStyle(el).backgroundColor);
+      expect(bg).toBe('rgb(148, 247, 180)');
+    });
 
     test('default goal card background is #EBEFE7 (03-TC-C-005)', async ({ page }) => {
       await authenticate(page);

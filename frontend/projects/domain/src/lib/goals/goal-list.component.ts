@@ -5,6 +5,7 @@ import { GOALS_SERVICE, GoalSummary } from 'api';
 import {
   EmptyStateComponent,
   GoalCardComponent,
+  GoalCardTone,
   PageHeaderComponent,
   SegmentedFilterComponent,
   SegmentedFilterOption,
@@ -66,6 +67,14 @@ export class GoalListComponent {
 
   longestStreakLabel(goal: GoalSummary): string {
     return `Best ${goal.longestStreak}`;
+  }
+
+  toneFor(goal: GoalSummary): GoalCardTone {
+    if (goal.target.value > 0 && goal.completedQuantity >= goal.target.value) {
+      return 'complete';
+    }
+    if (goal.currentStreak > 0) return 'streak';
+    return 'default';
   }
 
   onCardSelected(goal: GoalSummary): void {
