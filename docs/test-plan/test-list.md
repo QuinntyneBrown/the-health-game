@@ -118,7 +118,7 @@ and made green. The /loop process picks the first test with
 | 107 | 02 | TC-F-007 | Click "Log activity" CTA on goal card | Opens log activity flow for that goal | 2026-05-09T21:38:16Z |
 | 108 | 02 | TC-F-008 | Click "New goal" CTA | Navigates to create-goal flow | 2026-05-09T21:41:15Z |
 | 109 | 02 | TC-F-009 | Click reward in "Recent rewards" | Navigates to `/rewards/{id}` | 2026-05-09T21:44:30Z |
-| 110 | 02 | TC-F-010 | Dashboard shows only this user's data — switching accounts clears prior data | confirmed | null |
+| 110 | 02 | TC-F-010 | Dashboard shows only this user's data — switching accounts clears prior data | confirmed | 2026-05-09T21:46:29Z |
 | 111 | 02 | TC-F-011 | Empty state — no goals yet | Shows onboarding CTA card (mobile/tablet/desktop) | null |
 | 112 | 02 | TC-F-012 | Empty state — goals but zero activity today | Shows "log your first activity" prompt | null |
 | 113 | 02 | TC-F-013 | Admin role chip / admin link visible only when user has Admin role (L2-015) | confirmed | null |

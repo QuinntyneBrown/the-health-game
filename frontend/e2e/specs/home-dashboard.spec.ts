@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 02-TC-V-001..007, 02-TC-C-001..010, 02-TC-L-001..010, 02-TC-R-001..006, 02-TC-F-001..009
+// Traces to: 02-TC-V-001..007, 02-TC-C-001..010, 02-TC-L-001..010, 02-TC-R-001..006, 02-TC-F-001..010
 // Description: Dashboard greeting renders with Inter font, weight 500, sizes 22/28/32 px (mobile/tablet/desktop).
 // Section labels render with Inter weight 500 at 18 px.
 import AxeBuilder from '@axe-core/playwright';
@@ -46,6 +46,89 @@ async function authenticate(page: import('@playwright/test').Page): Promise<void
 }
 
 test.describe('Home Dashboard — greeting typography', () => {
+  test('switching accounts clears prior dashboard data (02-TC-F-010)', async ({ page }) => {
+    // User A: greeting "Quinn" + goal "Walk"
+    await authenticate(page);
+    await page.route(
+      '**/api/goals**',
+      (route) =>
+        route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify([
+            {
+              id: 'g-A',
+              name: 'Walk',
+              description: '',
+              cadence: 'daily',
+              target: { value: 1, unit: 'walks' },
+              completedQuantity: 0,
+              currentStreak: 0,
+              longestStreak: 0,
+              rewardName: '',
+            },
+          ]),
+        }),
+      { times: 1 },
+    );
+    await page.goto('/home');
+    await expect(page.locator('hg-goal-card', { hasText: 'Walk' })).toBeVisible();
+
+    // Sign out: clear access token + auth state on the origin
+    await page.evaluate(() => {
+      sessionStorage.removeItem('hg.oidc.access-token');
+      sessionStorage.removeItem('hg.oidc.verifier');
+      sessionStorage.removeItem('hg.oidc.state');
+    });
+
+    // User B: different display name + goal "Run"
+    await page.route('**/api/users/me**', (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({
+          displayName: 'Sam',
+          email: 'sam@example.com',
+          avatarUrl: null,
+          roles: [],
+        }),
+      }),
+    );
+    await page.route('**/api/goals**', (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify([
+          {
+            id: 'g-B',
+            name: 'Run',
+            description: '',
+            cadence: 'daily',
+            target: { value: 1, unit: 'runs' },
+            completedQuantity: 0,
+            currentStreak: 0,
+            longestStreak: 0,
+            rewardName: '',
+          },
+        ]),
+      }),
+    );
+
+    // Re-authenticate as User B (re-uses authenticate's verifier+state seed via callback)
+    await page.goto('/onboarding');
+    await page.evaluate(() => {
+      sessionStorage.setItem('hg.oidc.verifier', 'test-verifier');
+      sessionStorage.setItem('hg.oidc.state', 'test-state');
+    });
+    await page.goto('/auth/callback?code=test-code&state=test-state');
+    await page.waitForURL(/\/home(\b|\/|$)/);
+
+    await expect(page.locator('hg-goal-card', { hasText: 'Run' })).toBeVisible();
+    expect(await page.locator('hg-goal-card', { hasText: 'Walk' }).count()).toBe(0);
+    await expect(page.locator('.page-header__title')).toContainText('Sam');
+    await expect(page.locator('.page-header__title')).not.toContainText('Quinn');
+  });
+
   test('clicking a Recent rewards card → /rewards/{id} (02-TC-F-009)', async ({ page }) => {
     await authenticate(page);
     await page.route('**/api/rewards**', (route) =>
