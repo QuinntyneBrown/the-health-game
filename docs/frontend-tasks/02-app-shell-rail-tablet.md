@@ -1,3 +1,7 @@
+---
+status: Accepted
+---
+
 # Task 02 — Tablet rail navigation
 
 **Traces to:** L2-020, L2-021, L2-030
