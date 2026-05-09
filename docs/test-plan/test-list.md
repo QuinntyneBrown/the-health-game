@@ -63,7 +63,7 @@ and made green. The /loop process picks the first test with
 | 52 | 01 | TC-B-006 | Click during in-flight redirect (double click "Get started") | Only one OIDC redirect emitted | 2026-05-09T19:32:16Z |
 | 53 | 01 | TC-B-007 | Reduced-motion preference honored | No animated dot transitions | 2026-05-09T19:35:13Z |
 | 54 | 01 | TC-A-001 | `<main>` landmark wraps content | Yes | 2026-05-09T19:42:44Z |
-| 55 | 01 | TC-A-002 | Headline rendered as `<h1>` | Yes | null |
+| 55 | 01 | TC-A-002 | Headline rendered as `<h1>` | Yes | 2026-05-09T19:44:07Z |
 | 56 | 01 | TC-A-003 | Trophy icon has accessible name or `aria-hidden="true"` | Decorative — `aria-hidden` | null |
 | 57 | 01 | TC-A-004 | Buttons have descriptive accessible names ("Get started", "I have an account") | Yes | null |
 | 58 | 01 | TC-A-005 | Page-dot indicator exposes `aria-current="step"` on the active dot | Yes | null |
