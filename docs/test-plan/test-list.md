@@ -84,7 +84,7 @@ and made green. The /loop process picks the first test with
 | 73 | 02 | TC-V-006 | Streak label "Trophy" / streak count | Inter 13 px, weight 500–600 | 2026-05-09T20:26:44Z |
 | 74 | 02 | TC-V-007 | Bar-chart axis text | Inter 11 px, weight 400 | 2026-05-09T20:29:09Z |
 | 75 | 02 | TC-C-001 | Page background | `#F1F5ED` (surface-container-low) | 2026-05-09T20:31:16Z |
-| 76 | 02 | TC-C-002 | Bar-chart bars | `#006D3F` (primary) | null |
+| 76 | 02 | TC-C-002 | Bar-chart bars | `#006D3F` (primary) | 2026-05-09T20:32:31Z |
 | 77 | 02 | TC-C-003 | Streak card background | `#FFDCC4` (streak-container) | null |
 | 78 | 02 | TC-C-004 | Streak icon/text | `#E76A0C` (streak) | null |
 | 79 | 02 | TC-C-005 | Reward card background | `#FFD7EE` (reward-container) | null |
