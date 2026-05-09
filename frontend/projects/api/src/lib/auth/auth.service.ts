@@ -83,6 +83,19 @@ export class AuthService {
     return this.accessToken();
   }
 
+  signOut(): void {
+    this.accessToken.set(null);
+    sessionStorage.removeItem(VERIFIER_KEY);
+    sessionStorage.removeItem(STATE_KEY);
+    sessionStorage.removeItem(RETURN_URL_KEY);
+
+    const url = new URL('/connect/endsession', this.config.oidcAuthority);
+    url.searchParams.set('client_id', this.config.oidcClientId);
+    url.searchParams.set('post_logout_redirect_uri', this.config.oidcPostLogoutRedirectUri);
+
+    this.redirect(url.toString());
+  }
+
   setAccessTokenForTest(token: string | null): void {
     this.accessToken.set(token);
   }
