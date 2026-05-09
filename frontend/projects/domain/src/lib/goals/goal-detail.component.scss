@@ -77,3 +77,15 @@
   color: var(--hg-color-on-surface-variant);
   margin: 0;
 }
+
+.goal-detail__activity-row {
+  align-items: center;
+  display: grid;
+  gap: var(--hg-space-2);
+  grid-template-columns: minmax(0, 1fr) auto;
+}
+
+.goal-detail__activity-actions {
+  display: flex;
+  gap: var(--hg-space-1);
+}

@@ -13,6 +13,11 @@ import {
   StreakSummaryComponent,
 } from 'components';
 
+import { DeleteActivityDialogComponent } from '../activities/delete-activity-dialog.component';
+import {
+  EditActivityDialogComponent,
+  EditActivityDialogData,
+} from '../activities/edit-activity-dialog.component';
 import { LogActivityDialogComponent } from '../activities/log-activity-dialog.component';
 import {
   LogActivitySheetComponent,
@@ -84,6 +89,45 @@ export class GoalDetailComponent {
 
   activityMeta(entry: ActivityEntry): string {
     return new Date(entry.recordedAt).toLocaleString();
+  }
+
+  async onEditEntry(entry: ActivityEntry): Promise<void> {
+    const goal = this.goal();
+    if (!goal) return;
+    const ref = this.dialog.open<
+      EditActivityDialogComponent,
+      EditActivityDialogData,
+      ActivityEntry | undefined
+    >(EditActivityDialogComponent, {
+      data: { entry, unit: goal.target.unit },
+      width: '32rem',
+    });
+    const updated = await firstValueFrom(ref.afterClosed());
+    if (updated) {
+      this.activities.update((entries) =>
+        entries.map((e) => (e.id === updated.id ? updated : e)),
+      );
+      this.refreshGoal(goal.id);
+    }
+  }
+
+  async onDeleteEntry(entry: ActivityEntry): Promise<void> {
+    const goal = this.goal();
+    if (!goal) return;
+    const ref = this.dialog.open<DeleteActivityDialogComponent, undefined, boolean>(
+      DeleteActivityDialogComponent,
+    );
+    const confirmed = await firstValueFrom(ref.afterClosed());
+    if (!confirmed) return;
+    await firstValueFrom(this.activitiesService.deleteActivityEntry(entry.id));
+    this.activities.update((entries) => entries.filter((e) => e.id !== entry.id));
+    this.refreshGoal(goal.id);
+  }
+
+  private refreshGoal(id: string): void {
+    this.goalsService.getGoal(id).subscribe({
+      next: (goal) => this.state.set({ status: 'loaded', goal }),
+    });
   }
 
   cadenceLabel(goal: GoalSummary): string {
