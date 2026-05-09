@@ -1,5 +1,5 @@
 ---
-status: Accepted
+status: Complete
 ---
 
 # Task 27 — Dashboard from real API data
