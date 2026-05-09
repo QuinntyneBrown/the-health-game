@@ -54,8 +54,15 @@
 
 @media (min-width: 768px) {
   .app-shell__toolbar {
-    min-height: 80px;
-    height: 80px;
+    min-height: 80px !important;
+    height: 80px !important;
+    padding-inline: 32px !important;
+  }
+}
+
+@media (max-width: 767px) {
+  .app-shell__toolbar {
+    padding-inline: 8px !important;
   }
 }
 

@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 03-TC-V-001..009, 03-TC-C-001..011, 03-TC-L-001
+// Traces to: 03-TC-V-001..009, 03-TC-C-001..011, 03-TC-L-001..002
 // Description: /goals page title "Goals" renders with Inter weight 500 at 22/32 px.
 // Subtitle is Inter 13 px weight 400 with computed counts.
 import { expect, test } from '@playwright/test';
@@ -554,6 +554,47 @@ test.describe('Goals page — header typography', () => {
         expect(computed.fontWeight).toBe('500');
         expect(computed.fontSize).toBe('13px');
       }
+    });
+  });
+
+  test.describe('top bar horizontal padding (03-TC-L-002)', () => {
+    test('desktop top bar has 32 px horizontal padding', async ({ page }) => {
+      await page.setViewportSize({ width: 1440, height: 900 });
+      await authenticate(page);
+      await page.goto('/goals');
+      const toolbar = page.locator('mat-toolbar.app-shell__toolbar').first();
+      const padding = await toolbar.evaluate((el) => {
+        const s = getComputedStyle(el);
+        return { left: s.paddingLeft, right: s.paddingRight };
+      });
+      expect(padding.left).toBe('32px');
+      expect(padding.right).toBe('32px');
+    });
+
+    test('tablet top bar has 32 px horizontal padding', async ({ page }) => {
+      await page.setViewportSize({ width: 768, height: 1024 });
+      await authenticate(page);
+      await page.goto('/goals');
+      const toolbar = page.locator('mat-toolbar.app-shell__toolbar').first();
+      const padding = await toolbar.evaluate((el) => {
+        const s = getComputedStyle(el);
+        return { left: s.paddingLeft, right: s.paddingRight };
+      });
+      expect(padding.left).toBe('32px');
+      expect(padding.right).toBe('32px');
+    });
+
+    test('mobile top bar has 8 px horizontal padding', async ({ page }) => {
+      await page.setViewportSize({ width: 360, height: 780 });
+      await authenticate(page);
+      await page.goto('/goals');
+      const toolbar = page.locator('mat-toolbar.app-shell__toolbar').first();
+      const padding = await toolbar.evaluate((el) => {
+        const s = getComputedStyle(el);
+        return { left: s.paddingLeft, right: s.paddingRight };
+      });
+      expect(padding.left).toBe('8px');
+      expect(padding.right).toBe('8px');
     });
   });
 
