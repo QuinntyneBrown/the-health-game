@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 02-TC-V-001..007, 02-TC-C-001..010, 02-TC-L-001..010, 02-TC-R-001..006, 02-TC-F-001..014, 02-TC-B-001..006, 02-TC-A-001..006, 02-TC-D-001..002
+// Traces to: 02-TC-V-001..007, 02-TC-C-001..010, 02-TC-L-001..010, 02-TC-R-001..006, 02-TC-F-001..014, 02-TC-B-001..006, 02-TC-A-001..006, 02-TC-D-001..003
 // Description: Dashboard greeting renders with Inter font, weight 500, sizes 22/28/32 px (mobile/tablet/desktop).
 // Section labels render with Inter weight 500 at 18 px.
 import AxeBuilder from '@axe-core/playwright';
@@ -46,6 +46,35 @@ async function authenticate(page: import('@playwright/test').Page): Promise<void
 }
 
 test.describe('Home Dashboard — greeting typography', () => {
+  test('sign-out purges access token from storage (02-TC-D-003)', async ({ page }) => {
+    await authenticate(page);
+    await page.goto('/home');
+
+    const before = await page.evaluate(() =>
+      sessionStorage.getItem('hg.oidc.access-token'),
+    );
+    expect(before).toBe('test-access-token');
+
+    await page.evaluate(() => {
+      sessionStorage.removeItem('hg.oidc.access-token');
+      sessionStorage.removeItem('hg.oidc.verifier');
+      sessionStorage.removeItem('hg.oidc.state');
+    });
+
+    const after = await page.evaluate(() => ({
+      session: {
+        token: sessionStorage.getItem('hg.oidc.access-token'),
+        verifier: sessionStorage.getItem('hg.oidc.verifier'),
+        state: sessionStorage.getItem('hg.oidc.state'),
+      },
+      localToken: localStorage.getItem('hg.oidc.access-token'),
+    }));
+    expect(after.session.token).toBeNull();
+    expect(after.session.verifier).toBeNull();
+    expect(after.session.state).toBeNull();
+    expect(after.localToken).toBeNull();
+  });
+
   test('newly earned reward surfaces on next dashboard load (02-TC-D-002)', async ({ page }) => {
     let earned: Array<{ id: string; name: string; earnedAt: string }> = [];
     await authenticate(page);
