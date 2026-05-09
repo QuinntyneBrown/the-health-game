@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 03-TC-V-001..003
+// Traces to: 03-TC-V-001..004
 // Description: /goals page title "Goals" renders with Inter weight 500 at 22/32 px.
 // Subtitle is Inter 13 px weight 400 with computed counts.
 import { expect, test } from '@playwright/test';
@@ -63,6 +63,29 @@ async function authenticate(page: import('@playwright/test').Page): Promise<void
 test.describe('Goals page — header typography', () => {
   test.describe('desktop viewport', () => {
     test.use({ viewport: { width: 1440, height: 900 } });
+
+    test('goal card titles are Inter 14 px / weight 500 (03-TC-V-004)', async ({ page }) => {
+      await authenticate(page);
+      await page.goto('/goals');
+
+      const titles = page.locator('lib-goal-list .goal-card__title');
+      const count = await titles.count();
+      expect(count).toBeGreaterThan(0);
+
+      for (let i = 0; i < count; i++) {
+        const computed = await titles.nth(i).evaluate((el) => {
+          const style = getComputedStyle(el);
+          return {
+            fontFamily: style.fontFamily,
+            fontWeight: style.fontWeight,
+            fontSize: style.fontSize,
+          };
+        });
+        expect(computed.fontFamily.split(',')[0].replace(/['"]/g, '').trim()).toBe('Inter');
+        expect(computed.fontWeight).toBe('500');
+        expect(computed.fontSize).toBe('14px');
+      }
+    });
 
     test('filter chip labels are Inter 13 px / weight 500 (03-TC-V-003)', async ({ page }) => {
       await authenticate(page);
