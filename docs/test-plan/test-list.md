@@ -56,7 +56,7 @@ and made green. The /loop process picks the first test with
 | 45 | 01 | TC-F-007 | Page loads with no auth tokens leaked to console / network logs | Confirmed via DevTools | 2026-05-09T19:17:11Z |
 | 46 | 01 | TC-F-008 | Direct visit to `/onboarding` while authenticated | Redirect to `/home` | 2026-05-09T19:22:13Z |
 | 47 | 01 | TC-B-001 | Tab order: Get started -> I have an account -> page-dot? -> Get started | Logical, single-row, no skipped controls | 2026-05-09T19:23:43Z |
-| 48 | 01 | TC-B-002 | Visible focus ring on every interactive element | Yes, color contrast >= 3:1 | null |
+| 48 | 01 | TC-B-002 | Visible focus ring on every interactive element | Yes, color contrast >= 3:1 | 2026-05-09T19:24:57Z |
 | 49 | 01 | TC-B-003 | Enter on focused button activates it | Yes | null |
 | 50 | 01 | TC-B-004 | Space on focused button activates it | Yes | null |
 | 51 | 01 | TC-B-005 | Hover on primary button | Slight elevation / state-layer overlay; cursor pointer | null |

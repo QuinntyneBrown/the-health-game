@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 01-TC-V-001..010, 01-TC-C-001..010, 01-TC-L-001..010, 01-TC-R-001..008, 01-TC-F-001..008, 01-TC-B-001
+// Traces to: 01-TC-V-001..010, 01-TC-C-001..010, 01-TC-L-001..010, 01-TC-R-001..008, 01-TC-F-001..008, 01-TC-B-001..002
 // Description: Onboarding headline ("Make health a game") renders with font family Inter weight 500
 //              and the design-spec font-size at each breakpoint (mobile = 28 px, tablet = 45 px,
 //              desktop = 57 px with line-height 1.1). Body description paragraph renders at
@@ -218,6 +218,34 @@ test.describe('Onboarding — headline typography', () => {
     expect(url.searchParams.get('code_challenge')).toBeTruthy();
     expect(url.searchParams.get('state')).toBeTruthy();
     expect(url.searchParams.get('client_id')).toBeTruthy();
+  });
+
+  test('keyboard focus shows a visible focus ring on each button (TC-B-002)', async ({ page }) => {
+    await page.goto('/onboarding');
+    await expect(page.getByTestId('onboarding-headline')).toBeVisible();
+
+    for (const id of ['onboarding-get-started', 'onboarding-have-account']) {
+      const button = page.getByTestId(id);
+      await button.focus();
+
+      const indicator = await button.evaluate((el) => {
+        const style = getComputedStyle(el);
+        return {
+          outlineStyle: style.outlineStyle,
+          outlineWidth: style.outlineWidth,
+          outlineColor: style.outlineColor,
+          boxShadow: style.boxShadow,
+        };
+      });
+
+      const hasOutline =
+        indicator.outlineStyle !== 'none' &&
+        indicator.outlineStyle !== '' &&
+        parseFloat(indicator.outlineWidth) > 0;
+      const hasBoxShadow = indicator.boxShadow !== '' && indicator.boxShadow !== 'none';
+
+      expect(hasOutline || hasBoxShadow).toBe(true);
+    }
   });
 
   test('Tab order: Get started → I have an account (TC-B-001)', async ({ page }) => {
