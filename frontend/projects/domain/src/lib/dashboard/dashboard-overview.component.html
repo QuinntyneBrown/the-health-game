@@ -29,7 +29,7 @@
     class="dashboard-overview__bar-chart bar-chart"
     data-testid="dashboard-bar-chart"
     role="img"
-    aria-label="Weekly activity"
+    [attr.aria-label]="weeklyChartSummary"
     viewBox="0 0 280 80"
   >
     @for (day of weeklyChart; track day.label; let i = $index) {

@@ -93,4 +93,7 @@ export class DashboardOverviewComponent {
     { label: 'Sat', value: 55 },
     { label: 'Sun', value: 30 },
   ];
+
+  readonly weeklyChartSummary =
+    'Weekly activity: ' + this.weeklyChart.map((d) => `${d.label} ${d.value}`).join(', ');
 }

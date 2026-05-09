@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 02-TC-V-001..007, 02-TC-C-001..010, 02-TC-L-001..010, 02-TC-R-001..006, 02-TC-F-001..014, 02-TC-B-001..006, 02-TC-A-001..002
+// Traces to: 02-TC-V-001..007, 02-TC-C-001..010, 02-TC-L-001..010, 02-TC-R-001..006, 02-TC-F-001..014, 02-TC-B-001..006, 02-TC-A-001..003
 // Description: Dashboard greeting renders with Inter font, weight 500, sizes 22/28/32 px (mobile/tablet/desktop).
 // Section labels render with Inter weight 500 at 18 px.
 import AxeBuilder from '@axe-core/playwright';
@@ -46,6 +46,19 @@ async function authenticate(page: import('@playwright/test').Page): Promise<void
 }
 
 test.describe('Home Dashboard — greeting typography', () => {
+  test('bar chart exposes data summary in its accessible name (02-TC-A-003)', async ({ page }) => {
+    await authenticate(page);
+    await page.goto('/home');
+
+    const chart = page.getByTestId('dashboard-bar-chart');
+    const label = await chart.evaluate((el) => el.getAttribute('aria-label') ?? '');
+
+    // Expect the label to mention at least a couple of day labels with their values
+    expect(label).toMatch(/Mon/i);
+    expect(label).toMatch(/Sun/i);
+    expect(label).toMatch(/\d/);
+  });
+
   test('every dashboard <section> has aria-labelledby pointing to a heading (02-TC-A-002)', async ({
     page,
   }) => {
