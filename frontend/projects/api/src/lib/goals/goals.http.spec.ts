@@ -1,0 +1,49 @@
+// Acceptance Test
+// Traces to: L2-002
+// Description: GoalsService.getGoals fetches /api/goals over HTTP.
+import { provideHttpClient } from '@angular/common/http';
+import {
+  HttpTestingController,
+  provideHttpClientTesting,
+} from '@angular/common/http/testing';
+import { TestBed } from '@angular/core/testing';
+import { firstValueFrom } from 'rxjs';
+
+import { API_CONFIG, ApiConfig } from '../api.config';
+import { GoalsService } from './goals.service';
+
+const config: ApiConfig = {
+  apiBaseUrl: 'http://localhost:5117',
+  oidcAuthority: 'https://auth.example.test',
+  oidcClientId: 'health-game-web-test',
+  oidcScopes: 'openid profile email',
+  oidcRedirectUri: 'http://localhost:4200/auth/callback',
+  oidcPostLogoutRedirectUri: 'http://localhost:4200/auth/signed-out',
+};
+
+describe('GoalsService.getGoals', () => {
+  let service: GoalsService;
+  let controller: HttpTestingController;
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        { provide: API_CONFIG, useValue: config },
+      ],
+    });
+    service = TestBed.inject(GoalsService);
+    controller = TestBed.inject(HttpTestingController);
+  });
+
+  afterEach(() => controller.verify());
+
+  it('GETs /api/goals and returns the array as-is', async () => {
+    const promise = firstValueFrom(service.getGoals());
+    const req = controller.expectOne(`${config.apiBaseUrl}/api/goals`);
+    expect(req.request.method).toBe('GET');
+    req.flush([]);
+    expect(await promise).toEqual([]);
+  });
+});
