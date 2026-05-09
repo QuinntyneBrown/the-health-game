@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 02-TC-V-001..007, 02-TC-C-001..007
+// Traces to: 02-TC-V-001..007, 02-TC-C-001..008
 // Description: Dashboard greeting renders with Inter font, weight 500, sizes 22/28/32 px (mobile/tablet/desktop).
 // Section labels render with Inter weight 500 at 18 px.
 import { expect, test } from '@playwright/test';
@@ -54,6 +54,24 @@ test.describe('Home Dashboard — greeting typography', () => {
       expect(computed.fontFamily.split(',')[0].replace(/['"]/g, '').trim()).toBe('Inter');
       expect(computed.fontWeight).toBe('500');
       expect(computed.fontSize).toBe('32px');
+    });
+
+    test('primary CTA on dashboard is #006D3F bg with white label (02-TC-C-008)', async ({
+      page,
+    }) => {
+      await authenticate(page);
+
+      const cta = page.locator('hg-action-button.page-header__action button').first();
+      await expect(cta).toBeVisible();
+
+      const bg = await cta.evaluate((el) => getComputedStyle(el).backgroundColor);
+      expect(bg).toBe('rgb(0, 109, 63)');
+
+      const label = page
+        .locator('hg-action-button.page-header__action .action-button__label')
+        .first();
+      const labelColor = await label.evaluate((el) => getComputedStyle(el).color);
+      expect(labelColor).toBe('rgb(255, 255, 255)');
     });
 
     test('primary metric card bg is #94F7B4 and text is #00210F (02-TC-C-007)', async ({

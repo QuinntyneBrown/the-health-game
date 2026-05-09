@@ -6,6 +6,15 @@
   min-height: var(--hg-size-touch-target);
 }
 
+.action-button--filled {
+  --mdc-filled-button-container-color: #006d3f;
+  --mdc-filled-button-label-text-color: #ffffff;
+  --mat-filled-button-container-color: #006d3f;
+  --mat-filled-button-label-text-color: #ffffff;
+  background-color: #006d3f !important;
+  color: #ffffff !important;
+}
+
 .action-button--tonal {
   --mdc-filled-button-container-color: var(--hg-color-secondary-container);
   --mdc-filled-button-label-text-color: var(--hg-color-on-secondary-container);
