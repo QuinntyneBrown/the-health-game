@@ -38,6 +38,13 @@ export class GoalListComponent {
   readonly goals = toSignal(this.goalsService.getGoals(), { initialValue: [] as const });
   readonly visibleGoals = computed(() => filterGoalsByCadence(this.goals(), this.cadence()));
   readonly isEmpty = computed(() => this.goals().length === 0);
+  readonly subtitle = computed(() => {
+    const total = this.goals().length;
+    const streaking = this.goals().filter((g) => g.currentStreak > 0).length;
+    const goalLabel = total === 1 ? '1 active goal' : `${total} active goals`;
+    const streakLabel = streaking === 1 ? '1 streak running' : `${streaking} streaks running`;
+    return `${goalLabel} · ${streakLabel}`;
+  });
 
   cadenceLabel(goal: GoalSummary): string {
     return goal.cadence.charAt(0).toUpperCase() + goal.cadence.slice(1);

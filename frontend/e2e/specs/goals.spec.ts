@@ -1,6 +1,7 @@
 // Acceptance Test
-// Traces to: 03-TC-V-001
-// Description: /goals page title "Goals" renders with Inter weight 500 at 22 px (mobile) / 32 px (desktop).
+// Traces to: 03-TC-V-001..002
+// Description: /goals page title "Goals" renders with Inter weight 500 at 22/32 px.
+// Subtitle is Inter 13 px weight 400 with computed counts.
 import { expect, test } from '@playwright/test';
 
 async function authenticate(page: import('@playwright/test').Page): Promise<void> {
@@ -62,6 +63,29 @@ async function authenticate(page: import('@playwright/test').Page): Promise<void
 test.describe('Goals page — header typography', () => {
   test.describe('desktop viewport', () => {
     test.use({ viewport: { width: 1440, height: 900 } });
+
+    test('subtitle is Inter 13 px weight 400 with computed counts (03-TC-V-002)', async ({
+      page,
+    }) => {
+      await authenticate(page);
+      await page.goto('/goals');
+
+      const subtitle = page.locator('lib-goal-list .page-header__description').first();
+      await expect(subtitle).toBeVisible();
+      await expect(subtitle).toContainText(/active goal/i);
+
+      const computed = await subtitle.evaluate((el) => {
+        const style = getComputedStyle(el);
+        return {
+          fontFamily: style.fontFamily,
+          fontWeight: style.fontWeight,
+          fontSize: style.fontSize,
+        };
+      });
+      expect(computed.fontFamily.split(',')[0].replace(/['"]/g, '').trim()).toBe('Inter');
+      expect(computed.fontWeight).toBe('400');
+      expect(computed.fontSize).toBe('13px');
+    });
 
     test('"Goals" title is Inter weight 500 at 32 px on desktop (03-TC-V-001)', async ({ page }) => {
       await authenticate(page);

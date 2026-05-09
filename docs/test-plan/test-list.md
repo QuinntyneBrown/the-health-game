@@ -144,7 +144,7 @@ and made green. The /loop process picks the first test with
 | 133 | 02 | TC-P-002 | API call to `/dashboard/summary` — p95 server time | <= 300 ms (L2-018 §1) | 2026-05-09T22:36:03Z |
 | 134 | 02 | TC-P-003 | TBT under typical interactions | <= 200 ms | 2026-05-09T22:37:48Z |
 | 135 | 03 | TC-V-001 | Page title "Goals" | Inter 32 px desktop / 22 px mobile, weight 500 | 2026-05-09T22:40:45Z |
-| 136 | 03 | TC-V-002 | Subtitle ("5 active goals · 4 streaks running") | Inter 13 px, weight 400 | null |
+| 136 | 03 | TC-V-002 | Subtitle ("5 active goals · 4 streaks running") | Inter 13 px, weight 400 | 2026-05-09T22:43:02Z |
 | 137 | 03 | TC-V-003 | Filter chip labels | Inter 13 px, weight 500 | null |
 | 138 | 03 | TC-V-004 | Goal card title | Inter 14 px, weight 500 | null |
 | 139 | 03 | TC-V-005 | Goal card metadata (cadence, streak, target) | Inter 12 px, weight 400 | null |
