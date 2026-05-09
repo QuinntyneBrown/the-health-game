@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 02-TC-V-001..007, 02-TC-C-001..010, 02-TC-L-001
+// Traces to: 02-TC-V-001..007, 02-TC-C-001..010, 02-TC-L-001..002
 // Description: Dashboard greeting renders with Inter font, weight 500, sizes 22/28/32 px (mobile/tablet/desktop).
 // Section labels render with Inter weight 500 at 18 px.
 import AxeBuilder from '@axe-core/playwright';
@@ -55,6 +55,13 @@ test.describe('Home Dashboard — greeting typography', () => {
       expect(computed.fontFamily.split(',')[0].replace(/['"]/g, '').trim()).toBe('Inter');
       expect(computed.fontWeight).toBe('500');
       expect(computed.fontSize).toBe('32px');
+    });
+
+    test('metric card border-radius is 16 px (02-TC-L-002)', async ({ page }) => {
+      await authenticate(page);
+      const card = page.locator('mat-card.metric-card').first();
+      const radius = await card.evaluate((el) => getComputedStyle(el).borderTopLeftRadius);
+      expect(radius).toBe('16px');
     });
 
     test('dashboard page padding is 32 px on desktop (02-TC-L-001)', async ({ page }) => {
