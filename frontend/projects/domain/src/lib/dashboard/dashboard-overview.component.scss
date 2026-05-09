@@ -3,11 +3,14 @@
 }
 
 .dashboard-overview {
+  background-color: #f1f5ed;
   color: var(--hg-color-on-surface);
   display: grid;
   gap: var(--hg-space-6);
   margin-inline: auto;
   max-width: var(--hg-size-content-max);
+  padding: var(--hg-space-4);
+  min-height: 100%;
 }
 
 .dashboard-overview__metrics,

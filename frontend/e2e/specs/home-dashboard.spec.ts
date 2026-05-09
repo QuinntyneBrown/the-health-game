@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 02-TC-V-001..007
+// Traces to: 02-TC-V-001..007, 02-TC-C-001
 // Description: Dashboard greeting renders with Inter font, weight 500, sizes 22/28/32 px (mobile/tablet/desktop).
 // Section labels render with Inter weight 500 at 18 px.
 import { expect, test } from '@playwright/test';
@@ -54,6 +54,16 @@ test.describe('Home Dashboard — greeting typography', () => {
       expect(computed.fontFamily.split(',')[0].replace(/['"]/g, '').trim()).toBe('Inter');
       expect(computed.fontWeight).toBe('500');
       expect(computed.fontSize).toBe('32px');
+    });
+
+    test('dashboard page background is #F1F5ED (02-TC-C-001)', async ({ page }) => {
+      await authenticate(page);
+
+      const root = page.locator('hg-dashboard-overview .dashboard-overview').first();
+      await expect(root).toBeVisible();
+
+      const background = await root.evaluate((el) => getComputedStyle(el).backgroundColor);
+      expect(background).toBe('rgb(241, 245, 237)');
     });
 
     test('bar-chart axis text is Inter 11 px / weight 400 (02-TC-V-007)', async ({ page }) => {
