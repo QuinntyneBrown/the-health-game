@@ -145,7 +145,7 @@ and made green. The /loop process picks the first test with
 | 134 | 02 | TC-P-003 | TBT under typical interactions | <= 200 ms | 2026-05-09T22:37:48Z |
 | 135 | 03 | TC-V-001 | Page title "Goals" | Inter 32 px desktop / 22 px mobile, weight 500 | 2026-05-09T22:40:45Z |
 | 136 | 03 | TC-V-002 | Subtitle ("5 active goals · 4 streaks running") | Inter 13 px, weight 400 | 2026-05-09T22:43:02Z |
-| 137 | 03 | TC-V-003 | Filter chip labels | Inter 13 px, weight 500 | null |
+| 137 | 03 | TC-V-003 | Filter chip labels | Inter 13 px, weight 500 | 2026-05-09T22:45:53Z |
 | 138 | 03 | TC-V-004 | Goal card title | Inter 14 px, weight 500 | null |
 | 139 | 03 | TC-V-005 | Goal card metadata (cadence, streak, target) | Inter 12 px, weight 400 | null |
 | 140 | 03 | TC-V-006 | "New goal" button label | Inter 14 px, weight 500, white | null |

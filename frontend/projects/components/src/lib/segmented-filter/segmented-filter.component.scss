@@ -19,6 +19,9 @@
 }
 
 .segmented-filter__label {
+  font-family: Inter, Roboto, Arial, sans-serif;
+  font-size: 13px;
+  font-weight: 500;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
