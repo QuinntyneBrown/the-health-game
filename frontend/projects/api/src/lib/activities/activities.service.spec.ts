@@ -68,4 +68,29 @@ describe('ActivitiesService.logActivity', () => {
     ]);
     expect((await promise).length).toBe(2);
   });
+
+  it('PUTs the update body to /api/activities/:id and returns the updated entry', async () => {
+    const promise = firstValueFrom(
+      service.updateActivityEntry('a-1', { quantity: 5, notes: 'corrected' }),
+    );
+    const req = controller.expectOne(`${config.apiBaseUrl}/api/activities/a-1`);
+    expect(req.request.method).toBe('PUT');
+    expect(req.request.body).toEqual({ quantity: 5, notes: 'corrected' });
+    req.flush({
+      id: 'a-1',
+      goalId: 'g-1',
+      quantity: 5,
+      notes: 'corrected',
+      recordedAt: '2026-05-09T10:00:00Z',
+    });
+    expect((await promise).quantity).toBe(5);
+  });
+
+  it('DELETEs /api/activities/:id', async () => {
+    const promise = firstValueFrom(service.deleteActivityEntry('a-1'));
+    const req = controller.expectOne(`${config.apiBaseUrl}/api/activities/a-1`);
+    expect(req.request.method).toBe('DELETE');
+    req.flush(null, { status: 204, statusText: 'No Content' });
+    await promise;
+  });
 });
