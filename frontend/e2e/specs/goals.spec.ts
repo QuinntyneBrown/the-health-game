@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 03-TC-V-001..009, 03-TC-C-001..004
+// Traces to: 03-TC-V-001..009, 03-TC-C-001..005
 // Description: /goals page title "Goals" renders with Inter weight 500 at 22/32 px.
 // Subtitle is Inter 13 px weight 400 with computed counts.
 import { expect, test } from '@playwright/test';
@@ -236,6 +236,20 @@ test.describe('Goals page — header typography', () => {
 
   test.describe('goal form', () => {
     test.use({ viewport: { width: 1440, height: 900 } });
+
+    test('default goal card background is #EBEFE7 (03-TC-C-005)', async ({ page }) => {
+      await authenticate(page);
+      await page.goto('/goals');
+
+      const card = page
+        .locator(
+          'lib-goal-list .goal-card:not(.goal-card--complete):not(.goal-card--streak)',
+        )
+        .first();
+      await expect(card).toBeVisible();
+      const bg = await card.evaluate((el) => getComputedStyle(el).backgroundColor);
+      expect(bg).toBe('rgb(235, 239, 231)');
+    });
 
     test('inactive filter chip is transparent / outline #C2C9BE / label #191D17 (03-TC-C-004)', async ({
       page,

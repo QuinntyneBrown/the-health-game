@@ -173,6 +173,10 @@ lib-goal-list mat-button-toggle:not(.mat-button-toggle-checked) .segmented-filte
   color: #191d17 !important;
 }
 
+lib-goal-list .goal-card:not(.goal-card--complete):not(.goal-card--streak) {
+  background-color: #ebefe7 !important;
+}
+
 hg-empty-state .empty-state__title {
   font-family:
     Inter,
