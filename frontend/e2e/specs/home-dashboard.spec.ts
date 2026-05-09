@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 02-TC-V-001..007, 02-TC-C-001..010, 02-TC-L-001..010, 02-TC-R-001..006, 02-TC-F-001..014, 02-TC-B-001..006, 02-TC-A-001..006, 02-TC-D-001..005
+// Traces to: 02-TC-V-001..007, 02-TC-C-001..010, 02-TC-L-001..010, 02-TC-R-001..006, 02-TC-F-001..014, 02-TC-B-001..006, 02-TC-A-001..006, 02-TC-D-001..005, 02-TC-P-001
 // Description: Dashboard greeting renders with Inter font, weight 500, sizes 22/28/32 px (mobile/tablet/desktop).
 // Section labels render with Inter weight 500 at 18 px.
 import AxeBuilder from '@axe-core/playwright';
@@ -46,6 +46,35 @@ async function authenticate(page: import('@playwright/test').Page): Promise<void
 }
 
 test.describe('Home Dashboard — greeting typography', () => {
+  test('dashboard render uses a route-level chunk only (02-TC-P-001)', async ({ page }) => {
+    const jsRequests: { url: string; mainJs: boolean; hasDashboard: boolean }[] = [];
+    page.on('response', async (response) => {
+      const url = response.url();
+      if (!/\.js(\?|$)/.test(url)) return;
+      try {
+        const body = await response.text();
+        jsRequests.push({
+          url,
+          mainJs: /\/main\.js(\?|$)/.test(url),
+          hasDashboard:
+            body.includes('class DashboardOverviewComponent') ||
+            body.includes('DashboardOverviewComponent.ɵfac'),
+        });
+      } catch {
+        // skip unreadable responses
+      }
+    });
+
+    await authenticate(page);
+    await page.goto('/home', { waitUntil: 'networkidle' });
+    await expect(page.locator('.page-header__title')).toBeVisible();
+
+    // The DashboardOverviewComponent class definition must NEVER arrive inside
+    // the eagerly-loaded main.js bundle — it should be route-level lazy.
+    const heavyMain = jsRequests.filter((r) => r.mainJs && r.hasDashboard);
+    expect(heavyMain).toEqual([]);
+  });
+
   test('offline mode shows offline banner; cached snapshot remains (02-TC-D-005)', async ({
     page,
   }) => {
