@@ -27,6 +27,12 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
         margin: 0;
       }
 
+      @media (min-width: 768px) {
+        .onboarding__headline {
+          font-size: 45px;
+        }
+      }
+
       .onboarding__description {
         font-family: Inter, Roboto, Arial, sans-serif;
         font-weight: 400;
