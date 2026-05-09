@@ -14,7 +14,11 @@ export const routes: Routes = [
     canMatch: [authGuard],
     loadChildren: () => import('domain').then((module) => module.DASHBOARD_ROUTES),
   },
-  { path: 'goals', canMatch: [authGuard], component: PlaceholderComponent },
+  {
+    path: 'goals',
+    canMatch: [authGuard],
+    loadChildren: () => import('domain').then((module) => module.GOALS_ROUTES),
+  },
   { path: 'rewards', canMatch: [authGuard], component: PlaceholderComponent },
   {
     path: 'profile',

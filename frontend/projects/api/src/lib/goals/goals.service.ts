@@ -1,6 +1,8 @@
-import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Injectable, inject } from '@angular/core';
 import { Observable, of } from 'rxjs';
 
+import { API_CONFIG } from '../api.config';
 import { GoalSummary } from '../models/goal-summary.model';
 import { IGoalsService } from './goals.service.contract';
 
@@ -49,9 +51,16 @@ const goalSummaries: readonly GoalSummary[] = [
   },
 ];
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class GoalsService implements IGoalsService {
+  private readonly http = inject(HttpClient);
+  private readonly apiBaseUrl = inject(API_CONFIG).apiBaseUrl;
+
   getGoalSummaries(): Observable<readonly GoalSummary[]> {
     return of(goalSummaries);
+  }
+
+  getGoals(): Observable<readonly GoalSummary[]> {
+    return this.http.get<readonly GoalSummary[]>(`${this.apiBaseUrl}/api/goals`);
   }
 }
