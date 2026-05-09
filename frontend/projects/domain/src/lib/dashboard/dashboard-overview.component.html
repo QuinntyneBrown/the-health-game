@@ -54,17 +54,21 @@
         title="Rewards"
       />
 
-      <div class="dashboard-overview__reward-list">
-        @for (reward of overview().rewards; track reward.id) {
-          <hg-reward-card
-            [description]="reward.description"
-            [earnedDateLabel]="reward.earnedDateLabel"
-            [isEarned]="reward.isEarned"
-            [name]="reward.name"
-            [statusLabel]="reward.statusLabel"
-          />
-        }
-      </div>
+      @defer (on viewport) {
+        <div class="dashboard-overview__reward-list">
+          @for (reward of overview().rewards; track reward.id) {
+            <hg-reward-card
+              [description]="reward.description"
+              [earnedDateLabel]="reward.earnedDateLabel"
+              [isEarned]="reward.isEarned"
+              [name]="reward.name"
+              [statusLabel]="reward.statusLabel"
+            />
+          }
+        </div>
+      } @placeholder {
+        <div class="dashboard-overview__reward-list" aria-hidden="true"></div>
+      }
     </section>
   </div>
 </section>
