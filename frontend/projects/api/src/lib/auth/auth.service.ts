@@ -1,4 +1,6 @@
-import { Injectable, InjectionToken, inject } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Injectable, InjectionToken, inject, signal } from '@angular/core';
+import { firstValueFrom } from 'rxjs';
 
 import { API_CONFIG } from '../api.config';
 
@@ -13,10 +15,20 @@ export const OIDC_REDIRECTOR = new InjectionToken<Redirector>('OIDC_REDIRECTOR',
   factory: () => (url: string) => window.location.assign(url),
 });
 
+interface TokenResponse {
+  readonly access_token: string;
+  readonly token_type: string;
+  readonly expires_in: number;
+  readonly refresh_token?: string;
+  readonly id_token?: string;
+}
+
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private readonly config = inject(API_CONFIG);
   private readonly redirect = inject(OIDC_REDIRECTOR);
+  private readonly http = inject(HttpClient);
+  private readonly accessToken = signal<string | null>(null);
 
   async signIn(returnUrl?: string): Promise<void> {
     const verifier = randomBase64Url(32);
@@ -39,6 +51,48 @@ export class AuthService {
     url.searchParams.set('code_challenge_method', 'S256');
 
     this.redirect(url.toString());
+  }
+
+  async handleRedirect(code: string, state: string): Promise<void> {
+    const expectedState = sessionStorage.getItem(STATE_KEY);
+    if (!expectedState || state !== expectedState) {
+      throw new Error('OIDC state mismatch');
+    }
+    const verifier = sessionStorage.getItem(VERIFIER_KEY);
+    if (!verifier) {
+      throw new Error('Missing PKCE verifier');
+    }
+
+    const body = new URLSearchParams();
+    body.set('grant_type', 'authorization_code');
+    body.set('code', code);
+    body.set('redirect_uri', this.config.oidcRedirectUri);
+    body.set('client_id', this.config.oidcClientId);
+    body.set('code_verifier', verifier);
+
+    const tokens = await firstValueFrom(
+      this.http.post<TokenResponse>(`${this.config.oidcAuthority}/connect/token`, body),
+    );
+
+    this.accessToken.set(tokens.access_token);
+    sessionStorage.removeItem(VERIFIER_KEY);
+    sessionStorage.removeItem(STATE_KEY);
+  }
+
+  getAccessToken(): string | null {
+    return this.accessToken();
+  }
+
+  setAccessTokenForTest(token: string | null): void {
+    this.accessToken.set(token);
+  }
+
+  consumeReturnUrl(): string | null {
+    const url = sessionStorage.getItem(RETURN_URL_KEY);
+    if (url) {
+      sessionStorage.removeItem(RETURN_URL_KEY);
+    }
+    return url;
   }
 }
 
