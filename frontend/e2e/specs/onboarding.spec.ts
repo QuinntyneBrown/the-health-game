@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 01-TC-V-001..010, 01-TC-C-001..010, 01-TC-L-001..004
+// Traces to: 01-TC-V-001..010, 01-TC-C-001..010, 01-TC-L-001..005
 // Description: Onboarding headline ("Make health a game") renders with font family Inter weight 500
 //              and the design-spec font-size at each breakpoint (mobile = 28 px, tablet = 45 px,
 //              desktop = 57 px with line-height 1.1). Body description paragraph renders at
@@ -297,6 +297,16 @@ test.describe('Onboarding — headline typography', () => {
       expect(fontSize).toBe('16px');
     });
 
+    test('hero corner radius is 28 px on mobile (TC-L-005)', async ({ page }) => {
+      await page.goto('/onboarding');
+
+      const hero = page.getByTestId('onboarding-hero');
+      await expect(hero).toBeVisible();
+
+      const radius = await hero.evaluate((el) => getComputedStyle(el).borderTopLeftRadius);
+      expect(radius).toBe('28px');
+    });
+
     test('"Get started" button typography on mobile (TC-V-008)', async ({ page }) => {
       await page.goto('/onboarding');
 
@@ -406,6 +416,16 @@ test.describe('Onboarding — headline typography', () => {
 
       const fontSize = await description.evaluate((el) => getComputedStyle(el).fontSize);
       expect(fontSize).toBe('18px');
+    });
+
+    test('hero corner radius is 36 px on tablet (TC-L-005)', async ({ page }) => {
+      await page.goto('/onboarding');
+
+      const hero = page.getByTestId('onboarding-hero');
+      await expect(hero).toBeVisible();
+
+      const radius = await hero.evaluate((el) => getComputedStyle(el).borderTopLeftRadius);
+      expect(radius).toBe('36px');
     });
 
     test('"Get started" button typography on tablet (TC-V-008)', async ({ page }) => {

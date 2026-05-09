@@ -33,7 +33,7 @@ and made green. The /loop process picks the first test with
 | 22 | 01 | TC-L-002 | Mobile vertical gap between hero, title, dots, buttons | 24 px | 2026-05-09T18:22:21Z |
 | 23 | 01 | TC-L-003 | Tablet body padding | 40 px top/bottom, 80 px left/right | 2026-05-09T18:24:37Z |
 | 24 | 01 | TC-L-004 | Tablet content vertical gap | 32 px | 2026-05-09T18:26:48Z |
-| 25 | 01 | TC-L-005 | Hero corner radius — mobile/tablet | 28 / 36 px | null |
+| 25 | 01 | TC-L-005 | Hero corner radius — mobile/tablet | 28 / 36 px | 2026-05-09T18:29:13Z |
 | 26 | 01 | TC-L-006 | Trophy icon size — mobile/tablet/desktop | 120 / 180 / 280 px | null |
 | 27 | 01 | TC-L-007 | Buttons stacked vertically with 12 px gap on mobile | confirmed via DOM bounding boxes | null |
 | 28 | 01 | TC-L-008 | Buttons inline with 16 px gap on tablet/desktop | confirmed | null |

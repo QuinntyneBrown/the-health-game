@@ -146,6 +146,10 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
           padding: 40px 80px;
         }
 
+        .onboarding__hero {
+          border-radius: 36px;
+        }
+
         .onboarding__headline {
           font-size: 45px;
         }
