@@ -26,9 +26,14 @@
 - HTTP request DTOs are pure transport shapes — no validation attributes; map to commands and let the Application layer validate.
 
 ## Authentication & User Management
-- PKCE authorization
-- Full user management
-- RBAC implementation from database to frontend
+- Two supported sign-in flows, configurable per environment, both producing an equivalent authenticated session:
+    - **PKCE-based OAuth 2.0 / OIDC authorization code flow** against an external identity provider.
+    - **Local username + password** sign-in: backend validates credentials against the application database and issues a signed JWT access token (and a refresh token where appropriate).
+- Passwords stored only as salted hashes from a modern password-hashing function (Argon2id, PBKDF2 with adequate iterations, or bcrypt with adequate cost). Never store or log plaintext passwords, code verifiers, or tokens.
+- JWTs validated on every request: issuer, audience, signature, expiration. Invalid/expired tokens → HTTP 401.
+- Repeated failed sign-ins are rate-limited, locked out, or otherwise throttled, with a security audit log entry on each event.
+- Full user management — registration, sign-in, sign-out, password reset, profile management, account deletion.
+- RBAC implementation from database to frontend.
 
 ## Frontend (Angular)
 - Angular Material components for every component — buttons, headers, inputs, etc. (see https://m3.material.io/)
