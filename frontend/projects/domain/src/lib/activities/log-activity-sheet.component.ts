@@ -1,9 +1,12 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { MatBottomSheetRef, MAT_BOTTOM_SHEET_DATA } from '@angular/material/bottom-sheet';
 import { MatButtonModule } from '@angular/material/button';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { ACTIVITIES_SERVICE, ActivityEntry } from 'api';
 import { firstValueFrom } from 'rxjs';
 import { HealthTextFieldComponent } from 'components';
+
+import { formatRewardEarnedMessage } from '../rewards/format-reward-earned';
 
 export interface LogActivitySheetData {
   readonly goalId: string;
@@ -80,6 +83,7 @@ export class LogActivitySheetComponent {
     MatBottomSheetRef,
   );
   private readonly activities = inject(ACTIVITIES_SERVICE);
+  private readonly snackBar = inject(MatSnackBar);
 
   readonly quantity = signal('');
   readonly notes = signal('');
@@ -105,6 +109,14 @@ export class LogActivitySheetComponent {
         notes: this.notes().trim() || undefined,
       }),
     );
+    this.notifyRewards(entry);
     this.sheetRef.dismiss(entry);
+  }
+
+  private notifyRewards(entry: ActivityEntry): void {
+    const message = formatRewardEarnedMessage(entry.newlyEarnedRewards ?? []);
+    if (message) {
+      this.snackBar.open(message, 'View', { duration: 5_000 });
+    }
   }
 }

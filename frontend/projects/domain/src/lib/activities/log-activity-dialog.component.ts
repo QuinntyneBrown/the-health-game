@@ -1,10 +1,12 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { ACTIVITIES_SERVICE, ActivityEntry } from 'api';
 import { firstValueFrom } from 'rxjs';
 import { HealthTextFieldComponent } from 'components';
 
+import { formatRewardEarnedMessage } from '../rewards/format-reward-earned';
 import { LogActivitySheetData } from './log-activity-sheet.component';
 
 @Component({
@@ -56,6 +58,7 @@ export class LogActivityDialogComponent {
     MatDialogRef<LogActivityDialogComponent, ActivityEntry | undefined>
   >(MatDialogRef);
   private readonly activities = inject(ACTIVITIES_SERVICE);
+  private readonly snackBar = inject(MatSnackBar);
 
   readonly quantity = signal('');
   readonly notes = signal('');
@@ -81,6 +84,10 @@ export class LogActivityDialogComponent {
         notes: this.notes().trim() || undefined,
       }),
     );
+    const message = formatRewardEarnedMessage(entry.newlyEarnedRewards ?? []);
+    if (message) {
+      this.snackBar.open(message, 'View', { duration: 5_000 });
+    }
     this.dialogRef.close(entry);
   }
 }
