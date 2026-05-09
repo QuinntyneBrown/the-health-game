@@ -1,3 +1,7 @@
+---
+status: Accepted
+---
+
 # Task 30 — Accessibility (WCAG 2.1 AA) audit pass
 
 **Traces to:** L2-021
