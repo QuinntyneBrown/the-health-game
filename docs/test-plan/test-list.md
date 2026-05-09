@@ -15,7 +15,7 @@ and made green. The /loop process picks the first test with
 | 4 | 01 | TC-V-004 | Headline size — desktop | 57 px, line-height 1.1 | 2026-05-09T17:47:55Z |
 | 5 | 01 | TC-V-005 | Body description font weight | 400 (normal) | 2026-05-09T17:49:27Z |
 | 6 | 01 | TC-V-006 | Body description size — mobile/tablet/desktop | 16 / 18 / 18 px | 2026-05-09T17:52:38Z |
-| 7 | 01 | TC-V-007 | Body description line-height | 1.5 | null |
+| 7 | 01 | TC-V-007 | Body description line-height | 1.5 | 2026-05-09T17:53:38Z |
 | 8 | 01 | TC-V-008 | Primary button label ("Get started") | Inter 14/16 px, weight 500, white | null |
 | 9 | 01 | TC-V-009 | Secondary button label ("I have an account") | Inter 14/16 px, weight 500, on-surface color | null |
 | 10 | 01 | TC-V-010 | Brand wordmark ("HealthQuest") visible at desktop only | font 22 px, weight 500 | null |

@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 01-TC-V-001, 01-TC-V-002, 01-TC-V-003, 01-TC-V-004, 01-TC-V-005, 01-TC-V-006
+// Traces to: 01-TC-V-001, 01-TC-V-002, 01-TC-V-003, 01-TC-V-004, 01-TC-V-005, 01-TC-V-006, 01-TC-V-007
 // Description: Onboarding headline ("Make health a game") renders with font family Inter weight 500
 //              and the design-spec font-size at each breakpoint (mobile = 28 px, tablet = 45 px,
 //              desktop = 57 px with line-height 1.1). Body description paragraph renders at
@@ -34,6 +34,22 @@ test.describe('Onboarding — headline typography', () => {
 
     const fontWeight = await description.evaluate((el) => getComputedStyle(el).fontWeight);
     expect(fontWeight).toBe('400');
+  });
+
+  test('body description line-height ratio is 1.5 (TC-V-007)', async ({ page }) => {
+    await page.goto('/onboarding');
+
+    const description = page.getByTestId('onboarding-description');
+    await expect(description).toBeVisible();
+
+    const metrics = await description.evaluate((el) => {
+      const style = getComputedStyle(el);
+      return { fontSize: style.fontSize, lineHeight: style.lineHeight };
+    });
+
+    const fontSizePx = parseFloat(metrics.fontSize);
+    const lineHeightPx = parseFloat(metrics.lineHeight);
+    expect(lineHeightPx / fontSizePx).toBeCloseTo(1.5, 2);
   });
 
   test.describe('mobile viewport', () => {
