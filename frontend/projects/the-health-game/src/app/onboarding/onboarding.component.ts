@@ -225,6 +225,16 @@ import { AuthService } from 'api';
           font-size: 280px;
         }
       }
+
+      @media (prefers-reduced-motion: reduce) {
+        .onboarding *,
+        .onboarding *::before,
+        .onboarding *::after {
+          transition-duration: 0s !important;
+          animation-duration: 0s !important;
+          animation-iteration-count: 1 !important;
+        }
+      }
     `,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,

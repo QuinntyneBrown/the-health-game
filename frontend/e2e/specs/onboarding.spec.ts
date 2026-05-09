@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 01-TC-V-001..010, 01-TC-C-001..010, 01-TC-L-001..010, 01-TC-R-001..008, 01-TC-F-001..008, 01-TC-B-001..006
+// Traces to: 01-TC-V-001..010, 01-TC-C-001..010, 01-TC-L-001..010, 01-TC-R-001..008, 01-TC-F-001..008, 01-TC-B-001..007
 // Description: Onboarding headline ("Make health a game") renders with font family Inter weight 500
 //              and the design-spec font-size at each breakpoint (mobile = 28 px, tablet = 45 px,
 //              desktop = 57 px with line-height 1.1). Body description paragraph renders at
@@ -218,6 +218,34 @@ test.describe('Onboarding — headline typography', () => {
     expect(url.searchParams.get('code_challenge')).toBeTruthy();
     expect(url.searchParams.get('state')).toBeTruthy();
     expect(url.searchParams.get('client_id')).toBeTruthy();
+  });
+
+  test('reduced-motion preference suppresses dot transitions (TC-B-007)', async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await page.goto('/onboarding');
+
+    const dots = page.getByTestId('onboarding-page-dots');
+    await expect(dots).toBeVisible();
+
+    const dotMetrics = await dots.locator('li').first().evaluate((el) => {
+      const style = getComputedStyle(el);
+      return {
+        transitionDuration: style.transitionDuration,
+        animationDuration: style.animationDuration,
+        animationName: style.animationName,
+      };
+    });
+
+    expect(['0s', '0ms', ''].includes(dotMetrics.transitionDuration)).toBe(true);
+    expect(['0s', '0ms', ''].includes(dotMetrics.animationDuration)).toBe(true);
+    expect(['none', '']).toContain(dotMetrics.animationName);
+
+    // Primary button hover transition should also be suppressed
+    const primary = page.getByTestId('onboarding-get-started');
+    const primaryTransition = await primary.evaluate(
+      (el) => getComputedStyle(el).transitionDuration,
+    );
+    expect(['0s', '0ms', ''].includes(primaryTransition)).toBe(true);
   });
 
   test('double-clicking "Get started" emits only one OIDC redirect (TC-B-006)', async ({
