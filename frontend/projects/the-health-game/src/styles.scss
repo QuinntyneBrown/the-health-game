@@ -197,6 +197,13 @@ lib-goal-list mat-progress-bar .mdc-linear-progress__bar-inner {
 lib-goal-list mat-progress-bar {
   --mdc-linear-progress-active-indicator-color: #006d3f;
   --mat-progress-bar-active-indicator-color: #006d3f;
+  --mdc-linear-progress-track-color: #e5e9e2;
+  --mat-progress-bar-track-color: #e5e9e2;
+}
+
+lib-goal-list mat-progress-bar .mdc-linear-progress__buffer-bar,
+lib-goal-list mat-progress-bar .mdc-linear-progress__buffer {
+  background-color: #e5e9e2 !important;
 }
 
 hg-empty-state .empty-state__title {
