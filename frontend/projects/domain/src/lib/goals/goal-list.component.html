@@ -1,0 +1,38 @@
+@if (isEmpty()) {
+  <hg-empty-state
+    title="No goals yet"
+    description="Create your first goal to start tracking your habits."
+    actionLabel="Create goal"
+    actionIcon="add"
+    icon="flag"
+    (actionSelected)="onCreate()"
+  />
+} @else {
+  <header class="goal-list__header">
+    <hg-segmented-filter
+      ariaLabel="Cadence"
+      [options]="cadenceOptions"
+      [value]="cadence()"
+      (valueChange)="cadence.set($any($event))"
+    />
+  </header>
+
+  <ul class="goal-list" data-testid="goal-list">
+    @for (goal of visibleGoals(); track goal.id) {
+      <li class="goal-list__item">
+        <hg-goal-card
+          [title]="goal.name"
+          [description]="goal.description"
+          [cadenceLabel]="cadenceLabel(goal)"
+          [progressLabel]="progressLabel(goal)"
+          [progressValue]="progressValue(goal)"
+          [currentStreakLabel]="currentStreakLabel(goal)"
+          [longestStreakLabel]="longestStreakLabel(goal)"
+          [rewardName]="goal.rewardName"
+          actionLabel="Open"
+          (actionSelected)="onCardSelected(goal)"
+        />
+      </li>
+    }
+  </ul>
+}
