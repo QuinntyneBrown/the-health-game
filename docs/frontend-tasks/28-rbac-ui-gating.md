@@ -1,5 +1,5 @@
 ---
-status: Accepted
+status: Complete
 ---
 
 # Task 28 — RBAC UI gating with `hgIfRole` and `roleGuard`
