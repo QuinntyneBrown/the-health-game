@@ -1,4 +1,11 @@
-import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  DestroyRef,
+  computed,
+  inject,
+  signal,
+} from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
 import { catchError, defer, of, repeat, Subject, switchMap } from 'rxjs';
@@ -63,6 +70,23 @@ export class DashboardOverviewComponent {
   retry(): void {
     this.hasError.set(false);
     this.retry$.next();
+  }
+
+  readonly isOffline = signal(
+    typeof navigator !== 'undefined' ? !navigator.onLine : false,
+  );
+
+  constructor() {
+    if (typeof window !== 'undefined') {
+      const onOffline = (): void => this.isOffline.set(true);
+      const onOnline = (): void => this.isOffline.set(false);
+      window.addEventListener('offline', onOffline);
+      window.addEventListener('online', onOnline);
+      inject(DestroyRef).onDestroy(() => {
+        window.removeEventListener('offline', onOffline);
+        window.removeEventListener('online', onOnline);
+      });
+    }
   }
 
   readonly todayActivityTotal = computed(() => {

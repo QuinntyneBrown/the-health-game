@@ -139,7 +139,7 @@ and made green. The /loop process picks the first test with
 | 128 | 02 | TC-D-002 | Earning a reward | Surfaces on next dashboard load (L2-010 §2) | 2026-05-09T22:26:14Z |
 | 129 | 02 | TC-D-003 | Sign out then sign in as different user | Old user's data is purged from in-memory store and cache | 2026-05-09T22:27:42Z |
 | 130 | 02 | TC-D-004 | Cadence rollover — daily goal at local midnight | "Today" totals reset (L2-011 §1) | 2026-05-09T22:29:06Z |
-| 131 | 02 | TC-D-005 | Network offline | Last cached snapshot shown with offline banner (no stale write attempts) | null |
+| 131 | 02 | TC-D-005 | Network offline | Last cached snapshot shown with offline banner (no stale write attempts) | 2026-05-09T22:32:11Z |
 | 132 | 02 | TC-P-001 | Dashboard initial render uses route-level chunk only | yes (L2-019 §2) | null |
 | 133 | 02 | TC-P-002 | API call to `/dashboard/summary` — p95 server time | <= 300 ms (L2-018 §1) | null |
 | 134 | 02 | TC-P-003 | TBT under typical interactions | <= 200 ms | null |

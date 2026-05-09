@@ -5,6 +5,14 @@
       <button mat-stroked-button type="button" (click)="retry()">Retry</button>
     </div>
   }
+
+  @if (isOffline()) {
+    <div
+      class="dashboard-overview__offline"
+      data-testid="dashboard-offline-banner"
+      role="status"
+    >You're offline — showing your last cached snapshot.</div>
+  }
   <div class="dashboard-overview__avatar" data-testid="dashboard-avatar">
     <hg-user-avatar size="medium" name="You" />
   </div>

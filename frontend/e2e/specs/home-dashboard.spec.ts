@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 02-TC-V-001..007, 02-TC-C-001..010, 02-TC-L-001..010, 02-TC-R-001..006, 02-TC-F-001..014, 02-TC-B-001..006, 02-TC-A-001..006, 02-TC-D-001..004
+// Traces to: 02-TC-V-001..007, 02-TC-C-001..010, 02-TC-L-001..010, 02-TC-R-001..006, 02-TC-F-001..014, 02-TC-B-001..006, 02-TC-A-001..006, 02-TC-D-001..005
 // Description: Dashboard greeting renders with Inter font, weight 500, sizes 22/28/32 px (mobile/tablet/desktop).
 // Section labels render with Inter weight 500 at 18 px.
 import AxeBuilder from '@axe-core/playwright';
@@ -46,6 +46,28 @@ async function authenticate(page: import('@playwright/test').Page): Promise<void
 }
 
 test.describe('Home Dashboard — greeting typography', () => {
+  test('offline mode shows offline banner; cached snapshot remains (02-TC-D-005)', async ({
+    page,
+  }) => {
+    await authenticate(page);
+    await page.goto('/home');
+    // Snapshot is rendered (greeting visible)
+    await expect(page.locator('.page-header__title')).toBeVisible();
+
+    // Drop the connection
+    await page.evaluate(() => {
+      Object.defineProperty(navigator, 'onLine', { configurable: true, value: false });
+      window.dispatchEvent(new Event('offline'));
+    });
+
+    const banner = page.getByTestId('dashboard-offline-banner');
+    await expect(banner).toBeVisible();
+    await expect(banner).toContainText(/offline/i);
+
+    // The cached snapshot is still on screen
+    await expect(page.locator('.page-header__title')).toBeVisible();
+  });
+
   test('Today total resets after cadence rollover (02-TC-D-004)', async ({ page }) => {
     // Pre-midnight: a daily goal has 5 units logged
     let completedQuantity = 5;
