@@ -35,6 +35,7 @@ export interface IGoalsService {
   getGoal(id: string): Observable<GoalSummary>;
   createGoal(input: CreateGoalInput): Observable<GoalSummary>;
   updateGoal(id: string, input: UpdateGoalInput): Observable<GoalSummary>;
+  deleteGoal(id: string): Observable<void>;
 }
 
 export const GOALS_SERVICE = new InjectionToken<IGoalsService>('GOALS_SERVICE');

@@ -1,8 +1,15 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
+import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
+import { firstValueFrom } from 'rxjs';
 import { GOALS_SERVICE, GoalSummary } from 'api';
 import { PageHeaderComponent, StreakSummaryComponent } from 'components';
+
+import {
+  DeleteGoalDialogComponent,
+  DeleteGoalDialogData,
+} from './delete-goal-dialog.component';
 
 type DetailState =
   | { readonly status: 'loading' }
@@ -20,6 +27,7 @@ export class GoalDetailComponent {
   private readonly goalsService = inject(GOALS_SERVICE);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
+  private readonly dialog = inject(MatDialog);
 
   private readonly state = signal<DetailState>({ status: 'loading' });
   readonly goal = computed(() =>
@@ -54,8 +62,18 @@ export class GoalDetailComponent {
     }
   }
 
-  onDelete(): void {
-    // Wired in task 19.
+  async onDelete(): Promise<void> {
+    const goal = this.goal();
+    if (!goal) return;
+    const ref = this.dialog.open<
+      DeleteGoalDialogComponent,
+      DeleteGoalDialogData,
+      boolean
+    >(DeleteGoalDialogComponent, { data: { name: goal.name } });
+    const confirmed = await firstValueFrom(ref.afterClosed());
+    if (!confirmed) return;
+    await firstValueFrom(this.goalsService.deleteGoal(goal.id));
+    void this.router.navigateByUrl('/goals');
   }
 
   onBack(): void {

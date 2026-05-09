@@ -75,4 +75,8 @@ export class GoalsService implements IGoalsService {
   updateGoal(id: string, input: UpdateGoalInput): Observable<GoalSummary> {
     return this.http.put<GoalSummary>(`${this.apiBaseUrl}/api/goals/${id}`, input);
   }
+
+  deleteGoal(id: string): Observable<void> {
+    return this.http.delete<void>(`${this.apiBaseUrl}/api/goals/${id}`);
+  }
 }

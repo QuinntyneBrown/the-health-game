@@ -29,6 +29,7 @@ const goalsService: IGoalsService = {
   getGoal: () => EMPTY,
   createGoal: () => EMPTY,
   updateGoal: () => EMPTY,
+  deleteGoal: () => EMPTY,
 };
 
 describe('DashboardService', () => {
