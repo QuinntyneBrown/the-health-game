@@ -5,6 +5,11 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
   template: `
     <main class="onboarding" data-testid="onboarding">
       <span class="onboarding__wordmark" data-testid="onboarding-wordmark">HealthQuest</span>
+      <div
+        class="onboarding__hero"
+        data-testid="onboarding-hero"
+        aria-hidden="true"
+      ></div>
       <h1 class="onboarding__headline" data-testid="onboarding-headline">
         Make health a game
       </h1>
@@ -42,6 +47,12 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
         font-family: Inter, Roboto, Arial, sans-serif;
         font-size: 22px;
         font-weight: 500;
+      }
+
+      .onboarding__hero {
+        background-color: #94f7b4;
+        border-radius: 28px;
+        min-height: 200px;
       }
 
       .onboarding__headline {
