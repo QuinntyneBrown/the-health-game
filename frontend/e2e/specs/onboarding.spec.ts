@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 01-TC-V-001..010, 01-TC-C-001..010, 01-TC-L-001..010, 01-TC-R-001..008, 01-TC-F-001..008, 01-TC-B-001..007, 01-TC-A-001..006, 01-TC-D-001..003
+// Traces to: 01-TC-V-001..010, 01-TC-C-001..010, 01-TC-L-001..010, 01-TC-R-001..008, 01-TC-F-001..008, 01-TC-B-001..007, 01-TC-A-001..006, 01-TC-D-001..004
 // Description: Onboarding headline ("Make health a game") renders with font family Inter weight 500
 //              and the design-spec font-size at each breakpoint (mobile = 28 px, tablet = 45 px,
 //              desktop = 57 px with line-height 1.1). Body description paragraph renders at
@@ -219,6 +219,34 @@ test.describe('Onboarding — headline typography', () => {
     expect(url.searchParams.get('code_challenge')).toBeTruthy();
     expect(url.searchParams.get('state')).toBeTruthy();
     expect(url.searchParams.get('client_id')).toBeTruthy();
+  });
+
+  test('verifier survives reload mid-flow so the OIDC handshake can resume (TC-D-004)', async ({
+    page,
+  }) => {
+    await page.route('**/connect/authorize**', (route) =>
+      route.fulfill({ status: 200, contentType: 'text/html', body: '<html></html>' }),
+    );
+
+    await page.goto('/onboarding');
+    const navigation = page.waitForURL(/\/connect\/authorize/);
+    await page.getByTestId('onboarding-get-started').click();
+    await navigation;
+
+    // Return to the app, then simulate a hard reload before completing callback
+    await page.goto('/onboarding');
+    const verifierBefore = await page.evaluate(() =>
+      sessionStorage.getItem('hg.oidc.verifier'),
+    );
+    expect(verifierBefore).not.toBeNull();
+
+    await page.reload();
+    const verifierAfter = await page.evaluate(() =>
+      sessionStorage.getItem('hg.oidc.verifier'),
+    );
+    const stateAfter = await page.evaluate(() => sessionStorage.getItem('hg.oidc.state'));
+    expect(verifierAfter).toBe(verifierBefore);
+    expect(stateAfter).not.toBeNull();
   });
 
   test('no tokens or PII are persisted to localStorage across sign-in (TC-D-003)', async ({

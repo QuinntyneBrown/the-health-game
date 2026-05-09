@@ -71,7 +71,7 @@ and made green. The /loop process picks the first test with
 | 60 | 01 | TC-D-001 | OIDC `code_verifier` written to `sessionStorage` on click | Present until callback exchange | 2026-05-09T19:51:05Z |
 | 61 | 01 | TC-D-002 | OIDC `code_verifier` cleared after successful token exchange | Removed from sessionStorage | 2026-05-09T19:52:28Z |
 | 62 | 01 | TC-D-003 | No persistent identifiers (PII, tokens) written to localStorage | Confirmed | 2026-05-09T19:54:48Z |
-| 63 | 01 | TC-D-004 | Reload before completing OIDC redirect | Code verifier preserved; flow resumable | null |
+| 63 | 01 | TC-D-004 | Reload before completing OIDC redirect | Code verifier preserved; flow resumable | 2026-05-09T19:56:13Z |
 | 64 | 01 | TC-D-005 | After successful sign-in, refresh token (if used) stored only as httpOnly cookie | Confirmed via DevTools | null |
 | 65 | 01 | TC-P-001 | Cold load LCP on simulated 4G (Lighthouse) | <= 2.5 s (L2-019 §1) | null |
 | 66 | 01 | TC-P-002 | Initial JS payload split — onboarding chunk does not pull in dashboard code | Confirmed via bundle analyzer | null |
