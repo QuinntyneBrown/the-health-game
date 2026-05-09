@@ -1,6 +1,7 @@
 // Acceptance Test
-// Traces to: L2-030, L2-031, L2-033
-// Description: Verifies the root shell renders the library-based Material scaffold.
+// Traces to: L2-020, L2-021, L2-030, L2-031, L2-033
+// Description: Verifies the root shell renders the library-based Material scaffold
+// and a Material bottom navigation with Home, Goals, Rewards, and Profile items.
 import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 
@@ -25,5 +26,23 @@ describe('App', () => {
     await fixture.whenStable();
     const compiled = fixture.nativeElement as HTMLElement;
     expect(compiled.querySelector('hg-app-brand')?.textContent).toContain('HealthQuest');
+  });
+
+  it('should render the bottom navigation with the four primary destinations', async () => {
+    const fixture = TestBed.createComponent(App);
+    fixture.detectChanges();
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    const bottomNav = compiled.querySelector(
+      'hg-navigation-bar.app-shell__navigation--bottom',
+    );
+    expect(bottomNav).not.toBeNull();
+
+    const labels = Array.from(bottomNav?.querySelectorAll('.navigation-bar__label') ?? []).map(
+      (el) => el.textContent?.trim(),
+    );
+    expect(labels).toEqual(['Home', 'Goals', 'Rewards', 'Profile']);
   });
 });

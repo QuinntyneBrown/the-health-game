@@ -10,7 +10,9 @@
     "build:domain": "ng build domain",
     "build:libs": "npm run build:api && npm run build:components && npm run build:domain",
     "watch": "ng build --watch --configuration development",
-    "test": "npm run build:libs && ng test"
+    "test": "npm run build:libs && ng test",
+    "e2e": "playwright test",
+    "lint": "ng lint"
   },
   "private": true,
   "packageManager": "npm@10.9.4",
@@ -31,6 +33,7 @@
     "@angular/build": "^21.2.10",
     "@angular/cli": "^21.2.7",
     "@angular/compiler-cli": "^21.2.0",
+    "@playwright/test": "^1.59.1",
     "jsdom": "^28.0.0",
     "ng-packagr": "^21.2.0",
     "prettier": "^3.8.1",
