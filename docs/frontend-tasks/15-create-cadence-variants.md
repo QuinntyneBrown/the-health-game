@@ -1,3 +1,7 @@
+---
+status: Accepted
+---
+
 # Task 15 — Create hourly, weekly, monthly, custom-interval goals
 
 **Traces to:** L2-001, L2-011, L2-012, L2-016
