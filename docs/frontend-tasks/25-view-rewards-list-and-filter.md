@@ -1,3 +1,7 @@
+---
+status: Accepted
+---
+
 # Task 25 — View rewards list and filter
 
 **Traces to:** L2-010, L2-020, L2-021
