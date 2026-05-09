@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 01-TC-V-001..010, 01-TC-C-001..010, 01-TC-L-001..010, 01-TC-R-001..007
+// Traces to: 01-TC-V-001..010, 01-TC-C-001..010, 01-TC-L-001..010, 01-TC-R-001..008
 // Description: Onboarding headline ("Make health a game") renders with font family Inter weight 500
 //              and the design-spec font-size at each breakpoint (mobile = 28 px, tablet = 45 px,
 //              desktop = 57 px with line-height 1.1). Body description paragraph renders at
@@ -197,6 +197,21 @@ test.describe('Onboarding — headline typography', () => {
 
     const background = await active.evaluate((el) => getComputedStyle(el).backgroundColor);
     expect(background).toBe('rgb(0, 109, 63)');
+  });
+
+  test('page-dot indicator is visible at every breakpoint (TC-R-008)', async ({ page }) => {
+    for (const size of [
+      { width: 360, height: 780 },
+      { width: 768, height: 1024 },
+      { width: 1440, height: 900 },
+    ]) {
+      await page.setViewportSize(size);
+      await page.goto('/onboarding');
+      const dots = page.getByTestId('onboarding-page-dots');
+      await expect(dots).toBeVisible();
+      const count = await dots.locator('li').count();
+      expect(count).toBeGreaterThanOrEqual(1);
+    }
   });
 
   test('layout recomputes on window resize without overflow (TC-R-007)', async ({ page }) => {
