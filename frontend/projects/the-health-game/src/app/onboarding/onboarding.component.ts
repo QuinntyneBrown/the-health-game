@@ -7,7 +7,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
       <h1 class="onboarding__headline" data-testid="onboarding-headline">
         Make health a game
       </h1>
-      <p class="onboarding__description">
+      <p class="onboarding__description" data-testid="onboarding-description">
         Build streaks with goals, activity, and personal rewards.
       </p>
     </main>

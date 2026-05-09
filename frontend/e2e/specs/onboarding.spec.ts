@@ -1,8 +1,9 @@
 // Acceptance Test
-// Traces to: 01-TC-V-001, 01-TC-V-002, 01-TC-V-003, 01-TC-V-004
+// Traces to: 01-TC-V-001, 01-TC-V-002, 01-TC-V-003, 01-TC-V-004, 01-TC-V-005
 // Description: Onboarding headline ("Make health a game") renders with font family Inter weight 500
 //              and the design-spec font-size at each breakpoint (mobile = 28 px, tablet = 45 px,
-//              desktop = 57 px with line-height 1.1).
+//              desktop = 57 px with line-height 1.1). Body description paragraph renders at
+//              font-weight 400.
 import { expect, test } from '@playwright/test';
 
 test.describe('Onboarding — headline typography', () => {
@@ -23,6 +24,16 @@ test.describe('Onboarding — headline typography', () => {
 
     expect(computed.fontFamily.split(',')[0].replace(/['"]/g, '').trim()).toBe('Inter');
     expect(computed.fontWeight).toBe('500');
+  });
+
+  test('body description font-weight is 400 (TC-V-005)', async ({ page }) => {
+    await page.goto('/onboarding');
+
+    const description = page.getByTestId('onboarding-description');
+    await expect(description).toBeVisible();
+
+    const fontWeight = await description.evaluate((el) => getComputedStyle(el).fontWeight);
+    expect(fontWeight).toBe('400');
   });
 
   test.describe('mobile viewport', () => {
