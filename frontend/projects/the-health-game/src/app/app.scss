@@ -6,8 +6,9 @@
   min-height: 100dvh;
 }
 
-// Tablet rail layout: toolbar on top, rail on the left, main on the right.
-.app-shell:has(.app-shell__navigation--rail) {
+// Side-nav layout (rail or drawer): toolbar on top, nav on left, main on right.
+.app-shell:has(.app-shell__navigation--rail),
+.app-shell:has(.app-shell__navigation--drawer) {
   grid-template-columns: auto minmax(0, 1fr);
   grid-template-rows: auto minmax(0, 1fr);
   grid-template-areas:
@@ -15,12 +16,21 @@
     'nav main';
 }
 
-.app-shell:has(.app-shell__navigation--rail) .app-shell__toolbar {
+.app-shell:has(.app-shell__navigation--rail) .app-shell__toolbar,
+.app-shell:has(.app-shell__navigation--drawer) .app-shell__toolbar {
   grid-area: toolbar;
 }
 
-.app-shell:has(.app-shell__navigation--rail) .app-shell__main {
+.app-shell:has(.app-shell__navigation--rail) .app-shell__main,
+.app-shell:has(.app-shell__navigation--drawer) .app-shell__main {
   grid-area: main;
+}
+
+// Desktop drawer constrains main content width and centers it.
+.app-shell:has(.app-shell__navigation--drawer) .app-shell__main {
+  margin-inline: auto;
+  max-width: var(--hg-size-content-max);
+  width: 100%;
 }
 
 .app-shell__toolbar {
@@ -54,4 +64,10 @@
   border-right: var(--hg-border-subtle);
   grid-area: nav;
   width: var(--hg-size-rail);
+}
+
+.app-shell__navigation--drawer {
+  border-right: var(--hg-border-subtle);
+  grid-area: nav;
+  width: var(--hg-size-drawer);
 }

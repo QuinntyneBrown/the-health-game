@@ -12,6 +12,9 @@ import type { NavigationBarVariant } from 'components';
 export const VIEWPORT = new InjectionToken<Signal<NavigationBarVariant>>('VIEWPORT');
 
 export function computeVariant(width: number): NavigationBarVariant {
+  if (width >= 1200) {
+    return 'drawer';
+  }
   if (width >= 768) {
     return 'rail';
   }
