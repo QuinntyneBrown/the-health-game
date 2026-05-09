@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 01-TC-V-001..010, 01-TC-C-001..010, 01-TC-L-001..006
+// Traces to: 01-TC-V-001..010, 01-TC-C-001..010, 01-TC-L-001..007
 // Description: Onboarding headline ("Make health a game") renders with font family Inter weight 500
 //              and the design-spec font-size at each breakpoint (mobile = 28 px, tablet = 45 px,
 //              desktop = 57 px with line-height 1.1). Body description paragraph renders at
@@ -248,8 +248,7 @@ test.describe('Onboarding — headline typography', () => {
         'onboarding-headline',
         'onboarding-description',
         'onboarding-page-dots',
-        'onboarding-get-started',
-        'onboarding-have-account',
+        'onboarding-buttons',
       ];
       const rects = await Promise.all(
         ids.map((id) =>
@@ -263,6 +262,30 @@ test.describe('Onboarding — headline typography', () => {
         const gap = rects[i].top - rects[i - 1].bottom;
         expect(gap).toBeCloseTo(24, 0);
       }
+    });
+
+    test('buttons stack vertically with 12 px gap (TC-L-007)', async ({ page }) => {
+      await page.goto('/onboarding');
+
+      const buttons = page.getByTestId('onboarding-buttons');
+      await expect(buttons).toBeVisible();
+
+      const primary = page.getByTestId('onboarding-get-started');
+      const secondary = page.getByTestId('onboarding-have-account');
+
+      const rects = await Promise.all(
+        [primary, secondary].map((loc) =>
+          loc.evaluate((el) => {
+            const rect = (el as HTMLElement).getBoundingClientRect();
+            return { top: rect.top, bottom: rect.bottom, left: rect.left };
+          }),
+        ),
+      );
+
+      // Stacked vertically: secondary starts below primary at the same left edge
+      expect(rects[1].top).toBeGreaterThan(rects[0].bottom - 1);
+      expect(Math.abs(rects[1].left - rects[0].left)).toBeLessThan(1);
+      expect(rects[1].top - rects[0].bottom).toBeCloseTo(12, 0);
     });
 
     test('body padding is 24 px on all sides (TC-L-001)', async ({ page }) => {

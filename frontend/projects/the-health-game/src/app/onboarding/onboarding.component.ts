@@ -31,20 +31,22 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
         <li class="onboarding__dot"></li>
         <li class="onboarding__dot"></li>
       </ol>
-      <button
-        class="onboarding__primary"
-        type="button"
-        data-testid="onboarding-get-started"
-      >
-        Get started
-      </button>
-      <button
-        class="onboarding__secondary"
-        type="button"
-        data-testid="onboarding-have-account"
-      >
-        I have an account
-      </button>
+      <div class="onboarding__buttons" data-testid="onboarding-buttons">
+        <button
+          class="onboarding__primary"
+          type="button"
+          data-testid="onboarding-get-started"
+        >
+          Get started
+        </button>
+        <button
+          class="onboarding__secondary"
+          type="button"
+          data-testid="onboarding-have-account"
+        >
+          I have an account
+        </button>
+      </div>
     </main>
   `,
   styles: [
@@ -112,6 +114,12 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 
       .onboarding__dot--active {
         background-color: #006d3f;
+      }
+
+      .onboarding__buttons {
+        display: grid;
+        gap: 12px;
+        justify-items: start;
       }
 
       .onboarding__primary {
