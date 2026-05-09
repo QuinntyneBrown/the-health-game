@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 01-TC-V-001..010, 01-TC-C-001..010, 01-TC-L-001..009
+// Traces to: 01-TC-V-001..010, 01-TC-C-001..010, 01-TC-L-001..010
 // Description: Onboarding headline ("Make health a game") renders with font family Inter weight 500
 //              and the design-spec font-size at each breakpoint (mobile = 28 px, tablet = 45 px,
 //              desktop = 57 px with line-height 1.1). Body description paragraph renders at
@@ -604,6 +604,35 @@ test.describe('Onboarding — headline typography', () => {
 
       expect(Math.abs(rects[0].top - rects[1].top)).toBeLessThan(2);
       expect(rects[1].left - rects[0].right).toBeCloseTo(16, 0);
+    });
+
+    test('desktop layout splits ~50/50 with hero on the right (TC-L-010)', async ({ page }) => {
+      await page.goto('/onboarding');
+
+      const root = page.getByTestId('onboarding');
+      const hero = page.getByTestId('onboarding-hero');
+      const headline = page.getByTestId('onboarding-headline');
+      const description = page.getByTestId('onboarding-description');
+      const buttons = page.getByTestId('onboarding-buttons');
+
+      const rootRect = await root.evaluate((el) =>
+        (el as HTMLElement).getBoundingClientRect(),
+      );
+      const heroRect = await hero.evaluate((el) =>
+        (el as HTMLElement).getBoundingClientRect(),
+      );
+
+      const center = rootRect.left + rootRect.width / 2;
+
+      // Hero sits in the right half of the page area (the "right ~50%" of the design)
+      expect(heroRect.left).toBeGreaterThanOrEqual(center - 4);
+      expect(heroRect.right).toBeGreaterThan(center + heroRect.width * 0.4);
+
+      // Left column items (copy + actions) sit in the left half
+      for (const left of [headline, description, buttons]) {
+        const rect = await left.evaluate((el) => (el as HTMLElement).getBoundingClientRect());
+        expect(rect.right).toBeLessThanOrEqual(center + 4);
+      }
     });
 
     test('trophy icon size is 280 px on desktop (TC-L-006)', async ({ page }) => {

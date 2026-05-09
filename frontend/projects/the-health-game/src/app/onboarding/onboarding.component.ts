@@ -183,13 +183,33 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
       }
 
       @media (min-width: 1200px) {
-        .onboarding__headline {
-          font-size: 57px;
-          line-height: 1.1;
+        .onboarding {
+          grid-template-columns: 1fr 1fr;
+          column-gap: 64px;
+          align-items: start;
         }
 
         .onboarding__wordmark {
           display: block;
+          grid-column: 1;
+        }
+
+        .onboarding__hero {
+          grid-column: 2;
+          grid-row: 1 / -1;
+          align-self: stretch;
+        }
+
+        .onboarding__headline,
+        .onboarding__description,
+        .onboarding__dots,
+        .onboarding__buttons {
+          grid-column: 1;
+        }
+
+        .onboarding__headline {
+          font-size: 57px;
+          line-height: 1.1;
         }
 
         .onboarding__trophy {
