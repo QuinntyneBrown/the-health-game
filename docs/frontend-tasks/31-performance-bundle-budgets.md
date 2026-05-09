@@ -1,3 +1,7 @@
+---
+status: Accepted
+---
+
 # Task 31 — Performance budgets and lazy chunks
 
 **Traces to:** L2-019
