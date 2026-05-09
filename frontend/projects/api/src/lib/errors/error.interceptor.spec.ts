@@ -35,7 +35,7 @@ describe('errorInterceptor', () => {
 
   afterEach(() => controller.verify());
 
-  async function expectError(status: number, body: unknown): Promise<ApiError> {
+  async function expectError(status: number, body: object): Promise<ApiError> {
     const promise = firstValueFrom(http.get('/api/probe'));
     const req = controller.expectOne('/api/probe');
     req.flush(body, {
