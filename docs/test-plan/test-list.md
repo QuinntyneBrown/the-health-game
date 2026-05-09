@@ -116,7 +116,7 @@ and made green. The /loop process picks the first test with
 | 105 | 02 | TC-F-005 | Recent rewards card shows up to 3 most-recent earned rewards | newest first, with date earned | 2026-05-09T21:33:19Z |
 | 106 | 02 | TC-F-006 | Click goal card | Navigates to `/goals/{id}` (L2-002 §3) | 2026-05-09T21:36:11Z |
 | 107 | 02 | TC-F-007 | Click "Log activity" CTA on goal card | Opens log activity flow for that goal | 2026-05-09T21:38:16Z |
-| 108 | 02 | TC-F-008 | Click "New goal" CTA | Navigates to create-goal flow | null |
+| 108 | 02 | TC-F-008 | Click "New goal" CTA | Navigates to create-goal flow | 2026-05-09T21:41:15Z |
 | 109 | 02 | TC-F-009 | Click reward in "Recent rewards" | Navigates to `/rewards/{id}` | null |
 | 110 | 02 | TC-F-010 | Dashboard shows only this user's data — switching accounts clears prior data | confirmed | null |
 | 111 | 02 | TC-F-011 | Empty state — no goals yet | Shows onboarding CTA card (mobile/tablet/desktop) | null |

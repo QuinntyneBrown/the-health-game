@@ -47,6 +47,10 @@ export class DashboardOverviewComponent {
     void this.router.navigateByUrl(`/goals/${goalId}`);
   }
 
+  onNewGoal(): void {
+    void this.router.navigateByUrl('/goals/new');
+  }
+
   readonly weeklyChart: readonly { label: string; value: number }[] = [
     { label: 'Mon', value: 60 },
     { label: 'Tue', value: 80 },
