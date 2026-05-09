@@ -1,3 +1,7 @@
+---
+status: Accepted
+---
+
 # Task 09 — `authGuard` on protected routes
 
 **Traces to:** L2-013, L2-015
