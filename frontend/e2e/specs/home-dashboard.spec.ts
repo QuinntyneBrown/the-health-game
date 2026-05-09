@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 02-TC-V-001..007, 02-TC-C-001..010, 02-TC-L-001..006
+// Traces to: 02-TC-V-001..007, 02-TC-C-001..010, 02-TC-L-001..007
 // Description: Dashboard greeting renders with Inter font, weight 500, sizes 22/28/32 px (mobile/tablet/desktop).
 // Section labels render with Inter weight 500 at 18 px.
 import AxeBuilder from '@axe-core/playwright';
@@ -62,6 +62,18 @@ test.describe('Home Dashboard — greeting typography', () => {
       const root = page.locator('hg-dashboard-overview .dashboard-overview').first();
       const rowGap = await root.evaluate((el) => getComputedStyle(el).rowGap);
       expect(rowGap).toBe('24px');
+    });
+
+    test('dashboard header avatar is 48 px on desktop (02-TC-L-007)', async ({ page }) => {
+      await authenticate(page);
+      const avatar = page.locator('[data-testid="dashboard-avatar"] .user-avatar').first();
+      await expect(avatar).toBeVisible();
+      const size = await avatar.evaluate((el) => {
+        const rect = el.getBoundingClientRect();
+        return { width: rect.width, height: rect.height };
+      });
+      expect(size.width).toBe(48);
+      expect(size.height).toBe(48);
     });
 
     test('bar-chart bars are 4 viewBox units apart (02-TC-L-005)', async ({ page }) => {
@@ -527,6 +539,14 @@ test.describe('Home Dashboard — greeting typography', () => {
       const paddingTop = await root.evaluate((el) => getComputedStyle(el).paddingTop);
       expect(paddingTop).toBe('24px');
     });
+
+    test('dashboard header avatar is 40 px on tablet (02-TC-L-007)', async ({ page }) => {
+      await authenticate(page);
+      const avatar = page.locator('[data-testid="dashboard-avatar"] .user-avatar').first();
+      const size = await avatar.evaluate((el) => el.getBoundingClientRect());
+      expect(size.width).toBe(40);
+      expect(size.height).toBe(40);
+    });
   });
 
   test.describe('mobile viewport', () => {
@@ -547,6 +567,14 @@ test.describe('Home Dashboard — greeting typography', () => {
       const root = page.locator('hg-dashboard-overview .dashboard-overview').first();
       const paddingTop = await root.evaluate((el) => getComputedStyle(el).paddingTop);
       expect(paddingTop).toBe('16px');
+    });
+
+    test('dashboard header avatar is 32 px on mobile (02-TC-L-007)', async ({ page }) => {
+      await authenticate(page);
+      const avatar = page.locator('[data-testid="dashboard-avatar"] .user-avatar').first();
+      const size = await avatar.evaluate((el) => el.getBoundingClientRect());
+      expect(size.width).toBe(32);
+      expect(size.height).toBe(32);
     });
   });
 });

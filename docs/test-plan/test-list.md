@@ -99,7 +99,7 @@ and made green. The /loop process picks the first test with
 | 88 | 02 | TC-L-004 | Inter-card gap (within section) | 12–16 px | 2026-05-09T21:03:20Z |
 | 89 | 02 | TC-L-005 | Bar-chart bar gap | 4 px | 2026-05-09T21:04:47Z |
 | 90 | 02 | TC-L-006 | Section vertical rhythm | 24 px between sections | 2026-05-09T21:06:05Z |
-| 91 | 02 | TC-L-007 | Avatar size — header | 32 / 40 / 48 px | null |
+| 91 | 02 | TC-L-007 | Avatar size — header | 32 / 40 / 48 px | 2026-05-09T21:08:54Z |
 | 92 | 02 | TC-L-008 | Mobile shows single-column stack | confirmed | null |
 | 93 | 02 | TC-L-009 | Tablet shows 1–2 columns where space allows | confirmed | null |
 | 94 | 02 | TC-L-010 | Desktop shows main + side panel grid | confirmed; main bounded by max content width | null |

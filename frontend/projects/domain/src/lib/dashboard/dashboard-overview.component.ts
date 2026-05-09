@@ -6,6 +6,7 @@ import {
   PageHeaderComponent,
   RewardCardComponent,
   SectionHeaderComponent,
+  UserAvatarComponent,
 } from 'components';
 
 import { DashboardOverview } from './dashboard-overview.model';
@@ -27,6 +28,7 @@ const emptyOverview: DashboardOverview = {
     PageHeaderComponent,
     RewardCardComponent,
     SectionHeaderComponent,
+    UserAvatarComponent,
   ],
   templateUrl: './dashboard-overview.component.html',
   styleUrl: './dashboard-overview.component.scss',
