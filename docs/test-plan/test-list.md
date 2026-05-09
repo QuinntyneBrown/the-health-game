@@ -86,7 +86,7 @@ and made green. The /loop process picks the first test with
 | 75 | 02 | TC-C-001 | Page background | `#F1F5ED` (surface-container-low) | 2026-05-09T20:31:16Z |
 | 76 | 02 | TC-C-002 | Bar-chart bars | `#006D3F` (primary) | 2026-05-09T20:32:31Z |
 | 77 | 02 | TC-C-003 | Streak card background | `#FFDCC4` (streak-container) | 2026-05-09T20:34:27Z |
-| 78 | 02 | TC-C-004 | Streak icon/text | `#E76A0C` (streak) | null |
+| 78 | 02 | TC-C-004 | Streak icon/text | `#E76A0C` (streak) | 2026-05-09T20:36:18Z |
 | 79 | 02 | TC-C-005 | Reward card background | `#FFD7EE` (reward-container) | null |
 | 80 | 02 | TC-C-006 | Reward accent | `#9B2680` (reward) | null |
 | 81 | 02 | TC-C-007 | Success/level cards | `#94F7B4` background, `#00210F` text | null |
