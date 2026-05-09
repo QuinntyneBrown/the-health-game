@@ -3,10 +3,12 @@ import { authGuard } from 'api';
 
 import { CallbackComponent } from './auth/callback.component';
 import { SignedOutComponent } from './auth/signed-out.component';
+import { OnboardingComponent } from './onboarding/onboarding.component';
 
 export const routes: Routes = [
   { path: 'auth/callback', component: CallbackComponent, title: 'Signing you in' },
   { path: 'auth/signed-out', component: SignedOutComponent, title: 'Signed out' },
+  { path: 'onboarding', component: OnboardingComponent, title: 'Welcome — HealthQuest' },
   {
     path: '',
     pathMatch: 'full',

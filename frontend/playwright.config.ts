@@ -8,7 +8,7 @@ export default defineConfig({
   workers: process.env['CI'] ? 1 : undefined,
   reporter: 'list',
   use: {
-    baseURL: 'http://127.0.0.1:4200',
+    baseURL: process.env['PLAYWRIGHT_BASE_URL'] ?? 'http://127.0.0.1:4200',
     trace: 'on-first-retry',
   },
   projects: [
@@ -25,10 +25,12 @@ export default defineConfig({
       use: { viewport: { width: 1440, height: 900 } },
     },
   ],
-  webServer: {
-    command: 'npm run start -- --port=4200',
-    url: 'http://127.0.0.1:4200',
-    reuseExistingServer: !process.env['CI'],
-    timeout: 180_000,
-  },
+  webServer: process.env['PLAYWRIGHT_BASE_URL']
+    ? undefined
+    : {
+        command: 'npm run start -- --port=4200',
+        url: 'http://127.0.0.1:4200',
+        reuseExistingServer: !process.env['CI'],
+        timeout: 180_000,
+      },
 });

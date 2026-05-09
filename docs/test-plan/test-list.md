@@ -1,0 +1,448 @@
+# Test List
+
+Consolidated list of every test case from `docs/test-plan/`. Each entry has a
+`completionDateTime` property that is `null` until the test has been exercised
+and made green. The /loop process picks the first test with
+`completionDateTime: null` each iteration.
+
+## Tests
+
+| # | Plan | TC ID | Description | Expected | completionDateTime |
+|---|------|-------|-------------|----------|--------------------|
+| 1 | 01 | TC-V-001 | Headline ("Make health a game") font family | `Inter`, weight 500 | 2026-05-09T17:43:00Z |
+| 2 | 01 | TC-V-002 | Headline size — mobile | 28 px | null |
+| 3 | 01 | TC-V-003 | Headline size — tablet | 45 px | null |
+| 4 | 01 | TC-V-004 | Headline size — desktop | 57 px, line-height 1.1 | null |
+| 5 | 01 | TC-V-005 | Body description font weight | 400 (normal) | null |
+| 6 | 01 | TC-V-006 | Body description size — mobile/tablet/desktop | 16 / 18 / 18 px | null |
+| 7 | 01 | TC-V-007 | Body description line-height | 1.5 | null |
+| 8 | 01 | TC-V-008 | Primary button label ("Get started") | Inter 14/16 px, weight 500, white | null |
+| 9 | 01 | TC-V-009 | Secondary button label ("I have an account") | Inter 14/16 px, weight 500, on-surface color | null |
+| 10 | 01 | TC-V-010 | Brand wordmark ("HealthQuest") visible at desktop only | font 22 px, weight 500 | null |
+| 11 | 01 | TC-C-001 | Page background | `#F7FBF3` (md-sys-color-surface) | null |
+| 12 | 01 | TC-C-002 | Hero panel background | `#94F7B4` (primary container) | null |
+| 13 | 01 | TC-C-003 | Trophy icon color on hero | `#00210F` (on primary container) | null |
+| 14 | 01 | TC-C-004 | Headline text color | `#191D17` (on surface) | null |
+| 15 | 01 | TC-C-005 | Primary button background | `#006D3F` (primary) | null |
+| 16 | 01 | TC-C-006 | Primary button label color | `#FFFFFF` | null |
+| 17 | 01 | TC-C-007 | Secondary button border | `#C2C9BE` (outline-variant), 1 px | null |
+| 18 | 01 | TC-C-008 | Active page-dot color | `#006D3F` | null |
+| 19 | 01 | TC-C-009 | Inactive page-dot color | `#F1F5ED` (surface-container-low) | null |
+| 20 | 01 | TC-C-010 | Text/background contrast meets WCAG AA | >= 4.5:1 normal text, >= 3:1 large text | null |
+| 21 | 01 | TC-L-001 | Mobile body padding | 24 px on all sides | null |
+| 22 | 01 | TC-L-002 | Mobile vertical gap between hero, title, dots, buttons | 24 px | null |
+| 23 | 01 | TC-L-003 | Tablet body padding | 40 px top/bottom, 80 px left/right | null |
+| 24 | 01 | TC-L-004 | Tablet content vertical gap | 32 px | null |
+| 25 | 01 | TC-L-005 | Hero corner radius — mobile/tablet | 28 / 36 px | null |
+| 26 | 01 | TC-L-006 | Trophy icon size — mobile/tablet/desktop | 120 / 180 / 280 px | null |
+| 27 | 01 | TC-L-007 | Buttons stacked vertically with 12 px gap on mobile | confirmed via DOM bounding boxes | null |
+| 28 | 01 | TC-L-008 | Buttons inline with 16 px gap on tablet/desktop | confirmed | null |
+| 29 | 01 | TC-L-009 | Pill button corner radius | 9999 (full) | null |
+| 30 | 01 | TC-L-010 | Desktop split — left column ~50% width, right hero ~50% | left contains copy + actions, right contains trophy hero | null |
+| 31 | 01 | TC-R-001 | Viewport 360x780 | Single-column mobile layout, no horizontal scrollbar | null |
+| 32 | 01 | TC-R-002 | Viewport 375x812 | Same layout as 360 (mobile) | null |
+| 33 | 01 | TC-R-003 | Viewport 768x1024 | Tablet layout — buttons inline, larger hero | null |
+| 34 | 01 | TC-R-004 | Viewport 1024x768 | Tablet layout still applies (rail variant for app shell when signed in) | null |
+| 35 | 01 | TC-R-005 | Viewport 1440x900 | Desktop layout — split hero with brand wordmark visible | null |
+| 36 | 01 | TC-R-006 | Viewport >= 1920 wide | Content max-width respected (no edge-to-edge stretching) | null |
+| 37 | 01 | TC-R-007 | Window resize during render | Layout recomputes without flicker | null |
+| 38 | 01 | TC-R-008 | Page-dot indicator visible at all breakpoints | yes | null |
+| 39 | 01 | TC-F-001 | Click "Get started" | Browser navigates to OIDC `/authorize` URL (PKCE flow) | null |
+| 40 | 01 | TC-F-002 | Click "I have an account" | Same OIDC `/authorize` URL with `prompt=login` (or equivalent) | null |
+| 41 | 01 | TC-F-003 | OIDC state and code_verifier generated | Random per click; state echoed back in callback | null |
+| 42 | 01 | TC-F-004 | Code verifier stored in `sessionStorage` only | Not in localStorage; cleared after exchange | null |
+| 43 | 01 | TC-F-005 | After OIDC callback success | App routes to `/home` | null |
+| 44 | 01 | TC-F-006 | OIDC callback with mismatched `state` | Reject; route to `/onboarding` with toast (L2-013 §3) | null |
+| 45 | 01 | TC-F-007 | Page loads with no auth tokens leaked to console / network logs | Confirmed via DevTools | null |
+| 46 | 01 | TC-F-008 | Direct visit to `/onboarding` while authenticated | Redirect to `/home` | null |
+| 47 | 01 | TC-B-001 | Tab order: Get started -> I have an account -> page-dot? -> Get started | Logical, single-row, no skipped controls | null |
+| 48 | 01 | TC-B-002 | Visible focus ring on every interactive element | Yes, color contrast >= 3:1 | null |
+| 49 | 01 | TC-B-003 | Enter on focused button activates it | Yes | null |
+| 50 | 01 | TC-B-004 | Space on focused button activates it | Yes | null |
+| 51 | 01 | TC-B-005 | Hover on primary button | Slight elevation / state-layer overlay; cursor pointer | null |
+| 52 | 01 | TC-B-006 | Click during in-flight redirect (double click "Get started") | Only one OIDC redirect emitted | null |
+| 53 | 01 | TC-B-007 | Reduced-motion preference honored | No animated dot transitions | null |
+| 54 | 01 | TC-A-001 | `<main>` landmark wraps content | Yes | null |
+| 55 | 01 | TC-A-002 | Headline rendered as `<h1>` | Yes | null |
+| 56 | 01 | TC-A-003 | Trophy icon has accessible name or `aria-hidden="true"` | Decorative — `aria-hidden` | null |
+| 57 | 01 | TC-A-004 | Buttons have descriptive accessible names ("Get started", "I have an account") | Yes | null |
+| 58 | 01 | TC-A-005 | Page-dot indicator exposes `aria-current="step"` on the active dot | Yes | null |
+| 59 | 01 | TC-A-006 | axe-core scan returns 0 critical / serious violations | Yes | null |
+| 60 | 01 | TC-D-001 | OIDC `code_verifier` written to `sessionStorage` on click | Present until callback exchange | null |
+| 61 | 01 | TC-D-002 | OIDC `code_verifier` cleared after successful token exchange | Removed from sessionStorage | null |
+| 62 | 01 | TC-D-003 | No persistent identifiers (PII, tokens) written to localStorage | Confirmed | null |
+| 63 | 01 | TC-D-004 | Reload before completing OIDC redirect | Code verifier preserved; flow resumable | null |
+| 64 | 01 | TC-D-005 | After successful sign-in, refresh token (if used) stored only as httpOnly cookie | Confirmed via DevTools | null |
+| 65 | 01 | TC-P-001 | Cold load LCP on simulated 4G (Lighthouse) | <= 2.5 s (L2-019 §1) | null |
+| 66 | 01 | TC-P-002 | Initial JS payload split — onboarding chunk does not pull in dashboard code | Confirmed via bundle analyzer | null |
+| 67 | 01 | TC-P-003 | TBT under interaction | <= 200 ms | null |
+| 68 | 02 | TC-V-001 | Greeting ("Good morning, {name}") | Inter 32/28/22 (desktop/tablet/mobile), weight 500 | null |
+| 69 | 02 | TC-V-002 | Section labels ("Today", "Recent rewards", "Live a goal") | Inter 18 px, weight 500 | null |
+| 70 | 02 | TC-V-003 | Stat numbers (e.g., "12", "3 / 6", "Lvl 8", "87%") | Inter 28–32 px, weight 600 or 500 | null |
+| 71 | 02 | TC-V-004 | Goal/reward card titles | Inter 14 px, weight 500 | null |
+| 72 | 02 | TC-V-005 | Card subtitles / metadata | Inter 12–13 px, weight 400 | null |
+| 73 | 02 | TC-V-006 | Streak label "Trophy" / streak count | Inter 13 px, weight 500–600 | null |
+| 74 | 02 | TC-V-007 | Bar-chart axis text | Inter 11 px, weight 400 | null |
+| 75 | 02 | TC-C-001 | Page background | `#F1F5ED` (surface-container-low) | null |
+| 76 | 02 | TC-C-002 | Bar-chart bars | `#006D3F` (primary) | null |
+| 77 | 02 | TC-C-003 | Streak card background | `#FFDCC4` (streak-container) | null |
+| 78 | 02 | TC-C-004 | Streak icon/text | `#E76A0C` (streak) | null |
+| 79 | 02 | TC-C-005 | Reward card background | `#FFD7EE` (reward-container) | null |
+| 80 | 02 | TC-C-006 | Reward accent | `#9B2680` (reward) | null |
+| 81 | 02 | TC-C-007 | Success/level cards | `#94F7B4` background, `#00210F` text | null |
+| 82 | 02 | TC-C-008 | "Add" / "Log activity" primary CTA | `#006D3F` background, white label | null |
+| 83 | 02 | TC-C-009 | Card outline (when outlined variant) | `#C2C9BE` (outline-variant), 1 px | null |
+| 84 | 02 | TC-C-010 | Color contrast — all text | WCAG AA 4.5:1 / 3:1 | null |
+| 85 | 02 | TC-L-001 | Page padding — mobile/tablet/desktop | 16 / 24 / 32 px | null |
+| 86 | 02 | TC-L-002 | Card corner radius | 16 px (xl) | null |
+| 87 | 02 | TC-L-003 | Card padding | 20 px | null |
+| 88 | 02 | TC-L-004 | Inter-card gap (within section) | 12–16 px | null |
+| 89 | 02 | TC-L-005 | Bar-chart bar gap | 4 px | null |
+| 90 | 02 | TC-L-006 | Section vertical rhythm | 24 px between sections | null |
+| 91 | 02 | TC-L-007 | Avatar size — header | 32 / 40 / 48 px | null |
+| 92 | 02 | TC-L-008 | Mobile shows single-column stack | confirmed | null |
+| 93 | 02 | TC-L-009 | Tablet shows 1–2 columns where space allows | confirmed | null |
+| 94 | 02 | TC-L-010 | Desktop shows main + side panel grid | confirmed; main bounded by max content width | null |
+| 95 | 02 | TC-R-001 | 360 px viewport | Single-column; bottom nav visible | null |
+| 96 | 02 | TC-R-002 | 768 px viewport | Two columns where appropriate; rail variant | null |
+| 97 | 02 | TC-R-003 | 1200 px viewport | Drawer variant visible; bottom nav and rail hidden | null |
+| 98 | 02 | TC-R-004 | 1440 px viewport | Drawer + side panel; main `<main>` `max-width <= 1152 px` | null |
+| 99 | 02 | TC-R-005 | Resize from 1024 to 1440 | Smooth re-layout, no flicker | null |
+| 100 | 02 | TC-R-006 | Print stylesheet | Page is readable in print preview (no nav chrome) | null |
+| 101 | 02 | TC-F-001 | Greeting reflects current time-of-day in user TZ | morning <12, afternoon <17, evening <22, night otherwise | null |
+| 102 | 02 | TC-F-002 | Greeting uses user's display name | from profile (L2-014) | null |
+| 103 | 02 | TC-F-003 | Today section sums activity for the current cadence period only | matches API totals | null |
+| 104 | 02 | TC-F-004 | Streak chip on goal card shows current streak | matches L2-007 computation | null |
+| 105 | 02 | TC-F-005 | Recent rewards card shows up to 3 most-recent earned rewards | newest first, with date earned | null |
+| 106 | 02 | TC-F-006 | Click goal card | Navigates to `/goals/{id}` (L2-002 §3) | null |
+| 107 | 02 | TC-F-007 | Click "Log activity" CTA on goal card | Opens log activity flow for that goal | null |
+| 108 | 02 | TC-F-008 | Click "New goal" CTA | Navigates to create-goal flow | null |
+| 109 | 02 | TC-F-009 | Click reward in "Recent rewards" | Navigates to `/rewards/{id}` | null |
+| 110 | 02 | TC-F-010 | Dashboard shows only this user's data — switching accounts clears prior data | confirmed | null |
+| 111 | 02 | TC-F-011 | Empty state — no goals yet | Shows onboarding CTA card (mobile/tablet/desktop) | null |
+| 112 | 02 | TC-F-012 | Empty state — goals but zero activity today | Shows "log your first activity" prompt | null |
+| 113 | 02 | TC-F-013 | Admin role chip / admin link visible only when user has Admin role (L2-015) | confirmed | null |
+| 114 | 02 | TC-F-014 | API failure on dashboard load | Shows error state with retry, does not crash | null |
+| 115 | 02 | TC-B-001 | Tab order: greeting -> today metrics -> goals list -> rewards -> nav | Logical | null |
+| 116 | 02 | TC-B-002 | Cards have visible focus rings | Yes | null |
+| 117 | 02 | TC-B-003 | Bar chart has accessible `<svg role="img">` with summary text | Yes | null |
+| 118 | 02 | TC-B-004 | Hover/focus state on cards | Subtle elevation or state-layer | null |
+| 119 | 02 | TC-B-005 | Pull-to-refresh (mobile, optional) | Reloads dashboard data | null |
+| 120 | 02 | TC-B-006 | Reduced-motion preference | No bar entrance animation | null |
+| 121 | 02 | TC-A-001 | Greeting rendered as `<h1>` | Yes | null |
+| 122 | 02 | TC-A-002 | Sections wrapped in `<section aria-labelledby=...>` | Yes | null |
+| 123 | 02 | TC-A-003 | Bar chart exposes data via accessible name or table summary | Yes | null |
+| 124 | 02 | TC-A-004 | Icon-only "Add" button has `aria-label="New goal"` | Yes | null |
+| 125 | 02 | TC-A-005 | Streak chip text is not the sole conveyor of meaning (color + icon + label) | Yes | null |
+| 126 | 02 | TC-A-006 | axe-core scan | 0 critical / serious | null |
+| 127 | 02 | TC-D-001 | Logging an activity from elsewhere then returning to dashboard | New totals visible after refetch (cache-bust or revalidate) | null |
+| 128 | 02 | TC-D-002 | Earning a reward | Surfaces on next dashboard load (L2-010 §2) | null |
+| 129 | 02 | TC-D-003 | Sign out then sign in as different user | Old user's data is purged from in-memory store and cache | null |
+| 130 | 02 | TC-D-004 | Cadence rollover — daily goal at local midnight | "Today" totals reset (L2-011 §1) | null |
+| 131 | 02 | TC-D-005 | Network offline | Last cached snapshot shown with offline banner (no stale write attempts) | null |
+| 132 | 02 | TC-P-001 | Dashboard initial render uses route-level chunk only | yes (L2-019 §2) | null |
+| 133 | 02 | TC-P-002 | API call to `/dashboard/summary` — p95 server time | <= 300 ms (L2-018 §1) | null |
+| 134 | 02 | TC-P-003 | TBT under typical interactions | <= 200 ms | null |
+| 135 | 03 | TC-V-001 | Page title "Goals" | Inter 32 px desktop / 22 px mobile, weight 500 | null |
+| 136 | 03 | TC-V-002 | Subtitle ("5 active goals · 4 streaks running") | Inter 13 px, weight 400 | null |
+| 137 | 03 | TC-V-003 | Filter chip labels | Inter 13 px, weight 500 | null |
+| 138 | 03 | TC-V-004 | Goal card title | Inter 14 px, weight 500 | null |
+| 139 | 03 | TC-V-005 | Goal card metadata (cadence, streak, target) | Inter 12 px, weight 400 | null |
+| 140 | 03 | TC-V-006 | "New goal" button label | Inter 14 px, weight 500, white | null |
+| 141 | 03 | TC-V-007 | Empty state heading | Inter 22 px, weight 500 | null |
+| 142 | 03 | TC-V-008 | Form field labels | Inter 13 px, weight 500 | null |
+| 143 | 03 | TC-V-009 | Form helper text | Inter 12 px, weight 400 | null |
+| 144 | 03 | TC-C-001 | Page background | `#F1F5ED` (surface-container-low) | null |
+| 145 | 03 | TC-C-002 | Top bar background | `#F7FBF3` (surface) | null |
+| 146 | 03 | TC-C-003 | Active filter chip | `#D2E8D4` background, `#0C1F13` label | null |
+| 147 | 03 | TC-C-004 | Inactive filter chip | transparent fill, `#C2C9BE` 1 px outline, `#191D17` label | null |
+| 148 | 03 | TC-C-005 | Goal card background (default) | `#EBEFE7` (surface-container) | null |
+| 149 | 03 | TC-C-006 | Highlighted "ready" card | `#94F7B4` (primary container) | null |
+| 150 | 03 | TC-C-007 | Goal card icon backgrounds rotate through container palette | green / blue / orange / pink containers | null |
+| 151 | 03 | TC-C-008 | Progress bar fill | `#006D3F` | null |
+| 152 | 03 | TC-C-009 | Progress bar track | `#E5E9E2` | null |
+| 153 | 03 | TC-C-010 | Primary "New goal" button | `#006D3F` bg, `#FFFFFF` label | null |
+| 154 | 03 | TC-C-011 | Destructive "Delete" button | `#BA1A1A` bg in confirm dialog, `#FFFFFF` label | null |
+| 155 | 03 | TC-L-001 | Top bar height — desktop/tablet/mobile | 80 / 80 / 64 px | null |
+| 156 | 03 | TC-L-002 | Top bar horizontal padding | 32 / 32 / 8 px | null |
+| 157 | 03 | TC-L-003 | Filter row gap between chips | 8 px | null |
+| 158 | 03 | TC-L-004 | Filter chip height | 32 px (mobile), 36 px (tablet/desktop) | null |
+| 159 | 03 | TC-L-005 | Goal card corner radius | 16 px | null |
+| 160 | 03 | TC-L-006 | Goal card padding | 12 px (mobile), 20 px (tablet/desktop) | null |
+| 161 | 03 | TC-L-007 | Goal card icon container size | 40 px square, 9999 corner radius | null |
+| 162 | 03 | TC-L-008 | List inter-row gap (mobile) | 8 px | null |
+| 163 | 03 | TC-L-009 | Grid columns (desktop) | 3 cards across; gap 16 px | null |
+| 164 | 03 | TC-L-010 | Floating action button (mobile) | 56 px, bottom-right with 24 px inset | null |
+| 165 | 03 | TC-L-011 | Detail view — section spacing | 24 px between header / streak / activity history | null |
+| 166 | 03 | TC-R-001 | 360 px | Single-column list; FAB visible | null |
+| 167 | 03 | TC-R-002 | 768 px | Two-column grid; "New goal" pill in top bar | null |
+| 168 | 03 | TC-R-003 | 1440 px | Three-column grid; max content width <= 1152 px | null |
+| 169 | 03 | TC-R-004 | Filter row scrolls horizontally on mobile if overflowing | yes, no clipping | null |
+| 170 | 03 | TC-R-005 | Long goal names truncate at 1 line on cards | ellipsis + accessible full name on hover/focus | null |
+| 171 | 03 | TC-R-006 | Detail view streaks row stays readable at <576 px | no horizontal scroll (L2-008 §3) | null |
+| 172 | 03 | TC-F-001 | List shows only goals owned by current user | per L2-002 §1 | null |
+| 173 | 03 | TC-F-002 | Searching filters by name (case-insensitive substring) | Yes | null |
+| 174 | 03 | TC-F-003 | Filter chip "All" shows count of total goals | matches list size | null |
+| 175 | 03 | TC-F-004 | Filter chip "Daily" shows count of daily-cadence goals | counts match | null |
+| 176 | 03 | TC-F-005 | Filter chip "Hourly/Weekly/Monthly" similarly accurate | yes | null |
+| 177 | 03 | TC-F-006 | Sort: Streak length | descending current streak; tiebreak alphabetical | null |
+| 178 | 03 | TC-F-007 | Sort: Recently active | descending last-activity timestamp | null |
+| 179 | 03 | TC-F-008 | Sort: Name | ascending | null |
+| 180 | 03 | TC-F-009 | Empty state — 0 goals | Shows onboarding card with "Create your first goal" CTA | null |
+| 181 | 03 | TC-F-010 | Click on a goal card | Navigates to `/goals/{id}` | null |
+| 182 | 03 | TC-F-011 | Streak chip on card matches L2-007 computation | Yes | null |
+| 183 | 03 | TC-F-101 | Create goal — required field name empty | Form blocks submit; inline error (L2-001 §2) | null |
+| 184 | 03 | TC-F-102 | Create goal — non-positive target | Inline error; not persisted (L2-001 §3) | null |
+| 185 | 03 | TC-F-103 | Create daily goal — happy path | Persisted; appears at top of list within 500 ms | null |
+| 186 | 03 | TC-F-104 | Create hourly / weekly / monthly | Persisted with correct cadence (L2-011) | null |
+| 187 | 03 | TC-F-105 | Create custom cadence "every 3 days" | Persisted; period boundaries from start date in 3-day increments (L2-012 §1) | null |
+| 188 | 03 | TC-F-106 | Custom cadence with N <= 0 | Validation error (L2-012 §2) | null |
+| 189 | 03 | TC-F-107 | Edit goal — change cadence from daily to weekly | Streak windows recomputed forward; historical entries unchanged (L2-003 §3) | null |
+| 190 | 03 | TC-F-108 | Edit goal owned by another user via crafted request | 403 / 404 (L2-003 §2) | null |
+| 191 | 03 | TC-F-109 | Save while offline | Disabled or queued with offline indicator | null |
+| 192 | 03 | TC-F-201 | Click delete | Confirmation dialog appears (L2-004 §3) | null |
+| 193 | 03 | TC-F-202 | Cancel confirmation | Goal preserved | null |
+| 194 | 03 | TC-F-203 | Confirm delete | Goal + activity entries + linked rewards removed from view (L2-004 §1) | null |
+| 195 | 03 | TC-F-204 | Attempt to delete via crafted API request not owned | 403 / 404 (L2-004 §2) | null |
+| 196 | 03 | TC-B-001 | Tab order: search -> filter chips -> sort -> list cards -> FAB | Logical | null |
+| 197 | 03 | TC-B-002 | Enter activates focused chip / card / button | Yes | null |
+| 198 | 03 | TC-B-003 | Form fields show focus ring at >=3:1 contrast | Yes | null |
+| 199 | 03 | TC-B-004 | Submitting form with Enter from any field | Triggers submit | null |
+| 200 | 03 | TC-B-005 | Optimistic UI on create | Card appears immediately; rolls back on API failure with toast | null |
+| 201 | 03 | TC-B-006 | Streak count animates only when not in reduced-motion mode | Yes | null |
+| 202 | 03 | TC-A-001 | Goal card is a single accessible link/button | Yes (no nested clickable controls) | null |
+| 203 | 03 | TC-A-002 | Filter chips expose `role="tab"` or `aria-pressed` accurately | Yes | null |
+| 204 | 03 | TC-A-003 | Form fields have `<label>` associations | Yes | null |
+| 205 | 03 | TC-A-004 | Validation errors associated via `aria-describedby` | Yes | null |
+| 206 | 03 | TC-A-005 | Delete confirmation is a focus-trapping `<dialog>` | Yes | null |
+| 207 | 03 | TC-A-006 | axe-core | 0 critical/serious | null |
+| 208 | 03 | TC-D-001 | Created goal survives reload | Yes (server-persisted) | null |
+| 209 | 03 | TC-D-002 | Edit survives reload | Yes | null |
+| 210 | 03 | TC-D-003 | Deleted goal does not reappear after reload | Yes | null |
+| 211 | 03 | TC-D-004 | Sign out + sign in same user | Same goals visible | null |
+| 212 | 03 | TC-D-005 | Sign in as different user | Other user's goals not visible | null |
+| 213 | 03 | TC-D-006 | Cadence rollover at local midnight (daily) | Period totals reset; streak preserved (L2-011 §1) | null |
+| 214 | 03 | TC-D-007 | Concurrent edit (two tabs) | Last-write-wins or server reports stale-version error; UI reconciles | null |
+| 215 | 03 | TC-P-001 | Read 100 goals — p95 server time | <= 300 ms (L2-018 §1) | null |
+| 216 | 03 | TC-P-002 | Create / update — p95 | <= 500 ms (L2-018 §2) | null |
+| 217 | 03 | TC-P-003 | Goals route lazy-loaded | confirmed via bundle analyzer (L2-019 §2) | null |
+| 218 | 04 | TC-V-001 | Sheet/dialog title ("Log activity", "New goal") | Inter 22 px, weight 500 | null |
+| 219 | 04 | TC-V-002 | Field labels | Inter 13 px, weight 500 | null |
+| 220 | 04 | TC-V-003 | Input text | Inter 14 px, weight 400 | null |
+| 221 | 04 | TC-V-004 | Helper text / unit suffix | Inter 12 px, weight 400 | null |
+| 222 | 04 | TC-V-005 | Submit button label | Inter 14 px, weight 500, white | null |
+| 223 | 04 | TC-V-006 | Validation error text | Inter 12 px, weight 500, error color | null |
+| 224 | 04 | TC-V-007 | Section group label ("Cadence", "Reminder") | Inter 13 px, weight 600, letter-spacing 0.5 px | null |
+| 225 | 04 | TC-C-001 | Sheet/dialog surface | `#F7FBF3` (surface) | null |
+| 226 | 04 | TC-C-002 | Field outline (default) | `#C2C9BE` (outline-variant), 1 px | null |
+| 227 | 04 | TC-C-003 | Field outline (focused) | `#006D3F` (primary), 2 px | null |
+| 228 | 04 | TC-C-004 | Field outline (error) | `#BA1A1A` (error), 2 px | null |
+| 229 | 04 | TC-C-005 | Cadence segmented selected | `#94F7B4` background, `#00210F` label | null |
+| 230 | 04 | TC-C-006 | Cadence segmented unselected | transparent fill, outline 1 px, `#191D17` label | null |
+| 231 | 04 | TC-C-007 | Switch on color | `#006D3F` track, `#FFFFFF` thumb | null |
+| 232 | 04 | TC-C-008 | Submit button | `#006D3F` bg, white label | null |
+| 233 | 04 | TC-C-009 | Mobile sheet handle | `#C2C9BE`, 4 px tall, 32 px wide | null |
+| 234 | 04 | TC-C-010 | Backdrop scrim (when modal) | `#0000007A` | null |
+| 235 | 04 | TC-L-001 | Mobile bottom sheet corner radius | 28 px top, 0 bottom | null |
+| 236 | 04 | TC-L-002 | Mobile sheet padding | 24 px horizontal, 16 px top, 24 px bottom (above safe-area inset) | null |
+| 237 | 04 | TC-L-003 | Tablet form padding | 32 px | null |
+| 238 | 04 | TC-L-004 | Field height | 56 px | null |
+| 239 | 04 | TC-L-005 | Inter-field vertical gap | 16 px | null |
+| 240 | 04 | TC-L-006 | Section vertical gap | 24 px | null |
+| 241 | 04 | TC-L-007 | Cadence segmented control height | 40 px; corner radius 9999 | null |
+| 242 | 04 | TC-L-008 | Submit button height | 48 px (mobile) / 56 px (tablet/desktop) | null |
+| 243 | 04 | TC-L-009 | Submit button width | full width on mobile / right-aligned on tablet/desktop | null |
+| 244 | 04 | TC-L-010 | Dialog max width on desktop | 720 px; centered with max content max-width respected | null |
+| 245 | 04 | TC-R-001 | 360 px | Bottom sheet slides up from below; takes ~75% of viewport height; drag handle visible | null |
+| 246 | 04 | TC-R-002 | 768 px | Full-page form layout; nav rail still visible | null |
+| 247 | 04 | TC-R-003 | 1200 px | Centered dialog with backdrop; form re-uses tablet styling | null |
+| 248 | 04 | TC-R-004 | Resize from mobile to tablet while open | Component swaps from sheet to dialog without losing form state | null |
+| 249 | 04 | TC-R-005 | Soft keyboard on mobile | Sheet content scrolls; submit button stays visible above keyboard | null |
+| 250 | 04 | TC-R-006 | Long content (e.g., notes textarea grows) | Sheet remains scrollable; submit pinned to bottom | null |
+| 251 | 04 | TC-F-001 | Log a positive quantity for a daily goal | Persisted; appears in goal's activity history (L2-005 §1) | null |
+| 252 | 04 | TC-F-002 | Log a quantity of 0 | Allowed (counts as "checked in") OR rejected per design — confirm with spec; current expectation: rejected | null |
+| 253 | 04 | TC-F-003 | Log a negative quantity | Validation error (L2-001 §3 / L2-016) | null |
+| 254 | 04 | TC-F-004 | Log activity with future timestamp beyond cadence window | Validation error (L2-005 §2) | null |
+| 255 | 04 | TC-F-005 | Log activity with optional note (1–500 chars) | Persisted | null |
+| 256 | 04 | TC-F-006 | Note exceeding 500 chars | Validation error | null |
+| 257 | 04 | TC-F-007 | Log against a goal owned by another user (crafted request) | 403 / 404 (L2-005 §3) | null |
+| 258 | 04 | TC-F-008 | After successful log, streak recomputed | L2-007 satisfied; UI reflects new current streak | null |
+| 259 | 04 | TC-F-009 | Successful submit closes sheet/dialog and shows toast | Yes | null |
+| 260 | 04 | TC-F-010 | Edit existing activity entry | Persists; recomputes streak (L2-006 §1) | null |
+| 261 | 04 | TC-F-011 | Delete existing activity entry | Persists; recomputes streak (L2-006 §2) | null |
+| 262 | 04 | TC-F-012 | Edit/delete another user's entry via crafted request | 403 / 404 (L2-006 §3) | null |
+| 263 | 04 | TC-F-101 | Empty name | Validation error (L2-001 §2) | null |
+| 264 | 04 | TC-F-102 | Non-positive target | Validation error (L2-001 §3) | null |
+| 265 | 04 | TC-F-103 | Cadence Daily — happy path | Persisted; appears in list with streak 0 | null |
+| 266 | 04 | TC-F-104 | Cadence Hourly | Persisted; period rolls at top of next hour (L2-011 §4) | null |
+| 267 | 04 | TC-F-105 | Cadence Weekly with week-start = Monday | Persisted; rollover at next Monday (L2-011 §2) | null |
+| 268 | 04 | TC-F-106 | Cadence Monthly | Persisted; rollover on first of next month (L2-011 §3) | null |
+| 269 | 04 | TC-F-107 | Custom cadence "every 3 days" | Persisted with start date; period boundaries 3-day increments (L2-012 §1) | null |
+| 270 | 04 | TC-F-108 | Custom cadence N=0 | Validation error (L2-012 §2) | null |
+| 271 | 04 | TC-F-109 | Submit while unauthenticated (token expired) | 401; client routes to re-auth (L2-013 §4) | null |
+| 272 | 04 | TC-B-001 | Open log sheet via FAB | Slide-up animation 200 ms; respects reduced-motion | null |
+| 273 | 04 | TC-B-002 | Backdrop click closes sheet (no unsaved changes) | Yes | null |
+| 274 | 04 | TC-B-003 | Backdrop click with unsaved changes | Confirmation dialog ("Discard?") | null |
+| 275 | 04 | TC-B-004 | Esc closes dialog (desktop) | Yes | null |
+| 276 | 04 | TC-B-005 | Focus moves into first form field on open | Yes | null |
+| 277 | 04 | TC-B-006 | Focus returns to FAB / trigger on close | Yes | null |
+| 278 | 04 | TC-B-007 | Tab cycles within dialog (focus trap) | Yes | null |
+| 279 | 04 | TC-B-008 | Submit button shows loading spinner during in-flight call | Yes; disabled until done | null |
+| 280 | 04 | TC-B-009 | Double-click submit | Only one create / log POST emitted | null |
+| 281 | 04 | TC-B-010 | Drag handle on mobile sheet supports swipe-to-dismiss | Yes | null |
+| 282 | 04 | TC-A-001 | Sheet exposes `role="dialog"` with `aria-modal="true"` | Yes | null |
+| 283 | 04 | TC-A-002 | Title programmatically associated via `aria-labelledby` | Yes | null |
+| 284 | 04 | TC-A-003 | Each input has visible label and matching `<label for>` | Yes | null |
+| 285 | 04 | TC-A-004 | Inline errors announced via `aria-live="polite"` | Yes | null |
+| 286 | 04 | TC-A-005 | Submit button announces loading state via `aria-busy` | Yes | null |
+| 287 | 04 | TC-A-006 | Sheet handle has `aria-label="Drag to close"` (or button alternative) | Yes | null |
+| 288 | 04 | TC-A-007 | axe-core | 0 critical / serious | null |
+| 289 | 04 | TC-D-001 | Logged activity survives reload | Yes (server-persisted) | null |
+| 290 | 04 | TC-D-002 | Created goal survives reload | Yes | null |
+| 291 | 04 | TC-D-003 | Logged note text round-trips exactly (incl. unicode, newlines) | Yes | null |
+| 292 | 04 | TC-D-004 | Quantity decimal precision preserved (per goal unit definition) | Yes | null |
+| 293 | 04 | TC-D-005 | Network failure mid-submit | Form remains open with values preserved; retry works | null |
+| 294 | 04 | TC-D-006 | Concurrent log from another device | Second log succeeds; streak recomputed deterministically | null |
+| 295 | 04 | TC-S-001 | XSS payload in goal name / note | Escaped on render (L2-016 §3) | null |
+| 296 | 04 | TC-S-002 | SQL-injection-shaped input | Rejected/escaped; parameterized query (L2-016 §2) | null |
+| 297 | 04 | TC-S-003 | CSRF token attached to mutating request | Yes (L2-016 §4) | null |
+| 298 | 04 | TC-S-004 | No tokens or code verifiers logged | Confirmed (L2-013 §3, L2-022) | null |
+| 299 | 04 | TC-P-001 | Sheet opens within 100 ms of FAB tap | Yes | null |
+| 300 | 04 | TC-P-002 | Submit p95 server time | <= 500 ms (L2-018 §2) | null |
+| 301 | 05 | TC-V-001 | Page title "Rewards" | Inter 32 px desktop / 22 px mobile, weight 500 | null |
+| 302 | 05 | TC-V-002 | Hero "READY TO CLAIM" eyebrow | Inter 11 px, weight 600, letter-spacing 1.5 px, uppercase | null |
+| 303 | 05 | TC-V-003 | Hero reward title | Inter 36 px desktop, weight 500 | null |
+| 304 | 05 | TC-V-004 | Hero description | Inter 16 px, weight 400, line-height 1.5 | null |
+| 305 | 05 | TC-V-005 | Section labels ("In progress", "Locked") | Inter 18 px, weight 500 | null |
+| 306 | 05 | TC-V-006 | Reward card title | Inter 14 px, weight 500 | null |
+| 307 | 05 | TC-V-007 | Progress text ("6 of 10") | Inter 13 px, weight 600 | null |
+| 308 | 05 | TC-V-008 | "New reward" button | Inter 14 px, weight 500, white | null |
+| 309 | 05 | TC-C-001 | Hero background — ready-to-claim | `#FFD7EE` (reward-container) | null |
+| 310 | 05 | TC-C-002 | Hero icon container | `#9B2680` (reward) bg, white icon | null |
+| 311 | 05 | TC-C-003 | Hero primary CTA "Claim" | `#9B2680` bg, white label | null |
+| 312 | 05 | TC-C-004 | Hero secondary CTA | transparent bg, `#C2C9BE` outline | null |
+| 313 | 05 | TC-C-005 | In-progress card | `#EBEFE7` bg | null |
+| 314 | 05 | TC-C-006 | Locked card | `#EBEFE7` bg with opacity 0.65 | null |
+| 315 | 05 | TC-C-007 | Progress bar fill | `#006D3F` | null |
+| 316 | 05 | TC-C-008 | Progress bar track | `#E5E9E2` | null |
+| 317 | 05 | TC-C-009 | Earned reward chip | `#94F7B4` bg, `#00210F` label | null |
+| 318 | 05 | TC-C-010 | Page background | `#F1F5ED` | null |
+| 319 | 05 | TC-L-001 | Hero corner radius | 24 px | null |
+| 320 | 05 | TC-L-002 | Hero padding | 32 px | null |
+| 321 | 05 | TC-L-003 | Hero icon size | 120 px square, 9999 corner radius | null |
+| 322 | 05 | TC-L-004 | Hero shadow | offset y=2, blur 8, color `#00000026` | null |
+| 323 | 05 | TC-L-005 | Reward grid columns — desktop/tablet/mobile | 3 / 2 / 1 | null |
+| 324 | 05 | TC-L-006 | Card corner radius | 16 px | null |
+| 325 | 05 | TC-L-007 | Card padding | 20 px | null |
+| 326 | 05 | TC-L-008 | Inter-card gap | 16 px | null |
+| 327 | 05 | TC-L-009 | Page padding desktop / tablet / mobile | 32 / 24 / 16 px | null |
+| 328 | 05 | TC-L-010 | Top bar height | 80 px | null |
+| 329 | 05 | TC-R-001 | 360 px | Single column; hero stacks icon-then-text vertically | null |
+| 330 | 05 | TC-R-002 | 768 px | Two-column grid; hero side-by-side icon + text | null |
+| 331 | 05 | TC-R-003 | 1440 px | Three-column grid; bounded by max content width | null |
+| 332 | 05 | TC-R-004 | Hero CTA buttons stack on mobile | 12 px gap | null |
+| 333 | 05 | TC-R-005 | Locked cards still legible at smallest viewport | Yes | null |
+| 334 | 05 | TC-F-001 | List shows only the current user's rewards | Yes (ownership scoping) | null |
+| 335 | 05 | TC-F-002 | Earned rewards visually distinguished from pending | Distinct accent + earned date displayed (L2-010 §2) | null |
+| 336 | 05 | TC-F-003 | Counts in subtitle accurate ("1 ready · 2 in progress · 3 locked") | Sums match list | null |
+| 337 | 05 | TC-F-004 | Click "Claim" on ready-to-claim hero | Marks the reward as claimed; appears in earned section with claimed timestamp | null |
+| 338 | 05 | TC-F-005 | Streak resets after a reward was earned | Earned reward remains earned (L2-010 §3) | null |
+| 339 | 05 | TC-F-006 | Filter / tabs by state (ready, in-progress, locked, earned) | Counts and grids match | null |
+| 340 | 05 | TC-F-007 | Click reward card | Navigates to `/rewards/{id}` detail | null |
+| 341 | 05 | TC-F-101 | Create reward — name + description + qualifying condition (goal + streak threshold) | Persisted, linked to goal (L2-009 §1) | null |
+| 342 | 05 | TC-F-102 | Create reward without qualifying condition | Validation error (L2-009 §2) | null |
+| 343 | 05 | TC-F-103 | Attempt to attach reward to a goal not owned by user | Rejected (L2-009 §3) | null |
+| 344 | 05 | TC-F-104 | Edit reward name / description | Persisted | null |
+| 345 | 05 | TC-F-105 | Delete reward | Removed; previously earned instances of it preserved as user history | null |
+| 346 | 05 | TC-F-201 | User's streak reaches threshold mid-session | In-app notification fires (L2-010 §1) | null |
+| 347 | 05 | TC-F-202 | Threshold reached while user offline | Notification queued; surfaces on next dashboard / rewards visit | null |
+| 348 | 05 | TC-F-203 | Notification has accessible name and is dismissible | Yes | null |
+| 349 | 05 | TC-B-001 | Tab order: top bar -> filter tabs -> hero -> grid -> CTA | Logical | null |
+| 350 | 05 | TC-B-002 | Hero "Claim" button shows loading state | Yes; disabled until done | null |
+| 351 | 05 | TC-B-003 | Reduced-motion preference | No celebratory animation | null |
+| 352 | 05 | TC-B-004 | Hover state on cards | Subtle elevation | null |
+| 353 | 05 | TC-A-001 | Hero is `<section aria-labelledby>` with title as `<h2>` | Yes | null |
+| 354 | 05 | TC-A-002 | Earned/in-progress/locked state communicated via text and icon, not color alone | Yes | null |
+| 355 | 05 | TC-A-003 | Progress bar exposes `role="progressbar"` with `aria-valuenow / valuemax` | Yes | null |
+| 356 | 05 | TC-A-004 | "Claim" button has descriptive accessible name (`Claim "{reward name}"`) | Yes | null |
+| 357 | 05 | TC-A-005 | axe-core | 0 critical / serious | null |
+| 358 | 05 | TC-D-001 | Defined reward survives reload | Yes | null |
+| 359 | 05 | TC-D-002 | Earned reward survives reload | Yes | null |
+| 360 | 05 | TC-D-003 | Earned reward NOT revoked when streak later breaks | Yes (L2-010 §3) | null |
+| 361 | 05 | TC-D-004 | Claimed timestamp recorded | Yes; displayed on detail view | null |
+| 362 | 05 | TC-D-005 | Sign in as different user | Other users' rewards not visible | null |
+| 363 | 05 | TC-P-001 | Read rewards list (up to 100) — p95 | <= 300 ms | null |
+| 364 | 05 | TC-P-002 | Claim reward — p95 | <= 500 ms | null |
+| 365 | 06 | TC-V-001 | Page title ("Stats", "Profile") | Inter 32 / 22 px (desktop / mobile), weight 500 | null |
+| 366 | 06 | TC-V-002 | Stat headline numbers (e.g., "87%", "1,240", "Lvl 8") | Inter 32 px, weight 600 | null |
+| 367 | 06 | TC-V-003 | Stat label | Inter 12 px, weight 500 | null |
+| 368 | 06 | TC-V-004 | Section headings | Inter 18 px, weight 500 | null |
+| 369 | 06 | TC-V-005 | Form field labels (email, display name) | Inter 13 px, weight 500 | null |
+| 370 | 06 | TC-V-006 | Body / paragraph copy | Inter 14 px, weight 400, line-height 1.5 | null |
+| 371 | 06 | TC-V-007 | Destructive button label ("Delete account") | Inter 14 px, weight 500 | null |
+| 372 | 06 | TC-C-001 | Page background | `#F1F5ED` | null |
+| 373 | 06 | TC-C-002 | Stat tile backgrounds (rotation) | success `#94F7B4`, streak `#FFDCC4`, info `#BEEAF6`, reward `#FFD7EE` | null |
+| 374 | 06 | TC-C-003 | On-tile text colors | matching on-* token (e.g., `#00210F` on `#94F7B4`) | null |
+| 375 | 06 | TC-C-004 | Activity bar chart bars | `#006D3F` | null |
+| 376 | 06 | TC-C-005 | Activity bar chart axis labels | `#424940` (on surface variant) | null |
+| 377 | 06 | TC-C-006 | Profile avatar background | `#94F7B4`; initial in `#00210F` | null |
+| 378 | 06 | TC-C-007 | Profile primary action ("Save") | `#006D3F` bg, white label | null |
+| 379 | 06 | TC-C-008 | Destructive ("Delete account") | `#BA1A1A` bg, white label | null |
+| 380 | 06 | TC-C-009 | Form outline (default / focus / error) | `#C2C9BE` / `#006D3F` 2 px / `#BA1A1A` 2 px | null |
+| 381 | 06 | TC-C-010 | Color contrast all text | WCAG AA | null |
+| 382 | 06 | TC-L-001 | Stat tile grid — desktop/tablet/mobile | 5 / 3 / 2 columns | null |
+| 383 | 06 | TC-L-002 | Stat tile corner radius | 16 px | null |
+| 384 | 06 | TC-L-003 | Stat tile padding | 16 px | null |
+| 385 | 06 | TC-L-004 | Bar-chart panel padding | 24 px | null |
+| 386 | 06 | TC-L-005 | Profile form field height | 56 px | null |
+| 387 | 06 | TC-L-006 | Profile form column max width | 480 px | null |
+| 388 | 06 | TC-L-007 | Section vertical rhythm | 24 px | null |
+| 389 | 06 | TC-L-008 | Avatar size — desktop | 48 px | null |
+| 390 | 06 | TC-L-009 | Avatar size — mobile | 32 px | null |
+| 391 | 06 | TC-L-010 | Page padding desktop / tablet / mobile | 32 / 24 / 16 px | null |
+| 392 | 06 | TC-R-001 | 360 px | Stat tiles 2 columns; bar chart full width below | null |
+| 393 | 06 | TC-R-002 | 768 px | Stat tiles 3 columns | null |
+| 394 | 06 | TC-R-003 | 1440 px | Stat tiles 5 columns; profile right-rail or below per layout | null |
+| 395 | 06 | TC-R-004 | Print stylesheet | Renders without nav chrome | null |
+| 396 | 06 | TC-R-005 | Bar chart axis labels remain readable at 360 px | Yes (no overlap) | null |
+| 397 | 06 | TC-F-001 | Active goals count matches API count | Yes | null |
+| 398 | 06 | TC-F-002 | Total activity count over selected window matches sum of entries | Yes | null |
+| 399 | 06 | TC-F-003 | Completion % = met-period-count / total-period-count for window | Matches L2-007 logic | null |
+| 400 | 06 | TC-F-004 | Bar chart x-axis matches selected window (week / month / year) | Yes | null |
+| 401 | 06 | TC-F-005 | Streak tile matches L2-007 current streak across user's longest active goal | Yes | null |
+| 402 | 06 | TC-F-006 | Lvl tile derived from cumulative activity (deterministic formula) | Yes | null |
+| 403 | 06 | TC-F-007 | Switching window selector | Tiles + chart re-fetch and update | null |
+| 404 | 06 | TC-F-008 | Empty state — no activity | Stats show 0/0/0 with "log your first activity" prompt | null |
+| 405 | 06 | TC-F-101 | View profile shows display name, email, avatar, member-since date | Yes | null |
+| 406 | 06 | TC-F-102 | Edit display name — happy path | Persisted; reflected in dashboard greeting (L2-014 §1) | null |
+| 407 | 06 | TC-F-103 | Edit email — when provider permits | Persisted; verification email sent if required | null |
+| 408 | 06 | TC-F-104 | Edit email — when provider forbids | UI displays read-only with explanation | null |
+| 409 | 06 | TC-F-105 | Cancel edit | Form reverts to last saved values | null |
+| 410 | 06 | TC-F-106 | Submit empty display name | Validation error | null |
+| 411 | 06 | TC-F-107 | Submit invalid email | Validation error (RFC 5321 / 5322 reasonable subset) | null |
+| 412 | 06 | TC-F-201 | Click "Delete account" | Confirmation dialog with explicit warning + typed confirmation ("DELETE") | null |
+| 413 | 06 | TC-F-202 | Cancel confirmation | No-op | null |
+| 414 | 06 | TC-F-203 | Confirm deletion | Backend deletes/anonymizes data and revokes sessions (L2-014 §2) | null |
+| 415 | 06 | TC-F-204 | Subsequent sign-in attempt with deleted account | Rejected (L2-014 §3) | null |
+| 416 | 06 | TC-F-205 | RBAC: non-admin cannot delete other accounts | 403 (L2-015 §1) | null |
+| 417 | 06 | TC-B-001 | Tab order: window selector -> stat tiles -> chart -> profile fields -> save -> destructive | Logical | null |
+| 418 | 06 | TC-B-002 | Save button disabled until form is dirty AND valid | Yes | null |
+| 419 | 06 | TC-B-003 | Save shows loading state during in-flight call | Yes | null |
+| 420 | 06 | TC-B-004 | Delete dialog focus-traps and restores focus on close | Yes | null |
+| 421 | 06 | TC-B-005 | Destructive button only enabled after typed confirmation | Yes | null |
+| 422 | 06 | TC-B-006 | Reduced-motion | Bars do not animate; selector switch is instant | null |
+| 423 | 06 | TC-A-001 | Page title rendered as `<h1>` | Yes | null |
+| 424 | 06 | TC-A-002 | Stat tile values have visible label and accessible relationship (label + value grouped) | Yes | null |
+| 425 | 06 | TC-A-003 | Bar chart has accessible summary (table fallback or `aria-label`) | Yes | null |
+| 426 | 06 | TC-A-004 | Form fields use `<label for>` and announce errors via `aria-describedby` | Yes | null |
+| 427 | 06 | TC-A-005 | Destructive action region uses `role="alertdialog"` with focus trap | Yes | null |
+| 428 | 06 | TC-A-006 | axe-core | 0 critical / serious | null |
+| 429 | 06 | TC-D-001 | Profile edit survives reload | Yes | null |
+| 430 | 06 | TC-D-002 | After account deletion, no API endpoint reveals deleted user's data | Yes (L2-014 §2) | null |
+| 431 | 06 | TC-D-003 | After account deletion, audit log records the deletion event with correlation ID | Yes (L2-022 §3) | null |
+| 432 | 06 | TC-D-004 | Email is never logged at any level | Confirmed (L2-017 §3) | null |
+| 433 | 06 | TC-D-005 | Auth tokens never written to localStorage; refresh tokens (if used) httpOnly cookie only | Confirmed (L2-013 §3) | null |
+| 434 | 06 | TC-D-006 | Stats accurately reflect cadence rollovers across midnight / month boundaries (L2-011) | Yes | null |
+| 435 | 06 | TC-P-001 | Stats summary endpoint p95 | <= 300 ms (L2-018 §1) | null |
+| 436 | 06 | TC-P-002 | Profile update endpoint p95 | <= 500 ms (L2-018 §2) | null |
+| 437 | 06 | TC-P-003 | Bar chart renders without layout shift (CLS ~ 0) | Yes | null |
