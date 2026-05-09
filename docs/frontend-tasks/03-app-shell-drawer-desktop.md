@@ -1,5 +1,5 @@
 ---
-status: Accepted
+status: Complete
 ---
 
 # Task 03 — Desktop drawer navigation
