@@ -52,6 +52,13 @@
   width: 100%;
 }
 
+@media (min-width: 768px) {
+  .app-shell__toolbar {
+    min-height: 80px;
+    height: 80px;
+  }
+}
+
 .app-shell__toolbar {
   background: #f7fbf3;
   border-bottom: var(--hg-border-subtle);

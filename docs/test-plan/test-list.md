@@ -163,7 +163,7 @@ and made green. The /loop process picks the first test with
 | 152 | 03 | TC-C-009 | Progress bar track | `#E5E9E2` | 2026-05-09T23:41:18Z |
 | 153 | 03 | TC-C-010 | Primary "New goal" button | `#006D3F` bg, `#FFFFFF` label | 2026-05-09T23:42:10Z |
 | 154 | 03 | TC-C-011 | Destructive "Delete" button | `#BA1A1A` bg in confirm dialog, `#FFFFFF` label | 2026-05-09T23:45:02Z |
-| 155 | 03 | TC-L-001 | Top bar height — desktop/tablet/mobile | 80 / 80 / 64 px | null |
+| 155 | 03 | TC-L-001 | Top bar height — desktop/tablet/mobile | 80 / 80 / 64 px | 2026-05-09T23:50:34Z |
 | 156 | 03 | TC-L-002 | Top bar horizontal padding | 32 / 32 / 8 px | null |
 | 157 | 03 | TC-L-003 | Filter row gap between chips | 8 px | null |
 | 158 | 03 | TC-L-004 | Filter chip height | 32 px (mobile), 36 px (tablet/desktop) | null |

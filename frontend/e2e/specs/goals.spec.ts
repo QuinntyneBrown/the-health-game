@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 03-TC-V-001..009, 03-TC-C-001..011
+// Traces to: 03-TC-V-001..009, 03-TC-C-001..011, 03-TC-L-001
 // Description: /goals page title "Goals" renders with Inter weight 500 at 22/32 px.
 // Subtitle is Inter 13 px weight 400 with computed counts.
 import { expect, test } from '@playwright/test';
@@ -554,6 +554,35 @@ test.describe('Goals page — header typography', () => {
         expect(computed.fontWeight).toBe('500');
         expect(computed.fontSize).toBe('13px');
       }
+    });
+  });
+
+  test.describe('top bar height — viewport responsive (03-TC-L-001)', () => {
+    test('desktop top bar is 80 px tall', async ({ page }) => {
+      await page.setViewportSize({ width: 1440, height: 900 });
+      await authenticate(page);
+      await page.goto('/goals');
+      const toolbar = page.locator('mat-toolbar.app-shell__toolbar').first();
+      const h = await toolbar.evaluate((el) => Math.round(el.getBoundingClientRect().height));
+      expect(h).toBe(80);
+    });
+
+    test('tablet top bar is 80 px tall', async ({ page }) => {
+      await page.setViewportSize({ width: 768, height: 1024 });
+      await authenticate(page);
+      await page.goto('/goals');
+      const toolbar = page.locator('mat-toolbar.app-shell__toolbar').first();
+      const h = await toolbar.evaluate((el) => Math.round(el.getBoundingClientRect().height));
+      expect(h).toBe(80);
+    });
+
+    test('mobile top bar is 64 px tall', async ({ page }) => {
+      await page.setViewportSize({ width: 360, height: 780 });
+      await authenticate(page);
+      await page.goto('/goals');
+      const toolbar = page.locator('mat-toolbar.app-shell__toolbar').first();
+      const h = await toolbar.evaluate((el) => Math.round(el.getBoundingClientRect().height));
+      expect(h).toBe(64);
     });
   });
 
