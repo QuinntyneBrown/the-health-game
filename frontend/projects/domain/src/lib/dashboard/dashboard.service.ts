@@ -10,6 +10,13 @@ import {
 } from './dashboard-overview.model';
 import { IDashboardService } from './dashboard.service.contract';
 
+function greetingFor(hour: number): string {
+  if (hour < 12) return 'Good morning';
+  if (hour < 17) return 'Good afternoon';
+  if (hour < 22) return 'Good evening';
+  return 'Good night';
+}
+
 const cadenceLabels: Record<GoalCadence, string> = {
   hourly: 'Hourly',
   daily: 'Daily',
@@ -41,7 +48,7 @@ export class DashboardService implements IDashboardService {
 
         return {
           dateLabel: 'Today',
-          greeting: 'Good morning',
+          greeting: greetingFor(new Date().getHours()),
           goals: goals.map((goal): DashboardGoalItem => {
             const progressValue =
               goal.target.value === 0

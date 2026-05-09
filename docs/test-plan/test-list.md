@@ -109,7 +109,7 @@ and made green. The /loop process picks the first test with
 | 98 | 02 | TC-R-004 | 1440 px viewport | Drawer + side panel; main `<main>` `max-width <= 1152 px` | 2026-05-09T21:18:03Z |
 | 99 | 02 | TC-R-005 | Resize from 1024 to 1440 | Smooth re-layout, no flicker | 2026-05-09T21:19:19Z |
 | 100 | 02 | TC-R-006 | Print stylesheet | Page is readable in print preview (no nav chrome) | 2026-05-09T21:21:23Z |
-| 101 | 02 | TC-F-001 | Greeting reflects current time-of-day in user TZ | morning <12, afternoon <17, evening <22, night otherwise | null |
+| 101 | 02 | TC-F-001 | Greeting reflects current time-of-day in user TZ | morning <12, afternoon <17, evening <22, night otherwise | 2026-05-09T21:24:01Z |
 | 102 | 02 | TC-F-002 | Greeting uses user's display name | from profile (L2-014) | null |
 | 103 | 02 | TC-F-003 | Today section sums activity for the current cadence period only | matches API totals | null |
 | 104 | 02 | TC-F-004 | Streak chip on goal card shows current streak | matches L2-007 computation | null |

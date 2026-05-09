@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 02-TC-V-001..007, 02-TC-C-001..010, 02-TC-L-001..010, 02-TC-R-001..006
+// Traces to: 02-TC-V-001..007, 02-TC-C-001..010, 02-TC-L-001..010, 02-TC-R-001..006, 02-TC-F-001
 // Description: Dashboard greeting renders with Inter font, weight 500, sizes 22/28/32 px (mobile/tablet/desktop).
 // Section labels render with Inter weight 500 at 18 px.
 import AxeBuilder from '@axe-core/playwright';
@@ -34,6 +34,29 @@ async function authenticate(page: import('@playwright/test').Page): Promise<void
 }
 
 test.describe('Home Dashboard — greeting typography', () => {
+  test('greeting reflects time of day (02-TC-F-001)', async ({ page }) => {
+    const cases: Array<{ hour: number; expected: string }> = [
+      { hour: 8, expected: 'Good morning' },
+      { hour: 14, expected: 'Good afternoon' },
+      { hour: 19, expected: 'Good evening' },
+      { hour: 23, expected: 'Good night' },
+    ];
+
+    for (const { hour, expected } of cases) {
+      const fixed = new Date(2026, 4, 9, hour, 0, 0);
+      await page.clock.install({ time: fixed });
+      await authenticate(page);
+      const greeting = page.locator('.page-header__title').first();
+      await expect(greeting).toContainText(expected);
+      // Reset for next iteration
+      await page.context().clearCookies();
+      await page.evaluate(() => {
+        sessionStorage.clear();
+        localStorage.clear();
+      });
+    }
+  });
+
   test('print stylesheet hides nav chrome (02-TC-R-006)', async ({ page }) => {
     await authenticate(page);
     await page.emulateMedia({ media: 'print' });
