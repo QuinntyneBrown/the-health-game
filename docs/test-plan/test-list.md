@@ -147,7 +147,7 @@ and made green. The /loop process picks the first test with
 | 136 | 03 | TC-V-002 | Subtitle ("5 active goals · 4 streaks running") | Inter 13 px, weight 400 | 2026-05-09T22:43:02Z |
 | 137 | 03 | TC-V-003 | Filter chip labels | Inter 13 px, weight 500 | 2026-05-09T22:45:53Z |
 | 138 | 03 | TC-V-004 | Goal card title | Inter 14 px, weight 500 | 2026-05-09T22:47:11Z |
-| 139 | 03 | TC-V-005 | Goal card metadata (cadence, streak, target) | Inter 12 px, weight 400 | null |
+| 139 | 03 | TC-V-005 | Goal card metadata (cadence, streak, target) | Inter 12 px, weight 400 | 2026-05-09T22:52:40Z |
 | 140 | 03 | TC-V-006 | "New goal" button label | Inter 14 px, weight 500, white | null |
 | 141 | 03 | TC-V-007 | Empty state heading | Inter 22 px, weight 500 | null |
 | 142 | 03 | TC-V-008 | Form field labels | Inter 13 px, weight 500 | null |
