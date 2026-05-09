@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 01-TC-V-001..010, 01-TC-C-001..010, 01-TC-L-001..010, 01-TC-R-001..008, 01-TC-F-001..008, 01-TC-B-001..007, 01-TC-A-001..006, 01-TC-D-001..004
+// Traces to: 01-TC-V-001..010, 01-TC-C-001..010, 01-TC-L-001..010, 01-TC-R-001..008, 01-TC-F-001..008, 01-TC-B-001..007, 01-TC-A-001..006, 01-TC-D-001..005
 // Description: Onboarding headline ("Make health a game") renders with font family Inter weight 500
 //              and the design-spec font-size at each breakpoint (mobile = 28 px, tablet = 45 px,
 //              desktop = 57 px with line-height 1.1). Body description paragraph renders at
@@ -219,6 +219,55 @@ test.describe('Onboarding — headline typography', () => {
     expect(url.searchParams.get('code_challenge')).toBeTruthy();
     expect(url.searchParams.get('state')).toBeTruthy();
     expect(url.searchParams.get('client_id')).toBeTruthy();
+  });
+
+  test('refresh token from /connect/token never lands in client storage (TC-D-005)', async ({
+    page,
+  }) => {
+    const refreshSecret = 'super-secret-refresh-token-value';
+    await page.route('**/connect/token', (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({
+          access_token: 'test-access-token',
+          token_type: 'Bearer',
+          expires_in: 3600,
+          refresh_token: refreshSecret,
+          id_token: 'test-id-token',
+        }),
+      }),
+    );
+
+    await page.goto('/onboarding');
+    await page.evaluate(() => {
+      sessionStorage.setItem('hg.oidc.verifier', 'test-verifier');
+      sessionStorage.setItem('hg.oidc.state', 'test-state');
+    });
+    await page.goto('/auth/callback?code=test-code&state=test-state');
+    await page.waitForURL(/\/home(\b|\/|$)/);
+
+    const storage = await page.evaluate((needle) => {
+      const session: Record<string, string> = {};
+      const local: Record<string, string> = {};
+      for (let i = 0; i < sessionStorage.length; i++) {
+        const k = sessionStorage.key(i);
+        if (k !== null) session[k] = sessionStorage.getItem(k) ?? '';
+      }
+      for (let i = 0; i < localStorage.length; i++) {
+        const k = localStorage.key(i);
+        if (k !== null) local[k] = localStorage.getItem(k) ?? '';
+      }
+      return {
+        session,
+        local,
+        sessionContains: Object.values(session).some((v) => v.includes(needle)),
+        localContains: Object.values(local).some((v) => v.includes(needle)),
+      };
+    }, refreshSecret);
+
+    expect(storage.sessionContains).toBe(false);
+    expect(storage.localContains).toBe(false);
   });
 
   test('verifier survives reload mid-flow so the OIDC handshake can resume (TC-D-004)', async ({
