@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 03-TC-V-001..005
+// Traces to: 03-TC-V-001..006
 // Description: /goals page title "Goals" renders with Inter weight 500 at 22/32 px.
 // Subtitle is Inter 13 px weight 400 with computed counts.
 import { expect, test } from '@playwright/test';
@@ -85,6 +85,31 @@ test.describe('Goals page — header typography', () => {
         expect(computed.fontWeight).toBe('500');
         expect(computed.fontSize).toBe('14px');
       }
+    });
+
+    test('"New goal" button label is Inter 14 px / 500 / white (03-TC-V-006)', async ({ page }) => {
+      await authenticate(page);
+      await page.goto('/goals');
+
+      const label = page
+        .locator('lib-goal-list .page-header__action button')
+        .filter({ hasText: 'New goal' })
+        .first();
+      await expect(label).toBeVisible();
+
+      const computed = await label.evaluate((el) => {
+        const style = getComputedStyle(el);
+        return {
+          fontFamily: style.fontFamily,
+          fontWeight: style.fontWeight,
+          fontSize: style.fontSize,
+          color: style.color,
+        };
+      });
+      expect(computed.fontFamily.split(',')[0].replace(/['"]/g, '').trim()).toBe('Inter');
+      expect(computed.fontWeight).toBe('500');
+      expect(computed.fontSize).toBe('14px');
+      expect(computed.color).toBe('rgb(255, 255, 255)');
     });
 
     test('goal card metadata (target) is Inter 12 px / weight 400 (03-TC-V-005)', async ({

@@ -135,3 +135,14 @@ body {
 .cdk-keyboard-focused {
   box-shadow: var(--hg-focus-ring);
 }
+
+hg-action-button button.action-button,
+hg-action-button button.action-button .mdc-button__label {
+  font-family:
+    Inter,
+    Roboto,
+    Arial,
+    sans-serif !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+}

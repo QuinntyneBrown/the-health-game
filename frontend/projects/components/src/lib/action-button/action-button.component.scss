@@ -3,7 +3,16 @@
 }
 
 .action-button {
+  font-family: Inter, Roboto, Arial, sans-serif !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
   min-height: var(--hg-size-touch-target);
+}
+
+.action-button ::ng-deep .mdc-button__label {
+  font-family: Inter, Roboto, Arial, sans-serif !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
 }
 
 .action-button--filled {
@@ -37,3 +46,4 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+
