@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 01-TC-V-001..010, 01-TC-C-001..010, 01-TC-L-001..010, 01-TC-R-001..008, 01-TC-F-001..003
+// Traces to: 01-TC-V-001..010, 01-TC-C-001..010, 01-TC-L-001..010, 01-TC-R-001..008, 01-TC-F-001..004
 // Description: Onboarding headline ("Make health a game") renders with font family Inter weight 500
 //              and the design-spec font-size at each breakpoint (mobile = 28 px, tablet = 45 px,
 //              desktop = 57 px with line-height 1.1). Body description paragraph renders at
@@ -218,6 +218,38 @@ test.describe('Onboarding — headline typography', () => {
     expect(url.searchParams.get('code_challenge')).toBeTruthy();
     expect(url.searchParams.get('state')).toBeTruthy();
     expect(url.searchParams.get('client_id')).toBeTruthy();
+  });
+
+  test('verifier stored in sessionStorage only, not in localStorage (TC-F-004)', async ({
+    page,
+  }) => {
+    await page.route('**/connect/authorize**', (route) =>
+      route.fulfill({ status: 200, contentType: 'text/html', body: '<html></html>' }),
+    );
+
+    await page.goto('/onboarding');
+
+    const before = await page.evaluate(() => ({
+      session: sessionStorage.getItem('hg.oidc.verifier'),
+      local: localStorage.getItem('hg.oidc.verifier'),
+    }));
+    expect(before.session).toBeNull();
+    expect(before.local).toBeNull();
+
+    const navigation = page.waitForURL(/\/connect\/authorize/);
+    await page.getByTestId('onboarding-get-started').click();
+    await navigation;
+
+    // Navigate back to the origin where sessionStorage was written;
+    // sessionStorage persists for the tab session across the round trip.
+    await page.goto('/onboarding');
+    const after = await page.evaluate(() => ({
+      session: sessionStorage.getItem('hg.oidc.verifier'),
+      local: localStorage.getItem('hg.oidc.verifier'),
+    }));
+    expect(after.session).toBeTruthy();
+    expect((after.session ?? '').length).toBeGreaterThan(20);
+    expect(after.local).toBeNull();
   });
 
   test('OIDC state and code_challenge are random per click (TC-F-003)', async ({ page }) => {
