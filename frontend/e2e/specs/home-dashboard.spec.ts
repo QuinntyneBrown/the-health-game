@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 02-TC-V-001..007, 02-TC-C-001..010, 02-TC-L-001..010, 02-TC-R-001..004
+// Traces to: 02-TC-V-001..007, 02-TC-C-001..010, 02-TC-L-001..010, 02-TC-R-001..005
 // Description: Dashboard greeting renders with Inter font, weight 500, sizes 22/28/32 px (mobile/tablet/desktop).
 // Section labels render with Inter weight 500 at 18 px.
 import AxeBuilder from '@axe-core/playwright';
@@ -34,6 +34,23 @@ async function authenticate(page: import('@playwright/test').Page): Promise<void
 }
 
 test.describe('Home Dashboard — greeting typography', () => {
+  test('dashboard re-layouts cleanly when resizing 1024→1440 (02-TC-R-005)', async ({ page }) => {
+    await authenticate(page);
+
+    for (const width of [1024, 1200, 1280, 1440]) {
+      await page.setViewportSize({ width, height: 800 });
+      const overflow = await page.evaluate(() => ({
+        scroll: document.documentElement.scrollWidth,
+        client: document.documentElement.clientWidth,
+      }));
+      expect(overflow.scroll).toBeLessThanOrEqual(overflow.client);
+    }
+
+    // After landing at 1440, the drawer nav is the active variant
+    const drawer = page.locator('hg-navigation-bar.app-shell__navigation--drawer');
+    await expect(drawer).toBeVisible();
+  });
+
   test.describe('desktop viewport', () => {
     test.use({ viewport: { width: 1440, height: 900 } });
 
