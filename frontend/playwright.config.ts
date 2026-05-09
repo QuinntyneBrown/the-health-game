@@ -20,6 +20,10 @@ export default defineConfig({
       name: 'tablet',
       use: { viewport: { width: 1024, height: 768 } },
     },
+    {
+      name: 'desktop',
+      use: { viewport: { width: 1440, height: 900 } },
+    },
   ],
   webServer: {
     command: 'npm run start -- --port=4200',

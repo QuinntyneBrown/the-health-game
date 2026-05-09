@@ -9,8 +9,14 @@ describe('computeVariant', () => {
     expect(computeVariant(767)).toBe('bottom');
   });
 
-  it('returns "rail" for tablet widths (>=768)', () => {
+  it('returns "rail" for tablet widths (768–1199)', () => {
     expect(computeVariant(768)).toBe('rail');
     expect(computeVariant(1024)).toBe('rail');
+    expect(computeVariant(1199)).toBe('rail');
+  });
+
+  it('returns "drawer" for desktop widths (>=1200)', () => {
+    expect(computeVariant(1200)).toBe('drawer');
+    expect(computeVariant(1440)).toBe('drawer');
   });
 });
