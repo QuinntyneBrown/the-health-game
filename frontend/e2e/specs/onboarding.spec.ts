@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 01-TC-V-001..010, 01-TC-C-001..010, 01-TC-L-001..010, 01-TC-R-001..008, 01-TC-F-001..008, 01-TC-B-001..007, 01-TC-A-001..006, 01-TC-D-001..005
+// Traces to: 01-TC-V-001..010, 01-TC-C-001..010, 01-TC-L-001..010, 01-TC-R-001..008, 01-TC-F-001..008, 01-TC-B-001..007, 01-TC-A-001..006, 01-TC-D-001..005, 01-TC-P-001
 // Description: Onboarding headline ("Make health a game") renders with font family Inter weight 500
 //              and the design-spec font-size at each breakpoint (mobile = 28 px, tablet = 45 px,
 //              desktop = 57 px with line-height 1.1). Body description paragraph renders at
@@ -219,6 +219,36 @@ test.describe('Onboarding — headline typography', () => {
     expect(url.searchParams.get('code_challenge')).toBeTruthy();
     expect(url.searchParams.get('state')).toBeTruthy();
     expect(url.searchParams.get('client_id')).toBeTruthy();
+  });
+
+  test('cold load Largest Contentful Paint stays under 2.5s (TC-P-001)', async ({ page }) => {
+    // Note: in a CI run this should also apply CDP 4G throttling against a
+    // production build. Against the dev server we measure unthrottled LCP.
+    await page.goto('/onboarding', { waitUntil: 'load' });
+    await expect(page.getByTestId('onboarding-headline')).toBeVisible();
+
+    const lcpMs = await page.evaluate(
+      () =>
+        new Promise<number>((resolve) => {
+          let value = 0;
+          const observer = new PerformanceObserver((list) => {
+            for (const entry of list.getEntries()) {
+              value = (entry as PerformanceEntry & { renderTime?: number; loadTime?: number })
+                .renderTime ??
+                (entry as PerformanceEntry & { loadTime?: number }).loadTime ??
+                entry.startTime;
+            }
+          });
+          observer.observe({ type: 'largest-contentful-paint', buffered: true });
+          setTimeout(() => {
+            observer.disconnect();
+            resolve(value);
+          }, 800);
+        }),
+    );
+
+    expect(lcpMs).toBeGreaterThan(0);
+    expect(lcpMs).toBeLessThanOrEqual(2500);
   });
 
   test('refresh token from /connect/token never lands in client storage (TC-D-005)', async ({
