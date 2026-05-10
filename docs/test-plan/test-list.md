@@ -187,7 +187,7 @@ and made green. The /loop process picks the first test with
 | 176 | 03 | TC-F-005 | Filter chip "Hourly/Weekly/Monthly" similarly accurate | yes | 2026-05-10T00:52:55Z |
 | 177 | 03 | TC-F-006 | Sort: Streak length | descending current streak; tiebreak alphabetical | 2026-05-10T00:58:03Z |
 | 178 | 03 | TC-F-007 | Sort: Recently active | descending last-activity timestamp | 2026-05-10T01:03:43Z |
-| 179 | 03 | TC-F-008 | Sort: Name | ascending | null |
+| 179 | 03 | TC-F-008 | Sort: Name | ascending | 2026-05-10T01:05:02Z |
 | 180 | 03 | TC-F-009 | Empty state — 0 goals | Shows onboarding card with "Create your first goal" CTA | null |
 | 181 | 03 | TC-F-010 | Click on a goal card | Navigates to `/goals/{id}` | null |
 | 182 | 03 | TC-F-011 | Streak chip on card matches L2-007 computation | Yes | null |
