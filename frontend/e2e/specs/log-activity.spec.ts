@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 04-TC-V-001..007, 04-TC-C-001..010, 04-TC-L-001..010, 04-TC-R-001..006, 04-TC-F-001..012, 04-TC-F-101..109, 04-TC-B-001..010, 04-TC-A-001..007, 04-TC-D-001..006, 04-TC-S-001..002
+// Traces to: 04-TC-V-001..007, 04-TC-C-001..010, 04-TC-L-001..010, 04-TC-R-001..006, 04-TC-F-001..012, 04-TC-F-101..109, 04-TC-B-001..010, 04-TC-A-001..007, 04-TC-D-001..006, 04-TC-S-001..003
 // Description: log-activity dialog typography.
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
@@ -127,6 +127,52 @@ test.describe('Log activity sheet (mobile)', () => {
     });
     const accessibleName = meta.targetText || meta.ariaLabel || '';
     expect(accessibleName).toMatch(/Log activity/i);
+  });
+
+  test('mutating request carries CSRF/auth token (04-TC-S-003)', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await authenticate(page);
+
+    let postAuth: string | undefined;
+    let postOrigin: string | undefined;
+    await page.route('**/api/goals/g1', (route) =>
+      route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(goal) }),
+    );
+    await page.route('**/api/goals/g1/activities**', (route, request) => {
+      if (request.method() === 'POST') {
+        const headers = request.headers();
+        postAuth = headers['authorization'];
+        postOrigin = headers['origin'];
+        route.fulfill({
+          status: 201,
+          contentType: 'application/json',
+          body: JSON.stringify({
+            id: 'a-csrf',
+            goalId: 'g1',
+            quantity: 5,
+            recordedAt: '2026-05-10T06:25:00Z',
+            newlyEarnedRewards: [],
+          }),
+        });
+      } else {
+        route.fulfill({ status: 200, contentType: 'application/json', body: '[]' });
+      }
+    });
+
+    await page.goto('/goals/g1');
+    await page
+      .locator('[data-testid="goal-detail-log-fab"]')
+      .evaluate((el: HTMLElement) => el.click());
+    await page.waitForTimeout(300);
+    await page.locator('mat-dialog-container input[type="number"]').fill('5');
+    await page.locator('[data-testid="log-activity-save"]').click();
+    await expect(page.locator('mat-dialog-container')).toBeHidden();
+
+    // Bearer token (the same-origin-only secret in sessionStorage) is the
+    // anti-CSRF mechanism for this app — cookies aren't used, so a cross-origin
+    // attacker can't forge a valid mutating request.
+    expect(postAuth).toMatch(/^Bearer .+/);
+    expect(postOrigin ?? '').toMatch(/127\.0\.0\.1|localhost/);
   });
 
   test('SQL-injection-shaped input passes through cleanly (04-TC-S-002)', async ({ page }) => {
