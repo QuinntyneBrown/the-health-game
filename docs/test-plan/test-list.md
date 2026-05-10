@@ -490,7 +490,7 @@ and made green. The /loop process picks the first test with
 | 479 | 07 | TC-L-010 | Submit button height | 48 px (mobile) / 56 px (tablet/desktop), full width | 2026-05-10T14:04:30Z |
 | 480 | 07 | TC-L-011 | Pill button corner radius | 9999 (full) | 2026-05-10T14:05:30Z |
 | 481 | 07 | TC-L-012 | Brand mark size on form panel | 56 px square; centered | 2026-05-10T14:07:30Z |
-| 482 | 07 | TC-L-013 | "or" divider | full-width 1 px line broken by centered "or" label | null |
+| 482 | 07 | TC-L-013 | "or" divider | full-width 1 px line broken by centered "or" label | 2026-05-10T14:08:30Z |
 | 483 | 07 | TC-L-014 | Desktop hero corner radius | 0 on outer edges; matches split panel | null |
 | 484 | 07 | TC-R-001 | Viewport 360x780 | Single-column mobile layout, no horizontal scrollbar | null |
 | 485 | 07 | TC-R-002 | Viewport 375x812 | Same layout as 360 (mobile) | null |

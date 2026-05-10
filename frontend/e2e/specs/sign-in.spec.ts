@@ -1,11 +1,29 @@
 // Acceptance Test
-// Traces to: L2-036, 07-TC-V-001..014, 07-TC-C-001..018, 07-TC-L-001..012
+// Traces to: L2-036, 07-TC-V-001..014, 07-TC-C-001..018, 07-TC-L-001..013
 // Description: Username + password sign-in page. Each test exercises one
 //              vertical slice end-to-end against the running app.
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
 
 test.describe('Sign In — page', () => {
+  test('"or" divider has 1 px lines flanking centered label (07-TC-L-013)', async ({
+    page,
+  }) => {
+    await page.goto('/sign-in');
+    const divider = page.locator('lib-sign-in .sign-in__divider');
+    await expect(divider).toBeVisible();
+    const lines = divider.locator('.sign-in__divider-line');
+    await expect(lines).toHaveCount(2);
+    const heights = await lines.evaluateAll((els) =>
+      els.map((el) => Math.round((el as HTMLElement).getBoundingClientRect().height)),
+    );
+    expect(heights).toEqual([1, 1]);
+    const label = divider.locator('.sign-in__divider-label');
+    await expect(label).toHaveText(/or/i);
+    const cols = await divider.evaluate((el) => getComputedStyle(el as HTMLElement).gridTemplateColumns);
+    expect(cols.split(/\s+/).length).toBe(3);
+  });
+
   test('brand mark 56 px square, centered (07-TC-L-012)', async ({ page }) => {
     await page.goto('/sign-in');
     const m = await page
