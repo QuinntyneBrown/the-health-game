@@ -461,6 +461,12 @@ lib-reward-list .reward-card .mat-mdc-card-content.reward-card__content {
   padding: 20px !important;
 }
 
+lib-profile button.profile__delete .mdc-button__label {
+  font-family: Inter, Roboto, Arial, sans-serif !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+}
+
 lib-reward-list .reward-card {
   transition: box-shadow 150ms ease-out;
 }

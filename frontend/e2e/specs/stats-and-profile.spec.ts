@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 06-TC-V-001..006
+// Traces to: 06-TC-V-001..007
 // Description: stats + profile page chrome.
 import { expect, test } from '@playwright/test';
 
@@ -44,6 +44,34 @@ async function authenticate(page: import('@playwright/test').Page): Promise<void
 }
 
 test.describe('Stats & Profile chrome', () => {
+  test('Delete account button Inter 14 px / 500 (06-TC-V-007)', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await authenticate(page);
+    await page.goto('/profile');
+
+    const btn = page.locator('[data-testid="profile-delete"]');
+    await expect(btn).toBeVisible();
+    await expect(btn).toContainText(/Delete account/i);
+    const result = await btn.evaluate((el) => {
+      // Find the descendant whose text matches "Delete account" — that's the
+      // span carrying the visible label, regardless of MDC class.
+      const walker = document.createTreeWalker(el, NodeFilter.SHOW_ELEMENT);
+      let node: Element | null = el;
+      let target: Element | null = null;
+      while ((node = walker.nextNode() as Element | null)) {
+        if ((node.textContent ?? '').trim() === 'Delete account') {
+          target = node;
+          break;
+        }
+      }
+      const s = getComputedStyle(target ?? el);
+      return { family: s.fontFamily, size: s.fontSize, weight: s.fontWeight };
+    });
+    expect(result.family).toMatch(/Inter/);
+    expect(result.size).toBe('14px');
+    expect(result.weight).toBe('500');
+  });
+
   test('body copy Inter 14 px / 400 / line-height 1.5 (06-TC-V-006)', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await authenticate(page);
