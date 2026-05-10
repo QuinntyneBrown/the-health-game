@@ -9,6 +9,37 @@ import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
 
 test.describe('Sign In — page', () => {
+  test('repeated failed attempts: client emits one POST per click, no leak (07-TC-S-007)', async ({
+    page,
+  }) => {
+    const sentPasswords: string[] = [];
+    let attempts = 0;
+    await page.route('**/api/auth/sign-in', (route) => {
+      attempts++;
+      const body = JSON.parse(route.request().postData() ?? '{}');
+      sentPasswords.push(body.password ?? '');
+      const status = attempts >= 5 ? 423 : 401;
+      return route.fulfill({
+        status,
+        contentType: 'application/problem+json',
+        body: JSON.stringify({ status }),
+      });
+    });
+    await page.goto('/sign-in');
+    const username = page.getByTestId('sign-in-username').locator('input');
+    const password = page.getByTestId('sign-in-password').locator('input');
+    for (let i = 0; i < 5; i++) {
+      await username.fill('alice');
+      await password.fill(`Wrong${i}!`);
+      await page.getByTestId('sign-in-submit').click();
+      await expect(page.getByTestId('sign-in-error')).toBeVisible();
+    }
+    expect(attempts).toBe(5);
+    const err = (await page.getByTestId('sign-in-error').textContent()) ?? '';
+    expect(err).not.toMatch(/lock|attempt|throttl|too many/i);
+    expect(sentPasswords.every((p) => p.length > 0)).toBe(true);
+  });
+
   test('sign-in POST is CSRF-safe — no cookies or carries CSRF header (07-TC-S-006)', async ({
     page,
     context,
