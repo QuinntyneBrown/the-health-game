@@ -526,7 +526,7 @@ and made green. The /loop process picks the first test with
 | 515 | 07 | TC-B-006 | Click during in-flight submit (double click "Sign in") | Only one POST emitted | 2026-05-10T14:51:30Z |
 | 516 | 07 | TC-B-007 | Submit button shows busy state while in-flight | Label "Signing in..."; disabled | 2026-05-10T14:52:30Z |
 | 517 | 07 | TC-B-008 | Password toggle reveals and re-masks the password | Eye icon toggles `type=password` <-> `type=text` | 2026-05-10T14:53:30Z |
-| 518 | 07 | TC-B-009 | Reduced-motion preference honored | No animated transitions on submit / state change | null |
+| 518 | 07 | TC-B-009 | Reduced-motion preference honored | No animated transitions on submit / state change | 2026-05-10T14:54:30Z |
 | 519 | 07 | TC-B-010 | Browser autofill populates fields and re-evaluates submit-disabled | Submit becomes enabled | null |
 | 520 | 07 | TC-B-011 | Pasting credentials with leading/trailing whitespace | Whitespace is trimmed before submit | null |
 | 521 | 07 | TC-A-001 | Page rendered inside the app-shell `<main>`; no nested `<main>` | Exactly one `<main>` | 2026-05-09T19:45:30Z |

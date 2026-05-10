@@ -6,6 +6,24 @@ import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
 
 test.describe('Sign In — page', () => {
+  test('reduced-motion: no transitions on submit / state changes (07-TC-B-009)', async ({
+    page,
+  }) => {
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await page.goto('/sign-in');
+    await page.getByTestId('sign-in-username').locator('input').fill('alice');
+    await page.getByTestId('sign-in-password').locator('input').fill('Secret123!');
+    const submitTransition = await page
+      .getByTestId('sign-in-submit')
+      .evaluate((el) => getComputedStyle(el).transitionDuration);
+    const oidcTransition = await page
+      .getByTestId('sign-in-oidc')
+      .evaluate((el) => getComputedStyle(el).transitionDuration);
+    const allZero = (s: string) => s.split(',').every((v) => v.trim() === '0s');
+    expect(allZero(submitTransition), `submit: ${submitTransition}`).toBe(true);
+    expect(allZero(oidcTransition), `oidc: ${oidcTransition}`).toBe(true);
+  });
+
   test('password toggle reveals and re-masks (07-TC-B-008)', async ({ page }) => {
     await page.goto('/sign-in');
     const input = page.getByTestId('sign-in-password').locator('input');
