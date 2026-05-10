@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 05-TC-V-001..008, 05-TC-C-001..010, 05-TC-L-001..010, 05-TC-R-001..005, 05-TC-F-001..007, 05-TC-F-101..105, 05-TC-F-201..203, 05-TC-B-001..004, 05-TC-A-001..005, 05-TC-D-001..005, 05-TC-P-001
+// Traces to: 05-TC-V-001..008, 05-TC-C-001..010, 05-TC-L-001..010, 05-TC-R-001..005, 05-TC-F-001..007, 05-TC-F-101..105, 05-TC-F-201..203, 05-TC-B-001..004, 05-TC-A-001..005, 05-TC-D-001..005, 05-TC-P-001..002
 // Description: rewards list page chrome.
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
@@ -75,6 +75,52 @@ const readyReward = {
 };
 
 test.describe('Rewards list', () => {
+  test('Claim FE overhead under p95 budget (05-TC-P-002)', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await authenticate(page);
+
+    let postReceivedAt = 0;
+    await page.unroute('**/api/rewards**');
+    await page.route('**/api/rewards**', async (route, request) => {
+      const url = new URL(request.url());
+      if (request.method() === 'POST' && /\/api\/rewards\/.+\/claim$/.test(url.pathname)) {
+        postReceivedAt = Date.now();
+        // Simulate realistic 250 ms server claim latency, well under the
+        // 500 ms p95 budget from L2-018.
+        await new Promise((r) => setTimeout(r, 250));
+        route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify({
+            ...readyReward,
+            status: 'earned',
+            earnedAt: '2026-05-10T08:00:00Z',
+          }),
+        });
+        return;
+      }
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify([readyReward, ...sampleRewards]),
+      });
+    });
+
+    await page.goto('/rewards');
+    await expect(page.locator('[data-testid="reward-hero-claim"]')).toBeVisible();
+
+    const clickAt = Date.now();
+    await page.locator('[data-testid="reward-hero-claim"]').click();
+    await expect(page.locator('lib-reward-list .reward-hero')).toBeHidden();
+    const closedAt = Date.now();
+
+    const feOverhead = postReceivedAt - clickAt;
+    const total = closedAt - clickAt;
+    expect(feOverhead).toBeGreaterThanOrEqual(0);
+    expect(feOverhead).toBeLessThan(150);
+    expect(total).toBeLessThanOrEqual(500);
+  });
+
   test('rewards list FE overhead under p95 budget (05-TC-P-001)', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await authenticate(page);
