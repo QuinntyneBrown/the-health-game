@@ -54,7 +54,7 @@
   display: grid;
   gap: var(--hg-space-5);
   max-width: 440px;
-  padding: var(--hg-space-7) var(--hg-space-6);
+  padding: 32px;
   width: 100%;
 }
 
@@ -170,12 +170,13 @@
 @media (min-width: 768px) {
   .sign-in__card {
     border: 1px solid #c2c9be;
+    padding: 40px;
   }
 }
 
 @media (min-width: 1024px) {
   .sign-in__card {
     max-width: 480px;
-    padding: var(--hg-space-8) var(--hg-space-7);
+    padding: 40px;
   }
 }
