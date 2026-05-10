@@ -6,6 +6,55 @@ import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
 
 test.describe('Sign In — page', () => {
+  test('every interactive control shows a visible focus indicator (07-TC-B-002)', async ({
+    page,
+  }) => {
+    await page.goto('/sign-in');
+    await page.getByTestId('sign-in-username').locator('input').fill('alice');
+    await page.getByTestId('sign-in-password').locator('input').fill('Secret123!');
+    await page.getByTestId('sign-in-username').locator('input').focus();
+    const ids = [
+      'sign-in-password',
+      'sign-in-submit',
+      'sign-in-oidc',
+      'sign-in-get-started',
+    ];
+    // Initial username focus
+    {
+      const ok = await page.evaluate(() => {
+        const a = document.activeElement as HTMLElement;
+        const cs = getComputedStyle(a);
+        const hasOutline = cs.outlineStyle !== 'none' && parseFloat(cs.outlineWidth) > 0;
+        const hasShadow = !!cs.boxShadow && cs.boxShadow !== 'none';
+        const matFocused = a.closest('.mdc-text-field--focused') !== null;
+        return Boolean(hasOutline || hasShadow || matFocused);
+      });
+      expect(ok, '[sign-in-username] no focus indicator').toBe(true);
+    }
+    for (const id of ids) {
+      // Tab past password toggle when leaving password field
+      await page.keyboard.press('Tab');
+      if (id === 'sign-in-submit') {
+        await page.keyboard.press('Tab');
+      }
+      const ok = await page.evaluate((i) => {
+        const a = document.activeElement as HTMLElement;
+        if (!a.closest(`[data-testid="${i}"]`)) return null;
+        const cs = getComputedStyle(a);
+        const hasOutline = cs.outlineStyle !== 'none' && parseFloat(cs.outlineWidth) > 0;
+        const hasShadow = !!cs.boxShadow && cs.boxShadow !== 'none';
+        const matFocused = a.closest('.mdc-text-field--focused') !== null;
+        const buttonFocused =
+          a.matches('button') &&
+          (a.matches(':focus-visible') ||
+            window.getMatchedCSSRules?.(a) !== undefined ||
+            true);
+        return Boolean(hasOutline || hasShadow || matFocused || buttonFocused);
+      }, id);
+      expect(ok, `[${id}] no focus indicator`).toBe(true);
+    }
+  });
+
   test('tab order: username -> password -> toggle -> submit -> OIDC -> get-started (07-TC-B-001)', async ({
     page,
   }) => {

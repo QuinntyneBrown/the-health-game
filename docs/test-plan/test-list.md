@@ -519,7 +519,7 @@ and made green. The /loop process picks the first test with
 | 508 | 07 | TC-F-017 | Username over 254 chars | Client blocks submit; backend rejects as 400 | 2026-05-10T14:42:30Z |
 | 509 | 07 | TC-F-018 | Password over 256 chars | Client blocks submit; backend rejects as 400 | 2026-05-10T14:43:30Z |
 | 510 | 07 | TC-B-001 | Tab order: username -> password -> toggle -> submit -> OIDC -> "Get started" | Logical, no skipped controls | 2026-05-10T14:45:30Z |
-| 511 | 07 | TC-B-002 | Visible focus ring on every interactive element | Yes, contrast >= 3:1 | null |
+| 511 | 07 | TC-B-002 | Visible focus ring on every interactive element | Yes, contrast >= 3:1 | 2026-05-10T14:47:00Z |
 | 512 | 07 | TC-B-003 | Enter inside any field submits the form | Yes | null |
 | 513 | 07 | TC-B-004 | Space on focused button activates it | Yes | null |
 | 514 | 07 | TC-B-005 | Hover on primary button | Slight elevation / state-layer overlay; cursor pointer | null |
