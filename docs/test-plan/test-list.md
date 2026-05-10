@@ -405,7 +405,7 @@ and made green. The /loop process picks the first test with
 | 394 | 06 | TC-R-003 | 1440 px | Stat tiles 5 columns; profile right-rail or below per layout | 2026-05-10T11:25:23Z |
 | 395 | 06 | TC-R-004 | Print stylesheet | Renders without nav chrome | 2026-05-10T11:27:00Z |
 | 396 | 06 | TC-R-005 | Bar chart axis labels remain readable at 360 px | Yes (no overlap) | 2026-05-10T11:28:12Z |
-| 397 | 06 | TC-F-001 | Active goals count matches API count | Yes | null |
+| 397 | 06 | TC-F-001 | Active goals count matches API count | Yes | 2026-05-10T11:29:48Z |
 | 398 | 06 | TC-F-002 | Total activity count over selected window matches sum of entries | Yes | null |
 | 399 | 06 | TC-F-003 | Completion % = met-period-count / total-period-count for window | Matches L2-007 logic | null |
 | 400 | 06 | TC-F-004 | Bar chart x-axis matches selected window (week / month / year) | Yes | null |

@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 06-TC-V-001..007, 06-TC-C-001..010, 06-TC-L-001..010, 06-TC-R-001..005
+// Traces to: 06-TC-V-001..007, 06-TC-C-001..010, 06-TC-L-001..010, 06-TC-R-001..005, 06-TC-F-001
 // Description: stats + profile page chrome.
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
@@ -45,6 +45,39 @@ async function authenticate(page: import('@playwright/test').Page): Promise<void
 }
 
 test.describe('Stats & Profile chrome', () => {
+  test('active goals count matches API (06-TC-F-001)', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await authenticate(page);
+    await page.unroute('**/api/goals**');
+    await page.route('**/api/goals**', (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify(
+          Array.from({ length: 4 }, (_, i) => ({
+            id: `g${i}`,
+            name: `Goal ${i}`,
+            description: '',
+            cadence: 'daily',
+            target: { value: 10, unit: 'min' },
+            completedQuantity: 0,
+            currentStreak: 0,
+            longestStreak: 0,
+            rewardName: '',
+          })),
+        ),
+      }),
+    );
+
+    await page.goto('/stats');
+    const tile = page
+      .locator('lib-stats .stat-tile')
+      .filter({ hasText: 'Active goals' })
+      .locator('.stat-tile__value');
+    await expect(tile).toBeVisible();
+    await expect(tile).toHaveText('4');
+  });
+
   test('chart axis labels readable at 360 px no overlap (06-TC-R-005)', async ({ page }) => {
     await page.setViewportSize({ width: 360, height: 780 });
     await authenticate(page);

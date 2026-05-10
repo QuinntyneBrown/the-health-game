@@ -1,4 +1,6 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { GOALS_SERVICE } from 'api';
 import { PageHeaderComponent } from 'components';
 
 interface StatTile {
@@ -30,7 +32,7 @@ interface StatTile {
     </section>
     <h2 class="stats-section__title">This week</h2>
     <ul class="stat-tiles" data-testid="stat-tiles">
-      @for (tile of tiles; track tile.id) {
+      @for (tile of tiles(); track tile.id) {
         <li
           class="stat-tile"
           [class.stat-tile--success]="tile.tone === 'success'"
@@ -168,6 +170,9 @@ interface StatTile {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class StatsComponent {
+  private readonly goalsService = inject(GOALS_SERVICE);
+  private readonly goals = toSignal(this.goalsService.getGoals(), { initialValue: [] as const });
+
   readonly activity: ReadonlyArray<{ label: string; value: number }> = [
     { label: 'Mon', value: 60 },
     { label: 'Tue', value: 80 },
@@ -178,11 +183,11 @@ export class StatsComponent {
     { label: 'Sun', value: 55 },
   ];
 
-  readonly tiles: readonly StatTile[] = [
-    { id: 'completion', label: 'Goal completion', value: '87%', tone: 'success' },
+  readonly tiles = computed<readonly StatTile[]>(() => [
+    { id: 'goals', label: 'Active goals', value: String(this.goals().length), tone: 'success' },
     { id: 'streak', label: 'Current streak', value: '14 days', tone: 'streak' },
     { id: 'minutes', label: 'Active minutes', value: '1,240', tone: 'info' },
     { id: 'rewards', label: 'Rewards earned', value: '6', tone: 'reward' },
     { id: 'level', label: 'Level', value: 'Lvl 8', tone: 'success' },
-  ];
+  ]);
 }
