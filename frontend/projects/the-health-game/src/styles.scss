@@ -169,6 +169,19 @@ input.mat-mdc-input-element,
   font-weight: 400 !important;
 }
 
+button[data-testid='log-activity-save'],
+button[data-testid='log-activity-save'] .mdc-button__label {
+  background-color: #006d3f !important;
+  color: #ffffff !important;
+  font-family:
+    Inter,
+    Roboto,
+    Arial,
+    sans-serif !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+}
+
 hg-action-button button.action-button,
 hg-action-button button.action-button .mdc-button__label {
   font-family:

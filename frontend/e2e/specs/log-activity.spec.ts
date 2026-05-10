@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 04-TC-V-001..004
+// Traces to: 04-TC-V-001..005
 // Description: log-activity dialog typography.
 import { expect, test } from '@playwright/test';
 
@@ -57,6 +57,46 @@ const goal = {
 
 test.describe('Log activity dialog (desktop)', () => {
   test.use({ viewport: { width: 1440, height: 900 } });
+
+  test('dialog submit button Inter 14 px / 500 / white (04-TC-V-005)', async ({ page }) => {
+    await authenticate(page);
+    await page.route('**/api/goals/g1', (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify(goal),
+      }),
+    );
+    await page.route('**/api/goals/g1/activity**', (route) =>
+      route.fulfill({ status: 200, contentType: 'application/json', body: '[]' }),
+    );
+    await page.goto('/goals/g1');
+    await page.locator('[data-testid="goal-detail-log-fab"]').click();
+
+    // Provide a quantity so the Save button enables (color is the same when disabled
+    // visually, but enabled state is the canonical one to assert against).
+    await page
+      .locator('.cdk-overlay-container hg-health-text-field')
+      .filter({ hasText: 'Quantity' })
+      .locator('input')
+      .fill('5');
+
+    const save = page.locator('[data-testid="log-activity-save"]');
+    await expect(save).toBeVisible();
+    const styles = await save.evaluate((el) => {
+      const s = getComputedStyle(el);
+      return {
+        fontFamily: s.fontFamily,
+        fontWeight: s.fontWeight,
+        fontSize: s.fontSize,
+        color: s.color,
+      };
+    });
+    expect(styles.fontFamily.split(',')[0].replace(/['"]/g, '').trim()).toBe('Inter');
+    expect(styles.fontWeight).toBe('500');
+    expect(styles.fontSize).toBe('14px');
+    expect(styles.color).toBe('rgb(255, 255, 255)');
+  });
 
   test('dialog helper text is Inter 12 px / weight 400 (04-TC-V-004)', async ({ page }) => {
     await authenticate(page);
