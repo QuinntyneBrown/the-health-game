@@ -9,6 +9,39 @@ import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
 
 test.describe('Sign In — page', () => {
+  test('submit p95 round-trip <= 500 ms with fast server (07-TC-P-003)', async ({
+    page,
+  }, testInfo) => {
+    testInfo.setTimeout(120_000);
+    await page.route('**/api/auth/sign-in', (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({
+          accessToken: 't',
+          user: { id: 'u', displayName: 'A', roles: ['Player'] },
+        }),
+      }),
+    );
+    const samples: number[] = [];
+    for (let i = 0; i < 10; i++) {
+      await page.goto('/sign-in');
+      await page.evaluate(() => sessionStorage.clear()).catch(() => {});
+      if (!page.url().includes('/sign-in')) {
+        await page.goto('/sign-in');
+      }
+      await page.getByTestId('sign-in-username').locator('input').fill('alice');
+      await page.getByTestId('sign-in-password').locator('input').fill('Secret123!');
+      const start = Date.now();
+      await page.getByTestId('sign-in-submit').click();
+      await page.waitForURL(/\/home/);
+      samples.push(Date.now() - start);
+    }
+    samples.sort((a, b) => a - b);
+    const p95 = samples[Math.floor(samples.length * 0.95) - 1];
+    expect(p95, `samples=${samples.join(',')} p95=${p95}`).toBeLessThanOrEqual(500);
+  });
+
   test('sign-in route is lazy-loaded (07-TC-P-002)', () => {
     const routesPath = path.join(
       __dirname,
