@@ -6,6 +6,30 @@ import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
 
 test.describe('Sign In — page', () => {
+  test('OIDC button generates fresh state + verifier per click (07-TC-F-010)', async ({
+    page,
+  }) => {
+    const captured: string[] = [];
+    page.on('request', (req) => {
+      if (req.isNavigationRequest() && req.url().includes('/authorize')) {
+        captured.push(req.url());
+      }
+    });
+    await page.route('**/authorize**', (route) => route.abort());
+    await page.goto('/sign-in');
+    await page.locator('lib-sign-in [data-testid="sign-in-oidc"]').click({ noWaitAfter: true });
+    await page.waitForTimeout(400);
+    await page.goto('/sign-in');
+    await page.locator('lib-sign-in [data-testid="sign-in-oidc"]').click({ noWaitAfter: true });
+    await page.waitForTimeout(400);
+    expect(captured.length).toBeGreaterThanOrEqual(2);
+    const sp1 = new URL(captured[0]).searchParams;
+    const sp2 = new URL(captured[1]).searchParams;
+    expect(sp1.get('state')).toBeTruthy();
+    expect(sp1.get('state')).not.toBe(sp2.get('state'));
+    expect(sp1.get('code_challenge')).not.toBe(sp2.get('code_challenge'));
+  });
+
   test('successful sign-in stores token in sessionStorage only (07-TC-F-004)', async ({
     page,
   }) => {

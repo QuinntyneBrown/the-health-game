@@ -509,7 +509,7 @@ and made green. The /loop process picks the first test with
 | 498 | 07 | TC-F-007 | 401 response clears the password field; preserves username | Yes | 2026-05-09T20:00:30Z |
 | 499 | 07 | TC-F-008 | 401 response leaves user on `/sign-in` | URL unchanged | 2026-05-09T20:00:30Z |
 | 500 | 07 | TC-F-009 | Click "Continue with Single Sign-On" | Browser navigates to OIDC `/authorize` URL with PKCE (L2-013) | 2026-05-09T20:01:30Z |
-| 501 | 07 | TC-F-010 | OIDC alternative generates fresh `state` and `code_challenge` per click | Random per click (L2-013 §2) | null |
+| 501 | 07 | TC-F-010 | OIDC alternative generates fresh `state` and `code_challenge` per click | Random per click (L2-013 §2) | 2026-05-10T14:24:30Z |
 | 502 | 07 | TC-F-011 | Authenticated user visiting `/sign-in` directly | Redirects to `/home` (notAuthenticatedGuard) | 2026-05-09T20:02:30Z |
 | 503 | 07 | TC-F-012 | Sign-in for a deleted or disabled account | 401; UI shows generic error (L2-036 §8) | null |
 | 504 | 07 | TC-F-013 | Lockout — repeated failed attempts beyond threshold | 401; generic error; no leak of lockout state to non-locked users (L2-036 §7) | null |
