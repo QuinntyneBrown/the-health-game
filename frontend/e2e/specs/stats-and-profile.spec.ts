@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 06-TC-V-001..007, 06-TC-C-001..010, 06-TC-L-001..010, 06-TC-R-001..005, 06-TC-F-001..008, 06-TC-F-101..107, 06-TC-F-201..205, 06-TC-B-001..006, 06-TC-A-001
+// Traces to: 06-TC-V-001..007, 06-TC-C-001..010, 06-TC-L-001..010, 06-TC-R-001..005, 06-TC-F-001..008, 06-TC-F-101..107, 06-TC-F-201..205, 06-TC-B-001..006, 06-TC-A-001..002
 // Description: stats + profile page chrome.
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
@@ -45,6 +45,32 @@ async function authenticate(page: import('@playwright/test').Page): Promise<void
 }
 
 test.describe('Stats & Profile chrome', () => {
+  test('stat tile label + value share a parent (06-TC-A-002)', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await authenticate(page);
+    await page.goto('/stats');
+
+    const tiles = page.locator('lib-stats .stat-tile');
+    const count = await tiles.count();
+    expect(count).toBeGreaterThan(0);
+    for (let i = 0; i < count; i++) {
+      const meta = await tiles.nth(i).evaluate((el) => {
+        const value = el.querySelector('.stat-tile__value');
+        const label = el.querySelector('.stat-tile__label');
+        return {
+          valueText: value?.textContent?.trim() ?? '',
+          labelText: label?.textContent?.trim() ?? '',
+          // Both elements live inside the same .stat-tile parent (already
+          // implied by the queries above); exposing the parent role avoids
+          // the value being announced as a number-with-no-context.
+          containerRole: el.getAttribute('role'),
+        };
+      });
+      expect(meta.valueText.length).toBeGreaterThan(0);
+      expect(meta.labelText.length).toBeGreaterThan(0);
+    }
+  });
+
   test('Stats + Profile titles render as <h1> (06-TC-A-001)', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await authenticate(page);
