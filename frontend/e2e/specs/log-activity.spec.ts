@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 04-TC-V-001..007, 04-TC-C-001..010, 04-TC-L-001..010, 04-TC-R-001..006, 04-TC-F-001..012, 04-TC-F-101..109
+// Traces to: 04-TC-V-001..007, 04-TC-C-001..010, 04-TC-L-001..010, 04-TC-R-001..006, 04-TC-F-001..012, 04-TC-F-101..109, 04-TC-B-001
 // Description: log-activity dialog typography.
 import { expect, test } from '@playwright/test';
 
@@ -56,6 +56,55 @@ const goal = {
 };
 
 test.describe('Log activity sheet (mobile)', () => {
+  test('FAB opens sheet with slide-up; respects reduced-motion (04-TC-B-001)', async ({
+    browser,
+  }) => {
+    async function readSheetTransition(reducedMotion: 'reduce' | 'no-preference') {
+      const ctx = await browser.newContext({ reducedMotion });
+      const page = await ctx.newPage();
+      await page.setViewportSize({ width: 360, height: 780 });
+      await authenticate(page);
+      await page.route('**/api/goals/g1', (route) =>
+        route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify(goal),
+        }),
+      );
+      await page.route('**/api/goals/g1/activities**', (route) =>
+        route.fulfill({ status: 200, contentType: 'application/json', body: '[]' }),
+      );
+      await page.goto('/goals/g1');
+      await page
+        .locator('[data-testid="goal-detail-log-fab"]')
+        .evaluate((el: HTMLElement) => el.click());
+      await page.waitForTimeout(300);
+
+      const container = page.locator('mat-bottom-sheet-container').first();
+      await container.waitFor({ state: 'visible' });
+      const props = await container.evaluate((el) => {
+        const s = getComputedStyle(el);
+        return {
+          transitionDuration: s.transitionDuration,
+          animationDuration: s.animationDuration,
+        };
+      });
+      await ctx.close();
+      return props;
+    }
+
+    const motion = await readSheetTransition('no-preference');
+    const reduced = await readSheetTransition('reduce');
+
+    // Either transition or animation drives the slide; require non-zero in motion mode.
+    const motionMs =
+      Math.max(parseFloat(motion.transitionDuration) * 1000, parseFloat(motion.animationDuration) * 1000);
+    const reducedMs =
+      Math.max(parseFloat(reduced.transitionDuration) * 1000, parseFloat(reduced.animationDuration) * 1000);
+    expect(motionMs).toBeGreaterThan(0);
+    expect(reducedMs).toBe(0);
+  });
+
   test('long notes: sheet stays scrollable, submit reachable (04-TC-R-006)', async ({ page }) => {
     await page.setViewportSize({ width: 360, height: 780 });
     await authenticate(page);

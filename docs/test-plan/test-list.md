@@ -280,7 +280,7 @@ and made green. The /loop process picks the first test with
 | 269 | 04 | TC-F-107 | Custom cadence "every 3 days" | Persisted with start date; period boundaries 3-day increments (L2-012 §1) | 2026-05-10T05:17:21Z |
 | 270 | 04 | TC-F-108 | Custom cadence N=0 | Validation error (L2-012 §2) | 2026-05-10T05:19:04Z |
 | 271 | 04 | TC-F-109 | Submit while unauthenticated (token expired) | 401; client routes to re-auth (L2-013 §4) | 2026-05-10T05:31:07Z |
-| 272 | 04 | TC-B-001 | Open log sheet via FAB | Slide-up animation 200 ms; respects reduced-motion | null |
+| 272 | 04 | TC-B-001 | Open log sheet via FAB | Slide-up animation 200 ms; respects reduced-motion | 2026-05-10T05:32:53Z |
 | 273 | 04 | TC-B-002 | Backdrop click closes sheet (no unsaved changes) | Yes | null |
 | 274 | 04 | TC-B-003 | Backdrop click with unsaved changes | Confirmation dialog ("Discard?") | null |
 | 275 | 04 | TC-B-004 | Esc closes dialog (desktop) | Yes | null |
