@@ -13,7 +13,7 @@ import {
   SegmentedFilterOption,
 } from 'components';
 
-import { CadenceFilter, filterGoalsByCadence } from './filter-goals';
+import { CadenceFilter, filterGoalsByCadence, filterGoalsByName } from './filter-goals';
 
 const cadenceOptions: readonly SegmentedFilterOption[] = [
   { value: 'all', label: 'All' },
@@ -44,9 +44,12 @@ export class GoalListComponent {
 
   readonly cadenceOptions = cadenceOptions;
   readonly cadence = signal<CadenceFilter>('all');
+  readonly searchQuery = signal('');
 
   readonly goals = toSignal(this.goalsService.getGoals(), { initialValue: [] as const });
-  readonly visibleGoals = computed(() => filterGoalsByCadence(this.goals(), this.cadence()));
+  readonly visibleGoals = computed(() =>
+    filterGoalsByName(filterGoalsByCadence(this.goals(), this.cadence()), this.searchQuery()),
+  );
   readonly isEmpty = computed(() => this.goals().length === 0);
   readonly subtitle = computed(() => {
     const total = this.goals().length;

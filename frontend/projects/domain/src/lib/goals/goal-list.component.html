@@ -18,6 +18,16 @@
   />
 } @else {
   <header class="goal-list__header">
+    <label class="goal-list__search" data-testid="goals-search">
+      <span class="goal-list__search-label">Search goals</span>
+      <input
+        type="search"
+        placeholder="Search goals"
+        aria-label="Search goals"
+        [value]="searchQuery()"
+        (input)="searchQuery.set($any($event.target).value)"
+      />
+    </label>
     <hg-segmented-filter
       ariaLabel="Cadence"
       [options]="cadenceOptions"

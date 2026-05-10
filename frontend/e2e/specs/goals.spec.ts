@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 03-TC-V-001..009, 03-TC-C-001..011, 03-TC-L-001..011, 03-TC-R-001..006, 03-TC-F-001
+// Traces to: 03-TC-V-001..009, 03-TC-C-001..011, 03-TC-L-001..011, 03-TC-R-001..006, 03-TC-F-001..002
 // Description: /goals page title "Goals" renders with Inter weight 500 at 22/32 px.
 // Subtitle is Inter 13 px weight 400 with computed counts.
 import { expect, test } from '@playwright/test';
@@ -559,6 +559,57 @@ test.describe('Goals page — header typography', () => {
 
   test.describe('filter chip layout', () => {
     test.use({ viewport: { width: 1440, height: 900 } });
+
+    test('search filters by name case-insensitively (03-TC-F-002)', async ({ page }) => {
+      await page.setViewportSize({ width: 1440, height: 900 });
+      await authenticate(page);
+      await page.unroute('**/api/goals**');
+      const baseGoal = {
+        description: '',
+        cadence: 'daily' as const,
+        target: { value: 10, unit: 'min' },
+        completedQuantity: 0,
+        currentStreak: 0,
+        longestStreak: 0,
+        rewardName: '',
+      };
+      await page.route('**/api/goals**', (route) =>
+        route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify([
+            { id: 'g1', name: 'Walk', ...baseGoal },
+            { id: 'g2', name: 'Read books', ...baseGoal },
+            { id: 'g3', name: 'Stretch', ...baseGoal },
+            { id: 'g4', name: 'Walking meeting', ...baseGoal },
+          ]),
+        }),
+      );
+      await page.goto('/goals');
+
+      const cards = page.locator('lib-goal-list .goal-card');
+      await expect(cards).toHaveCount(4);
+
+      const search = page.locator('lib-goal-list [data-testid="goals-search"] input');
+      await expect(search).toBeVisible();
+
+      await search.fill('wal');
+      await expect(cards).toHaveCount(2);
+      const lowerTitles = (await cards.locator('.goal-card__title').allInnerTexts()).map((t) =>
+        t.toLowerCase(),
+      );
+      expect(lowerTitles.every((t) => t.includes('wal'))).toBe(true);
+
+      await search.fill('WALK');
+      await expect(cards).toHaveCount(2);
+
+      await search.fill('  read  ');
+      await expect(cards).toHaveCount(1);
+      await expect(cards.first().locator('.goal-card__title')).toHaveText('Read books');
+
+      await search.fill('');
+      await expect(cards).toHaveCount(4);
+    });
 
     test('list shows only goals returned by GET /api/goals for the current user (03-TC-F-001)', async ({
       page,

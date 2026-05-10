@@ -4,7 +4,33 @@
 }
 
 .goal-list__header {
+  display: grid;
+  gap: var(--hg-space-3);
   margin-bottom: var(--hg-space-4);
+}
+
+.goal-list__search {
+  display: grid;
+  gap: var(--hg-space-1);
+}
+
+.goal-list__search-label {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.goal-list__search input {
+  border: 1px solid var(--hg-color-outline);
+  border-radius: var(--hg-radius-control);
+  font: inherit;
+  padding: 8px 12px;
 }
 
 .goal-list {
