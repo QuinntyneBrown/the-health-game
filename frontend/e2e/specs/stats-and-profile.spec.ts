@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 06-TC-V-001..007, 06-TC-C-001..008
+// Traces to: 06-TC-V-001..007, 06-TC-C-001..009
 // Description: stats + profile page chrome.
 import { expect, test } from '@playwright/test';
 
@@ -44,6 +44,58 @@ async function authenticate(page: import('@playwright/test').Page): Promise<void
 }
 
 test.describe('Stats & Profile chrome', () => {
+  test('form outline default / focus / error (06-TC-C-009)', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await authenticate(page);
+    await page.goto('/profile');
+    await page.locator('[data-testid="profile-edit"]').click();
+
+    const fields = page.locator('lib-profile mat-form-field');
+    const defaultColor = await fields
+      .first()
+      .locator('.mdc-notched-outline__leading')
+      .first()
+      .evaluate((el) => getComputedStyle(el).borderTopColor);
+    expect(defaultColor).toBe('rgb(194, 201, 190)');
+
+    // Focus the email input and read its outline color/width.
+    await page
+      .locator('lib-profile hg-health-text-field')
+      .filter({ hasText: 'Email' })
+      .locator('input')
+      .focus();
+    await page.waitForTimeout(120);
+    const focusMeta = await page
+      .locator('lib-profile mat-form-field.mat-focused .mdc-notched-outline__leading')
+      .first()
+      .evaluate((el) => {
+        const s = getComputedStyle(el);
+        return { color: s.borderTopColor, width: s.borderTopWidth };
+      });
+    expect(focusMeta.color).toBe('rgb(0, 109, 63)');
+    expect(focusMeta.width).toBe('2px');
+
+    // Trigger error: invalid email — the visible error renders via the
+    // health-text-field--error host class and recolors the notched outline.
+    await page
+      .locator('lib-profile hg-health-text-field')
+      .filter({ hasText: 'Email' })
+      .locator('input')
+      .fill('not-an-email');
+    await page.waitForTimeout(120);
+    const errorMeta = await page
+      .locator(
+        'lib-profile hg-health-text-field.health-text-field--error .mdc-notched-outline__leading',
+      )
+      .first()
+      .evaluate((el) => {
+        const s = getComputedStyle(el);
+        return { color: s.borderTopColor, width: s.borderTopWidth };
+      });
+    expect(errorMeta.color).toBe('rgb(186, 26, 26)');
+    expect(parseFloat(errorMeta.width)).toBeGreaterThanOrEqual(1);
+  });
+
   test('Delete account button #BA1A1A / white (06-TC-C-008)', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await authenticate(page);

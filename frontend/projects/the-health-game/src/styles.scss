@@ -194,7 +194,19 @@ button[data-testid='goal-form-save'] {
 
 hg-health-text-field.health-text-field--error .mdc-notched-outline__leading,
 hg-health-text-field.health-text-field--error .mdc-notched-outline__notch,
-hg-health-text-field.health-text-field--error .mdc-notched-outline__trailing {
+hg-health-text-field.health-text-field--error .mdc-notched-outline__trailing,
+hg-health-text-field.health-text-field--error .mat-mdc-form-field .mdc-notched-outline__leading,
+hg-health-text-field.health-text-field--error .mat-mdc-form-field .mdc-notched-outline__notch,
+hg-health-text-field.health-text-field--error .mat-mdc-form-field .mdc-notched-outline__trailing,
+hg-health-text-field.health-text-field--error
+  .mat-mdc-form-field.mat-focused
+  .mdc-notched-outline__leading,
+hg-health-text-field.health-text-field--error
+  .mat-mdc-form-field.mat-focused
+  .mdc-notched-outline__notch,
+hg-health-text-field.health-text-field--error
+  .mat-mdc-form-field.mat-focused
+  .mdc-notched-outline__trailing {
   border-color: #ba1a1a !important;
   border-width: 2px !important;
 }
