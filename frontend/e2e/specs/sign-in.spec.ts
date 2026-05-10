@@ -1,11 +1,31 @@
 // Acceptance Test
-// Traces to: L2-036, 07-TC-V-001..014, 07-TC-C-001..018, 07-TC-L-001..002
+// Traces to: L2-036, 07-TC-V-001..014, 07-TC-C-001..018, 07-TC-L-001..003
 // Description: Username + password sign-in page. Each test exercises one
 //              vertical slice end-to-end against the running app.
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
 
 test.describe('Sign In — page', () => {
+  test('desktop hero ~50% / form ~50% split (07-TC-L-003)', async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.goto('/sign-in');
+    const meta = await page.evaluate(() => {
+      const hero = document.querySelector('lib-sign-in [data-testid="sign-in-hero"]');
+      const card = document.querySelector('lib-sign-in .sign-in__card');
+      const heroR = hero?.getBoundingClientRect();
+      const cardR = card?.getBoundingClientRect();
+      return {
+        heroWidth: heroR?.width ?? 0,
+        heroLeft: heroR?.left ?? 0,
+        cardLeft: cardR?.left ?? 0,
+        viewport: window.innerWidth,
+      };
+    });
+    // hero is at least 35% of viewport width and sits to the left of the card.
+    expect(meta.heroWidth).toBeGreaterThan(meta.viewport * 0.35);
+    expect(meta.heroLeft).toBeLessThan(meta.cardLeft);
+  });
+
   test('tablet body padding 40 / 80 (07-TC-L-002)', async ({ page }) => {
     await page.setViewportSize({ width: 768, height: 1024 });
     await page.goto('/sign-in');
