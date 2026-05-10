@@ -92,15 +92,23 @@ export class LogActivityDialogComponent {
   async submit(): Promise<void> {
     this.attemptedSubmit.set(true);
     if (!(Number(this.quantity()) > 0)) return;
-    const entry = await firstValueFrom(
-      this.activities.logActivity(this.data.goalId, {
-        quantity: Number(this.quantity()),
-        notes: this.notes().trim() || undefined,
-      }),
-    );
-    const message = formatRewardEarnedMessage(entry.newlyEarnedRewards ?? []);
-    if (message) {
-      this.snackBar.open(message, 'View', { duration: 5_000 });
+    let entry;
+    try {
+      entry = await firstValueFrom(
+        this.activities.logActivity(this.data.goalId, {
+          quantity: Number(this.quantity()),
+          notes: this.notes().trim() || undefined,
+        }),
+      );
+    } catch (err: unknown) {
+      const message = (err as { message?: string } | null)?.message
+        ?? 'Could not log activity — please try again.';
+      this.snackBar.open(message, 'Dismiss', { duration: 6_000 });
+      return;
+    }
+    const rewardMessage = formatRewardEarnedMessage(entry.newlyEarnedRewards ?? []);
+    if (rewardMessage) {
+      this.snackBar.open(rewardMessage, 'View', { duration: 5_000 });
     }
     this.draft.reset();
     this.dialogRef.close(entry);
