@@ -234,7 +234,7 @@ and made green. The /loop process picks the first test with
 | 223 | 04 | TC-V-006 | Validation error text | Inter 12 px, weight 500, error color | 2026-05-10T03:13:47Z |
 | 224 | 04 | TC-V-007 | Section group label ("Cadence", "Reminder") | Inter 13 px, weight 600, letter-spacing 0.5 px | 2026-05-10T03:16:24Z |
 | 225 | 04 | TC-C-001 | Sheet/dialog surface | `#F7FBF3` (surface) | 2026-05-10T03:18:03Z |
-| 226 | 04 | TC-C-002 | Field outline (default) | `#C2C9BE` (outline-variant), 1 px | null |
+| 226 | 04 | TC-C-002 | Field outline (default) | `#C2C9BE` (outline-variant), 1 px | 2026-05-10T03:19:39Z |
 | 227 | 04 | TC-C-003 | Field outline (focused) | `#006D3F` (primary), 2 px | null |
 | 228 | 04 | TC-C-004 | Field outline (error) | `#BA1A1A` (error), 2 px | null |
 | 229 | 04 | TC-C-005 | Cadence segmented selected | `#94F7B4` background, `#00210F` label | null |
