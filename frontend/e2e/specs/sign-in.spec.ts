@@ -6,6 +6,27 @@ import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
 
 test.describe('Sign In — page', () => {
+  test('disabled/deleted account shows generic 401 error (07-TC-F-012)', async ({
+    page,
+  }) => {
+    await page.route('**/api/auth/sign-in', (route) =>
+      route.fulfill({
+        status: 401,
+        contentType: 'application/problem+json',
+        body: JSON.stringify({ status: 401, title: 'Account disabled' }),
+      }),
+    );
+    await page.goto('/sign-in');
+    await page.getByTestId('sign-in-username').locator('input').fill('alice');
+    await page.getByTestId('sign-in-password').locator('input').fill('Secret123!');
+    await page.getByTestId('sign-in-submit').click();
+    const err = page.getByTestId('sign-in-error');
+    await expect(err).toBeVisible();
+    await expect(err).toHaveText(/Invalid username or password\./);
+    expect(await err.textContent()).not.toMatch(/disabled|deleted|locked/i);
+    expect(page.url()).toContain('/sign-in');
+  });
+
   test('OIDC button generates fresh state + verifier per click (07-TC-F-010)', async ({
     page,
   }) => {
@@ -648,7 +669,9 @@ test.describe('Sign In — page', () => {
   test('brand wordmark Inter 22 / 500 desktop (07-TC-V-014)', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await page.goto('/sign-in');
-    const name = page.locator('lib-sign-in .app-brand__name');
+    const name = page
+      .locator('lib-sign-in [data-testid="sign-in-brand"] .app-brand__name')
+      .first();
     await expect(name).toBeVisible();
     const r = await name.evaluate((el) => {
       const s = getComputedStyle(el);

@@ -9,9 +9,14 @@ import { fromHttpErrorResponse } from './api-errors';
 export const errorInterceptor: HttpInterceptorFn = (req, next) => {
   const router = inject(Router);
   const auth = inject(AuthService);
+  const isSignInRequest = req.url.includes('/api/auth/sign-in');
   return next(req).pipe(
     catchError((response: unknown) => {
-      if (response instanceof HttpErrorResponse && response.status === 401) {
+      if (
+        !isSignInRequest &&
+        response instanceof HttpErrorResponse &&
+        response.status === 401
+      ) {
         auth.clearLocalSession();
         if (typeof sessionStorage !== 'undefined') {
           sessionStorage.removeItem(ACCESS_TOKEN_KEY);
