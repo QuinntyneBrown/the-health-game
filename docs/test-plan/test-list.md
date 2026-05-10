@@ -212,7 +212,7 @@ and made green. The /loop process picks the first test with
 | 201 | 03 | TC-B-006 | Streak count animates only when not in reduced-motion mode | Yes | 2026-05-10T01:56:58Z |
 | 202 | 03 | TC-A-001 | Goal card is a single accessible link/button | Yes (no nested clickable controls) | 2026-05-10T01:58:13Z |
 | 203 | 03 | TC-A-002 | Filter chips expose `role="tab"` or `aria-pressed` accurately | Yes | 2026-05-10T01:59:23Z |
-| 204 | 03 | TC-A-003 | Form fields have `<label>` associations | Yes | null |
+| 204 | 03 | TC-A-003 | Form fields have `<label>` associations | Yes | 2026-05-10T02:00:29Z |
 | 205 | 03 | TC-A-004 | Validation errors associated via `aria-describedby` | Yes | null |
 | 206 | 03 | TC-A-005 | Delete confirmation is a focus-trapping `<dialog>` | Yes | null |
 | 207 | 03 | TC-A-006 | axe-core | 0 critical/serious | null |

@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 03-TC-V-001..009, 03-TC-C-001..011, 03-TC-L-001..011, 03-TC-R-001..006, 03-TC-F-001..011, 03-TC-F-101..109, 03-TC-F-201..204, 03-TC-B-001..006, 03-TC-A-001..002
+// Traces to: 03-TC-V-001..009, 03-TC-C-001..011, 03-TC-L-001..011, 03-TC-R-001..006, 03-TC-F-001..011, 03-TC-F-101..109, 03-TC-F-201..204, 03-TC-B-001..006, 03-TC-A-001..003
 // Description: /goals page title "Goals" renders with Inter weight 500 at 22/32 px.
 // Subtitle is Inter 13 px weight 400 with computed counts.
 import { expect, test } from '@playwright/test';
@@ -559,6 +559,56 @@ test.describe('Goals page — header typography', () => {
 
   test.describe('filter chip layout', () => {
     test.use({ viewport: { width: 1440, height: 900 } });
+
+    test('all form inputs have an accessible label (03-TC-A-003)', async ({ page }) => {
+      await page.setViewportSize({ width: 1440, height: 900 });
+      await authenticate(page);
+      await page.goto('/goals/new');
+
+      const findings = await page.evaluate(() => {
+        const form = document.querySelector('form[data-testid="goal-form"]');
+        if (!form) return { fields: [] };
+        const inputs = Array.from(
+          form.querySelectorAll('input, select, textarea, mat-select'),
+        ) as HTMLElement[];
+        return {
+          fields: inputs.map((el) => {
+            const id = el.id;
+            const labelledByAttr = el.getAttribute('aria-labelledby');
+            const ariaLabel = el.getAttribute('aria-label');
+            const matFormField = el.closest('mat-form-field');
+            const matLabel = matFormField?.querySelector('mat-label')?.textContent?.trim();
+            let labelText = '';
+            if (id) {
+              const lbl = document.querySelector(`label[for="${id}"]`);
+              if (lbl) labelText = lbl.textContent?.trim() ?? '';
+            }
+            if (!labelText && labelledByAttr) {
+              labelText = labelledByAttr
+                .split(/\s+/)
+                .map((rid) => document.getElementById(rid)?.textContent?.trim())
+                .filter(Boolean)
+                .join(' ');
+            }
+            if (!labelText && el.closest('label')) {
+              labelText = el.closest('label')?.textContent?.trim() ?? '';
+            }
+            if (!labelText && ariaLabel) labelText = ariaLabel;
+            if (!labelText && matLabel) labelText = matLabel;
+            return {
+              tag: el.tagName.toLowerCase(),
+              type: (el as HTMLInputElement).type ?? '',
+              labelText,
+            };
+          }),
+        };
+      });
+
+      expect(findings.fields.length).toBeGreaterThan(0);
+      for (const f of findings.fields) {
+        expect(f.labelText, `${f.tag}[type=${f.type}] missing label`).not.toBe('');
+      }
+    });
 
     test('filter chips expose accurate role + aria-pressed (03-TC-A-002)', async ({ page }) => {
       await page.setViewportSize({ width: 1440, height: 900 });
