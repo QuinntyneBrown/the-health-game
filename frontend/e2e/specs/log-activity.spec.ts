@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 04-TC-V-001..003
+// Traces to: 04-TC-V-001..004
 // Description: log-activity dialog typography.
 import { expect, test } from '@playwright/test';
 
@@ -57,6 +57,35 @@ const goal = {
 
 test.describe('Log activity dialog (desktop)', () => {
   test.use({ viewport: { width: 1440, height: 900 } });
+
+  test('dialog helper text is Inter 12 px / weight 400 (04-TC-V-004)', async ({ page }) => {
+    await authenticate(page);
+    await page.route('**/api/goals/g1', (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify(goal),
+      }),
+    );
+    await page.route('**/api/goals/g1/activity**', (route) =>
+      route.fulfill({ status: 200, contentType: 'application/json', body: '[]' }),
+    );
+    await page.goto('/goals/g1');
+    await page.locator('[data-testid="goal-detail-log-fab"]').click();
+
+    const hint = page
+      .locator('.cdk-overlay-container hg-health-text-field mat-hint')
+      .first();
+    await expect(hint).toBeVisible();
+    await expect(hint).toContainText('min');
+    const computed = await hint.evaluate((el) => {
+      const s = getComputedStyle(el);
+      return { fontFamily: s.fontFamily, fontWeight: s.fontWeight, fontSize: s.fontSize };
+    });
+    expect(computed.fontFamily.split(',')[0].replace(/['"]/g, '').trim()).toBe('Inter');
+    expect(computed.fontWeight).toBe('400');
+    expect(computed.fontSize).toBe('12px');
+  });
 
   test('dialog input text is Inter 14 px / weight 400 (04-TC-V-003)', async ({ page }) => {
     await authenticate(page);

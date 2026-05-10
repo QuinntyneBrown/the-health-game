@@ -16,8 +16,9 @@ import { LogActivitySheetData } from './log-activity-sheet.component';
     <h2 mat-dialog-title>Log activity</h2>
     <mat-dialog-content class="dialog__content">
       <hg-health-text-field
-        label="Quantity ({{ data.unit }})"
+        label="Quantity"
         type="number"
+        [helperText]="data.unit"
         [value]="quantity()"
         [errorText]="quantityError()"
         (valueChange)="quantity.set($event)"
