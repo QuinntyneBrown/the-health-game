@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 06-TC-V-001..007, 06-TC-C-001..010, 06-TC-L-001..010, 06-TC-R-001..005, 06-TC-F-001..008, 06-TC-F-101..107, 06-TC-F-201..205, 06-TC-B-001..006, 06-TC-A-001..006
+// Traces to: 06-TC-V-001..007, 06-TC-C-001..010, 06-TC-L-001..010, 06-TC-R-001..005, 06-TC-F-001..008, 06-TC-F-101..107, 06-TC-F-201..205, 06-TC-B-001..006, 06-TC-A-001..006, 06-TC-D-001
 // Description: stats + profile page chrome.
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
@@ -45,6 +45,48 @@ async function authenticate(page: import('@playwright/test').Page): Promise<void
 }
 
 test.describe('Stats & Profile chrome', () => {
+  test('profile edit survives reload (06-TC-D-001)', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await authenticate(page);
+
+    let user = {
+      displayName: 'Quinn',
+      email: 'q@q.q',
+      avatarUrl: null as string | null,
+      roles: [] as string[],
+    };
+    await page.unroute('**/api/users/me**');
+    await page.route('**/api/users/me**', (route, request) => {
+      if (request.method() === 'PUT') {
+        const body = request.postDataJSON() as { displayName: string; email: string };
+        user = { ...user, ...body };
+      }
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify(user),
+      });
+    });
+
+    await page.goto('/profile');
+    await page.locator('[data-testid="profile-edit"]').click();
+    await page
+      .locator('lib-profile hg-health-text-field')
+      .filter({ hasText: 'Display name' })
+      .locator('input')
+      .fill('Persisted Quinn');
+    await page.locator('[data-testid="profile-save"]').click();
+    await expect(page.locator('lib-profile [data-testid="profile-form"]')).toHaveCount(0);
+    await expect(page.locator('[data-testid="profile-display-name"]')).toHaveText(
+      'Persisted Quinn',
+    );
+
+    await page.reload();
+    await expect(page.locator('[data-testid="profile-display-name"]')).toHaveText(
+      'Persisted Quinn',
+    );
+  });
+
   test('axe-core: 0 critical/serious on Stats + Profile (06-TC-A-006)', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await authenticate(page);
