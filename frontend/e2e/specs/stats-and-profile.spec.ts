@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 06-TC-V-001..007, 06-TC-C-001..010, 06-TC-L-001..010, 06-TC-R-001..005, 06-TC-F-001..003
+// Traces to: 06-TC-V-001..007, 06-TC-C-001..010, 06-TC-L-001..010, 06-TC-R-001..005, 06-TC-F-001..004
 // Description: stats + profile page chrome.
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
@@ -45,6 +45,34 @@ async function authenticate(page: import('@playwright/test').Page): Promise<void
 }
 
 test.describe('Stats & Profile chrome', () => {
+  test('chart x-axis switches with window selector (06-TC-F-004)', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await authenticate(page);
+    await page.goto('/stats');
+
+    const labels = () =>
+      page.locator('lib-stats .activity-chart__axis-label').allTextContents();
+
+    expect((await labels()).length).toBe(7);
+    await page
+      .locator('lib-stats hg-segmented-filter mat-button-toggle')
+      .filter({ hasText: 'Month' })
+      .click();
+    await page.waitForTimeout(80);
+    const monthLabels = await labels();
+    expect(monthLabels.length).toBe(4);
+    expect(monthLabels[0].trim()).toBe('W1');
+
+    await page
+      .locator('lib-stats hg-segmented-filter mat-button-toggle')
+      .filter({ hasText: 'Year' })
+      .click();
+    await page.waitForTimeout(80);
+    const yearLabels = await labels();
+    expect(yearLabels.length).toBe(12);
+    expect(yearLabels[0].trim()).toBe('Jan');
+  });
+
   test('completion % matches goals math (06-TC-F-003)', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await authenticate(page);

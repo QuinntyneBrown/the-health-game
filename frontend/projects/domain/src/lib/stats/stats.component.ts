@@ -1,7 +1,13 @@
-import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  inject,
+  signal,
+} from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { GOALS_SERVICE } from 'api';
-import { PageHeaderComponent } from 'components';
+import { PageHeaderComponent, SegmentedFilterComponent, SegmentedFilterOption } from 'components';
 
 interface StatTile {
   readonly id: string;
@@ -10,15 +16,31 @@ interface StatTile {
   readonly tone: 'success' | 'streak' | 'info' | 'reward';
 }
 
+type StatsWindow = 'week' | 'month' | 'year';
+
+const WINDOW_OPTIONS: readonly SegmentedFilterOption[] = [
+  { value: 'week', label: 'Week' },
+  { value: 'month', label: 'Month' },
+  { value: 'year', label: 'Year' },
+];
+
 @Component({
   selector: 'lib-stats',
-  imports: [PageHeaderComponent],
+  imports: [PageHeaderComponent, SegmentedFilterComponent],
   template: `
     <hg-page-header title="Stats" />
+    <header class="stats-window">
+      <hg-segmented-filter
+        ariaLabel="Activity window"
+        [options]="windowOptions"
+        [value]="windowChoice()"
+        (valueChange)="windowChoice.set($any($event))"
+      />
+    </header>
     <h2 class="stats-section__title">Activity over time</h2>
     <section class="activity-chart" data-testid="activity-chart" aria-label="Daily activity minutes">
-      <ol class="activity-chart__bars">
-        @for (day of activity; track day.label) {
+      <ol class="activity-chart__bars" [attr.data-window]="windowChoice()">
+        @for (day of activeSeries(); track day.label) {
           <li class="activity-chart__column">
             <span
               class="activity-chart__bar"
@@ -142,6 +164,17 @@ interface StatTile {
         margin: 0;
         padding: 0;
       }
+      .activity-chart__bars[data-window='month'] {
+        grid-template-columns: repeat(4, 1fr);
+      }
+      .activity-chart__bars[data-window='year'] {
+        grid-template-columns: repeat(12, 1fr);
+        gap: 6px;
+      }
+
+      .stats-window {
+        margin-bottom: var(--hg-space-3);
+      }
 
       .activity-chart__column {
         display: grid;
@@ -173,7 +206,10 @@ export class StatsComponent {
   private readonly goalsService = inject(GOALS_SERVICE);
   private readonly goals = toSignal(this.goalsService.getGoals(), { initialValue: [] as const });
 
-  readonly activity: ReadonlyArray<{ label: string; value: number }> = [
+  readonly windowOptions = WINDOW_OPTIONS;
+  readonly windowChoice = signal<StatsWindow>('week');
+
+  private readonly weekSeries: ReadonlyArray<{ label: string; value: number }> = [
     { label: 'Mon', value: 60 },
     { label: 'Tue', value: 80 },
     { label: 'Wed', value: 45 },
@@ -182,7 +218,38 @@ export class StatsComponent {
     { label: 'Sat', value: 30 },
     { label: 'Sun', value: 55 },
   ];
-  readonly weekTotal = this.activity.reduce((sum, day) => sum + day.value, 0);
+  private readonly monthSeries: ReadonlyArray<{ label: string; value: number }> = [
+    { label: 'W1', value: 70 },
+    { label: 'W2', value: 50 },
+    { label: 'W3', value: 80 },
+    { label: 'W4', value: 60 },
+  ];
+  private readonly yearSeries: ReadonlyArray<{ label: string; value: number }> = [
+    { label: 'Jan', value: 40 },
+    { label: 'Feb', value: 55 },
+    { label: 'Mar', value: 65 },
+    { label: 'Apr', value: 75 },
+    { label: 'May', value: 80 },
+    { label: 'Jun', value: 70 },
+    { label: 'Jul', value: 65 },
+    { label: 'Aug', value: 60 },
+    { label: 'Sep', value: 70 },
+    { label: 'Oct', value: 75 },
+    { label: 'Nov', value: 65 },
+    { label: 'Dec', value: 50 },
+  ];
+
+  readonly activeSeries = computed(() => {
+    switch (this.windowChoice()) {
+      case 'month':
+        return this.monthSeries;
+      case 'year':
+        return this.yearSeries;
+      default:
+        return this.weekSeries;
+    }
+  });
+  readonly weekTotal = this.weekSeries.reduce((sum, day) => sum + day.value, 0);
 
   readonly completionPercent = computed(() => {
     const all = this.goals();
