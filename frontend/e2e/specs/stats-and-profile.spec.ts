@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 06-TC-V-001..007, 06-TC-C-001..005
+// Traces to: 06-TC-V-001..007, 06-TC-C-001..006
 // Description: stats + profile page chrome.
 import { expect, test } from '@playwright/test';
 
@@ -44,6 +44,21 @@ async function authenticate(page: import('@playwright/test').Page): Promise<void
 }
 
 test.describe('Stats & Profile chrome', () => {
+  test('profile avatar bg #94F7B4 / initial #00210F (06-TC-C-006)', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await authenticate(page);
+    await page.goto('/profile');
+
+    const avatar = page.locator('lib-profile .profile__avatar--initial').first();
+    await expect(avatar).toBeVisible();
+    const result = await avatar.evaluate((el) => {
+      const s = getComputedStyle(el);
+      return { bg: s.backgroundColor, color: s.color };
+    });
+    expect(result.bg).toBe('rgb(148, 247, 180)');
+    expect(result.color).toBe('rgb(0, 33, 15)');
+  });
+
   test('chart axis labels #424940 (06-TC-C-005)', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await authenticate(page);
