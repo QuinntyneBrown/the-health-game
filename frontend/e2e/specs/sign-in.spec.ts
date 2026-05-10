@@ -1,11 +1,28 @@
 // Acceptance Test
-// Traces to: L2-036, 07-TC-V-001..014, 07-TC-C-001..018, 07-TC-L-001..011
+// Traces to: L2-036, 07-TC-V-001..014, 07-TC-C-001..018, 07-TC-L-001..012
 // Description: Username + password sign-in page. Each test exercises one
 //              vertical slice end-to-end against the running app.
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
 
 test.describe('Sign In — page', () => {
+  test('brand mark 56 px square, centered (07-TC-L-012)', async ({ page }) => {
+    await page.goto('/sign-in');
+    const m = await page
+      .locator('lib-sign-in [data-testid="sign-in-brand"] .app-brand__mark')
+      .evaluate((el) => {
+        const r = (el as HTMLElement).getBoundingClientRect();
+        return { w: Math.round(r.width), h: Math.round(r.height) };
+      });
+    expect(m.w).toBe(56);
+    expect(m.h).toBe(56);
+
+    const justifySelf = await page
+      .locator('lib-sign-in [data-testid="sign-in-brand"]')
+      .evaluate((el) => getComputedStyle(el as HTMLElement).justifySelf);
+    expect(justifySelf).toBe('center');
+  });
+
   test('pill buttons full-radius (07-TC-L-011)', async ({ page }) => {
     await page.goto('/sign-in');
     const radii = await page.evaluate(() => {

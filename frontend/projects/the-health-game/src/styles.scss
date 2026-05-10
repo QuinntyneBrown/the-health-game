@@ -528,6 +528,11 @@ lib-sign-in [data-testid='sign-in-oidc'] span {
   }
 }
 
+lib-sign-in [data-testid='sign-in-brand'] .app-brand__mark {
+  height: 56px !important;
+  width: 56px !important;
+}
+
 lib-reward-list .reward-card {
   transition: box-shadow 150ms ease-out;
 }
