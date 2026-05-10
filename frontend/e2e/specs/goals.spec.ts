@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 03-TC-V-001..009, 03-TC-C-001..011, 03-TC-L-001..011, 03-TC-R-001..006, 03-TC-F-001..008
+// Traces to: 03-TC-V-001..009, 03-TC-C-001..011, 03-TC-L-001..011, 03-TC-R-001..006, 03-TC-F-001..009
 // Description: /goals page title "Goals" renders with Inter weight 500 at 22/32 px.
 // Subtitle is Inter 13 px weight 400 with computed counts.
 import { expect, test } from '@playwright/test';
@@ -559,6 +559,28 @@ test.describe('Goals page — header typography', () => {
 
   test.describe('filter chip layout', () => {
     test.use({ viewport: { width: 1440, height: 900 } });
+
+    test('empty state shows "Create your first goal" CTA when 0 goals (03-TC-F-009)', async ({
+      page,
+    }) => {
+      await page.setViewportSize({ width: 1440, height: 900 });
+      await authenticate(page);
+      await page.unroute('**/api/goals**');
+      await page.route('**/api/goals**', (route) =>
+        route.fulfill({ status: 200, contentType: 'application/json', body: '[]' }),
+      );
+      await page.goto('/goals');
+
+      const empty = page.locator('lib-goal-list hg-empty-state');
+      await expect(empty).toBeVisible();
+      await expect(empty).toContainText('No goals yet');
+
+      const cta = empty.getByRole('button', { name: /create.*goal/i });
+      await expect(cta).toBeVisible();
+
+      await cta.click();
+      await expect(page).toHaveURL(/\/goals\/new$/);
+    });
 
     test('sort by name: ascending (03-TC-F-008)', async ({ page }) => {
       await page.setViewportSize({ width: 1440, height: 900 });
