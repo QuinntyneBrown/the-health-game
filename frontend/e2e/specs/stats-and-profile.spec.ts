@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 06-TC-V-001..002
+// Traces to: 06-TC-V-001..003
 // Description: stats + profile page chrome.
 import { expect, test } from '@playwright/test';
 
@@ -44,6 +44,22 @@ async function authenticate(page: import('@playwright/test').Page): Promise<void
 }
 
 test.describe('Stats & Profile chrome', () => {
+  test('stat label Inter 12 px / weight 500 (06-TC-V-003)', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await authenticate(page);
+    await page.goto('/stats');
+
+    const label = page.locator('lib-stats .stat-tile__label').first();
+    await expect(label).toBeVisible();
+    const result = await label.evaluate((el) => {
+      const s = getComputedStyle(el);
+      return { family: s.fontFamily, size: s.fontSize, weight: s.fontWeight };
+    });
+    expect(result.family).toMatch(/Inter/);
+    expect(result.size).toBe('12px');
+    expect(result.weight).toBe('500');
+  });
+
   test('stat headline numbers Inter 32 px / weight 600 (06-TC-V-002)', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await authenticate(page);
