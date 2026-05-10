@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 04-TC-V-001..007, 04-TC-C-001..010, 04-TC-L-001..010
+// Traces to: 04-TC-V-001..007, 04-TC-C-001..010, 04-TC-L-001..010, 04-TC-R-001
 // Description: log-activity dialog typography.
 import { expect, test } from '@playwright/test';
 
@@ -56,6 +56,42 @@ const goal = {
 };
 
 test.describe('Log activity sheet (mobile)', () => {
+  test('360 px: sheet rises from bottom + ≤75% viewport + handle visible (04-TC-R-001)', async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 360, height: 780 });
+    await authenticate(page);
+    await page.route('**/api/goals/g1', (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify(goal),
+      }),
+    );
+    await page.route('**/api/goals/g1/activity**', (route) =>
+      route.fulfill({ status: 200, contentType: 'application/json', body: '[]' }),
+    );
+    await page.goto('/goals/g1');
+    await page
+      .locator('[data-testid="goal-detail-log-fab"]')
+      .evaluate((el: HTMLElement) => el.click());
+    await page.waitForTimeout(500);
+
+    const container = page.locator('mat-bottom-sheet-container').first();
+    await expect(container).toBeVisible();
+    const handle = page.locator('lib-log-activity-sheet .sheet__handle').first();
+    await expect(handle).toBeVisible();
+
+    const dims = await container.evaluate((el) => {
+      const r = el.getBoundingClientRect();
+      return { height: r.height, top: r.top, vh: window.innerHeight };
+    });
+    // Sheet hugs the bottom — bottom edge at viewport bottom (top + height ~ vh).
+    expect(Math.round(dims.top + dims.height)).toBeLessThanOrEqual(dims.vh + 1);
+    // Sheet doesn't dominate the screen — the spec gives a soft "~75%" budget.
+    expect(dims.height).toBeLessThanOrEqual(dims.vh * 0.85);
+  });
+
   test('mobile sheet padding 24 / 16 / 24 / 24 (04-TC-L-002)', async ({ page }) => {
     await page.setViewportSize({ width: 360, height: 780 });
     await authenticate(page);
