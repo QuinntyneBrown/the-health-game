@@ -241,6 +241,10 @@ const filterOptions: readonly SegmentedFilterOption[] = [
         margin-bottom: var(--hg-space-6);
       }
 
+      .reward-section[data-status='in-progress'] ::ng-deep .reward-card {
+        background: #ebefe7;
+      }
+
       .reward-section__label {
         font-family: Inter, Roboto, Arial, sans-serif;
         font-size: 18px;

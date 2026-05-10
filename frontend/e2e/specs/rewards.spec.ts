@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 05-TC-V-001..008, 05-TC-C-001..004
+// Traces to: 05-TC-V-001..008, 05-TC-C-001..005
 // Description: rewards list page chrome.
 import { expect, test } from '@playwright/test';
 
@@ -74,6 +74,27 @@ const readyReward = {
 };
 
 test.describe('Rewards list', () => {
+  test('in-progress card bg #EBEFE7 (05-TC-C-005)', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await authenticate(page);
+    await page.unroute('**/api/rewards**');
+    await page.route('**/api/rewards**', (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify(sampleRewards),
+      }),
+    );
+
+    await page.goto('/rewards');
+    const card = page
+      .locator('lib-reward-list .reward-section[data-status="in-progress"] .reward-card')
+      .first();
+    await expect(card).toBeVisible();
+    const bg = await card.evaluate((el) => getComputedStyle(el).backgroundColor);
+    expect(bg).toBe('rgb(235, 239, 231)');
+  });
+
   test('hero secondary CTA transparent bg / #C2C9BE outline (05-TC-C-004)', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await authenticate(page);
