@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 06-TC-V-001..007, 06-TC-C-001..010, 06-TC-L-001..010, 06-TC-R-001..005, 06-TC-F-001..008, 06-TC-F-101..107, 06-TC-F-201
+// Traces to: 06-TC-V-001..007, 06-TC-C-001..010, 06-TC-L-001..010, 06-TC-R-001..005, 06-TC-F-001..008, 06-TC-F-101..107, 06-TC-F-201..202
 // Description: stats + profile page chrome.
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
@@ -45,6 +45,42 @@ async function authenticate(page: import('@playwright/test').Page): Promise<void
 }
 
 test.describe('Stats & Profile chrome', () => {
+  test('cancel delete-account confirm is a no-op (06-TC-F-202)', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await authenticate(page);
+
+    let deleteCalls = 0;
+    await page.unroute('**/api/users/me**');
+    await page.route('**/api/users/me**', (route, request) => {
+      if (request.method() === 'DELETE') {
+        deleteCalls += 1;
+        route.fulfill({ status: 204, contentType: 'application/json', body: '' });
+        return;
+      }
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({
+          displayName: 'Quinn',
+          email: 'q@q.q',
+          avatarUrl: null,
+          roles: [],
+        }),
+      });
+    });
+
+    await page.goto('/profile');
+    await page.locator('[data-testid="profile-delete"]').click();
+    const dialog = page.locator('lib-delete-account-dialog').first();
+    await expect(dialog).toBeVisible();
+
+    await dialog.locator('button', { hasText: 'Cancel' }).click();
+    await expect(dialog).toHaveCount(0);
+    expect(deleteCalls).toBe(0);
+    expect(new URL(page.url()).pathname).toBe('/profile');
+    await expect(page.locator('[data-testid="profile-display-name"]')).toBeVisible();
+  });
+
   test('Delete account opens confirm dialog with typed gate (06-TC-F-201)', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await authenticate(page);
