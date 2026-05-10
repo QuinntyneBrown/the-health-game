@@ -329,7 +329,7 @@ and made green. The /loop process picks the first test with
 | 318 | 05 | TC-C-010 | Page background | `#F1F5ED` | 2026-05-10T07:18:14Z |
 | 319 | 05 | TC-L-001 | Hero corner radius | 24 px | 2026-05-10T07:18:59Z |
 | 320 | 05 | TC-L-002 | Hero padding | 32 px | 2026-05-10T07:20:07Z |
-| 321 | 05 | TC-L-003 | Hero icon size | 120 px square, 9999 corner radius | null |
+| 321 | 05 | TC-L-003 | Hero icon size | 120 px square, 9999 corner radius | 2026-05-10T07:21:10Z |
 | 322 | 05 | TC-L-004 | Hero shadow | offset y=2, blur 8, color `#00000026` | null |
 | 323 | 05 | TC-L-005 | Reward grid columns — desktop/tablet/mobile | 3 / 2 / 1 | null |
 | 324 | 05 | TC-L-006 | Card corner radius | 16 px | null |

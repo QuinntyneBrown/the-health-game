@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 05-TC-V-001..008, 05-TC-C-001..010, 05-TC-L-001..002
+// Traces to: 05-TC-V-001..008, 05-TC-C-001..010, 05-TC-L-001..003
 // Description: rewards list page chrome.
 import { expect, test } from '@playwright/test';
 
@@ -74,6 +74,34 @@ const readyReward = {
 };
 
 test.describe('Rewards list', () => {
+  test('hero icon 120 px square / 9999 radius (05-TC-L-003)', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await authenticate(page);
+    await page.unroute('**/api/rewards**');
+    await page.route('**/api/rewards**', (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify([readyReward, ...sampleRewards]),
+      }),
+    );
+
+    await page.goto('/rewards');
+    const frame = page.locator('lib-reward-list .reward-hero__icon-frame').first();
+    await expect(frame).toBeVisible();
+    const result = await frame.evaluate((el) => {
+      const s = getComputedStyle(el);
+      return {
+        width: s.width,
+        height: s.height,
+        radius: s.borderTopLeftRadius,
+      };
+    });
+    expect(result.width).toBe('120px');
+    expect(result.height).toBe('120px');
+    expect(parseFloat(result.radius)).toBeGreaterThanOrEqual(60);
+  });
+
   test('hero padding 32 px on all sides (05-TC-L-002)', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await authenticate(page);
