@@ -154,6 +154,10 @@ hg-streak-summary .streak-summary__value {
   background: rgba(0, 0, 0, 0.48) !important;
 }
 
+mat-bottom-sheet-container {
+  border-radius: 28px 28px 0 0 !important;
+}
+
 .mat-mdc-form-field .mdc-notched-outline__leading,
 .mat-mdc-form-field .mdc-notched-outline__notch,
 .mat-mdc-form-field .mdc-notched-outline__trailing {

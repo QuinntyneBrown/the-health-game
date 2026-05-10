@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 04-TC-V-001..007, 04-TC-C-001..010
+// Traces to: 04-TC-V-001..007, 04-TC-C-001..010, 04-TC-L-001
 // Description: log-activity dialog typography.
 import { expect, test } from '@playwright/test';
 
@@ -56,6 +56,39 @@ const goal = {
 };
 
 test.describe('Log activity sheet (mobile)', () => {
+  test('mobile sheet corner radius 28 px top / 0 bottom (04-TC-L-001)', async ({ page }) => {
+    await page.setViewportSize({ width: 360, height: 780 });
+    await authenticate(page);
+    await page.route('**/api/goals/g1', (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify(goal),
+      }),
+    );
+    await page.route('**/api/goals/g1/activity**', (route) =>
+      route.fulfill({ status: 200, contentType: 'application/json', body: '[]' }),
+    );
+    await page.goto('/goals/g1');
+    await page
+      .locator('[data-testid="goal-detail-log-fab"]')
+      .evaluate((el: HTMLElement) => el.click());
+    await page.waitForTimeout(500);
+
+    const container = page.locator('mat-bottom-sheet-container').first();
+    await expect(container).toBeVisible();
+    const radii = await container.evaluate((el) => {
+      const s = getComputedStyle(el);
+      return [
+        s.borderTopLeftRadius,
+        s.borderTopRightRadius,
+        s.borderBottomRightRadius,
+        s.borderBottomLeftRadius,
+      ];
+    });
+    expect(radii).toEqual(['28px', '28px', '0px', '0px']);
+  });
+
   test('mobile sheet handle #C2C9BE / 4 px tall / 32 px wide (04-TC-C-009)', async ({ page }) => {
     await page.setViewportSize({ width: 360, height: 780 });
     await authenticate(page);
