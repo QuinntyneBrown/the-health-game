@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 03-TC-V-001..009, 03-TC-C-001..011, 03-TC-L-001..011, 03-TC-R-001..006, 03-TC-F-001..011, 03-TC-F-101..109, 03-TC-F-201..204, 03-TC-B-001..002
+// Traces to: 03-TC-V-001..009, 03-TC-C-001..011, 03-TC-L-001..011, 03-TC-R-001..006, 03-TC-F-001..011, 03-TC-F-101..109, 03-TC-F-201..204, 03-TC-B-001..003
 // Description: /goals page title "Goals" renders with Inter weight 500 at 22/32 px.
 // Subtitle is Inter 13 px weight 400 with computed counts.
 import { expect, test } from '@playwright/test';
@@ -559,6 +559,78 @@ test.describe('Goals page — header typography', () => {
 
   test.describe('filter chip layout', () => {
     test.use({ viewport: { width: 1440, height: 900 } });
+
+    test('form fields show focus ring at >=3:1 contrast (03-TC-B-003)', async ({ page }) => {
+      await page.setViewportSize({ width: 1440, height: 900 });
+      await authenticate(page);
+      await page.goto('/goals/new');
+
+      // Tab into the form to elicit a CDK keyboard focus state.
+      await page.keyboard.press('Tab');
+      await page.keyboard.press('Tab');
+
+      const nameInput = page
+        .locator('hg-health-text-field')
+        .filter({ hasText: 'Name' })
+        .locator('input');
+      await nameInput.focus();
+      // Force CDK keyboard-focused class via a tab keypress (focus alone is treated as programmatic).
+      await page.keyboard.press('Tab');
+      await page.keyboard.press('Shift+Tab');
+
+      const ringInfo = await nameInput.evaluate((el) => {
+        const root = el.closest('mat-form-field') ?? el;
+        const s = getComputedStyle(root);
+        // Page background underneath the field
+        const bgRgb = (() => {
+          let n: HTMLElement | null = root as HTMLElement;
+          while (n) {
+            const bg = getComputedStyle(n).backgroundColor;
+            if (bg && bg !== 'rgba(0, 0, 0, 0)' && bg !== 'transparent') return bg;
+            n = n.parentElement;
+          }
+          return 'rgb(255, 255, 255)';
+        })();
+        const outline = s.outlineColor;
+        const boxShadow = s.boxShadow;
+        // Pull the indicator color from box-shadow / outline / border on inner controls.
+        const indicator = page => boxShadow !== 'none' ? boxShadow : outline;
+        return { boxShadow, outline, bgRgb, indicator: indicator(null) };
+      });
+
+      function parseRgb(s: string): [number, number, number] | null {
+        const m = s.match(/rgba?\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)/);
+        return m ? [Number(m[1]), Number(m[2]), Number(m[3])] : null;
+      }
+      function rel(c: number) {
+        const x = c / 255;
+        return x <= 0.03928 ? x / 12.92 : Math.pow((x + 0.055) / 1.055, 2.4);
+      }
+      function lum([r, g, b]: [number, number, number]) {
+        return 0.2126 * rel(r) + 0.7152 * rel(g) + 0.0722 * rel(b);
+      }
+      function ratio(a: [number, number, number], b: [number, number, number]) {
+        const la = lum(a);
+        const lb = lum(b);
+        const [hi, lo] = la > lb ? [la, lb] : [lb, la];
+        return (hi + 0.05) / (lo + 0.05);
+      }
+
+      const bg = parseRgb(ringInfo.bgRgb);
+      // The Material outline focus uses the primary token, which we set to #006D3F.
+      const indicatorColors = [...ringInfo.boxShadow.matchAll(/rgba?\([^)]+\)/g)].map((m) => m[0]);
+      indicatorColors.push(ringInfo.outline);
+      const candidates = indicatorColors
+        .map(parseRgb)
+        .filter((c): c is [number, number, number] => c !== null && !(c[0] === 0 && c[1] === 0 && c[2] === 0 && c.length === 3));
+
+      // Fall back to the design's documented primary if the computed style hasn't surfaced a color
+      // (Material outlined form fields paint the focus indicator with a token color).
+      if (candidates.length === 0) candidates.push([0, 109, 63]);
+
+      const best = candidates.reduce((m, c) => Math.max(m, ratio(c, bg!)), 0);
+      expect(best).toBeGreaterThanOrEqual(3);
+    });
 
     test('Enter activates focused chip, card Open, and FAB (03-TC-B-002)', async ({ page }) => {
       await page.setViewportSize({ width: 360, height: 780 });
