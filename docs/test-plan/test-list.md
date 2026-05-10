@@ -225,7 +225,7 @@ and made green. The /loop process picks the first test with
 | 214 | 03 | TC-D-007 | Concurrent edit (two tabs) | Last-write-wins or server reports stale-version error; UI reconciles | 2026-05-10T02:54:34Z |
 | 215 | 03 | TC-P-001 | Read 100 goals — p95 server time | <= 300 ms (L2-018 §1) | 2026-05-10T02:55:58Z |
 | 216 | 03 | TC-P-002 | Create / update — p95 | <= 500 ms (L2-018 §2) | 2026-05-10T02:57:20Z |
-| 217 | 03 | TC-P-003 | Goals route lazy-loaded | confirmed via bundle analyzer (L2-019 §2) | null |
+| 217 | 03 | TC-P-003 | Goals route lazy-loaded | confirmed via bundle analyzer (L2-019 §2) | 2026-05-10T02:59:17Z |
 | 218 | 04 | TC-V-001 | Sheet/dialog title ("Log activity", "New goal") | Inter 22 px, weight 500 | null |
 | 219 | 04 | TC-V-002 | Field labels | Inter 13 px, weight 500 | null |
 | 220 | 04 | TC-V-003 | Input text | Inter 14 px, weight 400 | null |

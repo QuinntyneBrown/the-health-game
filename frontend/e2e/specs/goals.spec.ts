@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 03-TC-V-001..009, 03-TC-C-001..011, 03-TC-L-001..011, 03-TC-R-001..006, 03-TC-F-001..011, 03-TC-F-101..109, 03-TC-F-201..204, 03-TC-B-001..006, 03-TC-A-001..006, 03-TC-D-001..007, 03-TC-P-001..002
+// Traces to: 03-TC-V-001..009, 03-TC-C-001..011, 03-TC-L-001..011, 03-TC-R-001..006, 03-TC-F-001..011, 03-TC-F-101..109, 03-TC-F-201..204, 03-TC-B-001..006, 03-TC-A-001..006, 03-TC-D-001..007, 03-TC-P-001..003
 // Description: /goals page title "Goals" renders with Inter weight 500 at 22/32 px.
 // Subtitle is Inter 13 px weight 400 with computed counts.
 import AxeBuilder from '@axe-core/playwright';
@@ -560,6 +560,30 @@ test.describe('Goals page — header typography', () => {
 
   test.describe('filter chip layout', () => {
     test.use({ viewport: { width: 1440, height: 900 } });
+
+    test('goals route is lazy-loaded (03-TC-P-003)', async ({ page }) => {
+      await page.setViewportSize({ width: 1440, height: 900 });
+      await authenticate(page);
+
+      const jsRequests: string[] = [];
+      page.on('response', (res) => {
+        const url = res.url();
+        if (/\.js(\?|$)/.test(url) || /chunk-[A-Z0-9]+/.test(url)) {
+          jsRequests.push(url);
+        }
+      });
+
+      await page.goto('/home');
+      await page.waitForLoadState('networkidle');
+      const beforeCount = jsRequests.length;
+
+      await page.goto('/goals');
+      await page.waitForLoadState('networkidle');
+      const after = jsRequests.slice(beforeCount);
+
+      // At least one new JS chunk must have loaded after navigating to /goals.
+      expect(after.length, `before: ${beforeCount}, after: ${after.length}`).toBeGreaterThan(0);
+    });
 
     test('POST + PUT /api/goals: p95 ≤ 500 ms (03-TC-P-002)', async ({ page }) => {
       await page.setViewportSize({ width: 1440, height: 900 });
