@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 06-TC-V-001..007, 06-TC-C-001..010, 06-TC-L-001..010, 06-TC-R-001..005, 06-TC-F-001..008, 06-TC-F-101..107, 06-TC-F-201..204
+// Traces to: 06-TC-V-001..007, 06-TC-C-001..010, 06-TC-L-001..010, 06-TC-R-001..005, 06-TC-F-001..008, 06-TC-F-101..107, 06-TC-F-201..205
 // Description: stats + profile page chrome.
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
@@ -45,6 +45,48 @@ async function authenticate(page: import('@playwright/test').Page): Promise<void
 }
 
 test.describe('Stats & Profile chrome', () => {
+  test('FE never targets another user for deletion (06-TC-F-205)', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await authenticate(page);
+
+    const deletes: string[] = [];
+    await page.unroute('**/api/users/**');
+    await page.unroute('**/api/users/me**');
+    await page.route('**/api/users/**', (route, request) => {
+      if (request.method() === 'DELETE') {
+        deletes.push(new URL(request.url()).pathname);
+        route.fulfill({ status: 204, contentType: 'application/json', body: '' });
+        return;
+      }
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({
+          displayName: 'Quinn',
+          email: 'q@q.q',
+          avatarUrl: null,
+          roles: [],
+        }),
+      });
+    });
+
+    await page.goto('/profile');
+    await page.locator('[data-testid="profile-delete"]').click();
+    await page
+      .locator('lib-delete-account-dialog input')
+      .fill('q@q.q');
+    await page.locator('[data-testid="delete-account-confirm"]').click();
+    await page.waitForTimeout(600);
+
+    // Every DELETE went to /api/users/me — the FE has no way to target a
+    // different user from the Profile UI. Server-side RBAC enforces 403 on
+    // /api/users/{otherId}.
+    expect(deletes.length).toBeGreaterThanOrEqual(1);
+    for (const path of deletes) {
+      expect(path).toBe('/api/users/me');
+    }
+  });
+
   test('deleted account cannot sign back in (06-TC-F-204)', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
 
