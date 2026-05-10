@@ -318,7 +318,7 @@ and made green. The /loop process picks the first test with
 | 307 | 05 | TC-V-007 | Progress text ("6 of 10") | Inter 13 px, weight 600 | 2026-05-10T07:02:28Z |
 | 308 | 05 | TC-V-008 | "New reward" button | Inter 14 px, weight 500, white | 2026-05-10T07:03:25Z |
 | 309 | 05 | TC-C-001 | Hero background — ready-to-claim | `#FFD7EE` (reward-container) | 2026-05-10T07:04:30Z |
-| 310 | 05 | TC-C-002 | Hero icon container | `#9B2680` (reward) bg, white icon | null |
+| 310 | 05 | TC-C-002 | Hero icon container | `#9B2680` (reward) bg, white icon | 2026-05-10T07:06:10Z |
 | 311 | 05 | TC-C-003 | Hero primary CTA "Claim" | `#9B2680` bg, white label | null |
 | 312 | 05 | TC-C-004 | Hero secondary CTA | transparent bg, `#C2C9BE` outline | null |
 | 313 | 05 | TC-C-005 | In-progress card | `#EBEFE7` bg | null |

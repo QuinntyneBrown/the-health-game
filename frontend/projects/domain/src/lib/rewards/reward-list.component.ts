@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { MatIconModule } from '@angular/material/icon';
 import { Router } from '@angular/router';
 import { REWARDS_SERVICE, Reward } from 'api';
 import {
@@ -22,6 +23,7 @@ const filterOptions: readonly SegmentedFilterOption[] = [
   selector: 'lib-reward-list',
   imports: [
     EmptyStateComponent,
+    MatIconModule,
     PageHeaderComponent,
     RewardCardComponent,
     SegmentedFilterComponent,
@@ -39,9 +41,16 @@ const filterOptions: readonly SegmentedFilterOption[] = [
         data-testid="reward-hero"
         aria-labelledby="reward-hero-title"
       >
-        <p class="reward-hero__eyebrow" data-testid="reward-hero-eyebrow">READY TO CLAIM</p>
-        <h2 class="reward-hero__title" id="reward-hero-title">{{ hero.name }}</h2>
-        <p class="reward-hero__description">{{ hero.description }}</p>
+        <span class="reward-hero__icon-frame" aria-hidden="true">
+          <mat-icon class="reward-hero__icon" fontSet="material-symbols-rounded">
+            emoji_events
+          </mat-icon>
+        </span>
+        <div class="reward-hero__copy">
+          <p class="reward-hero__eyebrow" data-testid="reward-hero-eyebrow">READY TO CLAIM</p>
+          <h2 class="reward-hero__title" id="reward-hero-title">{{ hero.name }}</h2>
+          <p class="reward-hero__description">{{ hero.description }}</p>
+        </div>
       </section>
     }
     @if (rewards().length === 0) {
@@ -110,12 +119,36 @@ const filterOptions: readonly SegmentedFilterOption[] = [
       }
 
       .reward-hero {
+        align-items: center;
         background: #ffd7ee;
         border-radius: 24px;
         display: grid;
-        gap: var(--hg-space-2);
+        gap: var(--hg-space-4);
+        grid-template-columns: auto 1fr;
         margin-bottom: var(--hg-space-6);
         padding: 32px;
+      }
+
+      .reward-hero__icon-frame {
+        align-items: center;
+        background: #9b2680;
+        border-radius: 9999px;
+        display: inline-flex;
+        height: 120px;
+        justify-content: center;
+        width: 120px;
+      }
+
+      .reward-hero__icon {
+        color: #ffffff;
+        font-size: 48px;
+        height: 48px;
+        width: 48px;
+      }
+
+      .reward-hero__copy {
+        display: grid;
+        gap: var(--hg-space-2);
       }
 
       .reward-hero__eyebrow {
