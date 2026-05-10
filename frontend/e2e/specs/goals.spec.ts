@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 03-TC-V-001..009, 03-TC-C-001..011, 03-TC-L-001..011, 03-TC-R-001..004
+// Traces to: 03-TC-V-001..009, 03-TC-C-001..011, 03-TC-L-001..011, 03-TC-R-001..005
 // Description: /goals page title "Goals" renders with Inter weight 500 at 22/32 px.
 // Subtitle is Inter 13 px weight 400 with computed counts.
 import { expect, test } from '@playwright/test';
@@ -559,6 +559,58 @@ test.describe('Goals page — header typography', () => {
 
   test.describe('filter chip layout', () => {
     test.use({ viewport: { width: 1440, height: 900 } });
+
+    test('long goal names truncate to 1 line + accessible full name (03-TC-R-005)', async ({
+      page,
+    }) => {
+      const longName =
+        'Walk thirty thousand steps a day come rain or shine through the entire winter';
+      await authenticate(page);
+      await page.unroute('**/api/goals**');
+      await page.route('**/api/goals**', (route) =>
+        route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify([
+            {
+              id: 'g1',
+              name: longName,
+              description: '',
+              cadence: 'daily',
+              target: { value: 10, unit: 'min' },
+              completedQuantity: 0,
+              currentStreak: 0,
+              longestStreak: 0,
+              rewardName: '',
+            },
+          ]),
+        }),
+      );
+      await page.goto('/goals');
+
+      const title = page.locator('lib-goal-list .goal-card__title').first();
+      await expect(title).toBeVisible();
+      const layout = await title.evaluate((el) => {
+        const style = getComputedStyle(el);
+        return {
+          overflow: style.overflow,
+          textOverflow: style.textOverflow,
+          whiteSpace: style.whiteSpace,
+          title: el.getAttribute('title'),
+          ariaLabel: el.getAttribute('aria-label'),
+          scrollWidth: el.scrollWidth,
+          clientWidth: el.clientWidth,
+        };
+      });
+      expect(['hidden', 'clip']).toContain(layout.overflow);
+      expect(layout.textOverflow).toBe('ellipsis');
+      expect(layout.whiteSpace).toBe('nowrap');
+      // Truncation actually applied (text overflows the rendered box).
+      expect(layout.scrollWidth).toBeGreaterThan(layout.clientWidth);
+      // Tooltip / aria-label exposes the full name.
+      const accessibleFull = layout.title ?? layout.ariaLabel ?? '';
+      expect(accessibleFull).toBe(longName);
+    });
 
     test('mobile filter row scrolls horizontally without clipping (03-TC-R-004)', async ({
       page,

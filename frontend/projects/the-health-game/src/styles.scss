@@ -211,6 +211,12 @@ lib-goal-list .goal-card:not(.goal-card--complete):not(.goal-card--streak) {
   background-color: #ebefe7 !important;
 }
 
+lib-goal-list .goal-card__title {
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+
 lib-goal-list .goal-card .goal-card__content {
   padding: 20px !important;
 }

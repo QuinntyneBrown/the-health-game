@@ -11,7 +11,7 @@
       </span>
 
       <div class="goal-card__copy">
-        <h3 class="goal-card__title">{{ title() }}</h3>
+        <h3 class="goal-card__title" [attr.title]="title()" [attr.aria-label]="title()">{{ title() }}</h3>
         @if (description()) {
           <p class="goal-card__description">{{ description() }}</p>
         }
