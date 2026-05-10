@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 05-TC-V-001..003
+// Traces to: 05-TC-V-001..004
 // Description: rewards list page chrome.
 import { expect, test } from '@playwright/test';
 
@@ -74,6 +74,36 @@ const readyReward = {
 };
 
 test.describe('Rewards list', () => {
+  test('hero description Inter 16 px / 400 / line-height 1.5 (05-TC-V-004)', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await authenticate(page);
+    await page.unroute('**/api/rewards**');
+    await page.route('**/api/rewards**', (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify([readyReward, ...sampleRewards]),
+      }),
+    );
+
+    await page.goto('/rewards');
+    const desc = page.locator('lib-reward-list .reward-hero__description').first();
+    await expect(desc).toBeVisible();
+    const result = await desc.evaluate((el) => {
+      const s = getComputedStyle(el);
+      return {
+        family: s.fontFamily,
+        size: s.fontSize,
+        weight: s.fontWeight,
+        lineHeight: s.lineHeight,
+      };
+    });
+    expect(result.family).toMatch(/Inter/);
+    expect(result.size).toBe('16px');
+    expect(result.weight).toBe('400');
+    expect(result.lineHeight).toBe('24px');
+  });
+
   test('hero reward title Inter 36 px desktop weight 500 (05-TC-V-003)', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await authenticate(page);
