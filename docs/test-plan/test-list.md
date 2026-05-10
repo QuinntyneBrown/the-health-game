@@ -474,7 +474,7 @@ and made green. The /loop process picks the first test with
 | 463 | 07 | TC-C-012 | OIDC button label color | `#191D17` (on surface) | 2026-05-10T13:42:10Z |
 | 464 | 07 | TC-C-013 | Inline error banner background | `#FFEDEA` (error container) | 2026-05-10T13:44:20Z |
 | 465 | 07 | TC-C-014 | Inline error banner text | `#410002` (on error container) | 2026-05-10T13:44:20Z |
-| 466 | 07 | TC-C-015 | Desktop hero panel background | `#94F7B4` (primary container) | null |
+| 466 | 07 | TC-C-015 | Desktop hero panel background | `#94F7B4` (primary container) | 2026-05-10T13:46:14Z |
 | 467 | 07 | TC-C-016 | Desktop hero text color | `#00210F` (on primary container) | null |
 | 468 | 07 | TC-C-017 | Sign-up link color | `#006D3F` (primary) | null |
 | 469 | 07 | TC-C-018 | Text/background contrast meets WCAG AA | >= 4.5:1 normal, >= 3:1 large | null |

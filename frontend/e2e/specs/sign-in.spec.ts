@@ -1,10 +1,19 @@
 // Acceptance Test
-// Traces to: L2-036, 07-TC-V-001..014, 07-TC-C-001..014
+// Traces to: L2-036, 07-TC-V-001..014, 07-TC-C-001..015
 // Description: Username + password sign-in page. Each test exercises one
 //              vertical slice end-to-end against the running app.
 import { expect, test } from '@playwright/test';
 
 test.describe('Sign In — page', () => {
+  test('desktop hero bg #94F7B4 (07-TC-C-015)', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await page.goto('/sign-in');
+    const hero = page.locator('lib-sign-in [data-testid="sign-in-hero"]');
+    await expect(hero).toBeVisible();
+    const bg = await hero.evaluate((el) => getComputedStyle(el).backgroundColor);
+    expect(bg).toBe('rgb(148, 247, 180)');
+  });
+
   test('error banner bg #FFEDEA + text #410002 (07-TC-C-013/014)', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await page.route('**/api/auth/sign-in', (route) =>

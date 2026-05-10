@@ -1,0 +1,97 @@
+<div class="sign-in" data-testid="sign-in">
+  <aside class="sign-in__hero" data-testid="sign-in-hero" aria-hidden="true">
+    <hg-app-brand class="sign-in__hero-brand" />
+    <p class="sign-in__hero-tagline">Build healthy streaks. Earn rewards.</p>
+  </aside>
+  <section class="sign-in__card" aria-labelledby="sign-in-title">
+    <hg-app-brand class="sign-in__brand" data-testid="sign-in-brand" />
+    <h1 id="sign-in-title" class="sign-in__title" data-testid="sign-in-title">
+      Welcome back.
+    </h1>
+    <p class="sign-in__subtitle" data-testid="sign-in-subtitle">
+      Pick up your streaks where you left off. Sign in with your username and password.
+    </p>
+
+    @if (errorMessage()) {
+      <p
+        class="sign-in__error"
+        role="alert"
+        aria-live="assertive"
+        data-testid="sign-in-error"
+      >
+        {{ errorMessage() }}
+      </p>
+    }
+
+    <form
+      class="sign-in__form"
+      data-testid="sign-in-form"
+      novalidate
+      (submit)="onSubmit($event)"
+    >
+      <hg-health-text-field
+        label="Username or email"
+        type="text"
+        data-testid="sign-in-username"
+        [value]="usernameOrEmail()"
+        [errorText]="usernameError()"
+        [disabled]="busy()"
+        (valueChange)="usernameOrEmail.set($event)"
+      />
+      <hg-health-text-field
+        label="Password"
+        type="password"
+        data-testid="sign-in-password"
+        [passwordToggle]="true"
+        [value]="password()"
+        [errorText]="passwordError()"
+        [disabled]="busy()"
+        (valueChange)="password.set($event)"
+      />
+
+      <button
+        mat-flat-button
+        type="submit"
+        class="sign-in__submit"
+        data-testid="sign-in-submit"
+        [disabled]="!canSubmit()"
+      >
+        @if (busy()) {
+          <span data-testid="sign-in-busy">Signing in…</span>
+        } @else {
+          <span>Sign in</span>
+        }
+      </button>
+    </form>
+
+    <div class="sign-in__divider" aria-hidden="true">
+      <span class="sign-in__divider-line"></span>
+      <span class="sign-in__divider-label">or</span>
+      <span class="sign-in__divider-line"></span>
+    </div>
+
+    <button
+      mat-stroked-button
+      type="button"
+      class="sign-in__oidc"
+      data-testid="sign-in-oidc"
+      [disabled]="busy()"
+      (click)="onContinueWithOidc()"
+    >
+      <mat-icon aria-hidden="true">vpn_key</mat-icon>
+      <span>Continue with Single Sign-On</span>
+    </button>
+
+    <p class="sign-in__signup" data-testid="sign-in-signup">
+      New to HealthQuest?
+      <button
+        type="button"
+        class="sign-in__signup-link"
+        data-testid="sign-in-get-started"
+        (click)="goToOnboarding()"
+      >
+        Get started
+      </button>
+    </p>
+  </section>
+</div>
