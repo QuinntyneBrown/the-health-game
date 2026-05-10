@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 06-TC-V-001..007, 06-TC-C-001..004
+// Traces to: 06-TC-V-001..007, 06-TC-C-001..005
 // Description: stats + profile page chrome.
 import { expect, test } from '@playwright/test';
 
@@ -44,6 +44,17 @@ async function authenticate(page: import('@playwright/test').Page): Promise<void
 }
 
 test.describe('Stats & Profile chrome', () => {
+  test('chart axis labels #424940 (06-TC-C-005)', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await authenticate(page);
+    await page.goto('/stats');
+
+    const label = page.locator('lib-stats .activity-chart__axis-label').first();
+    await expect(label).toBeVisible();
+    const color = await label.evaluate((el) => getComputedStyle(el).color);
+    expect(color).toBe('rgb(66, 73, 64)');
+  });
+
   test('activity bar chart bars in #006D3F (06-TC-C-004)', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await authenticate(page);
