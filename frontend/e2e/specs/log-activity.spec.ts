@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 04-TC-V-001..007, 04-TC-C-001..002
+// Traces to: 04-TC-V-001..007, 04-TC-C-001..003
 // Description: log-activity dialog typography.
 import { expect, test } from '@playwright/test';
 
@@ -57,6 +57,41 @@ const goal = {
 
 test.describe('Log activity dialog (desktop)', () => {
   test.use({ viewport: { width: 1440, height: 900 } });
+
+  test('field outline focused #006D3F / 2 px (04-TC-C-003)', async ({ page }) => {
+    await authenticate(page);
+    await page.route('**/api/goals/g1', (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify(goal),
+      }),
+    );
+    await page.route('**/api/goals/g1/activity**', (route) =>
+      route.fulfill({ status: 200, contentType: 'application/json', body: '[]' }),
+    );
+    await page.goto('/goals/g1');
+    await page.locator('[data-testid="goal-detail-log-fab"]').click();
+
+    const input = page
+      .locator('.cdk-overlay-container hg-health-text-field')
+      .filter({ hasText: 'Quantity' })
+      .locator('input');
+    await input.focus();
+
+    const piece = page
+      .locator(
+        '.cdk-overlay-container hg-health-text-field .mat-focused .mdc-notched-outline__leading',
+      )
+      .first();
+    await expect(piece).toBeVisible();
+    const result = await piece.evaluate((el) => {
+      const s = getComputedStyle(el);
+      return { color: s.borderTopColor, width: s.borderTopWidth };
+    });
+    expect(result.color).toBe('rgb(0, 109, 63)');
+    expect(result.width).toBe('2px');
+  });
 
   test('field outline default #C2C9BE / 1 px (04-TC-C-002)', async ({ page }) => {
     await authenticate(page);

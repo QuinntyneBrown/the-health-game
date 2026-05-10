@@ -157,6 +157,13 @@ hg-streak-summary .streak-summary__value {
   border-width: 1px !important;
 }
 
+.mat-mdc-form-field.mat-focused .mdc-notched-outline__leading,
+.mat-mdc-form-field.mat-focused .mdc-notched-outline__notch,
+.mat-mdc-form-field.mat-focused .mdc-notched-outline__trailing {
+  border-color: #006d3f !important;
+  border-width: 2px !important;
+}
+
 h2[mat-dialog-title],
 .mat-mdc-dialog-title {
   font-family:
