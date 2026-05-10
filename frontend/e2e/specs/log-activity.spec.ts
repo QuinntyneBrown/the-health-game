@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 04-TC-V-001..007, 04-TC-C-001..010, 04-TC-L-001..009
+// Traces to: 04-TC-V-001..007, 04-TC-C-001..010, 04-TC-L-001..010
 // Description: log-activity dialog typography.
 import { expect, test } from '@playwright/test';
 
@@ -158,6 +158,34 @@ test.describe('Log activity sheet (mobile)', () => {
 
 test.describe('Log activity dialog (desktop)', () => {
   test.use({ viewport: { width: 1440, height: 900 } });
+
+  test('dialog max width 720 px on desktop, centered (04-TC-L-010)', async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await authenticate(page);
+    await page.route('**/api/goals/g1', (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify(goal),
+      }),
+    );
+    await page.route('**/api/goals/g1/activity**', (route) =>
+      route.fulfill({ status: 200, contentType: 'application/json', body: '[]' }),
+    );
+    await page.goto('/goals/g1');
+    await page.locator('[data-testid="goal-detail-log-fab"]').click();
+
+    const surface = page.locator('.cdk-overlay-container .mat-mdc-dialog-surface').first();
+    await expect(surface).toBeVisible();
+    const dims = await surface.evaluate((el) => {
+      const r = el.getBoundingClientRect();
+      return { width: r.width, left: r.left, right: r.right, vw: window.innerWidth };
+    });
+    expect(Math.round(dims.width)).toBeLessThanOrEqual(720);
+    expect(Math.abs(Math.round(dims.left) - Math.round(dims.vw - dims.right))).toBeLessThanOrEqual(
+      8,
+    );
+  });
 
   test('submit button is full-width on mobile (04-TC-L-009)', async ({ page }) => {
     await page.setViewportSize({ width: 360, height: 780 });

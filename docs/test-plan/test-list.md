@@ -252,7 +252,7 @@ and made green. The /loop process picks the first test with
 | 241 | 04 | TC-L-007 | Cadence segmented control height | 40 px; corner radius 9999 | 2026-05-10T04:18:50Z |
 | 242 | 04 | TC-L-008 | Submit button height | 48 px (mobile) / 56 px (tablet/desktop) | 2026-05-10T04:20:56Z |
 | 243 | 04 | TC-L-009 | Submit button width | full width on mobile / right-aligned on tablet/desktop | 2026-05-10T04:22:53Z |
-| 244 | 04 | TC-L-010 | Dialog max width on desktop | 720 px; centered with max content max-width respected | null |
+| 244 | 04 | TC-L-010 | Dialog max width on desktop | 720 px; centered with max content max-width respected | 2026-05-10T04:24:59Z |
 | 245 | 04 | TC-R-001 | 360 px | Bottom sheet slides up from below; takes ~75% of viewport height; drag handle visible | null |
 | 246 | 04 | TC-R-002 | 768 px | Full-page form layout; nav rail still visible | null |
 | 247 | 04 | TC-R-003 | 1200 px | Centered dialog with backdrop; form re-uses tablet styling | null |
