@@ -485,7 +485,7 @@ and made green. The /loop process picks the first test with
 | 474 | 07 | TC-L-005 | Form card max-width | 440 px (mobile/tablet) / 480 px (desktop) | 2026-05-10T13:55:26Z |
 | 475 | 07 | TC-L-006 | Form card padding | 32 px (mobile) / 40 px (tablet/desktop) | 2026-05-10T13:56:51Z |
 | 476 | 07 | TC-L-007 | Inter-element vertical gap inside card | 20 px | 2026-05-10T13:58:06Z |
-| 477 | 07 | TC-L-008 | Inter-field gap inside form | 16 px | null |
+| 477 | 07 | TC-L-008 | Inter-field gap inside form | 16 px | 2026-05-10T14:01:30Z |
 | 478 | 07 | TC-L-009 | Field height | 56 px | null |
 | 479 | 07 | TC-L-010 | Submit button height | 48 px (mobile) / 56 px (tablet/desktop), full width | null |
 | 480 | 07 | TC-L-011 | Pill button corner radius | 9999 (full) | null |
