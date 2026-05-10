@@ -9,6 +9,31 @@ import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
 
 test.describe('Sign In — page', () => {
+  test('TBT under interaction <= 200 ms (07-TC-P-004)', async ({ page }) => {
+    await page.addInitScript(() => {
+      (window as any).__longTasks = [] as Array<{ start: number; duration: number }>;
+      try {
+        const obs = new PerformanceObserver((entries) => {
+          for (const e of entries.getEntries()) {
+            (window as any).__longTasks.push({ start: e.startTime, duration: e.duration });
+          }
+        });
+        obs.observe({ type: 'longtask', buffered: true });
+      } catch {}
+    });
+    await page.goto('/sign-in');
+    await page.getByTestId('sign-in-username').locator('input').fill('alice');
+    await page.getByTestId('sign-in-password').locator('input').fill('Secret123!');
+    await page.getByTestId('sign-in-password').locator('button.health-text-field__visibility').click();
+    await page.getByTestId('sign-in-password').locator('button.health-text-field__visibility').click();
+    await page.waitForTimeout(200);
+    const tbt = await page.evaluate(() => {
+      const tasks = (window as any).__longTasks as Array<{ start: number; duration: number }>;
+      return tasks.reduce((sum, t) => sum + Math.max(0, t.duration - 50), 0);
+    });
+    expect(tbt, `TBT=${tbt}ms`).toBeLessThanOrEqual(200);
+  });
+
   test('submit p95 round-trip <= 500 ms with fast server (07-TC-P-003)', async ({
     page,
   }, testInfo) => {
