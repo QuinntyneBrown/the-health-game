@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 06-TC-V-001..007, 06-TC-C-001..010, 06-TC-L-001..010, 06-TC-R-001..005, 06-TC-F-001..008, 06-TC-F-101..107, 06-TC-F-201..202
+// Traces to: 06-TC-V-001..007, 06-TC-C-001..010, 06-TC-L-001..010, 06-TC-R-001..005, 06-TC-F-001..008, 06-TC-F-101..107, 06-TC-F-201..203
 // Description: stats + profile page chrome.
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
@@ -45,6 +45,55 @@ async function authenticate(page: import('@playwright/test').Page): Promise<void
 }
 
 test.describe('Stats & Profile chrome', () => {
+  test('confirm deletion DELETEs and signs the user out (06-TC-F-203)', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await authenticate(page);
+
+    let deleteCalls = 0;
+    let deletePath = '';
+    let deleteAuth = '';
+    await page.unroute('**/api/users/me**');
+    await page.route('**/api/users/me**', (route, request) => {
+      if (request.method() === 'DELETE') {
+        deleteCalls += 1;
+        deletePath = new URL(request.url()).pathname;
+        deleteAuth = request.headers()['authorization'] ?? '';
+        route.fulfill({ status: 204, contentType: 'application/json', body: '' });
+        return;
+      }
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({
+          displayName: 'Quinn',
+          email: 'q@q.q',
+          avatarUrl: null,
+          roles: [],
+        }),
+      });
+    });
+
+    await page.goto('/profile');
+    await page.locator('[data-testid="profile-delete"]').click();
+    await page
+      .locator('lib-delete-account-dialog input')
+      .fill('q@q.q');
+    await page.locator('[data-testid="delete-account-confirm"]').click();
+
+    await page.waitForTimeout(800);
+    expect(deleteCalls).toBe(1);
+    expect(deletePath).toBe('/api/users/me');
+    expect(deleteAuth).toMatch(/^Bearer /);
+
+    // signOut clears the local session token. The OIDC redirect is to an
+    // external endpoint we don't run in tests, but the same-origin
+    // sessionStorage state proves the FE half of the contract.
+    const tokenStillPresent = await page
+      .evaluate(() => sessionStorage.getItem('hg.oidc.access-token'))
+      .catch(() => 'navigated-away');
+    expect(tokenStillPresent === null || tokenStillPresent === 'navigated-away').toBe(true);
+  });
+
   test('cancel delete-account confirm is a no-op (06-TC-F-202)', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await authenticate(page);
