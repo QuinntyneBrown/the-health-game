@@ -66,9 +66,9 @@
 }
 
 .sign-in__error {
-  background: var(--hg-color-error-container, #ffedea);
+  background: #ffedea;
   border-radius: var(--hg-radius-md, 12px);
-  color: var(--hg-color-on-error-container, #410002);
+  color: #410002;
   font-size: var(--hg-font-size-body-md);
   margin: 0;
   padding: var(--hg-space-3) var(--hg-space-4);

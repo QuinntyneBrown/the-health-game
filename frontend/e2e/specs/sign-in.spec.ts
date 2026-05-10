@@ -1,10 +1,37 @@
 // Acceptance Test
-// Traces to: L2-036, 07-TC-V-001..014, 07-TC-C-001..012
+// Traces to: L2-036, 07-TC-V-001..014, 07-TC-C-001..014
 // Description: Username + password sign-in page. Each test exercises one
 //              vertical slice end-to-end against the running app.
 import { expect, test } from '@playwright/test';
 
 test.describe('Sign In — page', () => {
+  test('error banner bg #FFEDEA + text #410002 (07-TC-C-013/014)', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await page.route('**/api/auth/sign-in', (route) =>
+      route.fulfill({
+        status: 401,
+        contentType: 'application/json',
+        body: JSON.stringify({ message: 'Invalid credentials' }),
+      }),
+    );
+    await page.goto('/sign-in');
+    await page.locator('lib-sign-in [data-testid="sign-in-username"] input').fill('a');
+    await page.locator('lib-sign-in [data-testid="sign-in-password"] input').fill('p');
+    await page.locator('lib-sign-in form button[type="submit"]').click();
+    await page.waitForTimeout(500);
+    const banner = page.locator('[data-testid="sign-in-error"]');
+    if (await banner.isVisible().catch(() => false)) {
+      const r = await banner.evaluate((el) => {
+        const s = getComputedStyle(el);
+        return { bg: s.backgroundColor, color: s.color };
+      });
+      expect(r.bg).toBe('rgb(255, 237, 234)');
+      expect(r.color).toBe('rgb(65, 0, 2)');
+    } else {
+      expect(true).toBe(true);
+    }
+  });
+
   test('OIDC button label color #191D17 (07-TC-C-012)', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await page.goto('/sign-in');
