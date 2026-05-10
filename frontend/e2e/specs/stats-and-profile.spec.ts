@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 06-TC-V-001..007, 06-TC-C-001..010, 06-TC-L-001..009
+// Traces to: 06-TC-V-001..007, 06-TC-C-001..010, 06-TC-L-001..010
 // Description: stats + profile page chrome.
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
@@ -45,6 +45,25 @@ async function authenticate(page: import('@playwright/test').Page): Promise<void
 }
 
 test.describe('Stats & Profile chrome', () => {
+  test('page padding 32 / 24 / 16 by viewport (06-TC-L-010)', async ({ page }) => {
+    await authenticate(page);
+    const measure = async (path: string) => {
+      const host = path === '/stats' ? 'lib-stats' : 'lib-profile';
+      await page.goto(path);
+      const el = page.locator(host).first();
+      await expect(el).toBeVisible();
+      return el.evaluate((node) => getComputedStyle(node).paddingLeft);
+    };
+    for (const path of ['/stats', '/profile']) {
+      await page.setViewportSize({ width: 1440, height: 900 });
+      expect(await measure(path)).toBe('32px');
+      await page.setViewportSize({ width: 768, height: 1024 });
+      expect(await measure(path)).toBe('24px');
+      await page.setViewportSize({ width: 360, height: 780 });
+      expect(await measure(path)).toBe('16px');
+    }
+  });
+
   test('avatar 32 px on mobile (06-TC-L-009)', async ({ page }) => {
     await page.setViewportSize({ width: 360, height: 780 });
     await authenticate(page);
