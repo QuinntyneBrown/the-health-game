@@ -39,6 +39,7 @@ import { LogActivitySheetData } from './log-activity-sheet.component';
         type="button"
         data-testid="log-activity-save"
         [disabled]="!canSave() || submitting()"
+        [attr.aria-busy]="submitting() ? 'true' : null"
         (click)="submit()"
       >
         @if (submitting()) {

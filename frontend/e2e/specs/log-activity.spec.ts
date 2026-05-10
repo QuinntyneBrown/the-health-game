@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 04-TC-V-001..007, 04-TC-C-001..010, 04-TC-L-001..010, 04-TC-R-001..006, 04-TC-F-001..012, 04-TC-F-101..109, 04-TC-B-001..010, 04-TC-A-001..004
+// Traces to: 04-TC-V-001..007, 04-TC-C-001..010, 04-TC-L-001..010, 04-TC-R-001..006, 04-TC-F-001..012, 04-TC-F-101..109, 04-TC-B-001..010, 04-TC-A-001..005
 // Description: log-activity dialog typography.
 import { expect, test } from '@playwright/test';
 
@@ -126,6 +126,51 @@ test.describe('Log activity sheet (mobile)', () => {
     });
     const accessibleName = meta.targetText || meta.ariaLabel || '';
     expect(accessibleName).toMatch(/Log activity/i);
+  });
+
+  test('submit button toggles aria-busy while logging (04-TC-A-005)', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await authenticate(page);
+    await page.route('**/api/goals/g1', (route) =>
+      route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(goal) }),
+    );
+    await page.route('**/api/goals/g1/activities**', (route, request) => {
+      if (request.method() === 'POST') {
+        setTimeout(() => {
+          route.fulfill({
+            status: 201,
+            contentType: 'application/json',
+            body: JSON.stringify({
+              id: 'a1',
+              goalId: 'g1',
+              quantity: 5,
+              recordedAt: '2026-05-10T06:00:00Z',
+              newlyEarnedRewards: [],
+            }),
+          });
+        }, 600);
+      } else {
+        route.fulfill({ status: 200, contentType: 'application/json', body: '[]' });
+      }
+    });
+    await page.goto('/goals/g1');
+    await page
+      .locator('[data-testid="goal-detail-log-fab"]')
+      .evaluate((el: HTMLElement) => el.click());
+    await page.waitForTimeout(300);
+
+    const dialog = page.locator('mat-dialog-container');
+    await expect(dialog).toBeVisible();
+    await dialog.locator('input[type="number"]').fill('5');
+
+    const saveBtn = page.locator('[data-testid="log-activity-save"]');
+    expect(await saveBtn.getAttribute('aria-busy')).not.toBe('true');
+
+    await saveBtn.click();
+    await page.waitForTimeout(80);
+    expect(await saveBtn.getAttribute('aria-busy')).toBe('true');
+
+    await expect(dialog).toBeHidden({ timeout: 4000 });
   });
 
   test('inline errors are announced via aria-live=polite (04-TC-A-004)', async ({ page }) => {
