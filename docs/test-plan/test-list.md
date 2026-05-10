@@ -217,7 +217,7 @@ and made green. The /loop process picks the first test with
 | 206 | 03 | TC-A-005 | Delete confirmation is a focus-trapping `<dialog>` | Yes | 2026-05-10T02:29:07Z |
 | 207 | 03 | TC-A-006 | axe-core | 0 critical/serious | 2026-05-10T02:32:28Z |
 | 208 | 03 | TC-D-001 | Created goal survives reload | Yes (server-persisted) | 2026-05-10T02:34:17Z |
-| 209 | 03 | TC-D-002 | Edit survives reload | Yes | null |
+| 209 | 03 | TC-D-002 | Edit survives reload | Yes | 2026-05-10T02:35:49Z |
 | 210 | 03 | TC-D-003 | Deleted goal does not reappear after reload | Yes | null |
 | 211 | 03 | TC-D-004 | Sign out + sign in same user | Same goals visible | null |
 | 212 | 03 | TC-D-005 | Sign in as different user | Other user's goals not visible | null |

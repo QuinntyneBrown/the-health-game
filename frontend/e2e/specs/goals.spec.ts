@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 03-TC-V-001..009, 03-TC-C-001..011, 03-TC-L-001..011, 03-TC-R-001..006, 03-TC-F-001..011, 03-TC-F-101..109, 03-TC-F-201..204, 03-TC-B-001..006, 03-TC-A-001..006, 03-TC-D-001
+// Traces to: 03-TC-V-001..009, 03-TC-C-001..011, 03-TC-L-001..011, 03-TC-R-001..006, 03-TC-F-001..011, 03-TC-F-101..109, 03-TC-F-201..204, 03-TC-B-001..006, 03-TC-A-001..006, 03-TC-D-001..002
 // Description: /goals page title "Goals" renders with Inter weight 500 at 22/32 px.
 // Subtitle is Inter 13 px weight 400 with computed counts.
 import AxeBuilder from '@axe-core/playwright';
@@ -560,6 +560,73 @@ test.describe('Goals page — header typography', () => {
 
   test.describe('filter chip layout', () => {
     test.use({ viewport: { width: 1440, height: 900 } });
+
+    test('edit survives a full page reload (03-TC-D-002)', async ({ page }) => {
+      await page.setViewportSize({ width: 1440, height: 900 });
+      await authenticate(page);
+
+      let goal = {
+        id: 'g1',
+        name: 'Walk',
+        description: '',
+        cadence: 'daily' as const,
+        target: { value: 10, unit: 'min' },
+        completedQuantity: 0,
+        currentStreak: 0,
+        longestStreak: 0,
+        rewardName: '',
+      };
+
+      await page.unroute('**/api/goals**');
+      await page.route('**/api/goals**', (route) => {
+        const req = route.request();
+        if (req.url().endsWith('/api/goals/g1')) {
+          if (req.method() === 'PUT') {
+            const body = req.postDataJSON() as Partial<typeof goal>;
+            goal = { ...goal, ...body };
+            route.fulfill({
+              status: 200,
+              contentType: 'application/json',
+              body: JSON.stringify(goal),
+            });
+            return;
+          }
+          route.fulfill({
+            status: 200,
+            contentType: 'application/json',
+            body: JSON.stringify(goal),
+          });
+          return;
+        }
+        route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify([goal]),
+        });
+      });
+      await page.route('**/api/goals/g1/activity**', (route) =>
+        route.fulfill({ status: 200, contentType: 'application/json', body: '[]' }),
+      );
+
+      await page.goto('/goals/g1/edit');
+      const targetInput = page
+        .locator('hg-health-text-field')
+        .filter({ hasText: 'Target' })
+        .locator('input');
+      await targetInput.fill('25');
+      await page.locator('[data-testid="goal-form-save"]').click();
+      await page.waitForURL(/\/goals\/g1$/);
+
+      await expect(page.locator('lib-goal-detail [data-testid="goal-detail-target"]')).toContainText(
+        '25',
+      );
+
+      // Reload — server snapshot still reflects the edit.
+      await page.reload();
+      await expect(page.locator('lib-goal-detail [data-testid="goal-detail-target"]')).toContainText(
+        '25',
+      );
+    });
 
     test('created goal survives a full page reload (03-TC-D-001)', async ({ page }) => {
       await page.setViewportSize({ width: 1440, height: 900 });
