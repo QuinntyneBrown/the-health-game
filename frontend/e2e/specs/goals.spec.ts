@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 03-TC-V-001..009, 03-TC-C-001..011, 03-TC-L-001..008
+// Traces to: 03-TC-V-001..009, 03-TC-C-001..011, 03-TC-L-001..009
 // Description: /goals page title "Goals" renders with Inter weight 500 at 22/32 px.
 // Subtitle is Inter 13 px weight 400 with computed counts.
 import { expect, test } from '@playwright/test';
@@ -559,6 +559,52 @@ test.describe('Goals page — header typography', () => {
 
   test.describe('filter chip layout', () => {
     test.use({ viewport: { width: 1440, height: 900 } });
+
+    test('desktop grid is 3 cards across with 16 px gap (03-TC-L-009)', async ({ page }) => {
+      await page.setViewportSize({ width: 1440, height: 900 });
+      await authenticate(page);
+      await page.unroute('**/api/goals**');
+      const baseGoal = {
+        description: '',
+        cadence: 'daily' as const,
+        target: { value: 10, unit: 'min' },
+        completedQuantity: 0,
+        currentStreak: 0,
+        longestStreak: 0,
+        rewardName: '',
+      };
+      await page.route('**/api/goals**', (route) =>
+        route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify(
+            ['Walk', 'Read', 'Stretch'].map((name, i) => ({
+              id: `g${i + 1}`,
+              name,
+              ...baseGoal,
+            })),
+          ),
+        }),
+      );
+      await page.goto('/goals');
+
+      const cards = page.locator('lib-goal-list .goal-card');
+      await expect(cards).toHaveCount(3);
+      const tops = await cards.evaluateAll((els) =>
+        els.map((el) => Math.round(el.getBoundingClientRect().top)),
+      );
+      // All 3 on the same row → identical top
+      expect(tops.every((t) => t === tops[0])).toBe(true);
+
+      const lefts = await cards.evaluateAll((els) =>
+        els.map((el) => Math.round(el.getBoundingClientRect().left)),
+      );
+      const rights = await cards.evaluateAll((els) =>
+        els.map((el) => Math.round(el.getBoundingClientRect().right)),
+      );
+      const colGaps = [lefts[1] - rights[0], lefts[2] - rights[1]];
+      colGaps.forEach((g) => expect(g).toBe(16));
+    });
 
     test('mobile list inter-row gap is 8 px (03-TC-L-008)', async ({ page }) => {
       await page.setViewportSize({ width: 360, height: 780 });
