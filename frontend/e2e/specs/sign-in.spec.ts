@@ -6,6 +6,34 @@ import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
 
 test.describe('Sign In — page', () => {
+  test('each input has a programmatically associated label (07-TC-A-004)', async ({
+    page,
+  }) => {
+    await page.goto('/sign-in');
+    const checkLabel = async (testId: string, expected: RegExp) => {
+      const result = await page.evaluate((id) => {
+        const input = document.querySelector(
+          `lib-sign-in [data-testid="${id}"] input`,
+        ) as HTMLInputElement;
+        if (!input) return null;
+        const inputId = input.id;
+        const labelFor = inputId
+          ? document.querySelector(`label[for="${inputId}"]`)?.textContent?.trim()
+          : '';
+        const labelledBy = input.getAttribute('aria-labelledby');
+        const labelledByText = labelledBy
+          ? document.getElementById(labelledBy)?.textContent?.trim()
+          : '';
+        const aria = input.getAttribute('aria-label');
+        return labelFor || labelledByText || aria || '';
+      }, testId);
+      expect(result, `[${testId}] no label`).toBeTruthy();
+      expect(result!).toMatch(expected);
+    };
+    await checkLabel('sign-in-username', /username|email/i);
+    await checkLabel('sign-in-password', /password/i);
+  });
+
   test('brand mark is decorative (aria-hidden) (07-TC-A-003)', async ({ page }) => {
     await page.goto('/sign-in');
     const ariaHidden = await page

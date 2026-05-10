@@ -532,7 +532,7 @@ and made green. The /loop process picks the first test with
 | 521 | 07 | TC-A-001 | Page rendered inside the app-shell `<main>`; no nested `<main>` | Exactly one `<main>` | 2026-05-09T19:45:30Z |
 | 522 | 07 | TC-A-002 | Title rendered as `<h1>` | Yes | 2026-05-10T14:57:30Z |
 | 523 | 07 | TC-A-003 | Brand mark has accessible name or `aria-hidden="true"` | Decorative — `aria-hidden` | 2026-05-10T14:58:30Z |
-| 524 | 07 | TC-A-004 | Each input has a programmatically associated `<label for>` | Yes | null |
+| 524 | 07 | TC-A-004 | Each input has a programmatically associated `<label for>` | Yes | 2026-05-10T14:59:30Z |
 | 525 | 07 | TC-A-005 | Password field exposes `type=password` and is announced as masked | Yes | 2026-05-09T19:45:45Z |
 | 526 | 07 | TC-A-006 | Validation errors associated via `aria-describedby` and `aria-live="polite"` | Yes | null |
 | 527 | 07 | TC-A-007 | Inline 401 error has `role="alert"` and `aria-live="assertive"` | Yes | null |
