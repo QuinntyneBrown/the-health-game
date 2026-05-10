@@ -6,6 +6,42 @@ import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
 
 test.describe('Sign In — page', () => {
+  test('validation errors use aria-describedby + aria-live=polite (07-TC-A-006)', async ({
+    page,
+  }) => {
+    await page.goto('/sign-in');
+    await page.evaluate(() => {
+      const f = document.querySelector(
+        'lib-sign-in [data-testid="sign-in-form"]',
+      ) as HTMLFormElement;
+      f.requestSubmit();
+    });
+    await page.waitForTimeout(150);
+    const result = await page.evaluate(() => {
+      const inputs = Array.from(
+        document.querySelectorAll(
+          'lib-sign-in [data-testid="sign-in-username"] input, lib-sign-in [data-testid="sign-in-password"] input',
+        ),
+      ) as HTMLInputElement[];
+      return inputs.map((i) => {
+        const describedBy = i.getAttribute('aria-describedby');
+        const desc = describedBy
+          ? document.getElementById(describedBy)
+          : null;
+        return {
+          describedBy: describedBy ?? '',
+          live: desc?.getAttribute('aria-live') ?? '',
+          text: desc?.textContent?.trim() ?? '',
+        };
+      });
+    });
+    for (const r of result) {
+      expect(r.describedBy).toBeTruthy();
+      expect(r.text.length).toBeGreaterThan(0);
+      expect(r.live).toBe('polite');
+    }
+  });
+
   test('each input has a programmatically associated label (07-TC-A-004)', async ({
     page,
   }) => {

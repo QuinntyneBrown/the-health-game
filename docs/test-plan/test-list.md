@@ -534,7 +534,7 @@ and made green. The /loop process picks the first test with
 | 523 | 07 | TC-A-003 | Brand mark has accessible name or `aria-hidden="true"` | Decorative — `aria-hidden` | 2026-05-10T14:58:30Z |
 | 524 | 07 | TC-A-004 | Each input has a programmatically associated `<label for>` | Yes | 2026-05-10T14:59:30Z |
 | 525 | 07 | TC-A-005 | Password field exposes `type=password` and is announced as masked | Yes | 2026-05-09T19:45:45Z |
-| 526 | 07 | TC-A-006 | Validation errors associated via `aria-describedby` and `aria-live="polite"` | Yes | null |
+| 526 | 07 | TC-A-006 | Validation errors associated via `aria-describedby` and `aria-live="polite"` | Yes | 2026-05-10T15:00:30Z |
 | 527 | 07 | TC-A-007 | Inline 401 error has `role="alert"` and `aria-live="assertive"` | Yes | null |
 | 528 | 07 | TC-A-008 | Buttons have descriptive accessible names | "Sign in", "Continue with Single Sign-On", "Get started" | null |
 | 529 | 07 | TC-A-009 | Password toggle has accessible name | "Show password" / "Hide password" | null |
