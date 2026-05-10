@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 05-TC-V-001..008, 05-TC-C-001..010, 05-TC-L-001..010, 05-TC-R-001..005, 05-TC-F-001..007, 05-TC-F-101..105
+// Traces to: 05-TC-V-001..008, 05-TC-C-001..010, 05-TC-L-001..010, 05-TC-R-001..005, 05-TC-F-001..007, 05-TC-F-101..105, 05-TC-F-201
 // Description: rewards list page chrome.
 import { expect, test } from '@playwright/test';
 
@@ -74,6 +74,60 @@ const readyReward = {
 };
 
 test.describe('Rewards list', () => {
+  test('streak crossing threshold mid-session shows reward toast (05-TC-F-201)', async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await authenticate(page);
+
+    const goal = {
+      id: 'g1',
+      name: 'Walk',
+      description: '',
+      cadence: 'daily' as const,
+      target: { value: 10, unit: 'min' },
+      completedQuantity: 0,
+      currentStreak: 6,
+      longestStreak: 6,
+      rewardName: '',
+    };
+    await page.route('**/api/goals/g1', (route) =>
+      route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(goal) }),
+    );
+    await page.route('**/api/goals/g1/activities**', (route, request) => {
+      if (request.method() === 'POST') {
+        route.fulfill({
+          status: 201,
+          contentType: 'application/json',
+          body: JSON.stringify({
+            id: 'a-streak-cross',
+            goalId: 'g1',
+            quantity: 10,
+            recordedAt: '2026-05-10T07:00:00Z',
+            newlyEarnedRewards: [{ id: 'r-7day', name: '7-day badge' }],
+          }),
+        });
+      } else {
+        route.fulfill({ status: 200, contentType: 'application/json', body: '[]' });
+      }
+    });
+
+    await page.goto('/goals/g1');
+    await page
+      .locator('[data-testid="goal-detail-log-fab"]')
+      .evaluate((el: HTMLElement) => el.click());
+    await page.waitForTimeout(300);
+    await page.locator('mat-dialog-container input[type="number"]').fill('10');
+    await page.locator('[data-testid="log-activity-save"]').click();
+    await expect(page.locator('mat-dialog-container')).toBeHidden();
+
+    const snack = page
+      .locator('mat-snack-bar-container, .mat-mdc-snack-bar-container')
+      .first();
+    await expect(snack).toBeVisible({ timeout: 4000 });
+    await expect(snack).toContainText(/7-day badge/);
+  });
+
   test('delete reward removes it from the list (05-TC-F-105)', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await authenticate(page);
