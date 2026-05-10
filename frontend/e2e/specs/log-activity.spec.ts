@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 04-TC-V-001..007, 04-TC-C-001..010, 04-TC-L-001..002
+// Traces to: 04-TC-V-001..007, 04-TC-C-001..010, 04-TC-L-001..003
 // Description: log-activity dialog typography.
 import { expect, test } from '@playwright/test';
 
@@ -158,6 +158,20 @@ test.describe('Log activity sheet (mobile)', () => {
 
 test.describe('Log activity dialog (desktop)', () => {
   test.use({ viewport: { width: 1440, height: 900 } });
+
+  test('tablet goal-form padding is 32 px (04-TC-L-003)', async ({ page }) => {
+    await page.setViewportSize({ width: 768, height: 1024 });
+    await authenticate(page);
+    await page.goto('/goals/new');
+
+    const host = page.locator('lib-goal-form').first();
+    await expect(host).toBeVisible();
+    const padding = await host.evaluate((el) => {
+      const s = getComputedStyle(el);
+      return [s.paddingTop, s.paddingRight, s.paddingBottom, s.paddingLeft];
+    });
+    expect(padding).toEqual(['32px', '32px', '32px', '32px']);
+  });
 
   test('backdrop scrim is rgba(0, 0, 0, 0.48) (04-TC-C-010)', async ({ page }) => {
     await authenticate(page);

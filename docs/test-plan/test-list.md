@@ -245,7 +245,7 @@ and made green. The /loop process picks the first test with
 | 234 | 04 | TC-C-010 | Backdrop scrim (when modal) | `#0000007A` | 2026-05-10T04:04:21Z |
 | 235 | 04 | TC-L-001 | Mobile bottom sheet corner radius | 28 px top, 0 bottom | 2026-05-10T04:06:36Z |
 | 236 | 04 | TC-L-002 | Mobile sheet padding | 24 px horizontal, 16 px top, 24 px bottom (above safe-area inset) | 2026-05-10T04:08:05Z |
-| 237 | 04 | TC-L-003 | Tablet form padding | 32 px | null |
+| 237 | 04 | TC-L-003 | Tablet form padding | 32 px | 2026-05-10T04:10:10Z |
 | 238 | 04 | TC-L-004 | Field height | 56 px | null |
 | 239 | 04 | TC-L-005 | Inter-field vertical gap | 16 px | null |
 | 240 | 04 | TC-L-006 | Section vertical gap | 24 px | null |

@@ -3,6 +3,12 @@
   padding: var(--hg-space-6);
 }
 
+@media (min-width: 768px) {
+  :host {
+    padding: 32px;
+  }
+}
+
 .goal-form {
   display: grid;
   gap: var(--hg-space-4);
