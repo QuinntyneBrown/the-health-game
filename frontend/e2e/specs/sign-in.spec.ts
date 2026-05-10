@@ -1,11 +1,30 @@
 // Acceptance Test
-// Traces to: L2-036, 07-TC-V-001..014, 07-TC-C-001..018, 07-TC-L-001..014, 07-TC-R-001..006
+// Traces to: L2-036, 07-TC-V-001..014, 07-TC-C-001..018, 07-TC-L-001..014, 07-TC-R-001..007
 // Description: Username + password sign-in page. Each test exercises one
 //              vertical slice end-to-end against the running app.
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
 
 test.describe('Sign In — page', () => {
+  test('resize preserves focus and value (07-TC-R-007)', async ({ page }) => {
+    await page.setViewportSize({ width: 360, height: 780 });
+    await page.goto('/sign-in');
+    const userInput = page.locator(
+      'lib-sign-in [data-testid="sign-in-username"] input',
+    );
+    await userInput.focus();
+    await userInput.fill('alice@example.com');
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await page.waitForTimeout(120);
+    const v = await userInput.inputValue();
+    expect(v).toBe('alice@example.com');
+    const focused = await page.evaluate(() => {
+      const el = document.activeElement as HTMLElement | null;
+      return el?.closest('[data-testid="sign-in-username"]') !== null;
+    });
+    expect(focused).toBe(true);
+  });
+
   test('viewport 1920+ respects content max-width (07-TC-R-006)', async ({ page }) => {
     await page.setViewportSize({ width: 1920, height: 1080 });
     await page.goto('/sign-in');
