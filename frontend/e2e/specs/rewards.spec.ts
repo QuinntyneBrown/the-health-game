@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 05-TC-V-001..008, 05-TC-C-001..010, 05-TC-L-001..010, 05-TC-R-001..002
+// Traces to: 05-TC-V-001..008, 05-TC-C-001..010, 05-TC-L-001..010, 05-TC-R-001..003
 // Description: rewards list page chrome.
 import { expect, test } from '@playwright/test';
 
@@ -74,6 +74,58 @@ const readyReward = {
 };
 
 test.describe('Rewards list', () => {
+  test('desktop 1440 px: 3-col grid + bounded by max width (05-TC-R-003)', async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await authenticate(page);
+    await page.unroute('**/api/rewards**');
+    const manyRewards = Array.from({ length: 6 }, (_, i) => ({
+      id: `r-grid-${i}`,
+      goalId: 'g1',
+      name: `In-progress reward ${i + 1}`,
+      description: '',
+      status: 'in-progress',
+      earnedAt: null,
+      progress: { current: i, target: 10 },
+      condition: { type: 'streak-milestone', streakDays: 10 + i },
+    }));
+    await page.route('**/api/rewards**', (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify(manyRewards),
+      }),
+    );
+    await page.goto('/rewards');
+
+    const grid = page
+      .locator('lib-reward-list .reward-section[data-status="in-progress"] .reward-list')
+      .first();
+    await expect(grid).toBeVisible();
+    const cols = await grid.evaluate(
+      (el) => getComputedStyle(el).gridTemplateColumns.split(/\s+/).filter(Boolean).length,
+    );
+    expect(cols).toBe(3);
+
+    const host = page.locator('lib-reward-list').first();
+    const meta = await host.evaluate((el) => {
+      const innerWidth = window.innerWidth;
+      const rect = el.getBoundingClientRect();
+      const inner = el.querySelector('.reward-list-inner') as HTMLElement | null;
+      const innerRect = inner?.getBoundingClientRect();
+      return {
+        innerWidth,
+        hostWidth: rect.width,
+        innerWidthEl: innerRect?.width ?? null,
+      };
+    });
+    // Either the host or an inner wrapper must be bounded under viewport width on
+    // a 1440-wide screen. We accept either pattern.
+    const widthInside = meta.innerWidthEl ?? meta.hostWidth;
+    expect(widthInside).toBeLessThanOrEqual(meta.innerWidth);
+    // And there must be SOME bounding (i.e. content area not the full 1440).
+    expect(widthInside).toBeLessThan(meta.innerWidth);
+  });
+
   test('tablet 768 px: 2-col grid + hero side-by-side (05-TC-R-002)', async ({ page }) => {
     await page.setViewportSize({ width: 768, height: 1024 });
     await authenticate(page);
