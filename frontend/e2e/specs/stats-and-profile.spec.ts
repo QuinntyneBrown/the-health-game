@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 06-TC-V-001..007, 06-TC-C-001..010, 06-TC-L-001..010, 06-TC-R-001..005, 06-TC-F-001..008, 06-TC-F-101..107, 06-TC-F-201..205, 06-TC-B-001..006, 06-TC-A-001..002
+// Traces to: 06-TC-V-001..007, 06-TC-C-001..010, 06-TC-L-001..010, 06-TC-R-001..005, 06-TC-F-001..008, 06-TC-F-101..107, 06-TC-F-201..205, 06-TC-B-001..006, 06-TC-A-001..003
 // Description: stats + profile page chrome.
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
@@ -45,6 +45,32 @@ async function authenticate(page: import('@playwright/test').Page): Promise<void
 }
 
 test.describe('Stats & Profile chrome', () => {
+  test('bar chart carries aria-label summary (06-TC-A-003)', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await authenticate(page);
+    await page.goto('/stats');
+
+    const chart = page.locator('lib-stats .activity-chart').first();
+    await expect(chart).toBeVisible();
+    const meta = await chart.evaluate((el) => ({
+      ariaLabel: el.getAttribute('aria-label'),
+      role: el.getAttribute('role'),
+    }));
+    expect((meta.ariaLabel ?? '').length).toBeGreaterThan(0);
+
+    // Each bar additionally exposes its day + value via aria-label, so a
+    // screen reader can read the data row by row even without a table.
+    const labels = await page
+      .locator('lib-stats .activity-chart__bar')
+      .evaluateAll((els) =>
+        (els as HTMLElement[]).map((el) => el.getAttribute('aria-label') ?? ''),
+      );
+    expect(labels.length).toBeGreaterThan(0);
+    for (const label of labels) {
+      expect(label).toMatch(/^\w+: \d+%$/);
+    }
+  });
+
   test('stat tile label + value share a parent (06-TC-A-002)', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await authenticate(page);

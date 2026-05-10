@@ -433,7 +433,7 @@ and made green. The /loop process picks the first test with
 | 422 | 06 | TC-B-006 | Reduced-motion | Bars do not animate; selector switch is instant | 2026-05-10T12:37:01Z |
 | 423 | 06 | TC-A-001 | Page title rendered as `<h1>` | Yes | 2026-05-10T12:38:27Z |
 | 424 | 06 | TC-A-002 | Stat tile values have visible label and accessible relationship (label + value grouped) | Yes | 2026-05-10T12:40:01Z |
-| 425 | 06 | TC-A-003 | Bar chart has accessible summary (table fallback or `aria-label`) | Yes | null |
+| 425 | 06 | TC-A-003 | Bar chart has accessible summary (table fallback or `aria-label`) | Yes | 2026-05-10T12:41:37Z |
 | 426 | 06 | TC-A-004 | Form fields use `<label for>` and announce errors via `aria-describedby` | Yes | null |
 | 427 | 06 | TC-A-005 | Destructive action region uses `role="alertdialog"` with focus trap | Yes | null |
 | 428 | 06 | TC-A-006 | axe-core | 0 critical / serious | null |
