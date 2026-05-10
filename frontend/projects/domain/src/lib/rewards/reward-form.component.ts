@@ -5,7 +5,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { GOALS_SERVICE, GoalSummary, REWARDS_SERVICE, RewardConditionType } from 'api';
 import { firstValueFrom } from 'rxjs';
 import { HealthTextFieldComponent } from 'components';
@@ -22,7 +22,7 @@ import { HealthTextFieldComponent } from 'components';
   ],
   template: `
     <form class="reward-form" (ngSubmit)="submit()" data-testid="reward-form">
-      <h1 class="reward-form__title">Define reward</h1>
+      <h1 class="reward-form__title">{{ isEditing() ? 'Edit reward' : 'Define reward' }}</h1>
 
       <hg-health-text-field
         label="Name"
@@ -81,7 +81,7 @@ import { HealthTextFieldComponent } from 'components';
           data-testid="reward-form-save"
           [disabled]="!canSave()"
         >
-          Create reward
+          {{ isEditing() ? 'Save changes' : 'Create reward' }}
         </button>
       </div>
     </form>
@@ -131,7 +131,11 @@ export class RewardFormComponent {
   private readonly rewardsService = inject(REWARDS_SERVICE);
   private readonly goalsService = inject(GOALS_SERVICE);
   private readonly router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
   private readonly snackBar = inject(MatSnackBar);
+
+  readonly editingId = signal<string | null>(null);
+  readonly isEditing = computed(() => this.editingId() !== null);
 
   readonly goals = signal<readonly GoalSummary[]>([]);
   readonly name = signal('');
@@ -168,6 +172,20 @@ export class RewardFormComponent {
         this.goalId.set(goals[0].id);
       }
     });
+
+    const id = this.route.snapshot.paramMap.get('id');
+    if (id) {
+      this.editingId.set(id);
+      this.rewardsService.getReward(id).subscribe((reward) => {
+        this.name.set(reward.name);
+        this.description.set(reward.description);
+        this.goalId.set(reward.goalId);
+        this.conditionType.set(reward.condition.type);
+        if (reward.condition.type === 'streak-milestone') {
+          this.streakDays.set(String(reward.condition.streakDays));
+        }
+      });
+    }
   }
 
   cancel(): void {
@@ -183,14 +201,24 @@ export class RewardFormComponent {
       this.conditionType() === 'goal-target'
         ? ({ type: 'goal-target' } as const)
         : ({ type: 'streak-milestone', streakDays: Number(this.streakDays()) } as const);
+    const editing = this.editingId();
     try {
-      await firstValueFrom(
-        this.rewardsService.createReward(goalId, {
-          name: this.name().trim(),
-          description: this.description().trim(),
-          condition,
-        }),
-      );
+      if (editing) {
+        await firstValueFrom(
+          this.rewardsService.updateReward(editing, {
+            name: this.name().trim(),
+            description: this.description().trim(),
+          }),
+        );
+      } else {
+        await firstValueFrom(
+          this.rewardsService.createReward(goalId, {
+            name: this.name().trim(),
+            description: this.description().trim(),
+            condition,
+          }),
+        );
+      }
     } catch (err: unknown) {
       const message =
         (err as { message?: string } | null)?.message ??

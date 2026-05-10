@@ -6,5 +6,6 @@ import { RewardListComponent } from './reward-list.component';
 export const REWARDS_ROUTES: Routes = [
   { path: '', component: RewardListComponent },
   { path: 'new', component: RewardFormComponent },
+  { path: ':id/edit', component: RewardFormComponent },
   { path: ':id', component: RewardListComponent },
 ];

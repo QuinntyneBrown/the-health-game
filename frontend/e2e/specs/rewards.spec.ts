@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 05-TC-V-001..008, 05-TC-C-001..010, 05-TC-L-001..010, 05-TC-R-001..005, 05-TC-F-001..007, 05-TC-F-101..103
+// Traces to: 05-TC-V-001..008, 05-TC-C-001..010, 05-TC-L-001..010, 05-TC-R-001..005, 05-TC-F-001..007, 05-TC-F-101..104
 // Description: rewards list page chrome.
 import { expect, test } from '@playwright/test';
 
@@ -74,6 +74,91 @@ const readyReward = {
 };
 
 test.describe('Rewards list', () => {
+  test('edit reward name/description persists (05-TC-F-104)', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await authenticate(page);
+    await page.unroute('**/api/goals**');
+    await page.route('**/api/goals**', (route, request) => {
+      if (request.method() === 'GET' && new URL(request.url()).pathname === '/api/goals') {
+        route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify([
+            { id: 'g1', name: 'Walk', cadence: 'daily', target: { value: 10, unit: 'min' }, completedQuantity: 0, currentStreak: 0, longestStreak: 0, rewardName: '', description: '' },
+          ]),
+        });
+        return;
+      }
+      route.fulfill({ status: 200, contentType: 'application/json', body: '{}' });
+    });
+
+    let putBody: Record<string, unknown> | null = null;
+    let putUrl = '';
+    await page.unroute('**/api/rewards**');
+    await page.route('**/api/rewards/r-edit', (route, request) => {
+      if (request.method() === 'GET') {
+        route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify({
+            id: 'r-edit',
+            goalId: 'g1',
+            name: 'Old name',
+            description: 'Old description',
+            status: 'in-progress',
+            earnedAt: null,
+            condition: { type: 'streak-milestone', streakDays: 7 },
+          }),
+        });
+        return;
+      }
+      if (request.method() === 'PUT') {
+        putBody = request.postDataJSON();
+        putUrl = new URL(request.url()).pathname;
+        route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify({
+            id: 'r-edit',
+            goalId: 'g1',
+            name: (putBody as { name: string }).name,
+            description: (putBody as { description: string }).description,
+            status: 'in-progress',
+            earnedAt: null,
+            condition: { type: 'streak-milestone', streakDays: 7 },
+          }),
+        });
+        return;
+      }
+      route.continue();
+    });
+    await page.route('**/api/rewards', (route) =>
+      route.fulfill({ status: 200, contentType: 'application/json', body: '[]' }),
+    );
+
+    await page.goto('/rewards/r-edit/edit');
+    const nameInput = page
+      .locator('hg-health-text-field')
+      .filter({ hasText: 'Name' })
+      .locator('input, textarea');
+    await expect(nameInput).toHaveValue('Old name');
+    await nameInput.fill('New shiny name');
+    await page
+      .locator('hg-health-text-field')
+      .filter({ hasText: 'Description' })
+      .locator('input, textarea')
+      .fill('Updated description');
+
+    await page.locator('[data-testid="reward-form-save"]').click();
+    await page.waitForURL(/\/rewards($|\?|#)/);
+
+    expect(putUrl).toBe('/api/rewards/r-edit');
+    expect(putBody).toMatchObject({
+      name: 'New shiny name',
+      description: 'Updated description',
+    });
+  });
+
   test('server rejects reward on non-owned goal → toast (05-TC-F-103)', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await authenticate(page);

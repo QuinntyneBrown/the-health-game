@@ -9,9 +9,16 @@ export interface CreateRewardInput {
   readonly condition: RewardCondition;
 }
 
+export interface UpdateRewardInput {
+  readonly name: string;
+  readonly description: string;
+}
+
 export interface IRewardsService {
   createReward(goalId: string, input: CreateRewardInput): Observable<Reward>;
   getRewards(): Observable<readonly Reward[]>;
+  getReward(rewardId: string): Observable<Reward>;
+  updateReward(rewardId: string, input: UpdateRewardInput): Observable<Reward>;
   claimReward(rewardId: string): Observable<Reward>;
 }
 

@@ -4,7 +4,11 @@ import { Observable } from 'rxjs';
 
 import { API_CONFIG } from '../api.config';
 import { Reward } from './reward.model';
-import { CreateRewardInput, IRewardsService } from './rewards.service.contract';
+import {
+  CreateRewardInput,
+  IRewardsService,
+  UpdateRewardInput,
+} from './rewards.service.contract';
 
 @Injectable({ providedIn: 'root' })
 export class RewardsService implements IRewardsService {
@@ -21,5 +25,13 @@ export class RewardsService implements IRewardsService {
 
   claimReward(rewardId: string): Observable<Reward> {
     return this.http.post<Reward>(`${this.apiBaseUrl}/api/rewards/${rewardId}/claim`, {});
+  }
+
+  getReward(rewardId: string): Observable<Reward> {
+    return this.http.get<Reward>(`${this.apiBaseUrl}/api/rewards/${rewardId}`);
+  }
+
+  updateReward(rewardId: string, input: UpdateRewardInput): Observable<Reward> {
+    return this.http.put<Reward>(`${this.apiBaseUrl}/api/rewards/${rewardId}`, input);
   }
 }

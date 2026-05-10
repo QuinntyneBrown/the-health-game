@@ -352,7 +352,7 @@ and made green. The /loop process picks the first test with
 | 341 | 05 | TC-F-101 | Create reward — name + description + qualifying condition (goal + streak threshold) | Persisted, linked to goal (L2-009 §1) | 2026-05-10T07:49:15Z |
 | 342 | 05 | TC-F-102 | Create reward without qualifying condition | Validation error (L2-009 §2) | 2026-05-10T07:51:41Z |
 | 343 | 05 | TC-F-103 | Attempt to attach reward to a goal not owned by user | Rejected (L2-009 §3) | 2026-05-10T07:53:53Z |
-| 344 | 05 | TC-F-104 | Edit reward name / description | Persisted | null |
+| 344 | 05 | TC-F-104 | Edit reward name / description | Persisted | 2026-05-10T07:55:32Z |
 | 345 | 05 | TC-F-105 | Delete reward | Removed; previously earned instances of it preserved as user history | null |
 | 346 | 05 | TC-F-201 | User's streak reaches threshold mid-session | In-app notification fires (L2-010 §1) | null |
 | 347 | 05 | TC-F-202 | Threshold reached while user offline | Notification queued; surfaces on next dashboard / rewards visit | null |
