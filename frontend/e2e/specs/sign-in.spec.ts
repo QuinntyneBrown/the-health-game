@@ -9,6 +9,36 @@ import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
 
 test.describe('Sign In — page', () => {
+  test('XSS payload in username field is rendered as text (07-TC-S-005)', async ({
+    page,
+  }) => {
+    let executed = false;
+    await page.exposeFunction('__xssExecuted', () => {
+      executed = true;
+    });
+    await page.route('**/api/auth/sign-in', (route) =>
+      route.fulfill({
+        status: 401,
+        contentType: 'application/problem+json',
+        body: JSON.stringify({ status: 401 }),
+      }),
+    );
+    const payload = '<img src=x onerror="window.__xssExecuted()">';
+    await page.goto('/sign-in');
+    const userInput = page.getByTestId('sign-in-username').locator('input');
+    await userInput.fill(payload);
+    await page.getByTestId('sign-in-password').locator('input').fill('Secret123!');
+    await page.getByTestId('sign-in-submit').click();
+    await expect(page.getByTestId('sign-in-error')).toBeVisible();
+    const inputDom = await userInput.inputValue();
+    expect(inputDom).toBe(payload);
+    expect(executed).toBe(false);
+    const imgCount = await page
+      .locator('lib-sign-in img[onerror]')
+      .count();
+    expect(imgCount).toBe(0);
+  });
+
   test('client surfaces generic message regardless of 401 body content (07-TC-S-004)', async ({
     page,
   }) => {
