@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ACTIVITIES_SERVICE, ActivityEntry } from 'api';
 import { firstValueFrom } from 'rxjs';
@@ -12,7 +13,7 @@ import { LogActivitySheetData } from './log-activity-sheet.component';
 
 @Component({
   selector: 'lib-log-activity-dialog',
-  imports: [HealthTextFieldComponent, MatButtonModule, MatDialogModule],
+  imports: [HealthTextFieldComponent, MatButtonModule, MatDialogModule, MatProgressSpinnerModule],
   template: `
     <h2 mat-dialog-title>Log activity</h2>
     <mat-dialog-content class="dialog__content">
@@ -37,10 +38,14 @@ import { LogActivitySheetData } from './log-activity-sheet.component';
         mat-flat-button
         type="button"
         data-testid="log-activity-save"
-        [disabled]="!canSave()"
+        [disabled]="!canSave() || submitting()"
         (click)="submit()"
       >
-        Log
+        @if (submitting()) {
+          <mat-spinner diameter="18"></mat-spinner>
+        } @else {
+          Log
+        }
       </button>
     </mat-dialog-actions>
   `,
@@ -66,6 +71,7 @@ export class LogActivityDialogComponent {
 
   readonly quantity = signal(this.draft.draft().quantity);
   readonly notes = signal(this.draft.draft().notes);
+  readonly submitting = signal(false);
   private readonly attemptedSubmit = signal(false);
 
   readonly quantityError = computed(() =>
@@ -98,6 +104,8 @@ export class LogActivityDialogComponent {
   async submit(): Promise<void> {
     this.attemptedSubmit.set(true);
     if (!(Number(this.quantity()) > 0) || this.notes().length > 500) return;
+    if (this.submitting()) return;
+    this.submitting.set(true);
     let entry;
     try {
       entry = await firstValueFrom(
@@ -107,6 +115,7 @@ export class LogActivityDialogComponent {
         }),
       );
     } catch (err: unknown) {
+      this.submitting.set(false);
       const message = (err as { message?: string } | null)?.message
         ?? 'Could not log activity — please try again.';
       this.snackBar.open(message, 'Dismiss', { duration: 6_000 });
