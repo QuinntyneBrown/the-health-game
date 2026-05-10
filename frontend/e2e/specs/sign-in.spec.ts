@@ -1,11 +1,26 @@
 // Acceptance Test
-// Traces to: L2-036, 07-TC-V-001..014, 07-TC-C-001..018, 07-TC-L-001..014, 07-TC-R-001
+// Traces to: L2-036, 07-TC-V-001..014, 07-TC-C-001..018, 07-TC-L-001..014, 07-TC-R-001..002
 // Description: Username + password sign-in page. Each test exercises one
 //              vertical slice end-to-end against the running app.
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
 
 test.describe('Sign In — page', () => {
+  test('viewport 375x812: same mobile layout (07-TC-R-002)', async ({ page }) => {
+    await page.setViewportSize({ width: 375, height: 812 });
+    await page.goto('/sign-in');
+    await expect(page.locator('lib-sign-in [data-testid="sign-in-hero"]')).toBeHidden();
+    const overflow = await page.evaluate(() => ({
+      sw: document.documentElement.scrollWidth,
+      cw: document.documentElement.clientWidth,
+    }));
+    expect(overflow.sw).toBeLessThanOrEqual(overflow.cw);
+    const padding = await page
+      .locator('lib-sign-in .sign-in__card')
+      .evaluate((el) => getComputedStyle(el as HTMLElement).paddingTop);
+    expect(padding).toBe('32px');
+  });
+
   test('viewport 360x780: single-column, no horizontal scroll (07-TC-R-001)', async ({
     page,
   }) => {
