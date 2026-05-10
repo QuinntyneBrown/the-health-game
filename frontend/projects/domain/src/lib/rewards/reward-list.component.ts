@@ -241,8 +241,13 @@ const filterOptions: readonly SegmentedFilterOption[] = [
         margin-bottom: var(--hg-space-6);
       }
 
-      .reward-section[data-status='in-progress'] ::ng-deep .reward-card {
+      .reward-section[data-status='in-progress'] ::ng-deep .reward-card,
+      .reward-section[data-status='locked'] ::ng-deep .reward-card {
         background: #ebefe7;
+      }
+
+      .reward-section[data-status='locked'] .reward-list__item {
+        opacity: 0.65;
       }
 
       .reward-section__label {

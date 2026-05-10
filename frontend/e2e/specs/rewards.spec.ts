@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 05-TC-V-001..008, 05-TC-C-001..005
+// Traces to: 05-TC-V-001..008, 05-TC-C-001..006
 // Description: rewards list page chrome.
 import { expect, test } from '@playwright/test';
 
@@ -74,6 +74,47 @@ const readyReward = {
 };
 
 test.describe('Rewards list', () => {
+  test('locked card bg #EBEFE7 with 0.65 opacity (05-TC-C-006)', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await authenticate(page);
+    await page.unroute('**/api/rewards**');
+    await page.route('**/api/rewards**', (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify([
+          ...sampleRewards,
+          {
+            id: 'r-locked',
+            goalId: 'g1',
+            name: 'Massage',
+            description: 'A 60-min back massage',
+            status: 'locked',
+            earnedAt: null,
+            condition: { type: 'streak-milestone', streakDays: 60 },
+          },
+        ]),
+      }),
+    );
+
+    await page.goto('/rewards');
+    const item = page
+      .locator('lib-reward-list .reward-section[data-status="locked"] .reward-list__item')
+      .first();
+    await expect(item).toBeVisible();
+    const card = item.locator('.reward-card');
+    const result = await item.evaluate((el) => {
+      const inner = el.querySelector('.reward-card');
+      return {
+        itemOpacity: parseFloat(getComputedStyle(el).opacity),
+        cardBg: inner ? getComputedStyle(inner).backgroundColor : '',
+      };
+    });
+    expect(result.itemOpacity).toBeCloseTo(0.65, 2);
+    expect(result.cardBg).toBe('rgb(235, 239, 231)');
+    await expect(card).toBeVisible();
+  });
+
   test('in-progress card bg #EBEFE7 (05-TC-C-005)', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await authenticate(page);

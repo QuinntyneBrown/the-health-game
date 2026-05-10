@@ -322,7 +322,7 @@ and made green. The /loop process picks the first test with
 | 311 | 05 | TC-C-003 | Hero primary CTA "Claim" | `#9B2680` bg, white label | 2026-05-10T07:07:42Z |
 | 312 | 05 | TC-C-004 | Hero secondary CTA | transparent bg, `#C2C9BE` outline | 2026-05-10T07:09:17Z |
 | 313 | 05 | TC-C-005 | In-progress card | `#EBEFE7` bg | 2026-05-10T07:10:47Z |
-| 314 | 05 | TC-C-006 | Locked card | `#EBEFE7` bg with opacity 0.65 | null |
+| 314 | 05 | TC-C-006 | Locked card | `#EBEFE7` bg with opacity 0.65 | 2026-05-10T07:11:58Z |
 | 315 | 05 | TC-C-007 | Progress bar fill | `#006D3F` | null |
 | 316 | 05 | TC-C-008 | Progress bar track | `#E5E9E2` | null |
 | 317 | 05 | TC-C-009 | Earned reward chip | `#94F7B4` bg, `#00210F` label | null |
