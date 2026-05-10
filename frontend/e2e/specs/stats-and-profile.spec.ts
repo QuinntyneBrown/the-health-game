@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 06-TC-V-001..007, 06-TC-C-001..010, 06-TC-L-001..010, 06-TC-R-001..005, 06-TC-F-001..008, 06-TC-F-101..107, 06-TC-F-201..205, 06-TC-B-001
+// Traces to: 06-TC-V-001..007, 06-TC-C-001..010, 06-TC-L-001..010, 06-TC-R-001..005, 06-TC-F-001..008, 06-TC-F-101..107, 06-TC-F-201..205, 06-TC-B-001..002
 // Description: stats + profile page chrome.
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
@@ -45,6 +45,38 @@ async function authenticate(page: import('@playwright/test').Page): Promise<void
 }
 
 test.describe('Stats & Profile chrome', () => {
+  test('Save disabled until form is dirty AND valid (06-TC-B-002)', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await authenticate(page);
+    await page.goto('/profile');
+    await page.locator('[data-testid="profile-edit"]').click();
+
+    const save = page.locator('[data-testid="profile-save"]');
+    // Pristine form — Save disabled.
+    expect(await save.isDisabled()).toBe(true);
+
+    // Dirty + valid — Save enabled.
+    const nameInput = page
+      .locator('lib-profile hg-health-text-field')
+      .filter({ hasText: 'Display name' })
+      .locator('input');
+    await nameInput.fill('Quinntyne');
+    expect(await save.isDisabled()).toBe(false);
+
+    // Dirty + invalid — Save disabled again.
+    const emailInput = page
+      .locator('lib-profile hg-health-text-field')
+      .filter({ hasText: 'Email' })
+      .locator('input');
+    await emailInput.fill('not-an-email');
+    expect(await save.isDisabled()).toBe(true);
+
+    // Revert to original values — pristine again, Save disabled.
+    await emailInput.fill('q@q.q');
+    await nameInput.fill('Quinn');
+    expect(await save.isDisabled()).toBe(true);
+  });
+
   test('Stats + Profile reading order matches DOM order (06-TC-B-001)', async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 900 });
     await authenticate(page);

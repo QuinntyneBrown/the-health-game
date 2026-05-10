@@ -45,8 +45,18 @@ export class ProfileComponent {
   readonly emailError = computed(() =>
     this.editing() && !isEmail(this.email()) ? 'Enter a valid email' : '',
   );
+  readonly isDirty = computed(() => {
+    const current = this.profile();
+    if (!current) return false;
+    return (
+      this.displayName().trim() !== current.displayName.trim() ||
+      this.email().trim() !== current.email.trim()
+    );
+  });
+
   readonly canSave = computed(
-    () => this.displayNameError() === '' && this.emailError() === '',
+    () =>
+      this.isDirty() && this.displayNameError() === '' && this.emailError() === '',
   );
 
   constructor() {

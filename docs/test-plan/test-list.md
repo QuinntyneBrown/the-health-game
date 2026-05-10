@@ -426,7 +426,7 @@ and made green. The /loop process picks the first test with
 | 415 | 06 | TC-F-204 | Subsequent sign-in attempt with deleted account | Rejected (L2-014 §3) | 2026-05-10T12:24:06Z |
 | 416 | 06 | TC-F-205 | RBAC: non-admin cannot delete other accounts | 403 (L2-015 §1) | 2026-05-10T12:25:23Z |
 | 417 | 06 | TC-B-001 | Tab order: window selector -> stat tiles -> chart -> profile fields -> save -> destructive | Logical | 2026-05-10T12:26:46Z |
-| 418 | 06 | TC-B-002 | Save button disabled until form is dirty AND valid | Yes | null |
+| 418 | 06 | TC-B-002 | Save button disabled until form is dirty AND valid | Yes | 2026-05-10T12:28:13Z |
 | 419 | 06 | TC-B-003 | Save shows loading state during in-flight call | Yes | null |
 | 420 | 06 | TC-B-004 | Delete dialog focus-traps and restores focus on close | Yes | null |
 | 421 | 06 | TC-B-005 | Destructive button only enabled after typed confirmation | Yes | null |
