@@ -31,9 +31,16 @@
 
 .profile__avatar {
   border-radius: var(--hg-radius-full);
-  height: 48px;
+  height: 32px;
   object-fit: cover;
-  width: 48px;
+  width: 32px;
+}
+
+@media (min-width: 768px) {
+  .profile__avatar {
+    height: 48px;
+    width: 48px;
+  }
 }
 
 .profile__avatar--initial {
