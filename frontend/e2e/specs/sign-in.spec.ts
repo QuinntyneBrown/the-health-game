@@ -1,10 +1,19 @@
 // Acceptance Test
-// Traces to: L2-036, 07-TC-V-001..014
+// Traces to: L2-036, 07-TC-V-001..014, 07-TC-C-001
 // Description: Username + password sign-in page. Each test exercises one
 //              vertical slice end-to-end against the running app.
 import { expect, test } from '@playwright/test';
 
 test.describe('Sign In — page', () => {
+  test('sign-in page background #F1F5ED (07-TC-C-001)', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await page.goto('/sign-in');
+    const wrapper = page.locator('lib-sign-in .sign-in');
+    await expect(wrapper).toBeVisible();
+    const bg = await wrapper.evaluate((el) => getComputedStyle(el).backgroundColor);
+    expect(bg).toBe('rgb(241, 245, 237)');
+  });
+
   test('brand wordmark Inter 22 / 500 desktop (07-TC-V-014)', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await page.goto('/sign-in');

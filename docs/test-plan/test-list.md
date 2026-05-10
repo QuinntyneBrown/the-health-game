@@ -460,7 +460,7 @@ and made green. The /loop process picks the first test with
 | 449 | 07 | TC-V-012 | "or" divider label | Inter 11 px, weight 500, uppercase, letter-spacing 1.5 px | 2026-05-10T13:21:00Z |
 | 450 | 07 | TC-V-013 | Sign-up link ("Get started") | Inter 13 px, weight 500, primary color, underlined | 2026-05-10T13:22:27Z |
 | 451 | 07 | TC-V-014 | Brand wordmark visibility — desktop hero | Visible (Inter 22 px, weight 500) | 2026-05-10T13:24:09Z |
-| 452 | 07 | TC-C-001 | Page background | `#F1F5ED` (surface-container-low) | null |
+| 452 | 07 | TC-C-001 | Page background | `#F1F5ED` (surface-container-low) | 2026-05-10T13:25:33Z |
 | 453 | 07 | TC-C-002 | Form card surface | `#F7FBF3` (surface) | null |
 | 454 | 07 | TC-C-003 | Form card border | none on mobile, 1 px `#C2C9BE` on tablet+ when outlined | null |
 | 455 | 07 | TC-C-004 | Title text color | `#191D17` (on surface) | null |
