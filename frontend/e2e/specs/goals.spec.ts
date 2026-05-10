@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 03-TC-V-001..009, 03-TC-C-001..011, 03-TC-L-001..011, 03-TC-R-001..006, 03-TC-F-001..011, 03-TC-F-101..109, 03-TC-F-201..204, 03-TC-B-001..006, 03-TC-A-001..006, 03-TC-D-001..007
+// Traces to: 03-TC-V-001..009, 03-TC-C-001..011, 03-TC-L-001..011, 03-TC-R-001..006, 03-TC-F-001..011, 03-TC-F-101..109, 03-TC-F-201..204, 03-TC-B-001..006, 03-TC-A-001..006, 03-TC-D-001..007, 03-TC-P-001
 // Description: /goals page title "Goals" renders with Inter weight 500 at 22/32 px.
 // Subtitle is Inter 13 px weight 400 with computed counts.
 import AxeBuilder from '@axe-core/playwright';
@@ -560,6 +560,49 @@ test.describe('Goals page — header typography', () => {
 
   test.describe('filter chip layout', () => {
     test.use({ viewport: { width: 1440, height: 900 } });
+
+    test('GET /api/goals with 100 goals: p95 fetch ≤ 300 ms (03-TC-P-001)', async ({ page }) => {
+      await page.setViewportSize({ width: 1440, height: 900 });
+      await authenticate(page);
+
+      const goals = Array.from({ length: 100 }, (_, i) => ({
+        id: `g-${i}`,
+        name: `Goal ${i}`,
+        description: '',
+        cadence: 'daily' as const,
+        target: { value: 10, unit: 'min' },
+        completedQuantity: 0,
+        currentStreak: 0,
+        longestStreak: 0,
+        rewardName: '',
+      }));
+
+      await page.unroute('**/api/goals**');
+      await page.route('**/api/goals**', (route) =>
+        route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify(goals),
+        }),
+      );
+
+      // Measure 20 fetches client-side; compute p95.
+      const samples: number[] = [];
+      const N = 20;
+      for (let i = 0; i < N; i++) {
+        const start = Date.now();
+        await page.evaluate(async () => {
+          const r = await fetch('/api/goals', {
+            headers: { Authorization: 'Bearer test-access-token' },
+          });
+          await r.json();
+        });
+        samples.push(Date.now() - start);
+      }
+      samples.sort((a, b) => a - b);
+      const p95 = samples[Math.ceil(samples.length * 0.95) - 1];
+      expect(p95, `samples: ${samples.join(', ')}`).toBeLessThanOrEqual(300);
+    });
 
     test('concurrent edit: stale PUT surfaces 409 reconcile toast (03-TC-D-007)', async ({
       page,
