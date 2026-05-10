@@ -47,10 +47,14 @@ export class GoalListComponent {
 
   readonly goals = toSignal(this.goalsService.getGoals(), { initialValue: [] as const });
   readonly cadenceOptions = computed<readonly SegmentedFilterOption[]>(() => {
-    const total = this.goals().length;
-    return baseCadenceOptions.map((opt) =>
-      opt.value === 'all' ? { ...opt, label: `All (${total})` } : opt,
-    );
+    const goals = this.goals();
+    return baseCadenceOptions.map((opt) => {
+      const count =
+        opt.value === 'all'
+          ? goals.length
+          : goals.filter((g) => g.cadence === opt.value).length;
+      return { ...opt, label: `${opt.label} (${count})` };
+    });
   });
   readonly visibleGoals = computed(() =>
     filterGoalsByName(filterGoalsByCadence(this.goals(), this.cadence()), this.searchQuery()),
