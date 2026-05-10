@@ -381,7 +381,7 @@ and made green. The /loop process picks the first test with
 | 370 | 06 | TC-V-006 | Body / paragraph copy | Inter 14 px, weight 400, line-height 1.5 | 2026-05-10T08:28:08Z |
 | 371 | 06 | TC-V-007 | Destructive button label ("Delete account") | Inter 14 px, weight 500 | 2026-05-10T08:31:01Z |
 | 372 | 06 | TC-C-001 | Page background | `#F1F5ED` | 2026-05-10T10:51:53Z |
-| 373 | 06 | TC-C-002 | Stat tile backgrounds (rotation) | success `#94F7B4`, streak `#FFDCC4`, info `#BEEAF6`, reward `#FFD7EE` | null |
+| 373 | 06 | TC-C-002 | Stat tile backgrounds (rotation) | success `#94F7B4`, streak `#FFDCC4`, info `#BEEAF6`, reward `#FFD7EE` | 2026-05-10T10:53:11Z |
 | 374 | 06 | TC-C-003 | On-tile text colors | matching on-* token (e.g., `#00210F` on `#94F7B4`) | null |
 | 375 | 06 | TC-C-004 | Activity bar chart bars | `#006D3F` | null |
 | 376 | 06 | TC-C-005 | Activity bar chart axis labels | `#424940` (on surface variant) | null |

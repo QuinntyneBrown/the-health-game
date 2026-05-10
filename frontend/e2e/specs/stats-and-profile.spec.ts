@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 06-TC-V-001..007, 06-TC-C-001
+// Traces to: 06-TC-V-001..007, 06-TC-C-001..002
 // Description: stats + profile page chrome.
 import { expect, test } from '@playwright/test';
 
@@ -44,6 +44,30 @@ async function authenticate(page: import('@playwright/test').Page): Promise<void
 }
 
 test.describe('Stats & Profile chrome', () => {
+  test('stat tile palette success/streak/info/reward (06-TC-C-002)', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await authenticate(page);
+    await page.goto('/stats');
+
+    const colors = await page.evaluate(() => {
+      const map: Record<string, string> = {};
+      for (const tone of ['success', 'streak', 'info', 'reward']) {
+        const el = document.querySelector(
+          `lib-stats .stat-tile.stat-tile--${tone}, lib-stats .stat-tile`,
+        );
+        // Pick the first tile of each tone via class match.
+        const tiles = Array.from(document.querySelectorAll(`lib-stats .stat-tile--${tone}`));
+        const node = (tiles[0] as HTMLElement) ?? (el as HTMLElement);
+        if (node) map[tone] = getComputedStyle(node).backgroundColor;
+      }
+      return map;
+    });
+    expect(colors.success).toBe('rgb(148, 247, 180)');
+    expect(colors.streak).toBe('rgb(255, 220, 196)');
+    expect(colors.info).toBe('rgb(190, 234, 246)');
+    expect(colors.reward).toBe('rgb(255, 215, 238)');
+  });
+
   test('Stats + Profile pages background #F1F5ED (06-TC-C-001)', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await authenticate(page);
