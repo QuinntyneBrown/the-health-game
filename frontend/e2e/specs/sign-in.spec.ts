@@ -6,6 +6,18 @@ import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
 
 test.describe('Sign In — page', () => {
+  test('buttons have descriptive accessible names (07-TC-A-008)', async ({ page }) => {
+    await page.goto('/sign-in');
+    const submitText = (await page.getByTestId('sign-in-submit').textContent())?.trim();
+    expect(submitText).toMatch(/^Sign in$/i);
+    const oidcText = (await page.getByTestId('sign-in-oidc').textContent())?.trim();
+    expect(oidcText).toMatch(/Continue with Single Sign-On/i);
+    const getStartedText = (
+      await page.getByTestId('sign-in-get-started').textContent()
+    )?.trim();
+    expect(getStartedText).toMatch(/^Get started$/i);
+  });
+
   test('inline 401 error uses role=alert + aria-live=assertive (07-TC-A-007)', async ({
     page,
   }) => {

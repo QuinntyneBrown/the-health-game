@@ -536,7 +536,7 @@ and made green. The /loop process picks the first test with
 | 525 | 07 | TC-A-005 | Password field exposes `type=password` and is announced as masked | Yes | 2026-05-09T19:45:45Z |
 | 526 | 07 | TC-A-006 | Validation errors associated via `aria-describedby` and `aria-live="polite"` | Yes | 2026-05-10T15:00:30Z |
 | 527 | 07 | TC-A-007 | Inline 401 error has `role="alert"` and `aria-live="assertive"` | Yes | 2026-05-10T15:01:30Z |
-| 528 | 07 | TC-A-008 | Buttons have descriptive accessible names | "Sign in", "Continue with Single Sign-On", "Get started" | null |
+| 528 | 07 | TC-A-008 | Buttons have descriptive accessible names | "Sign in", "Continue with Single Sign-On", "Get started" | 2026-05-10T15:02:30Z |
 | 529 | 07 | TC-A-009 | Password toggle has accessible name | "Show password" / "Hide password" | null |
 | 530 | 07 | TC-A-010 | axe-core scan returns 0 critical / serious violations | Yes | null |
 | 531 | 07 | TC-D-001 | Successful sign-in writes access token to `sessionStorage` only | Key `hg.oidc.access-token`; not in localStorage | null |
