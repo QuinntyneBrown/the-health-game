@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 04-TC-V-001..007, 04-TC-C-001..010, 04-TC-L-001..010, 04-TC-R-001..006, 04-TC-F-001..012, 04-TC-F-101..109, 04-TC-B-001..010, 04-TC-A-001..007, 04-TC-D-001..003
+// Traces to: 04-TC-V-001..007, 04-TC-C-001..010, 04-TC-L-001..010, 04-TC-R-001..006, 04-TC-F-001..012, 04-TC-F-101..109, 04-TC-B-001..010, 04-TC-A-001..007, 04-TC-D-001..004
 // Description: log-activity dialog typography.
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
@@ -127,6 +127,60 @@ test.describe('Log activity sheet (mobile)', () => {
     });
     const accessibleName = meta.targetText || meta.ariaLabel || '';
     expect(accessibleName).toMatch(/Log activity/i);
+  });
+
+  test('quantity decimal precision preserved (04-TC-D-004)', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await authenticate(page);
+
+    let posted: { quantity?: number } | null = null;
+    let activities: Array<Record<string, unknown>> = [];
+    const decimalGoal = { ...goal, target: { value: 10, unit: 'km' } };
+
+    await page.route('**/api/goals/g1', (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify(decimalGoal),
+      }),
+    );
+    await page.route('**/api/goals/g1/activities**', async (route, request) => {
+      if (request.method() === 'POST') {
+        posted = request.postDataJSON();
+        const entry = {
+          id: 'a-decimal',
+          goalId: 'g1',
+          quantity: posted?.quantity ?? 0,
+          recordedAt: '2026-05-10T06:30:00Z',
+          newlyEarnedRewards: [],
+        };
+        activities = [entry];
+        await route.fulfill({
+          status: 201,
+          contentType: 'application/json',
+          body: JSON.stringify(entry),
+        });
+      } else {
+        await route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify(activities),
+        });
+      }
+    });
+
+    await page.goto('/goals/g1');
+    await page
+      .locator('[data-testid="goal-detail-log-fab"]')
+      .evaluate((el: HTMLElement) => el.click());
+    await page.waitForTimeout(300);
+    const dialog = page.locator('mat-dialog-container');
+    await expect(dialog).toBeVisible();
+    await dialog.locator('input[type="number"]').fill('5.25');
+    await page.locator('[data-testid="log-activity-save"]').click();
+    await expect(dialog).toBeHidden();
+
+    expect(posted?.quantity).toBe(5.25);
   });
 
   test('logged note text round-trips exactly (04-TC-D-003)', async ({ page }) => {
