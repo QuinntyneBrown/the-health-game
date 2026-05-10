@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 04-TC-V-001..007, 04-TC-C-001..010, 04-TC-L-001..010, 04-TC-R-001..006, 04-TC-F-001..012, 04-TC-F-101..109, 04-TC-B-001..010, 04-TC-A-001..007, 04-TC-D-001..005
+// Traces to: 04-TC-V-001..007, 04-TC-C-001..010, 04-TC-L-001..010, 04-TC-R-001..006, 04-TC-F-001..012, 04-TC-F-101..109, 04-TC-B-001..010, 04-TC-A-001..007, 04-TC-D-001..006
 // Description: log-activity dialog typography.
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
@@ -127,6 +127,86 @@ test.describe('Log activity sheet (mobile)', () => {
     });
     const accessibleName = meta.targetText || meta.ariaLabel || '';
     expect(accessibleName).toMatch(/Log activity/i);
+  });
+
+  test('concurrent log from another device updates streak (04-TC-D-006)', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await authenticate(page);
+
+    // Goal endpoint returns progressively higher streak as if another device
+    // also contributed concurrently — first call: streak 0; second call (after
+    // our log triggers a refresh): streak 2 (us +1 + other device +1).
+    let goalCalls = 0;
+    await page.route('**/api/goals/g1', (route) => {
+      goalCalls += 1;
+      const snapshot =
+        goalCalls === 1
+          ? { ...goal, currentStreak: 0, longestStreak: 0 }
+          : { ...goal, currentStreak: 2, longestStreak: 2 };
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify(snapshot),
+      });
+    });
+    let activitiesCalls = 0;
+    await page.route('**/api/goals/g1/activities**', (route, request) => {
+      if (request.method() === 'POST') {
+        route.fulfill({
+          status: 201,
+          contentType: 'application/json',
+          body: JSON.stringify({
+            id: 'a-mine',
+            goalId: 'g1',
+            quantity: 5,
+            recordedAt: '2026-05-10T06:30:00Z',
+            newlyEarnedRewards: [],
+          }),
+        });
+      } else {
+        activitiesCalls += 1;
+        const entries =
+          activitiesCalls === 1
+            ? []
+            : [
+                {
+                  id: 'a-other',
+                  goalId: 'g1',
+                  quantity: 4,
+                  recordedAt: '2026-05-10T06:25:00Z',
+                  newlyEarnedRewards: [],
+                },
+                {
+                  id: 'a-mine',
+                  goalId: 'g1',
+                  quantity: 5,
+                  recordedAt: '2026-05-10T06:30:00Z',
+                  newlyEarnedRewards: [],
+                },
+              ];
+        route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify(entries),
+        });
+      }
+    });
+
+    await page.goto('/goals/g1');
+    await page
+      .locator('[data-testid="goal-detail-log-fab"]')
+      .evaluate((el: HTMLElement) => el.click());
+    await page.waitForTimeout(300);
+
+    const dialog = page.locator('mat-dialog-container');
+    await expect(dialog).toBeVisible();
+    await dialog.locator('input[type="number"]').fill('5');
+    await page.locator('[data-testid="log-activity-save"]').click();
+    await expect(dialog).toBeHidden();
+
+    // Streak summary reflects the deterministic server snapshot (2), not 1.
+    const streak = page.locator('hg-streak-summary, [data-testid="goal-detail-streak"]').first();
+    await expect(streak).toContainText(/2/);
   });
 
   test('network failure preserves form, retry succeeds (04-TC-D-005)', async ({ page }) => {
