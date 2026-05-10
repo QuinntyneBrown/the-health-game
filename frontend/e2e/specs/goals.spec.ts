@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 03-TC-V-001..009, 03-TC-C-001..011, 03-TC-L-001..011, 03-TC-R-001..006, 03-TC-F-001..011, 03-TC-F-101..109, 03-TC-F-201..204, 03-TC-B-001..006, 03-TC-A-001..006, 03-TC-D-001..004
+// Traces to: 03-TC-V-001..009, 03-TC-C-001..011, 03-TC-L-001..011, 03-TC-R-001..006, 03-TC-F-001..011, 03-TC-F-101..109, 03-TC-F-201..204, 03-TC-B-001..006, 03-TC-A-001..006, 03-TC-D-001..005
 // Description: /goals page title "Goals" renders with Inter weight 500 at 22/32 px.
 // Subtitle is Inter 13 px weight 400 with computed counts.
 import AxeBuilder from '@axe-core/playwright';
@@ -560,6 +560,125 @@ test.describe('Goals page — header typography', () => {
 
   test.describe('filter chip layout', () => {
     test.use({ viewport: { width: 1440, height: 900 } });
+
+    test('sign in as different user does not see other user goals (03-TC-D-005)', async ({
+      page,
+      context,
+    }) => {
+      await page.setViewportSize({ width: 1440, height: 900 });
+
+      // Set up server keyed by Authorization header.
+      const userAGoals = [
+        {
+          id: 'a-1',
+          name: 'Alpha walk',
+          description: '',
+          cadence: 'daily' as const,
+          target: { value: 10, unit: 'min' },
+          completedQuantity: 0,
+          currentStreak: 0,
+          longestStreak: 0,
+          rewardName: '',
+        },
+      ];
+      const userBGoals = [
+        {
+          id: 'b-1',
+          name: 'Bravo run',
+          description: '',
+          cadence: 'daily' as const,
+          target: { value: 30, unit: 'min' },
+          completedQuantity: 0,
+          currentStreak: 0,
+          longestStreak: 0,
+          rewardName: '',
+        },
+      ];
+
+      let activeUser: 'A' | 'B' = 'A';
+
+      await context.route('**/api/users/me**', (route) => {
+        route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify({
+            displayName: activeUser === 'A' ? 'Alpha' : 'Bravo',
+            email: activeUser === 'A' ? 'alpha@x.com' : 'bravo@x.com',
+            avatarUrl: null,
+            roles: [],
+          }),
+        });
+      });
+      await context.route('**/api/goals**', (route) =>
+        route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify(activeUser === 'A' ? userAGoals : userBGoals),
+        }),
+      );
+      await context.route('**/api/rewards**', (route) =>
+        route.fulfill({ status: 200, contentType: 'application/json', body: '[]' }),
+      );
+
+      // User A signs in.
+      await context.route('**/connect/token', (route) =>
+        route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify({
+            access_token: 'token-A',
+            token_type: 'Bearer',
+            expires_in: 3600,
+          }),
+        }),
+      );
+      await page.goto('/onboarding');
+      await page.evaluate(() => {
+        sessionStorage.setItem('hg.oidc.verifier', 'A');
+        sessionStorage.setItem('hg.oidc.state', 'A');
+      });
+      await page.goto('/auth/callback?code=code-A&state=A');
+      await page.waitForURL(/\/home/);
+      await page.goto('/goals');
+      await expect(
+        page.locator('lib-goal-list .goal-card').filter({ hasText: 'Alpha walk' }),
+      ).toBeVisible();
+
+      // Sign out + switch to user B.
+      await page.evaluate(() => {
+        sessionStorage.clear();
+        localStorage.clear();
+      });
+      await context.clearCookies();
+      activeUser = 'B';
+      await context.unroute('**/connect/token');
+      await context.route('**/connect/token', (route) =>
+        route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify({
+            access_token: 'token-B',
+            token_type: 'Bearer',
+            expires_in: 3600,
+          }),
+        }),
+      );
+      await page.goto('/onboarding');
+      await page.evaluate(() => {
+        sessionStorage.setItem('hg.oidc.verifier', 'B');
+        sessionStorage.setItem('hg.oidc.state', 'B');
+      });
+      await page.goto('/auth/callback?code=code-B&state=B');
+      await page.waitForURL(/\/home/);
+      await page.goto('/goals');
+
+      await expect(
+        page.locator('lib-goal-list .goal-card').filter({ hasText: 'Bravo run' }),
+      ).toBeVisible();
+      await expect(
+        page.locator('lib-goal-list .goal-card').filter({ hasText: 'Alpha walk' }),
+      ).toHaveCount(0);
+    });
 
     test('sign out + sign in shows the same goals (03-TC-D-004)', async ({ page, context }) => {
       await page.setViewportSize({ width: 1440, height: 900 });
