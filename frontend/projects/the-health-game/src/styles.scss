@@ -221,6 +221,10 @@ lib-goal-list .goal-card .goal-card__content {
   }
 }
 
+lib-goal-list .goal-card__icon-frame {
+  border-radius: 9999px !important;
+}
+
 lib-goal-list .goal-list__item:nth-child(4n + 1) .goal-card__icon-frame {
   background-color: #94f7b4 !important;
 }

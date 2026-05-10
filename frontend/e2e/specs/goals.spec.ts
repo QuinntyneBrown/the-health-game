@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 03-TC-V-001..009, 03-TC-C-001..011, 03-TC-L-001..006
+// Traces to: 03-TC-V-001..009, 03-TC-C-001..011, 03-TC-L-001..007
 // Description: /goals page title "Goals" renders with Inter weight 500 at 22/32 px.
 // Subtitle is Inter 13 px weight 400 with computed counts.
 import { expect, test } from '@playwright/test';
@@ -559,6 +559,27 @@ test.describe('Goals page — header typography', () => {
 
   test.describe('filter chip layout', () => {
     test.use({ viewport: { width: 1440, height: 900 } });
+
+    test('goal card icon container is 40 px square / pill radius (03-TC-L-007)', async ({
+      page,
+    }) => {
+      await authenticate(page);
+      await page.goto('/goals');
+      const frame = page.locator('lib-goal-list .goal-card__icon-frame').first();
+      await expect(frame).toBeVisible();
+      const box = await frame.evaluate((el) => {
+        const r = el.getBoundingClientRect();
+        const s = getComputedStyle(el);
+        return {
+          width: Math.round(r.width),
+          height: Math.round(r.height),
+          radius: parseFloat(s.borderTopLeftRadius),
+        };
+      });
+      expect(box.width).toBe(40);
+      expect(box.height).toBe(40);
+      expect(box.radius).toBeGreaterThanOrEqual(20);
+    });
 
     test('goal card content padding is 20 px on desktop (03-TC-L-006)', async ({ page }) => {
       await page.setViewportSize({ width: 1440, height: 900 });
