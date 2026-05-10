@@ -86,6 +86,15 @@
     </div>
   }
 
+  <h2 class="goal-form__section-label">Reminders</h2>
+  <mat-slide-toggle
+    data-testid="reminders-toggle"
+    [checked]="remindersOn()"
+    (change)="remindersOn.set($event.checked)"
+  >
+    Send daily reminder
+  </mat-slide-toggle>
+
   <div class="goal-form__actions">
     <button mat-stroked-button type="button" (click)="cancel()">Cancel</button>
     <button

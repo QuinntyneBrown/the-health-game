@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 04-TC-V-001..007, 04-TC-C-001..006
+// Traces to: 04-TC-V-001..007, 04-TC-C-001..007
 // Description: log-activity dialog typography.
 import { expect, test } from '@playwright/test';
 
@@ -57,6 +57,25 @@ const goal = {
 
 test.describe('Log activity dialog (desktop)', () => {
   test.use({ viewport: { width: 1440, height: 900 } });
+
+  test('switch on: track #006D3F / thumb white (04-TC-C-007)', async ({ page }) => {
+    await authenticate(page);
+    await page.goto('/goals/new');
+
+    const toggle = page.locator('lib-goal-form mat-slide-toggle[data-testid="reminders-toggle"]');
+    await expect(toggle).toBeVisible();
+    // Click the inner switch button to toggle on.
+    await toggle.locator('button[role="switch"]').click();
+    await expect(toggle.locator('button[role="switch"][aria-checked="true"]')).toBeVisible();
+
+    const track = toggle.locator('.mdc-switch__track').first();
+    const handle = toggle.locator('.mdc-switch__handle').first();
+    const trackBg = await track.evaluate((el) => getComputedStyle(el, '::after').backgroundColor);
+    const handleBg = await handle.evaluate((el) => getComputedStyle(el, '::after').backgroundColor);
+
+    expect(trackBg).toBe('rgb(0, 109, 63)');
+    expect(handleBg).toBe('rgb(255, 255, 255)');
+  });
 
   test('cadence segmented unselected: transparent / outline / #191D17 (04-TC-C-006)', async ({
     page,

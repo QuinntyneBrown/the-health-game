@@ -3,6 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
@@ -48,6 +49,7 @@ const customUnits: readonly { id: CustomIntervalUnit; label: string }[] = [
     MatButtonModule,
     MatFormFieldModule,
     MatSelectModule,
+    MatSlideToggleModule,
     SegmentedFilterComponent,
   ],
   templateUrl: './goal-form.component.html',
@@ -80,6 +82,7 @@ export class GoalFormComponent {
   readonly weekStart = signal<GoalFormState['weekStart']>('monday');
   readonly customCount = signal('1');
   readonly customUnit = signal<CustomIntervalUnit>('days');
+  readonly remindersOn = signal(false);
   private readonly attemptedSubmit = signal(false);
   private readonly initialCadence = signal<GoalCadence>('daily');
 

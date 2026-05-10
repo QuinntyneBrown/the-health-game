@@ -193,6 +193,25 @@ hg-segmented-filter[data-testid='cadence-picker'] mat-button-toggle:not(.mat-but
   color: #191d17 !important;
 }
 
+mat-slide-toggle {
+  --mdc-switch-selected-track-color: #006d3f;
+  --mdc-switch-selected-handle-color: #ffffff;
+  --mdc-switch-selected-focus-track-color: #006d3f;
+  --mdc-switch-selected-hover-track-color: #006d3f;
+  --mdc-switch-selected-pressed-track-color: #006d3f;
+  --mdc-switch-selected-focus-handle-color: #ffffff;
+  --mdc-switch-selected-hover-handle-color: #ffffff;
+  --mdc-switch-selected-pressed-handle-color: #ffffff;
+}
+
+mat-slide-toggle.mat-mdc-slide-toggle-checked .mdc-switch--selected .mdc-switch__track::after {
+  background: #006d3f !important;
+}
+
+mat-slide-toggle.mat-mdc-slide-toggle-checked .mdc-switch--selected .mdc-switch__handle::after {
+  background: #ffffff !important;
+}
+
 h2[mat-dialog-title],
 .mat-mdc-dialog-title {
   font-family:
