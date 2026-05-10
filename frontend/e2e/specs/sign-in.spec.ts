@@ -1,11 +1,35 @@
 // Acceptance Test
-// Traces to: L2-036, 07-TC-V-001..014, 07-TC-C-001..018, 07-TC-L-001..009
+// Traces to: L2-036, 07-TC-V-001..014, 07-TC-C-001..018, 07-TC-L-001..010
 // Description: Username + password sign-in page. Each test exercises one
 //              vertical slice end-to-end against the running app.
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
 
 test.describe('Sign In — page', () => {
+  test('submit 48 mobile / 56 tablet+desktop, full width (07-TC-L-010)', async ({
+    page,
+  }) => {
+    const measure = async () =>
+      page
+        .locator('lib-sign-in [data-testid="sign-in-submit"]')
+        .evaluate((el) => {
+          const r = (el as HTMLElement).getBoundingClientRect();
+          const card = (el.closest('.sign-in__card') as HTMLElement)?.getBoundingClientRect();
+          return { h: Math.round(r.height), w: Math.round(r.width), cw: Math.round(card?.width ?? 0) };
+        });
+
+    await page.setViewportSize({ width: 360, height: 780 });
+    await page.goto('/sign-in');
+    let r = await measure();
+    expect(r.h).toBe(48);
+    expect(r.w).toBeGreaterThanOrEqual(r.cw - 80);
+
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await page.waitForTimeout(80);
+    r = await measure();
+    expect(r.h).toBe(56);
+  });
+
   test('field height 56 px (07-TC-L-009)', async ({ page }) => {
     await page.goto('/sign-in');
     const h = await page
