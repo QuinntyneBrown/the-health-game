@@ -1,10 +1,32 @@
 // Acceptance Test
-// Traces to: L2-036, 07-TC-V-001..011
+// Traces to: L2-036, 07-TC-V-001..012
 // Description: Username + password sign-in page. Each test exercises one
 //              vertical slice end-to-end against the running app.
 import { expect, test } from '@playwright/test';
 
 test.describe('Sign In — page', () => {
+  test('"or" divider Inter 11 / 500 / 1.5px / upper (07-TC-V-012)', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await page.goto('/sign-in');
+    const label = page.locator('lib-sign-in .sign-in__divider-label');
+    await expect(label).toBeVisible();
+    const r = await label.evaluate((el) => {
+      const s = getComputedStyle(el);
+      return {
+        family: s.fontFamily,
+        size: s.fontSize,
+        weight: s.fontWeight,
+        letterSpacing: s.letterSpacing,
+        textTransform: s.textTransform,
+      };
+    });
+    expect(r.family).toMatch(/Inter/);
+    expect(r.size).toBe('11px');
+    expect(r.weight).toBe('500');
+    expect(r.letterSpacing).toBe('1.5px');
+    expect(r.textTransform).toBe('uppercase');
+  });
+
   test('SSO button Inter 14/16 px / 500 / on-surface (07-TC-V-011)', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await page.goto('/sign-in');
