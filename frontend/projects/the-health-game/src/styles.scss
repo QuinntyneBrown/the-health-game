@@ -150,6 +150,10 @@ hg-streak-summary .streak-summary__value {
   background-color: #f7fbf3 !important;
 }
 
+.cdk-overlay-backdrop:not(.cdk-overlay-transparent-backdrop) {
+  background: rgba(0, 0, 0, 0.48) !important;
+}
+
 .mat-mdc-form-field .mdc-notched-outline__leading,
 .mat-mdc-form-field .mdc-notched-outline__notch,
 .mat-mdc-form-field .mdc-notched-outline__trailing {

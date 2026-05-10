@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 04-TC-V-001..007, 04-TC-C-001..009
+// Traces to: 04-TC-V-001..007, 04-TC-C-001..010
 // Description: log-activity dialog typography.
 import { expect, test } from '@playwright/test';
 
@@ -97,6 +97,30 @@ test.describe('Log activity sheet (mobile)', () => {
 
 test.describe('Log activity dialog (desktop)', () => {
   test.use({ viewport: { width: 1440, height: 900 } });
+
+  test('backdrop scrim is rgba(0, 0, 0, 0.48) (04-TC-C-010)', async ({ page }) => {
+    await authenticate(page);
+    await page.route('**/api/goals/g1', (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify(goal),
+      }),
+    );
+    await page.route('**/api/goals/g1/activity**', (route) =>
+      route.fulfill({ status: 200, contentType: 'application/json', body: '[]' }),
+    );
+    await page.goto('/goals/g1');
+    await page.locator('[data-testid="goal-detail-log-fab"]').click();
+
+    const backdrop = page
+      .locator('.cdk-overlay-backdrop:not(.cdk-overlay-transparent-backdrop)')
+      .first();
+    await expect(backdrop).toBeVisible();
+    const bg = await backdrop.evaluate((el) => getComputedStyle(el).backgroundColor);
+    // 0x7A / 0xFF ≈ 0.48 — accept either canonical CSS form.
+    expect(bg).toBe('rgba(0, 0, 0, 0.48)');
+  });
 
   test('submit button bg #006D3F / label white (04-TC-C-008)', async ({ page }) => {
     await authenticate(page);
