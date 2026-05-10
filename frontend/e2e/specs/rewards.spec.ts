@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 05-TC-V-001..008, 05-TC-C-001..008
+// Traces to: 05-TC-V-001..008, 05-TC-C-001..009
 // Description: rewards list page chrome.
 import { expect, test } from '@playwright/test';
 
@@ -74,6 +74,52 @@ const readyReward = {
 };
 
 test.describe('Rewards list', () => {
+  test('earned reward chip #94F7B4 bg, #00210F label (05-TC-C-009)', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await authenticate(page);
+    await page.unroute('**/api/rewards**');
+    await page.route('**/api/rewards**', (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify(sampleRewards),
+      }),
+    );
+
+    await page.goto('/rewards');
+    const chipSurface = page
+      .locator('lib-reward-list .reward-section[data-status="earned"] .reward-card mat-chip')
+      .first()
+      .locator('.mdc-evolution-chip__cell--primary, .mat-mdc-chip-action');
+    const chipLabel = page
+      .locator('lib-reward-list .reward-section[data-status="earned"] .reward-card mat-chip')
+      .first()
+      .locator('.mdc-evolution-chip__text-label, .mat-mdc-chip-action-label');
+    await expect(chipLabel.first()).toBeVisible();
+    await expect(chipLabel.first()).toHaveText(/Earned/i);
+
+    const meta = await page.evaluate(() => {
+      const chip = document.querySelector(
+        'lib-reward-list .reward-section[data-status="earned"] .reward-card mat-chip',
+      );
+      const label = chip?.querySelector(
+        '.mdc-evolution-chip__text-label, .mat-mdc-chip-action-label',
+      ) as HTMLElement | null;
+      const surface = chip?.querySelector(
+        '.mdc-evolution-chip__cell--primary, .mat-mdc-chip-action',
+      ) as HTMLElement | null;
+      return {
+        bg: chip ? getComputedStyle(chip).backgroundColor : '',
+        labelColor: label ? getComputedStyle(label).color : '',
+        surfaceBg: surface ? getComputedStyle(surface).backgroundColor : '',
+      };
+    });
+    const allowed = ['rgb(148, 247, 180)', 'rgb(148, 247, 180)'];
+    const bgChosen = meta.surfaceBg !== 'rgba(0, 0, 0, 0)' ? meta.surfaceBg : meta.bg;
+    expect(allowed).toContain(bgChosen);
+    expect(meta.labelColor).toBe('rgb(0, 33, 15)');
+  });
+
   test('reward progress bar track #E5E9E2 (05-TC-C-008)', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await authenticate(page);

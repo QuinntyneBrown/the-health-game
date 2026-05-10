@@ -444,6 +444,18 @@ lib-reward-list mat-progress-bar .mdc-linear-progress__buffer {
   background-color: #e5e9e2 !important;
 }
 
+lib-reward-list .reward-section[data-status='earned'] mat-chip {
+  background-color: #94f7b4 !important;
+}
+lib-reward-list .reward-section[data-status='earned'] mat-chip .mdc-evolution-chip__cell--primary,
+lib-reward-list .reward-section[data-status='earned'] mat-chip .mat-mdc-chip-action {
+  background-color: #94f7b4 !important;
+}
+lib-reward-list .reward-section[data-status='earned'] mat-chip .mdc-evolution-chip__text-label,
+lib-reward-list .reward-section[data-status='earned'] mat-chip .mat-mdc-chip-action-label {
+  color: #00210f !important;
+}
+
 button[data-testid='delete-goal-confirm'] {
   background-color: #ba1a1a !important;
   color: #ffffff !important;
