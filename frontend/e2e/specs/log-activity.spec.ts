@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 04-TC-V-001..007, 04-TC-C-001..005
+// Traces to: 04-TC-V-001..007, 04-TC-C-001..006
 // Description: log-activity dialog typography.
 import { expect, test } from '@playwright/test';
 
@@ -57,6 +57,36 @@ const goal = {
 
 test.describe('Log activity dialog (desktop)', () => {
   test.use({ viewport: { width: 1440, height: 900 } });
+
+  test('cadence segmented unselected: transparent / outline / #191D17 (04-TC-C-006)', async ({
+    page,
+  }) => {
+    await authenticate(page);
+    await page.goto('/goals/new');
+
+    const inactive = page
+      .locator(
+        'lib-goal-form hg-segmented-filter[data-testid="cadence-picker"] mat-button-toggle:not(.mat-button-toggle-checked)',
+      )
+      .first();
+    await expect(inactive).toBeVisible();
+
+    const styles = await inactive.evaluate((host) => {
+      const inner = host.querySelector('.mat-button-toggle-button') ?? host;
+      const label = host.querySelector('.segmented-filter__label') ?? host;
+      const sHost = getComputedStyle(host);
+      return {
+        bg: getComputedStyle(inner).backgroundColor,
+        labelColor: getComputedStyle(label).color,
+        borderColor: sHost.borderTopColor,
+        borderWidth: sHost.borderTopWidth,
+      };
+    });
+    expect(styles.bg).toBe('rgba(0, 0, 0, 0)');
+    expect(styles.borderColor).toBe('rgb(194, 201, 190)');
+    expect(styles.borderWidth).toBe('1px');
+    expect(styles.labelColor).toBe('rgb(25, 29, 23)');
+  });
 
   test('cadence segmented selected #94F7B4 / #00210F (04-TC-C-005)', async ({ page }) => {
     await authenticate(page);

@@ -238,7 +238,7 @@ and made green. The /loop process picks the first test with
 | 227 | 04 | TC-C-003 | Field outline (focused) | `#006D3F` (primary), 2 px | 2026-05-10T03:21:38Z |
 | 228 | 04 | TC-C-004 | Field outline (error) | `#BA1A1A` (error), 2 px | 2026-05-10T03:24:51Z |
 | 229 | 04 | TC-C-005 | Cadence segmented selected | `#94F7B4` background, `#00210F` label | 2026-05-10T03:36:01Z |
-| 230 | 04 | TC-C-006 | Cadence segmented unselected | transparent fill, outline 1 px, `#191D17` label | null |
+| 230 | 04 | TC-C-006 | Cadence segmented unselected | transparent fill, outline 1 px, `#191D17` label | 2026-05-10T03:38:17Z |
 | 231 | 04 | TC-C-007 | Switch on color | `#006D3F` track, `#FFFFFF` thumb | null |
 | 232 | 04 | TC-C-008 | Submit button | `#006D3F` bg, white label | null |
 | 233 | 04 | TC-C-009 | Mobile sheet handle | `#C2C9BE`, 4 px tall, 32 px wide | null |
