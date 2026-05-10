@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 06-TC-V-001..007, 06-TC-C-001..010, 06-TC-L-001..010, 06-TC-R-001..005, 06-TC-F-001..008, 06-TC-F-101..107, 06-TC-F-201..205, 06-TC-B-001..002
+// Traces to: 06-TC-V-001..007, 06-TC-C-001..010, 06-TC-L-001..010, 06-TC-R-001..005, 06-TC-F-001..008, 06-TC-F-101..107, 06-TC-F-201..205, 06-TC-B-001..003
 // Description: stats + profile page chrome.
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
@@ -45,6 +45,56 @@ async function authenticate(page: import('@playwright/test').Page): Promise<void
 }
 
 test.describe('Stats & Profile chrome', () => {
+  test('Save shows loading state in flight (06-TC-B-003)', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await authenticate(page);
+
+    let user = {
+      displayName: 'Quinn',
+      email: 'q@q.q',
+      avatarUrl: null as string | null,
+      roles: [] as string[],
+    };
+    await page.unroute('**/api/users/me**');
+    await page.route('**/api/users/me**', async (route, request) => {
+      if (request.method() === 'PUT') {
+        await new Promise((r) => setTimeout(r, 500));
+        const body = request.postDataJSON() as { displayName: string; email: string };
+        user = { ...user, ...body };
+        route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify(user),
+        });
+        return;
+      }
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify(user),
+      });
+    });
+
+    await page.goto('/profile');
+    await page.locator('[data-testid="profile-edit"]').click();
+    await page
+      .locator('lib-profile hg-health-text-field')
+      .filter({ hasText: 'Display name' })
+      .locator('input')
+      .fill('Quinntyne');
+
+    const save = page.locator('[data-testid="profile-save"]');
+    expect(await save.getAttribute('aria-busy')).not.toBe('true');
+    await save.click();
+    await page.waitForTimeout(80);
+    expect(await save.getAttribute('aria-busy')).toBe('true');
+    expect(await save.isDisabled()).toBe(true);
+
+    await expect(page.locator('lib-profile [data-testid="profile-form"]')).toHaveCount(0, {
+      timeout: 4000,
+    });
+  });
+
   test('Save disabled until form is dirty AND valid (06-TC-B-002)', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await authenticate(page);

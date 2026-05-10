@@ -24,6 +24,7 @@ export class ProfileComponent {
   private readonly dialog = inject(MatDialog);
 
   readonly profile = signal<UserProfile | undefined>(undefined);
+  readonly saving = signal(false);
   readonly emailEditable = computed(() => this.profile()?.emailEditable !== false);
   readonly memberSinceLabel = computed(() => {
     const since = this.profile()?.memberSince;
@@ -76,12 +77,17 @@ export class ProfileComponent {
   }
 
   save(): void {
-    if (!this.canSave()) return;
+    if (!this.canSave() || this.saving()) return;
+    this.saving.set(true);
     this.users
       .updateCurrentUser({ displayName: this.displayName().trim(), email: this.email().trim() })
-      .subscribe((updated) => {
-        this.profile.set(updated);
-        this.editing.set(false);
+      .subscribe({
+        next: (updated) => {
+          this.profile.set(updated);
+          this.editing.set(false);
+          this.saving.set(false);
+        },
+        error: () => this.saving.set(false),
       });
   }
 

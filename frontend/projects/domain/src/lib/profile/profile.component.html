@@ -63,9 +63,10 @@
             mat-flat-button
             type="submit"
             data-testid="profile-save"
-            [disabled]="!canSave()"
+            [disabled]="!canSave() || saving()"
+            [attr.aria-busy]="saving() ? 'true' : null"
           >
-            Save
+            {{ saving() ? 'Saving…' : 'Save' }}
           </button>
         </div>
       </form>
