@@ -29,8 +29,9 @@
 }
 
 .app-brand__name {
-  font-size: var(--hg-font-size-title-sm);
-  font-weight: var(--hg-font-weight-semibold);
+  font-family: Inter, Roboto, Arial, sans-serif;
+  font-size: 22px;
+  font-weight: 500;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
