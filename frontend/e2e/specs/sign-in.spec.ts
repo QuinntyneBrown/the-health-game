@@ -9,6 +9,29 @@ import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
 
 test.describe('Sign In — page', () => {
+  test('cold-load LCP <= 2.5 s (07-TC-P-001)', async ({ page }) => {
+    await page.goto('/sign-in');
+    const lcp = await page.evaluate(
+      () =>
+        new Promise<number>((resolve) => {
+          let value = 0;
+          const obs = new PerformanceObserver((entries) => {
+            for (const e of entries.getEntries()) {
+              const ev = e as PerformanceEntry & { renderTime?: number; loadTime?: number };
+              const t = ev.renderTime ?? ev.loadTime ?? e.startTime;
+              if (t > value) value = t;
+            }
+          });
+          obs.observe({ type: 'largest-contentful-paint', buffered: true });
+          setTimeout(() => {
+            obs.disconnect();
+            resolve(value);
+          }, 1500);
+        }),
+    );
+    expect(lcp, `LCP=${lcp}ms`).toBeLessThanOrEqual(2500);
+  });
+
   test('deleted/disabled account treated identically to bad creds (07-TC-S-008)', async ({
     page,
   }) => {
