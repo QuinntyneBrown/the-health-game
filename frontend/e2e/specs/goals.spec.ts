@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 03-TC-V-001..009, 03-TC-C-001..011, 03-TC-L-001..011, 03-TC-R-001..006, 03-TC-F-001..011, 03-TC-F-101..109, 03-TC-F-201..203
+// Traces to: 03-TC-V-001..009, 03-TC-C-001..011, 03-TC-L-001..011, 03-TC-R-001..006, 03-TC-F-001..011, 03-TC-F-101..109, 03-TC-F-201..204
 // Description: /goals page title "Goals" renders with Inter weight 500 at 22/32 px.
 // Subtitle is Inter 13 px weight 400 with computed counts.
 import { expect, test } from '@playwright/test';
@@ -559,6 +559,69 @@ test.describe('Goals page — header typography', () => {
 
   test.describe('filter chip layout', () => {
     test.use({ viewport: { width: 1440, height: 900 } });
+
+    for (const status of [403, 404] as const) {
+      test(`crafted DELETE on another user's goal yields ${status} and no list mutation (03-TC-F-204 — ${status})`, async ({
+        page,
+      }) => {
+        await page.setViewportSize({ width: 1440, height: 900 });
+        await authenticate(page);
+
+        let listed = [
+          {
+            id: 'mine',
+            name: 'Walk',
+            description: '',
+            cadence: 'daily',
+            target: { value: 10, unit: 'min' },
+            completedQuantity: 0,
+            currentStreak: 0,
+            longestStreak: 0,
+            rewardName: '',
+          },
+        ];
+        let deleteCalls = 0;
+        let lastDeleteStatus = 0;
+
+        await page.unroute('**/api/goals**');
+        await page.route('**/api/goals**', (route) => {
+          const req = route.request();
+          if (req.url().endsWith('/api/goals/other-user-goal')) {
+            if (req.method() === 'DELETE') {
+              deleteCalls += 1;
+              lastDeleteStatus = status;
+              route.fulfill({ status, contentType: 'application/json', body: '{}' });
+              return;
+            }
+            route.fulfill({ status, contentType: 'application/json', body: '{}' });
+            return;
+          }
+          route.fulfill({
+            status: 200,
+            contentType: 'application/json',
+            body: JSON.stringify(listed),
+          });
+        });
+
+        // Visit the list first so the user's own goal is loaded into the view.
+        await page.goto('/goals');
+        await expect(page.locator('lib-goal-list .goal-card')).toHaveCount(1);
+
+        // Craft a direct API call as a malicious client would.
+        const responseStatus = await page.evaluate(async () => {
+          const r = await fetch('/api/goals/other-user-goal', { method: 'DELETE' });
+          return r.status;
+        });
+        expect(responseStatus).toBe(status);
+
+        // The user's own list is unchanged on a re-fetch.
+        await page.reload();
+        await expect(page.locator('lib-goal-list .goal-card')).toHaveCount(1);
+        expect(deleteCalls).toBe(1);
+        expect(lastDeleteStatus).toBe(status);
+        expect(listed.length).toBe(1);
+      });
+    }
 
     test('confirm delete removes goal from view (03-TC-F-203)', async ({ page }) => {
       await page.setViewportSize({ width: 1440, height: 900 });

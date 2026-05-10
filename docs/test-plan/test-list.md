@@ -203,7 +203,7 @@ and made green. The /loop process picks the first test with
 | 192 | 03 | TC-F-201 | Click delete | Confirmation dialog appears (L2-004 §3) | 2026-05-10T01:35:13Z |
 | 193 | 03 | TC-F-202 | Cancel confirmation | Goal preserved | 2026-05-10T01:36:16Z |
 | 194 | 03 | TC-F-203 | Confirm delete | Goal + activity entries + linked rewards removed from view (L2-004 §1) | 2026-05-10T01:37:25Z |
-| 195 | 03 | TC-F-204 | Attempt to delete via crafted API request not owned | 403 / 404 (L2-004 §2) | null |
+| 195 | 03 | TC-F-204 | Attempt to delete via crafted API request not owned | 403 / 404 (L2-004 §2) | 2026-05-10T01:38:36Z |
 | 196 | 03 | TC-B-001 | Tab order: search -> filter chips -> sort -> list cards -> FAB | Logical | null |
 | 197 | 03 | TC-B-002 | Enter activates focused chip / card / button | Yes | null |
 | 198 | 03 | TC-B-003 | Form fields show focus ring at >=3:1 contrast | Yes | null |
