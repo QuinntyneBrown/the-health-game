@@ -14,6 +14,15 @@
   margin: 0;
 }
 
+.goal-form__section-label {
+  font-family: Inter, Roboto, Arial, sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  margin: 8px 0 0;
+  text-transform: none;
+}
+
 .goal-form__target,
 .goal-form__custom {
   display: grid;

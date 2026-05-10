@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 04-TC-V-001..006
+// Traces to: 04-TC-V-001..007
 // Description: log-activity dialog typography.
 import { expect, test } from '@playwright/test';
 
@@ -57,6 +57,27 @@ const goal = {
 
 test.describe('Log activity dialog (desktop)', () => {
   test.use({ viewport: { width: 1440, height: 900 } });
+
+  test('goal-form Cadence section label Inter 13 / 600 / 0.5px (04-TC-V-007)', async ({ page }) => {
+    await authenticate(page);
+    await page.goto('/goals/new');
+
+    const label = page.locator('lib-goal-form .goal-form__section-label').filter({ hasText: 'Cadence' }).first();
+    await expect(label).toBeVisible();
+    const computed = await label.evaluate((el) => {
+      const s = getComputedStyle(el);
+      return {
+        fontFamily: s.fontFamily,
+        fontWeight: s.fontWeight,
+        fontSize: s.fontSize,
+        letterSpacing: s.letterSpacing,
+      };
+    });
+    expect(computed.fontFamily.split(',')[0].replace(/['"]/g, '').trim()).toBe('Inter');
+    expect(computed.fontWeight).toBe('600');
+    expect(computed.fontSize).toBe('13px');
+    expect(computed.letterSpacing).toBe('0.5px');
+  });
 
   test('dialog validation error Inter 12 / 500 / error color (04-TC-V-006)', async ({ page }) => {
     await authenticate(page);
