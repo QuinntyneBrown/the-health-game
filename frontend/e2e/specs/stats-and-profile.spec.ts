@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 06-TC-V-001..007, 06-TC-C-001..010, 06-TC-L-001..010, 06-TC-R-001..005, 06-TC-F-001..008, 06-TC-F-101..107, 06-TC-F-201..205, 06-TC-B-001..006, 06-TC-A-001..006, 06-TC-D-001..004
+// Traces to: 06-TC-V-001..007, 06-TC-C-001..010, 06-TC-L-001..010, 06-TC-R-001..005, 06-TC-F-001..008, 06-TC-F-101..107, 06-TC-F-201..205, 06-TC-B-001..006, 06-TC-A-001..006, 06-TC-D-001..005
 // Description: stats + profile page chrome.
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
@@ -45,6 +45,41 @@ async function authenticate(page: import('@playwright/test').Page): Promise<void
 }
 
 test.describe('Stats & Profile chrome', () => {
+  test('auth tokens never land in localStorage (06-TC-D-005)', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await authenticate(page);
+    await page.goto('/profile');
+
+    const storage = await page.evaluate(() => {
+      const localKeys: Record<string, string> = {};
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key) localKeys[key] = localStorage.getItem(key) ?? '';
+      }
+      const sessionKeys: Record<string, string> = {};
+      for (let i = 0; i < sessionStorage.length; i++) {
+        const key = sessionStorage.key(i);
+        if (key) sessionKeys[key] = sessionStorage.getItem(key) ?? '';
+      }
+      return { localKeys, sessionKeys };
+    });
+
+    // localStorage holds NOTHING auth-related — no access token, no refresh
+    // token, no PKCE state. (PKCE secrets ride sessionStorage which dies
+    // with the tab; refresh tokens, if any, must come back as httpOnly
+    // cookies the JS context can't see.)
+    for (const [key, value] of Object.entries(storage.localKeys)) {
+      expect(/(token|access|refresh|verifier|pkce|hg\.oidc)/i.test(key)).toBe(false);
+      expect(/(test-access-token|Bearer )/i.test(value)).toBe(false);
+    }
+
+    // sessionStorage may carry the in-memory token. Confirm at least the
+    // access-token key is the only auth artifact (no refresh token written).
+    for (const key of Object.keys(storage.sessionKeys)) {
+      expect(/refresh/i.test(key)).toBe(false);
+    }
+  });
+
   test('email never appears in console logs (06-TC-D-004)', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     const SENTINEL_EMAIL = 'logging-canary-06D004@example.test';
