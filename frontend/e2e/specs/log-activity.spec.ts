@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 04-TC-V-001..007, 04-TC-C-001..010, 04-TC-L-001..010, 04-TC-R-001..006, 04-TC-F-001..012, 04-TC-F-101..109, 04-TC-B-001..010, 04-TC-A-001..007, 04-TC-D-001..004
+// Traces to: 04-TC-V-001..007, 04-TC-C-001..010, 04-TC-L-001..010, 04-TC-R-001..006, 04-TC-F-001..012, 04-TC-F-101..109, 04-TC-B-001..010, 04-TC-A-001..007, 04-TC-D-001..005
 // Description: log-activity dialog typography.
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
@@ -127,6 +127,69 @@ test.describe('Log activity sheet (mobile)', () => {
     });
     const accessibleName = meta.targetText || meta.ariaLabel || '';
     expect(accessibleName).toMatch(/Log activity/i);
+  });
+
+  test('network failure preserves form, retry succeeds (04-TC-D-005)', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await authenticate(page);
+
+    let postCalls = 0;
+    await page.route('**/api/goals/g1', (route) =>
+      route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(goal) }),
+    );
+    await page.route('**/api/goals/g1/activities**', (route, request) => {
+      if (request.method() === 'POST') {
+        postCalls += 1;
+        if (postCalls === 1) {
+          route.fulfill({ status: 500, contentType: 'application/json', body: '{}' });
+        } else {
+          route.fulfill({
+            status: 201,
+            contentType: 'application/json',
+            body: JSON.stringify({
+              id: 'a-retry',
+              goalId: 'g1',
+              quantity: 9,
+              notes: 'second try',
+              recordedAt: '2026-05-10T06:30:00Z',
+              newlyEarnedRewards: [],
+            }),
+          });
+        }
+      } else {
+        route.fulfill({ status: 200, contentType: 'application/json', body: '[]' });
+      }
+    });
+
+    await page.goto('/goals/g1');
+    await page
+      .locator('[data-testid="goal-detail-log-fab"]')
+      .evaluate((el: HTMLElement) => el.click());
+    await page.waitForTimeout(300);
+
+    const dialog = page.locator('mat-dialog-container');
+    await expect(dialog).toBeVisible();
+    const qty = dialog.locator('input[type="number"]');
+    const notes = dialog
+      .locator('hg-health-text-field')
+      .filter({ hasText: 'Notes' })
+      .locator('input, textarea');
+    await qty.fill('9');
+    await notes.fill('second try');
+
+    await page.locator('[data-testid="log-activity-save"]').click();
+    await page.waitForTimeout(400);
+
+    // Dialog still open, values preserved.
+    await expect(dialog).toBeVisible();
+    await expect(qty).toHaveValue('9');
+    await expect(notes).toHaveValue('second try');
+    expect(postCalls).toBe(1);
+
+    // Retry succeeds.
+    await page.locator('[data-testid="log-activity-save"]').click();
+    await expect(dialog).toBeHidden();
+    expect(postCalls).toBe(2);
   });
 
   test('quantity decimal precision preserved (04-TC-D-004)', async ({ page }) => {

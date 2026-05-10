@@ -301,7 +301,7 @@ and made green. The /loop process picks the first test with
 | 290 | 04 | TC-D-002 | Created goal survives reload | Yes | 2026-05-10T06:26:22Z |
 | 291 | 04 | TC-D-003 | Logged note text round-trips exactly (incl. unicode, newlines) | Yes | 2026-05-10T06:35:39Z |
 | 292 | 04 | TC-D-004 | Quantity decimal precision preserved (per goal unit definition) | Yes | 2026-05-10T06:36:45Z |
-| 293 | 04 | TC-D-005 | Network failure mid-submit | Form remains open with values preserved; retry works | null |
+| 293 | 04 | TC-D-005 | Network failure mid-submit | Form remains open with values preserved; retry works | 2026-05-10T06:38:08Z |
 | 294 | 04 | TC-D-006 | Concurrent log from another device | Second log succeeds; streak recomputed deterministically | null |
 | 295 | 04 | TC-S-001 | XSS payload in goal name / note | Escaped on render (L2-016 §3) | null |
 | 296 | 04 | TC-S-002 | SQL-injection-shaped input | Rejected/escaped; parameterized query (L2-016 §2) | null |
