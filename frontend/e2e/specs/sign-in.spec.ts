@@ -9,6 +9,44 @@ import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
 
 test.describe('Sign In — page', () => {
+  test('sign-in POST is CSRF-safe — no cookies or carries CSRF header (07-TC-S-006)', async ({
+    page,
+    context,
+  }) => {
+    await context.addCookies([
+      {
+        name: 'session',
+        value: 'fake-session',
+        url: 'http://localhost:5117',
+      },
+    ]);
+    let cookieHeader = '';
+    let csrfHeader = '';
+    await page.route('**/api/auth/sign-in', (route) => {
+      const headers = route.request().headers();
+      cookieHeader = headers['cookie'] ?? '';
+      csrfHeader = headers['x-xsrf-token'] ?? headers['x-csrf-token'] ?? '';
+      return route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({
+          accessToken: 't',
+          user: { id: 'u', displayName: 'A', roles: ['Player'] },
+        }),
+      });
+    });
+    await page.goto('/sign-in');
+    await page.getByTestId('sign-in-username').locator('input').fill('alice');
+    await page.getByTestId('sign-in-password').locator('input').fill('Secret123!');
+    await page.getByTestId('sign-in-submit').click();
+    await page.waitForURL(/\/home/);
+    const safe = !cookieHeader || csrfHeader.length > 0;
+    expect(
+      safe,
+      `cookies sent without CSRF header (cookie="${cookieHeader}", csrf="${csrfHeader}")`,
+    ).toBe(true);
+  });
+
   test('XSS payload in username field is rendered as text (07-TC-S-005)', async ({
     page,
   }) => {
