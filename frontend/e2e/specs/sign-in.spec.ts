@@ -1,10 +1,25 @@
 // Acceptance Test
-// Traces to: L2-036, 07-TC-V-001..014, 07-TC-C-001..005
+// Traces to: L2-036, 07-TC-V-001..014, 07-TC-C-001..006
 // Description: Username + password sign-in page. Each test exercises one
 //              vertical slice end-to-end against the running app.
 import { expect, test } from '@playwright/test';
 
 test.describe('Sign In — page', () => {
+  test('field outline default #C2C9BE / 1 px (07-TC-C-006)', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await page.goto('/sign-in');
+    const piece = page
+      .locator('lib-sign-in mat-form-field .mdc-notched-outline__leading')
+      .first();
+    await expect(piece).toBeVisible();
+    const r = await piece.evaluate((el) => {
+      const s = getComputedStyle(el);
+      return { color: s.borderTopColor, width: s.borderTopWidth };
+    });
+    expect(r.color).toBe('rgb(194, 201, 190)');
+    expect(r.width).toBe('1px');
+  });
+
   test('subtitle color #424940 (07-TC-C-005)', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await page.goto('/sign-in');
