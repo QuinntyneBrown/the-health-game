@@ -193,7 +193,7 @@ and made green. The /loop process picks the first test with
 | 182 | 03 | TC-F-011 | Streak chip on card matches L2-007 computation | Yes | 2026-05-10T01:09:08Z |
 | 183 | 03 | TC-F-101 | Create goal — required field name empty | Form blocks submit; inline error (L2-001 §2) | 2026-05-10T01:11:07Z |
 | 184 | 03 | TC-F-102 | Create goal — non-positive target | Inline error; not persisted (L2-001 §3) | 2026-05-10T01:12:28Z |
-| 185 | 03 | TC-F-103 | Create daily goal — happy path | Persisted; appears at top of list within 500 ms | null |
+| 185 | 03 | TC-F-103 | Create daily goal — happy path | Persisted; appears at top of list within 500 ms | 2026-05-10T01:19:46Z |
 | 186 | 03 | TC-F-104 | Create hourly / weekly / monthly | Persisted with correct cadence (L2-011) | null |
 | 187 | 03 | TC-F-105 | Create custom cadence "every 3 days" | Persisted; period boundaries from start date in 3-day increments (L2-012 §1) | null |
 | 188 | 03 | TC-F-106 | Custom cadence with N <= 0 | Validation error (L2-012 §2) | null |
