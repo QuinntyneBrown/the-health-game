@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 04-TC-V-001..007, 04-TC-C-001..010, 04-TC-L-001..010, 04-TC-R-001..006, 04-TC-F-001..012, 04-TC-F-101..109, 04-TC-B-001..010, 04-TC-A-001..007, 04-TC-D-001..006, 04-TC-S-001..004
+// Traces to: 04-TC-V-001..007, 04-TC-C-001..010, 04-TC-L-001..010, 04-TC-R-001..006, 04-TC-F-001..012, 04-TC-F-101..109, 04-TC-B-001..010, 04-TC-A-001..007, 04-TC-D-001..006, 04-TC-S-001..004, 04-TC-P-001
 // Description: log-activity dialog typography.
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
@@ -127,6 +127,47 @@ test.describe('Log activity sheet (mobile)', () => {
     });
     const accessibleName = meta.targetText || meta.ariaLabel || '';
     expect(accessibleName).toMatch(/Log activity/i);
+  });
+
+  test('sheet opens within 100 ms of FAB tap (04-TC-P-001)', async ({ page }) => {
+    await page.setViewportSize({ width: 360, height: 780 });
+    await authenticate(page);
+    await page.route('**/api/goals/g1', (route) =>
+      route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(goal) }),
+    );
+    await page.route('**/api/goals/g1/activities**', (route) =>
+      route.fulfill({ status: 200, contentType: 'application/json', body: '[]' }),
+    );
+    await page.goto('/goals/g1');
+    const fab = page.locator('[data-testid="goal-detail-log-fab"]');
+    await expect(fab).toBeVisible();
+
+    // Warm the JIT path with one open/close cycle so the measured open isn't
+    // amortizing first-time module evaluation.
+    await fab.evaluate((el: HTMLElement) => el.click());
+    await expect(page.locator('mat-bottom-sheet-container')).toBeVisible();
+    await page.keyboard.press('Escape');
+    await expect(page.locator('mat-bottom-sheet-container')).toHaveCount(0);
+
+    const elapsed = await page.evaluate(async () => {
+      const fabEl = document.querySelector(
+        '[data-testid="goal-detail-log-fab"]',
+      ) as HTMLElement | null;
+      if (!fabEl) return -1;
+      const start = performance.now();
+      fabEl.click();
+      // Wait for sheet container to appear in the DOM.
+      const deadline = start + 1000;
+      while (performance.now() < deadline) {
+        if (document.querySelector('mat-bottom-sheet-container')) {
+          return performance.now() - start;
+        }
+        await new Promise((r) => requestAnimationFrame(() => r(undefined)));
+      }
+      return -1;
+    });
+    expect(elapsed).toBeGreaterThanOrEqual(0);
+    expect(elapsed).toBeLessThanOrEqual(100);
   });
 
   test('no tokens or verifiers in console logs (04-TC-S-004)', async ({ page }) => {
