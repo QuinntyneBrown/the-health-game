@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 05-TC-V-001..008, 05-TC-C-001..010, 05-TC-L-001..010, 05-TC-R-001..005, 05-TC-F-001..007, 05-TC-F-101..105, 05-TC-F-201..203, 05-TC-B-001..003
+// Traces to: 05-TC-V-001..008, 05-TC-C-001..010, 05-TC-L-001..010, 05-TC-R-001..005, 05-TC-F-001..007, 05-TC-F-101..105, 05-TC-F-201..203, 05-TC-B-001..004
 // Description: rewards list page chrome.
 import { expect, test } from '@playwright/test';
 
@@ -74,6 +74,33 @@ const readyReward = {
 };
 
 test.describe('Rewards list', () => {
+  test('reward card lifts on hover (05-TC-B-004)', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await authenticate(page);
+    await page.unroute('**/api/rewards**');
+    await page.route('**/api/rewards**', (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify(sampleRewards),
+      }),
+    );
+    await page.goto('/rewards');
+
+    const card = page
+      .locator('lib-reward-list .reward-section[data-status="in-progress"] .reward-card')
+      .first();
+    await expect(card).toBeVisible();
+    const before = await card.evaluate((el) => getComputedStyle(el).boxShadow);
+
+    await card.hover();
+    await page.waitForTimeout(120);
+    const after = await card.evaluate((el) => getComputedStyle(el).boxShadow);
+
+    expect(after).not.toBe(before);
+    expect(after).not.toBe('none');
+  });
+
   test('reduced-motion: no celebratory animation on Claim (05-TC-B-003)', async ({ browser }) => {
     const context = await browser.newContext({
       viewport: { width: 1280, height: 900 },

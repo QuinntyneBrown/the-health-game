@@ -461,6 +461,18 @@ lib-reward-list .reward-card .mat-mdc-card-content.reward-card__content {
   padding: 20px !important;
 }
 
+lib-reward-list .reward-card {
+  transition: box-shadow 150ms ease-out;
+}
+lib-reward-list .reward-list__item:hover .reward-card {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.16);
+}
+@media (prefers-reduced-motion: reduce) {
+  lib-reward-list .reward-card {
+    transition: none;
+  }
+}
+
 button[data-testid='delete-goal-confirm'] {
   background-color: #ba1a1a !important;
   color: #ffffff !important;
