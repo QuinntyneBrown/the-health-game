@@ -289,7 +289,7 @@ and made green. The /loop process picks the first test with
 | 278 | 04 | TC-B-007 | Tab cycles within dialog (focus trap) | Yes | 2026-05-10T05:45:29Z |
 | 279 | 04 | TC-B-008 | Submit button shows loading spinner during in-flight call | Yes; disabled until done | 2026-05-10T05:48:20Z |
 | 280 | 04 | TC-B-009 | Double-click submit | Only one create / log POST emitted | 2026-05-10T05:49:50Z |
-| 281 | 04 | TC-B-010 | Drag handle on mobile sheet supports swipe-to-dismiss | Yes | null |
+| 281 | 04 | TC-B-010 | Drag handle on mobile sheet supports swipe-to-dismiss | Yes | 2026-05-10T05:52:25Z |
 | 282 | 04 | TC-A-001 | Sheet exposes `role="dialog"` with `aria-modal="true"` | Yes | null |
 | 283 | 04 | TC-A-002 | Title programmatically associated via `aria-labelledby` | Yes | null |
 | 284 | 04 | TC-A-003 | Each input has visible label and matching `<label for>` | Yes | null |

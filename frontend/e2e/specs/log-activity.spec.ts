@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 04-TC-V-001..007, 04-TC-C-001..010, 04-TC-L-001..010, 04-TC-R-001..006, 04-TC-F-001..012, 04-TC-F-101..109, 04-TC-B-001..009
+// Traces to: 04-TC-V-001..007, 04-TC-C-001..010, 04-TC-L-001..010, 04-TC-R-001..006, 04-TC-F-001..012, 04-TC-F-101..109, 04-TC-B-001..010
 // Description: log-activity dialog typography.
 import { expect, test } from '@playwright/test';
 
@@ -92,6 +92,41 @@ test.describe('Log activity sheet (mobile)', () => {
     await expect(confirm).toBeVisible();
     await expect(confirm).toContainText(/discard/i);
     await expect(page.locator('mat-bottom-sheet-container')).toBeVisible();
+  });
+
+  test('drag handle swipe dismisses the sheet (04-TC-B-010)', async ({ page }) => {
+    await page.setViewportSize({ width: 360, height: 780 });
+    await authenticate(page);
+    await page.route('**/api/goals/g1', (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify(goal),
+      }),
+    );
+    await page.route('**/api/goals/g1/activities**', (route) =>
+      route.fulfill({ status: 200, contentType: 'application/json', body: '[]' }),
+    );
+    await page.goto('/goals/g1');
+    await page
+      .locator('[data-testid="goal-detail-log-fab"]')
+      .evaluate((el: HTMLElement) => el.click());
+    await page.waitForTimeout(300);
+
+    const handle = page.locator('lib-log-activity-sheet .sheet__handle').first();
+    await expect(handle).toBeVisible();
+
+    // Simulate a downward swipe on the handle.
+    const box = await handle.boundingBox();
+    if (!box) throw new Error('no handle box');
+    const startX = box.x + box.width / 2;
+    const startY = box.y + box.height / 2;
+    await page.mouse.move(startX, startY);
+    await page.mouse.down();
+    await page.mouse.move(startX, startY + 200, { steps: 10 });
+    await page.mouse.up();
+
+    await expect(page.locator('mat-bottom-sheet-container')).toHaveCount(0);
   });
 
   test('backdrop click closes the sheet (04-TC-B-002)', async ({ page }) => {

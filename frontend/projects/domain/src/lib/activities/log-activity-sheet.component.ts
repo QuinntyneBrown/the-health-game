@@ -21,7 +21,13 @@ export interface LogActivitySheetData {
   imports: [HealthTextFieldComponent, MatButtonModule],
   template: `
     <section class="sheet" data-testid="log-activity-sheet">
-      <span class="sheet__handle" aria-hidden="true"></span>
+      <span
+        class="sheet__handle"
+        aria-hidden="true"
+        (pointerdown)="onHandleDown($event)"
+        (pointermove)="onHandleMove($event)"
+        (pointerup)="onHandleUp($event)"
+      ></span>
       <h2 class="sheet__title">Log activity</h2>
       <hg-health-text-field
         label="Quantity ({{ data.unit }})"
@@ -115,6 +121,7 @@ export class LogActivitySheetComponent {
   readonly quantity = signal(this.draft.draft().quantity);
   readonly notes = signal(this.draft.draft().notes);
   private readonly attemptedSubmit = signal(false);
+  private dragStartY: number | null = null;
 
   readonly quantityError = computed(() =>
     this.attemptedSubmit() && !(Number(this.quantity()) > 0)
@@ -122,6 +129,26 @@ export class LogActivitySheetComponent {
       : '',
   );
   readonly canSave = computed(() => Number(this.quantity()) > 0);
+
+  onHandleDown(event: PointerEvent): void {
+    this.dragStartY = event.clientY;
+    (event.target as HTMLElement).setPointerCapture?.(event.pointerId);
+  }
+
+  onHandleMove(_event: PointerEvent): void {
+    // No-op; handled at pointerup so the sheet doesn't move underfoot.
+  }
+
+  onHandleUp(event: PointerEvent): void {
+    const start = this.dragStartY;
+    this.dragStartY = null;
+    if (start === null) return;
+    const delta = event.clientY - start;
+    if (delta > 80) {
+      this.draft.reset();
+      this.sheetRef.dismiss();
+    }
+  }
 
   onQuantity(value: string): void {
     this.quantity.set(value);
