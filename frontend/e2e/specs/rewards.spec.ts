@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 05-TC-V-001..005
+// Traces to: 05-TC-V-001..006
 // Description: rewards list page chrome.
 import { expect, test } from '@playwright/test';
 
@@ -74,6 +74,30 @@ const readyReward = {
 };
 
 test.describe('Rewards list', () => {
+  test('reward card title Inter 14 px / weight 500 (05-TC-V-006)', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await authenticate(page);
+    await page.unroute('**/api/rewards**');
+    await page.route('**/api/rewards**', (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify(sampleRewards),
+      }),
+    );
+
+    await page.goto('/rewards');
+    const name = page.locator('lib-reward-list .reward-card__name').first();
+    await expect(name).toBeVisible();
+    const result = await name.evaluate((el) => {
+      const s = getComputedStyle(el);
+      return { family: s.fontFamily, size: s.fontSize, weight: s.fontWeight };
+    });
+    expect(result.family).toMatch(/Inter/);
+    expect(result.size).toBe('14px');
+    expect(result.weight).toBe('500');
+  });
+
   test('section labels Inter 18 px / weight 500 (05-TC-V-005)', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await authenticate(page);
