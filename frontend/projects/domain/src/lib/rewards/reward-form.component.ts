@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatRadioModule } from '@angular/material/radio';
@@ -11,6 +12,7 @@ import { HealthTextFieldComponent } from 'components';
 @Component({
   selector: 'lib-reward-form',
   imports: [
+    FormsModule,
     HealthTextFieldComponent,
     MatButtonModule,
     MatFormFieldModule,

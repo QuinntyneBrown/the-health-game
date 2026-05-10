@@ -349,7 +349,7 @@ and made green. The /loop process picks the first test with
 | 338 | 05 | TC-F-005 | Streak resets after a reward was earned | Earned reward remains earned (L2-010 §3) | 2026-05-10T07:44:12Z |
 | 339 | 05 | TC-F-006 | Filter / tabs by state (ready, in-progress, locked, earned) | Counts and grids match | 2026-05-10T07:45:17Z |
 | 340 | 05 | TC-F-007 | Click reward card | Navigates to `/rewards/{id}` detail | 2026-05-10T07:46:59Z |
-| 341 | 05 | TC-F-101 | Create reward — name + description + qualifying condition (goal + streak threshold) | Persisted, linked to goal (L2-009 §1) | null |
+| 341 | 05 | TC-F-101 | Create reward — name + description + qualifying condition (goal + streak threshold) | Persisted, linked to goal (L2-009 §1) | 2026-05-10T07:49:15Z |
 | 342 | 05 | TC-F-102 | Create reward without qualifying condition | Validation error (L2-009 §2) | null |
 | 343 | 05 | TC-F-103 | Attempt to attach reward to a goal not owned by user | Rejected (L2-009 §3) | null |
 | 344 | 05 | TC-F-104 | Edit reward name / description | Persisted | null |
