@@ -6,6 +6,16 @@ import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
 
 test.describe('Sign In — page', () => {
+  test('password toggle has Show/Hide accessible name (07-TC-A-009)', async ({ page }) => {
+    await page.goto('/sign-in');
+    const toggle = page
+      .getByTestId('sign-in-password')
+      .locator('button.health-text-field__visibility');
+    expect(await toggle.getAttribute('aria-label')).toBe('Show password');
+    await toggle.click();
+    expect(await toggle.getAttribute('aria-label')).toBe('Hide password');
+  });
+
   test('buttons have descriptive accessible names (07-TC-A-008)', async ({ page }) => {
     await page.goto('/sign-in');
     const submitText = (await page.getByTestId('sign-in-submit').textContent())?.trim();
