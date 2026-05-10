@@ -201,7 +201,7 @@ and made green. The /loop process picks the first test with
 | 190 | 03 | TC-F-108 | Edit goal owned by another user via crafted request | 403 / 404 (L2-003 §2) | 2026-05-10T01:29:40Z |
 | 191 | 03 | TC-F-109 | Save while offline | Disabled or queued with offline indicator | 2026-05-10T01:34:09Z |
 | 192 | 03 | TC-F-201 | Click delete | Confirmation dialog appears (L2-004 §3) | 2026-05-10T01:35:13Z |
-| 193 | 03 | TC-F-202 | Cancel confirmation | Goal preserved | null |
+| 193 | 03 | TC-F-202 | Cancel confirmation | Goal preserved | 2026-05-10T01:36:16Z |
 | 194 | 03 | TC-F-203 | Confirm delete | Goal + activity entries + linked rewards removed from view (L2-004 §1) | null |
 | 195 | 03 | TC-F-204 | Attempt to delete via crafted API request not owned | 403 / 404 (L2-004 §2) | null |
 | 196 | 03 | TC-B-001 | Tab order: search -> filter chips -> sort -> list cards -> FAB | Logical | null |

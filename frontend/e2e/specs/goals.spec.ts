@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 03-TC-V-001..009, 03-TC-C-001..011, 03-TC-L-001..011, 03-TC-R-001..006, 03-TC-F-001..011, 03-TC-F-101..109, 03-TC-F-201
+// Traces to: 03-TC-V-001..009, 03-TC-C-001..011, 03-TC-L-001..011, 03-TC-R-001..006, 03-TC-F-001..011, 03-TC-F-101..109, 03-TC-F-201..202
 // Description: /goals page title "Goals" renders with Inter weight 500 at 22/32 px.
 // Subtitle is Inter 13 px weight 400 with computed counts.
 import { expect, test } from '@playwright/test';
@@ -559,6 +559,55 @@ test.describe('Goals page — header typography', () => {
 
   test.describe('filter chip layout', () => {
     test.use({ viewport: { width: 1440, height: 900 } });
+
+    test('cancel delete confirmation preserves the goal (03-TC-F-202)', async ({ page }) => {
+      await page.setViewportSize({ width: 1440, height: 900 });
+      await authenticate(page);
+
+      let deleteCalls = 0;
+      const goal = {
+        id: 'g1',
+        name: 'Walk',
+        description: '',
+        cadence: 'daily',
+        target: { value: 10, unit: 'min' },
+        completedQuantity: 0,
+        currentStreak: 0,
+        longestStreak: 0,
+        rewardName: '',
+      };
+      await page.route('**/api/goals/g1', (route) => {
+        if (route.request().method() === 'DELETE') {
+          deleteCalls += 1;
+          route.fulfill({ status: 204, body: '' });
+          return;
+        }
+        route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify(goal),
+        });
+      });
+      await page.route('**/api/goals/g1/activity**', (route) =>
+        route.fulfill({ status: 200, contentType: 'application/json', body: '[]' }),
+      );
+
+      await page.goto('/goals/g1');
+      await page.locator('[data-testid="goal-detail-delete"]').click();
+
+      const dialog = page.locator('lib-delete-goal-dialog');
+      await expect(dialog).toBeVisible();
+
+      await dialog.getByRole('button', { name: /cancel/i }).click();
+      await expect(dialog).toHaveCount(0);
+
+      // We're still on the detail page; the goal is intact.
+      await expect(page).toHaveURL(/\/goals\/g1$/);
+      await expect(page.locator('lib-goal-detail [data-testid="goal-detail"]')).toContainText(
+        'Walk',
+      );
+      expect(deleteCalls).toBe(0);
+    });
 
     test('clicking Delete opens confirmation dialog with goal name (03-TC-F-201)', async ({
       page,
