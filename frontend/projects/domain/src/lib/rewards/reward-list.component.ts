@@ -16,8 +16,10 @@ import { RewardStatusFilter, filterRewardsByStatus } from './filter-rewards';
 
 const filterOptions: readonly SegmentedFilterOption[] = [
   { value: 'all', label: 'All' },
+  { value: 'ready-to-claim', label: 'Ready' },
+  { value: 'in-progress', label: 'In progress' },
   { value: 'earned', label: 'Earned' },
-  { value: 'pending', label: 'Pending' },
+  { value: 'locked', label: 'Locked' },
 ];
 
 @Component({

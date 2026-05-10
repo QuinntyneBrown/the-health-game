@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 05-TC-V-001..008, 05-TC-C-001..010, 05-TC-L-001..010, 05-TC-R-001..005, 05-TC-F-001..005
+// Traces to: 05-TC-V-001..008, 05-TC-C-001..010, 05-TC-L-001..010, 05-TC-R-001..005, 05-TC-F-001..006
 // Description: rewards list page chrome.
 import { expect, test } from '@playwright/test';
 
@@ -74,6 +74,66 @@ const readyReward = {
 };
 
 test.describe('Rewards list', () => {
+  test('filter tabs scope grid to status (05-TC-F-006)', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await authenticate(page);
+    await page.unroute('**/api/rewards**');
+    await page.route('**/api/rewards**', (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify([
+          readyReward,
+          ...sampleRewards,
+          {
+            id: 'r-locked-1',
+            goalId: 'g1',
+            name: 'Locked extra',
+            description: '',
+            status: 'locked',
+            earnedAt: null,
+            condition: { type: 'streak-milestone', streakDays: 60 },
+          },
+        ]),
+      }),
+    );
+    await page.goto('/rewards');
+
+    const cards = () => page.locator('lib-reward-list .reward-card');
+    await expect(cards()).toHaveCount(3); // earned + in-progress + locked extra (hero excluded)
+
+    await page
+      .locator('lib-reward-list hg-segmented-filter mat-button-toggle')
+      .filter({ hasText: 'In progress' })
+      .click();
+    await page.waitForTimeout(80);
+    await expect(cards()).toHaveCount(1);
+    await expect(cards().first()).toContainText('Spa day');
+
+    await page
+      .locator('lib-reward-list hg-segmented-filter mat-button-toggle')
+      .filter({ hasText: 'Earned' })
+      .click();
+    await page.waitForTimeout(80);
+    await expect(cards()).toHaveCount(1);
+    await expect(cards().first()).toContainText('New running shoes');
+
+    await page
+      .locator('lib-reward-list hg-segmented-filter mat-button-toggle')
+      .filter({ hasText: 'Locked' })
+      .click();
+    await page.waitForTimeout(80);
+    await expect(cards()).toHaveCount(1);
+    await expect(cards().first()).toContainText('Locked extra');
+
+    await page
+      .locator('lib-reward-list hg-segmented-filter mat-button-toggle')
+      .filter({ hasText: 'All' })
+      .click();
+    await page.waitForTimeout(80);
+    await expect(cards()).toHaveCount(3);
+  });
+
   test('streak reset after earn keeps reward earned (05-TC-F-005)', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await authenticate(page);
