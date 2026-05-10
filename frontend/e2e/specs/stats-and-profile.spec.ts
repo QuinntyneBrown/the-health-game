@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 06-TC-V-001..007, 06-TC-C-001..010, 06-TC-L-001..010, 06-TC-R-001..005, 06-TC-F-001..008, 06-TC-F-101..107
+// Traces to: 06-TC-V-001..007, 06-TC-C-001..010, 06-TC-L-001..010, 06-TC-R-001..005, 06-TC-F-001..008, 06-TC-F-101..107, 06-TC-F-201
 // Description: stats + profile page chrome.
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
@@ -45,6 +45,23 @@ async function authenticate(page: import('@playwright/test').Page): Promise<void
 }
 
 test.describe('Stats & Profile chrome', () => {
+  test('Delete account opens confirm dialog with typed gate (06-TC-F-201)', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await authenticate(page);
+    await page.goto('/profile');
+
+    await page.locator('[data-testid="profile-delete"]').click();
+    const dialog = page.locator('lib-delete-account-dialog').first();
+    await expect(dialog).toBeVisible();
+    await expect(dialog).toContainText(/permanently deletes/i);
+
+    const confirm = page.locator('[data-testid="delete-account-confirm"]');
+    expect(await confirm.isDisabled()).toBe(true);
+
+    await dialog.locator('input').fill('q@q.q');
+    expect(await confirm.isDisabled()).toBe(false);
+  });
+
   test('invalid email shows validation error (06-TC-F-107)', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await authenticate(page);

@@ -420,7 +420,7 @@ and made green. The /loop process picks the first test with
 | 409 | 06 | TC-F-105 | Cancel edit | Form reverts to last saved values | 2026-05-10T12:07:54Z |
 | 410 | 06 | TC-F-106 | Submit empty display name | Validation error | 2026-05-10T12:09:35Z |
 | 411 | 06 | TC-F-107 | Submit invalid email | Validation error (RFC 5321 / 5322 reasonable subset) | 2026-05-10T12:11:14Z |
-| 412 | 06 | TC-F-201 | Click "Delete account" | Confirmation dialog with explicit warning + typed confirmation ("DELETE") | null |
+| 412 | 06 | TC-F-201 | Click "Delete account" | Confirmation dialog with explicit warning + typed confirmation ("DELETE") | 2026-05-10T12:13:18Z |
 | 413 | 06 | TC-F-202 | Cancel confirmation | No-op | null |
 | 414 | 06 | TC-F-203 | Confirm deletion | Backend deletes/anonymizes data and revokes sessions (L2-014 §2) | null |
 | 415 | 06 | TC-F-204 | Subsequent sign-in attempt with deleted account | Rejected (L2-014 §3) | null |
