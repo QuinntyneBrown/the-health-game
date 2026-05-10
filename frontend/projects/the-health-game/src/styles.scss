@@ -164,6 +164,13 @@ hg-streak-summary .streak-summary__value {
   border-width: 2px !important;
 }
 
+hg-health-text-field.health-text-field--error .mdc-notched-outline__leading,
+hg-health-text-field.health-text-field--error .mdc-notched-outline__notch,
+hg-health-text-field.health-text-field--error .mdc-notched-outline__trailing {
+  border-color: #ba1a1a !important;
+  border-width: 2px !important;
+}
+
 h2[mat-dialog-title],
 .mat-mdc-dialog-title {
   font-family:

@@ -12,6 +12,9 @@ export type HealthTextFieldType = 'email' | 'number' | 'password' | 'search' | '
   templateUrl: './health-text-field.component.html',
   styleUrl: './health-text-field.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  host: {
+    '[class.health-text-field--error]': '!!errorText()',
+  },
 })
 export class HealthTextFieldComponent {
   readonly valueChange = output<string>();

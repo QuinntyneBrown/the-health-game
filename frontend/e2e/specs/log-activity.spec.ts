@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 04-TC-V-001..007, 04-TC-C-001..003
+// Traces to: 04-TC-V-001..007, 04-TC-C-001..004
 // Description: log-activity dialog typography.
 import { expect, test } from '@playwright/test';
 
@@ -57,6 +57,44 @@ const goal = {
 
 test.describe('Log activity dialog (desktop)', () => {
   test.use({ viewport: { width: 1440, height: 900 } });
+
+  test('field outline error #BA1A1A / 2 px (04-TC-C-004)', async ({ page }) => {
+    await authenticate(page);
+    await page.route('**/api/goals/g1', (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify(goal),
+      }),
+    );
+    await page.route('**/api/goals/g1/activity**', (route) =>
+      route.fulfill({ status: 200, contentType: 'application/json', body: '[]' }),
+    );
+    await page.goto('/goals/g1');
+    await page.locator('[data-testid="goal-detail-log-fab"]').click();
+
+    await page
+      .locator('.cdk-overlay-container hg-health-text-field')
+      .filter({ hasText: 'Quantity' })
+      .locator('input')
+      .fill('0');
+    await page.locator('[data-testid="log-activity-save"]').click();
+
+    // The hg-health-text-field gains a `.health-text-field--error` class when errorText is set;
+    // its outline pieces should repaint with the error color and the 2 px stroke.
+    const piece = page
+      .locator(
+        '.cdk-overlay-container hg-health-text-field.health-text-field--error .mdc-notched-outline__leading',
+      )
+      .first();
+    await expect(piece).toBeVisible();
+    const result = await piece.evaluate((el) => {
+      const s = getComputedStyle(el);
+      return { color: s.borderTopColor, width: s.borderTopWidth };
+    });
+    expect(result.color).toBe('rgb(186, 26, 26)');
+    expect(result.width).toBe('2px');
+  });
 
   test('field outline focused #006D3F / 2 px (04-TC-C-003)', async ({ page }) => {
     await authenticate(page);
