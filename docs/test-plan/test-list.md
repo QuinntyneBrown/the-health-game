@@ -538,7 +538,7 @@ and made green. The /loop process picks the first test with
 | 527 | 07 | TC-A-007 | Inline 401 error has `role="alert"` and `aria-live="assertive"` | Yes | 2026-05-10T15:01:30Z |
 | 528 | 07 | TC-A-008 | Buttons have descriptive accessible names | "Sign in", "Continue with Single Sign-On", "Get started" | 2026-05-10T15:02:30Z |
 | 529 | 07 | TC-A-009 | Password toggle has accessible name | "Show password" / "Hide password" | 2026-05-10T15:03:30Z |
-| 530 | 07 | TC-A-010 | axe-core scan returns 0 critical / serious violations | Yes | null |
+| 530 | 07 | TC-A-010 | axe-core scan returns 0 critical / serious violations | Yes | 2026-05-10T15:04:30Z |
 | 531 | 07 | TC-D-001 | Successful sign-in writes access token to `sessionStorage` only | Key `hg.oidc.access-token`; not in localStorage | null |
 | 532 | 07 | TC-D-002 | Reload after sign-in keeps the user authenticated | Token persists for the tab session | null |
 | 533 | 07 | TC-D-003 | Closing the tab clears the access token | `sessionStorage` is per-tab; new tab is unauthenticated | null |

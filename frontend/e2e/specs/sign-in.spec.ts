@@ -6,6 +6,18 @@ import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
 
 test.describe('Sign In — page', () => {
+  test('axe-core: 0 critical / serious violations (07-TC-A-010)', async ({ page }) => {
+    await page.goto('/sign-in');
+    const result = await new AxeBuilder({ page })
+      .include('lib-sign-in')
+      .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'])
+      .analyze();
+    const blocking = result.violations.filter(
+      (v) => v.impact === 'critical' || v.impact === 'serious',
+    );
+    expect(blocking, JSON.stringify(blocking, null, 2)).toEqual([]);
+  });
+
   test('password toggle has Show/Hide accessible name (07-TC-A-009)', async ({ page }) => {
     await page.goto('/sign-in');
     const toggle = page
