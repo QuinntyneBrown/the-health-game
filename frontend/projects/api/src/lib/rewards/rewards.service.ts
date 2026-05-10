@@ -18,4 +18,8 @@ export class RewardsService implements IRewardsService {
   getRewards(): Observable<readonly Reward[]> {
     return this.http.get<readonly Reward[]>(`${this.apiBaseUrl}/api/rewards`);
   }
+
+  claimReward(rewardId: string): Observable<Reward> {
+    return this.http.post<Reward>(`${this.apiBaseUrl}/api/rewards/${rewardId}/claim`, {});
+  }
 }

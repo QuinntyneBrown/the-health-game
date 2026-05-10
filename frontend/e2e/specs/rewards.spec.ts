@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 05-TC-V-001..008, 05-TC-C-001..010, 05-TC-L-001..010, 05-TC-R-001..005, 05-TC-F-001..003
+// Traces to: 05-TC-V-001..008, 05-TC-C-001..010, 05-TC-L-001..010, 05-TC-R-001..005, 05-TC-F-001..004
 // Description: rewards list page chrome.
 import { expect, test } from '@playwright/test';
 
@@ -74,6 +74,58 @@ const readyReward = {
 };
 
 test.describe('Rewards list', () => {
+  test('Claim moves reward to earned with timestamp (05-TC-F-004)', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await authenticate(page);
+
+    let rewards: Array<Record<string, unknown>> = [readyReward, ...sampleRewards];
+    let claimCalls = 0;
+    await page.unroute('**/api/rewards**');
+    await page.route('**/api/rewards**', (route, request) => {
+      const url = new URL(request.url());
+      if (request.method() === 'POST' && /\/api\/rewards\/.+\/claim$/.test(url.pathname)) {
+        claimCalls += 1;
+        const id = url.pathname.split('/').slice(-2, -1)[0];
+        const claimedAt = '2026-05-10T07:30:00Z';
+        rewards = rewards.map((r) =>
+          (r as { id: string }).id === id
+            ? { ...r, status: 'earned', earnedAt: claimedAt }
+            : r,
+        );
+        const claimed = rewards.find((r) => (r as { id: string }).id === id);
+        route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify(claimed),
+        });
+        return;
+      }
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify(rewards),
+      });
+    });
+
+    await page.goto('/rewards');
+    await expect(page.locator('lib-reward-list .reward-hero')).toBeVisible();
+    await page.locator('[data-testid="reward-hero-claim"]').click();
+    await expect(page.locator('lib-reward-list .reward-hero')).toBeHidden();
+    expect(claimCalls).toBe(1);
+
+    // Reward now appears under the earned section.
+    const earnedSection = page.locator('lib-reward-list .reward-section[data-status="earned"]');
+    await expect(earnedSection).toContainText(readyReward.name);
+
+    // The earned card carries a date label populated from earnedAt.
+    const earnedDate = earnedSection
+      .locator('.reward-card', { hasText: readyReward.name })
+      .locator('.reward-card__date')
+      .first();
+    await expect(earnedDate).toBeVisible();
+    await expect(earnedDate).not.toHaveText(/^$/);
+  });
+
   test('subtitle counts: 1 ready · 2 in progress · 3 locked (05-TC-F-003)', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await authenticate(page);

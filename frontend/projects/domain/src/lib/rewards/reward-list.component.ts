@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@a
 import { toSignal } from '@angular/core/rxjs-interop';
 import { MatIconModule } from '@angular/material/icon';
 import { Router } from '@angular/router';
+import { firstValueFrom } from 'rxjs';
 import { REWARDS_SERVICE, Reward } from 'api';
 import {
   EmptyStateComponent,
@@ -308,9 +309,13 @@ export class RewardListComponent {
   readonly filterOptions = filterOptions;
   readonly status = signal<RewardStatusFilter>('all');
 
-  readonly rewards = toSignal(this.rewardsService.getRewards(), {
+  private readonly localOverride = signal<readonly Reward[] | null>(null);
+  private readonly serverRewards = toSignal(this.rewardsService.getRewards(), {
     initialValue: [] as const,
   });
+  readonly rewards = computed<readonly Reward[]>(
+    () => this.localOverride() ?? this.serverRewards(),
+  );
   readonly visibleRewards = computed(() => filterRewardsByStatus(this.rewards(), this.status()));
   readonly readyToClaim = computed(() =>
     this.rewards().find((r) => r.status === 'ready-to-claim') ?? null,
@@ -359,8 +364,10 @@ export class RewardListComponent {
     void this.router.navigateByUrl('/rewards/new');
   }
 
-  onClaim(_reward: Reward): void {
-    // Wired in 05-TC-F-004; visual + structural only for now.
+  async onClaim(reward: Reward): Promise<void> {
+    const claimed = await firstValueFrom(this.rewardsService.claimReward(reward.id));
+    const merged = this.rewards().map((r) => (r.id === claimed.id ? claimed : r));
+    this.localOverride.set(merged);
   }
 
   onMaybeLater(_reward: Reward): void {

@@ -12,6 +12,7 @@ export interface CreateRewardInput {
 export interface IRewardsService {
   createReward(goalId: string, input: CreateRewardInput): Observable<Reward>;
   getRewards(): Observable<readonly Reward[]>;
+  claimReward(rewardId: string): Observable<Reward>;
 }
 
 export const REWARDS_SERVICE = new InjectionToken<IRewardsService>('REWARDS_SERVICE');
