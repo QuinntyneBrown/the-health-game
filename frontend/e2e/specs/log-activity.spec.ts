@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 04-TC-V-001..007, 04-TC-C-001..010, 04-TC-L-001..010, 04-TC-R-001..004
+// Traces to: 04-TC-V-001..007, 04-TC-C-001..010, 04-TC-L-001..010, 04-TC-R-001..005
 // Description: log-activity dialog typography.
 import { expect, test } from '@playwright/test';
 
@@ -56,6 +56,54 @@ const goal = {
 };
 
 test.describe('Log activity sheet (mobile)', () => {
+  test('soft keyboard: sheet content scrolls + submit stays visible (04-TC-R-005)', async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 360, height: 780 });
+    await authenticate(page);
+    await page.route('**/api/goals/g1', (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify(goal),
+      }),
+    );
+    await page.route('**/api/goals/g1/activity**', (route) =>
+      route.fulfill({ status: 200, contentType: 'application/json', body: '[]' }),
+    );
+    await page.goto('/goals/g1');
+    await page
+      .locator('[data-testid="goal-detail-log-fab"]')
+      .evaluate((el: HTMLElement) => el.click());
+    await page.waitForTimeout(500);
+
+    // Simulate soft keyboard by shrinking viewport height to ~320 (kb takes ~460 px).
+    await page.setViewportSize({ width: 360, height: 320 });
+    await page.waitForTimeout(300);
+
+    const sheet = page.locator('lib-log-activity-sheet .sheet').first();
+    await expect(sheet).toBeVisible();
+    const meta = await sheet.evaluate((el) => {
+      const s = getComputedStyle(el);
+      return {
+        overflowY: s.overflowY,
+        scrollable: el.scrollHeight > el.clientHeight,
+      };
+    });
+    expect(['auto', 'scroll']).toContain(meta.overflowY);
+    expect(meta.scrollable).toBe(true);
+
+    // The Save button must remain inside the visible viewport rect (after scrolling to it).
+    const save = page.locator('[data-testid="log-activity-save"]');
+    await save.scrollIntoViewIfNeeded();
+    const dims = await save.evaluate((el) => {
+      const r = el.getBoundingClientRect();
+      return { top: r.top, bottom: r.bottom, vh: window.innerHeight };
+    });
+    expect(dims.top).toBeGreaterThanOrEqual(0);
+    expect(dims.bottom).toBeLessThanOrEqual(dims.vh);
+  });
+
   test('resize mobile→tablet swaps sheet→dialog, preserves form state (04-TC-R-004)', async ({
     page,
   }) => {

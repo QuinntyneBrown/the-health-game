@@ -52,6 +52,8 @@ export interface LogActivitySheetData {
       .sheet {
         display: grid;
         gap: var(--hg-space-4);
+        max-height: 100vh;
+        overflow-y: auto;
         padding: var(--hg-space-4) var(--hg-space-6) var(--hg-space-6);
       }
 
