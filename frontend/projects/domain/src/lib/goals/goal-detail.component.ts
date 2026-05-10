@@ -198,7 +198,13 @@ export class GoalDetailComponent {
         this.cleanupLogContainer();
       });
     } else {
-      const ref = this.dialog.open(LogActivityDialogComponent, { data, width: '35rem' });
+      const ref = this.dialog.open(LogActivityDialogComponent, {
+        data,
+        width: '35rem',
+        ariaModal: true,
+        role: 'dialog',
+        restoreFocus: true,
+      });
       this.currentDialogRef = ref;
       ref.afterClosed().subscribe((entry) => {
         if (entry) this.refreshActivities();
