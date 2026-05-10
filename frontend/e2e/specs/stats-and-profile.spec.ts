@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 06-TC-V-001..007, 06-TC-C-001..010, 06-TC-L-001..010, 06-TC-R-001..005, 06-TC-F-001..008, 06-TC-F-101..107, 06-TC-F-201..205, 06-TC-B-001..006, 06-TC-A-001..003
+// Traces to: 06-TC-V-001..007, 06-TC-C-001..010, 06-TC-L-001..010, 06-TC-R-001..005, 06-TC-F-001..008, 06-TC-F-101..107, 06-TC-F-201..205, 06-TC-B-001..006, 06-TC-A-001..004
 // Description: stats + profile page chrome.
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
@@ -45,6 +45,65 @@ async function authenticate(page: import('@playwright/test').Page): Promise<void
 }
 
 test.describe('Stats & Profile chrome', () => {
+  test('form fields labelled + errors via aria-describedby (06-TC-A-004)', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await authenticate(page);
+    await page.goto('/profile');
+    await page.locator('[data-testid="profile-edit"]').click();
+
+    const inputs = await page
+      .locator('lib-profile [data-testid="profile-form"] mat-form-field input')
+      .evaluateAll((els) =>
+        (els as HTMLInputElement[]).map((el) => {
+          const ids = (el.getAttribute('aria-labelledby') ?? '')
+            .split(/\s+/)
+            .filter(Boolean);
+          const labelledByText = ids
+            .map((id) => document.getElementById(id)?.textContent?.trim() ?? '')
+            .join(' ')
+            .trim();
+          // Fallback: Material may render the label inside a sibling
+          // <mat-label> in the same form-field — that's the visible
+          // label even if aria-labelledby isn't wired.
+          const formField = el.closest('mat-form-field');
+          const matLabel = formField?.querySelector('mat-label, .mdc-floating-label');
+          const matLabelText = matLabel?.textContent?.trim() ?? '';
+          return {
+            labelledByText,
+            ariaLabel: el.getAttribute('aria-label') ?? '',
+            matLabelText,
+          };
+        }),
+      );
+    expect(inputs.length).toBeGreaterThanOrEqual(2);
+    for (const meta of inputs) {
+      const accessibleName =
+        meta.labelledByText || meta.ariaLabel || meta.matLabelText;
+      expect(accessibleName.length).toBeGreaterThan(0);
+    }
+
+    // Trigger an error on the email field — aria-describedby grows to point
+    // at the error region.
+    const emailInput = page
+      .locator('lib-profile hg-health-text-field')
+      .filter({ hasText: 'Email' })
+      .locator('input');
+    await emailInput.fill('not-an-email');
+    await page.waitForTimeout(80);
+    const meta = await emailInput.evaluate((el) => {
+      const ids = (el.getAttribute('aria-describedby') ?? '').split(/\s+/).filter(Boolean);
+      const targets = ids
+        .map((id) => document.getElementById(id))
+        .filter((node): node is HTMLElement => !!node);
+      return {
+        ariaInvalid: el.getAttribute('aria-invalid'),
+        describedByText: targets.map((n) => n.textContent?.trim() ?? '').join(' '),
+      };
+    });
+    expect(meta.ariaInvalid).toBe('true');
+    expect(meta.describedByText).toMatch(/valid email/i);
+  });
+
   test('bar chart carries aria-label summary (06-TC-A-003)', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await authenticate(page);
