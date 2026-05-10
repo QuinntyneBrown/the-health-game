@@ -361,7 +361,7 @@ and made green. The /loop process picks the first test with
 | 350 | 05 | TC-B-002 | Hero "Claim" button shows loading state | Yes; disabled until done | 2026-05-10T08:03:13Z |
 | 351 | 05 | TC-B-003 | Reduced-motion preference | No celebratory animation | 2026-05-10T08:04:07Z |
 | 352 | 05 | TC-B-004 | Hover state on cards | Subtle elevation | 2026-05-10T08:05:50Z |
-| 353 | 05 | TC-A-001 | Hero is `<section aria-labelledby>` with title as `<h2>` | Yes | null |
+| 353 | 05 | TC-A-001 | Hero is `<section aria-labelledby>` with title as `<h2>` | Yes | 2026-05-10T08:06:44Z |
 | 354 | 05 | TC-A-002 | Earned/in-progress/locked state communicated via text and icon, not color alone | Yes | null |
 | 355 | 05 | TC-A-003 | Progress bar exposes `role="progressbar"` with `aria-valuenow / valuemax` | Yes | null |
 | 356 | 05 | TC-A-004 | "Claim" button has descriptive accessible name (`Claim "{reward name}"`) | Yes | null |

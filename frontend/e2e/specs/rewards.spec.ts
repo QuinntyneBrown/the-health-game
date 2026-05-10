@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 05-TC-V-001..008, 05-TC-C-001..010, 05-TC-L-001..010, 05-TC-R-001..005, 05-TC-F-001..007, 05-TC-F-101..105, 05-TC-F-201..203, 05-TC-B-001..004
+// Traces to: 05-TC-V-001..008, 05-TC-C-001..010, 05-TC-L-001..010, 05-TC-R-001..005, 05-TC-F-001..007, 05-TC-F-101..105, 05-TC-F-201..203, 05-TC-B-001..004, 05-TC-A-001
 // Description: rewards list page chrome.
 import { expect, test } from '@playwright/test';
 
@@ -74,6 +74,37 @@ const readyReward = {
 };
 
 test.describe('Rewards list', () => {
+  test('hero is a section labelled by an h2 title (05-TC-A-001)', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await authenticate(page);
+    await page.unroute('**/api/rewards**');
+    await page.route('**/api/rewards**', (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify([readyReward, ...sampleRewards]),
+      }),
+    );
+    await page.goto('/rewards');
+
+    const hero = page.locator('lib-reward-list .reward-hero').first();
+    await expect(hero).toBeVisible();
+    const meta = await hero.evaluate((el) => {
+      const labelledBy = el.getAttribute('aria-labelledby');
+      const target = labelledBy ? document.getElementById(labelledBy) : null;
+      return {
+        tagName: el.tagName,
+        labelledBy,
+        targetTag: target?.tagName ?? null,
+        targetText: target?.textContent?.trim() ?? '',
+      };
+    });
+    expect(meta.tagName).toBe('SECTION');
+    expect(meta.labelledBy).toBeTruthy();
+    expect(meta.targetTag).toBe('H2');
+    expect(meta.targetText.length).toBeGreaterThan(0);
+  });
+
   test('reward card lifts on hover (05-TC-B-004)', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await authenticate(page);
