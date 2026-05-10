@@ -191,7 +191,7 @@ and made green. The /loop process picks the first test with
 | 180 | 03 | TC-F-009 | Empty state — 0 goals | Shows onboarding card with "Create your first goal" CTA | 2026-05-10T01:06:08Z |
 | 181 | 03 | TC-F-010 | Click on a goal card | Navigates to `/goals/{id}` | 2026-05-10T01:07:19Z |
 | 182 | 03 | TC-F-011 | Streak chip on card matches L2-007 computation | Yes | 2026-05-10T01:09:08Z |
-| 183 | 03 | TC-F-101 | Create goal — required field name empty | Form blocks submit; inline error (L2-001 §2) | null |
+| 183 | 03 | TC-F-101 | Create goal — required field name empty | Form blocks submit; inline error (L2-001 §2) | 2026-05-10T01:11:07Z |
 | 184 | 03 | TC-F-102 | Create goal — non-positive target | Inline error; not persisted (L2-001 §3) | null |
 | 185 | 03 | TC-F-103 | Create daily goal — happy path | Persisted; appears at top of list within 500 ms | null |
 | 186 | 03 | TC-F-104 | Create hourly / weekly / monthly | Persisted with correct cadence (L2-011) | null |

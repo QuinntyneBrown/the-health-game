@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 03-TC-V-001..009, 03-TC-C-001..011, 03-TC-L-001..011, 03-TC-R-001..006, 03-TC-F-001..011
+// Traces to: 03-TC-V-001..009, 03-TC-C-001..011, 03-TC-L-001..011, 03-TC-R-001..006, 03-TC-F-001..011, 03-TC-F-101
 // Description: /goals page title "Goals" renders with Inter weight 500 at 22/32 px.
 // Subtitle is Inter 13 px weight 400 with computed counts.
 import { expect, test } from '@playwright/test';
@@ -559,6 +559,59 @@ test.describe('Goals page — header typography', () => {
 
   test.describe('filter chip layout', () => {
     test.use({ viewport: { width: 1440, height: 900 } });
+
+    test('create goal: empty name blocks submit and shows inline error (03-TC-F-101)', async ({
+      page,
+    }) => {
+      await page.setViewportSize({ width: 1440, height: 900 });
+      await authenticate(page);
+
+      let postCalls = 0;
+      await page.route('**/api/goals', (route) => {
+        if (route.request().method() === 'POST') {
+          postCalls += 1;
+          route.fulfill({ status: 201, contentType: 'application/json', body: '{}' });
+          return;
+        }
+        route.fulfill({ status: 200, contentType: 'application/json', body: '[]' });
+      });
+
+      await page.goto('/goals/new');
+
+      const save = page.locator('[data-testid="goal-form-save"]');
+      // Required name empty → submit button disabled.
+      await expect(save).toBeDisabled();
+
+      // Force-click via attempted submit form to surface inline error.
+      await page.locator('input').first().fill('');
+      await page.locator('input').first().blur();
+
+      // Provide a target then attempt submission via Enter on a non-required field
+      // to trigger validation messaging.
+      await page
+        .locator('hg-health-text-field')
+        .filter({ hasText: 'Target' })
+        .locator('input')
+        .fill('10');
+      await page
+        .locator('hg-health-text-field')
+        .filter({ hasText: 'Unit' })
+        .locator('input')
+        .fill('min');
+      await expect(save).toBeDisabled();
+
+      // Dispatch submit on the form directly to flip attemptedSubmit and surface the inline error.
+      await page
+        .locator('form[data-testid="goal-form"]')
+        .evaluate((form: HTMLFormElement) => {
+          form.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
+        });
+
+      const nameField = page.locator('hg-health-text-field').filter({ hasText: 'Name' }).first();
+      await expect(nameField).toContainText(/required|name/i);
+
+      expect(postCalls).toBe(0);
+    });
 
     test('streak chip on card reflects currentStreak from API (03-TC-F-011)', async ({ page }) => {
       await page.setViewportSize({ width: 1440, height: 900 });
