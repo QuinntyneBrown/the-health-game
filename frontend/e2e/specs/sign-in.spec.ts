@@ -1,11 +1,42 @@
 // Acceptance Test
-// Traces to: L2-036, 07-TC-V-001..014, 07-TC-C-001..018, 07-TC-L-001..014, 07-TC-R-001..008
+// Traces to: L2-036, 07-TC-V-001..014, 07-TC-C-001..018, 07-TC-L-001..014, 07-TC-R-001..008, 07-TC-F-004
 // Description: Username + password sign-in page. Each test exercises one
 //              vertical slice end-to-end against the running app.
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
 
 test.describe('Sign In — page', () => {
+  test('successful sign-in stores token in sessionStorage only (07-TC-F-004)', async ({
+    page,
+  }) => {
+    await page.route('**/api/auth/sign-in', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({
+          accessToken: 'tc-f-004-token',
+          user: { id: 'u1', displayName: 'Alice', roles: ['Player'] },
+        }),
+      });
+    });
+    await page.goto('/sign-in');
+    await page.locator('lib-sign-in [data-testid="sign-in-username"] input').fill('alice');
+    await page.locator('lib-sign-in [data-testid="sign-in-password"] input').fill('Secret123!');
+    await page.evaluate(() => {
+      const f = document.querySelector(
+        'lib-sign-in [data-testid="sign-in-form"]',
+      ) as HTMLFormElement;
+      f.requestSubmit();
+    });
+    await page.waitForURL(/\/home/);
+    const stored = await page.evaluate(() => ({
+      session: sessionStorage.getItem('hg.oidc.access-token'),
+      local: localStorage.getItem('hg.oidc.access-token'),
+    }));
+    expect(stored.session).toBe('tc-f-004-token');
+    expect(stored.local).toBeNull();
+  });
+
   test('soft keyboard: submit reachable via scroll (07-TC-R-008)', async ({ page }) => {
     await page.setViewportSize({ width: 360, height: 360 });
     await page.goto('/sign-in');

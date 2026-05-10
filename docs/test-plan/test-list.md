@@ -503,7 +503,7 @@ and made green. The /loop process picks the first test with
 | 492 | 07 | TC-F-001 | `/sign-in` route renders the page | brand + "Welcome back." heading visible (L2-036 §1) | 2026-05-09T19:45:30Z |
 | 493 | 07 | TC-F-002 | Submit disabled until both fields have non-empty trimmed values | Yes | 2026-05-09T19:46:00Z |
 | 494 | 07 | TC-F-003 | Valid credentials POST `/api/auth/sign-in` | Body `{usernameOrEmail, password}` (L2-036 §2) | 2026-05-09T19:46:30Z |
-| 495 | 07 | TC-F-004 | Successful sign-in stores access token in `sessionStorage` only | Key `hg.oidc.access-token`; not in localStorage (L2-013 §3, L2-022) | null |
+| 495 | 07 | TC-F-004 | Successful sign-in stores access token in `sessionStorage` only | Key `hg.oidc.access-token`; not in localStorage (L2-013 §3, L2-022) | 2026-05-10T14:21:30Z |
 | 496 | 07 | TC-F-005 | Successful sign-in routes to `/home` (or consumed return URL) | Yes | 2026-05-09T19:47:00Z |
 | 497 | 07 | TC-F-006 | 401 Unauthorized response | Generic "Invalid username or password." inline; no field-level disclosure (L2-036 §3) | 2026-05-09T20:00:30Z |
 | 498 | 07 | TC-F-007 | 401 response clears the password field; preserves username | Yes | 2026-05-09T20:00:30Z |
