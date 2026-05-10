@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 06-TC-V-001..007, 06-TC-C-001..010, 06-TC-L-001..010, 06-TC-R-001..005, 06-TC-F-001..008, 06-TC-F-101..107, 06-TC-F-201..205, 06-TC-B-001..006, 06-TC-A-001..006, 06-TC-D-001..003
+// Traces to: 06-TC-V-001..007, 06-TC-C-001..010, 06-TC-L-001..010, 06-TC-R-001..005, 06-TC-F-001..008, 06-TC-F-101..107, 06-TC-F-201..205, 06-TC-B-001..006, 06-TC-A-001..006, 06-TC-D-001..004
 // Description: stats + profile page chrome.
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
@@ -45,6 +45,81 @@ async function authenticate(page: import('@playwright/test').Page): Promise<void
 }
 
 test.describe('Stats & Profile chrome', () => {
+  test('email never appears in console logs (06-TC-D-004)', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    const SENTINEL_EMAIL = 'logging-canary-06D004@example.test';
+
+    const messages: string[] = [];
+    page.on('console', (msg) => {
+      messages.push(`${msg.type()}|${msg.text()}`);
+    });
+    page.on('pageerror', (err) => {
+      messages.push(`pageerror|${err.message}|${err.stack ?? ''}`);
+    });
+
+    await page.route('**/connect/token', (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({
+          access_token: 'test-access-token',
+          token_type: 'Bearer',
+          expires_in: 3600,
+        }),
+      }),
+    );
+    await page.route('**/api/goals**', (route) =>
+      route.fulfill({ status: 200, contentType: 'application/json', body: '[]' }),
+    );
+    await page.route('**/api/rewards**', (route) =>
+      route.fulfill({ status: 200, contentType: 'application/json', body: '[]' }),
+    );
+    let user = {
+      displayName: 'Quinn',
+      email: SENTINEL_EMAIL,
+      avatarUrl: null as string | null,
+      roles: [] as string[],
+    };
+    await page.route('**/api/users/me**', (route, request) => {
+      if (request.method() === 'PUT') {
+        const body = request.postDataJSON() as { displayName: string; email: string };
+        user = { ...user, ...body };
+      }
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify(user),
+      });
+    });
+
+    await page.goto('/onboarding');
+    await page.evaluate(() => {
+      sessionStorage.setItem('hg.oidc.verifier', 'v');
+      sessionStorage.setItem('hg.oidc.state', 's');
+    });
+    await page.goto('/auth/callback?code=c&state=s');
+    await page.waitForURL(/\/home(\b|\/|$)/);
+
+    // Visit Profile, edit, save. The email is in flight repeatedly.
+    await page.goto('/profile');
+    await page.locator('[data-testid="profile-edit"]').click();
+    await page
+      .locator('lib-profile hg-health-text-field')
+      .filter({ hasText: 'Display name' })
+      .locator('input')
+      .fill('Logged Quinn');
+    await page.locator('[data-testid="profile-save"]').click();
+    await page.waitForTimeout(400);
+    await page.goto('/stats');
+    await page.waitForTimeout(200);
+
+    const leaks = messages.filter((m) => m.includes(SENTINEL_EMAIL));
+    if (leaks.length) {
+      console.log('LEAK:', leaks.join('\n'));
+    }
+    expect(leaks).toHaveLength(0);
+  });
+
   test('deletion DELETE round-trips a correlation id (06-TC-D-003)', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await authenticate(page);
