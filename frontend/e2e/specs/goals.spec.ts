@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 03-TC-V-001..009, 03-TC-C-001..011, 03-TC-L-001..011, 03-TC-R-001..006, 03-TC-F-001..011, 03-TC-F-101..104
+// Traces to: 03-TC-V-001..009, 03-TC-C-001..011, 03-TC-L-001..011, 03-TC-R-001..006, 03-TC-F-001..011, 03-TC-F-101..105
 // Description: /goals page title "Goals" renders with Inter weight 500 at 22/32 px.
 // Subtitle is Inter 13 px weight 400 with computed counts.
 import { expect, test } from '@playwright/test';
@@ -559,6 +559,99 @@ test.describe('Goals page — header typography', () => {
 
   test.describe('filter chip layout', () => {
     test.use({ viewport: { width: 1440, height: 900 } });
+
+    test('create custom cadence "every 3 days" persists customInterval (03-TC-F-105)', async ({
+      page,
+    }) => {
+      await page.setViewportSize({ width: 1440, height: 900 });
+      await authenticate(page);
+
+      let postBody: Record<string, unknown> | null = null;
+      const created = {
+        id: 'c-custom',
+        name: 'Stretch',
+        description: '',
+        cadence: 'custom',
+        target: { value: 5, unit: 'min' },
+        completedQuantity: 0,
+        currentStreak: 0,
+        longestStreak: 0,
+        rewardName: '',
+        customInterval: { count: 3, unit: 'days' },
+      };
+
+      await page.unroute('**/api/goals**');
+      await page.route('**/api/goals**', (route) => {
+        const req = route.request();
+        if (req.method() === 'POST') {
+          postBody = req.postDataJSON();
+          route.fulfill({
+            status: 201,
+            contentType: 'application/json',
+            body: JSON.stringify(created),
+          });
+          return;
+        }
+        if (req.url().endsWith('/api/goals/c-custom')) {
+          route.fulfill({
+            status: 200,
+            contentType: 'application/json',
+            body: JSON.stringify(created),
+          });
+          return;
+        }
+        route.fulfill({ status: 200, contentType: 'application/json', body: '[]' });
+      });
+      await page.route('**/api/goals/c-custom/activity**', (route) =>
+        route.fulfill({ status: 200, contentType: 'application/json', body: '[]' }),
+      );
+
+      await page.goto('/goals/new');
+      await page
+        .locator('hg-health-text-field')
+        .filter({ hasText: 'Name' })
+        .locator('input')
+        .fill('Stretch');
+      await page
+        .locator('hg-health-text-field')
+        .filter({ hasText: 'Target' })
+        .locator('input')
+        .fill('5');
+      await page
+        .locator('hg-health-text-field')
+        .filter({ hasText: 'Unit' })
+        .locator('input')
+        .fill('min');
+
+      await page
+        .locator('mat-form-field')
+        .filter({ hasText: 'Cadence' })
+        .locator('mat-select')
+        .click();
+      await page.locator('mat-option').filter({ hasText: /^Custom$/ }).click();
+
+      await page
+        .locator('hg-health-text-field')
+        .filter({ hasText: 'Every' })
+        .locator('input')
+        .fill('3');
+
+      // The "Unit" mat-select inside .goal-form__custom defaults to days; verify and assert.
+      const customUnit = page.locator('[data-testid="goal-form-custom-unit"]');
+      await expect(customUnit).toBeVisible();
+
+      const save = page.locator('[data-testid="goal-form-save"]');
+      await expect(save).toBeEnabled();
+      await save.click();
+      await page.waitForURL(/\/goals\/c-custom$/);
+
+      expect(postBody).toMatchObject({
+        name: 'Stretch',
+        cadence: 'custom',
+        target: { value: 5, unit: 'min' },
+        customInterval: { count: 3, unit: 'days' },
+      });
+    });
 
     for (const cadence of ['hourly', 'weekly', 'monthly'] as const) {
       test(`create ${cadence} goal persists with correct cadence (03-TC-F-104 — ${cadence})`, async ({
