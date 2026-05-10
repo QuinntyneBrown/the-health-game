@@ -34,13 +34,29 @@
           [errorText]="displayNameError()"
           (valueChange)="displayName.set($event)"
         />
-        <hg-health-text-field
-          label="Email"
-          type="email"
-          [value]="email()"
-          [errorText]="emailError()"
-          (valueChange)="email.set($event)"
-        />
+        @if (emailEditable()) {
+          <hg-health-text-field
+            label="Email"
+            type="email"
+            [value]="email()"
+            [errorText]="emailError()"
+            (valueChange)="email.set($event)"
+          />
+        } @else {
+          <hg-health-text-field
+            label="Email"
+            type="email"
+            [value]="email()"
+            [isReadonly]="true"
+            [errorText]="emailError()"
+            (valueChange)="email.set($event)"
+          />
+        }
+        @if (!emailEditable()) {
+          <p class="profile__email-locked" data-testid="profile-email-locked">
+            Email is managed by your sign-in provider and cannot be changed here.
+          </p>
+        }
         <div class="profile__actions">
           <button mat-stroked-button type="button" (click)="cancelEdit()">Cancel</button>
           <button

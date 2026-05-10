@@ -13,7 +13,7 @@
       matInput
       [attr.aria-describedby]="errorText() ? errorId : null"
       [attr.aria-invalid]="errorText() ? 'true' : null"
-      [attr.readonly]="readonly() ? '' : null"
+      [readonly]="isReadonly()"
       [disabled]="disabled()"
       [placeholder]="placeholder()"
       [rows]="rows()"
@@ -26,7 +26,7 @@
       matInput
       [attr.aria-describedby]="errorText() ? errorId : null"
       [attr.aria-invalid]="errorText() ? 'true' : null"
-      [attr.readonly]="readonly() ? '' : null"
+      [readonly]="isReadonly()"
       [disabled]="disabled()"
       [placeholder]="placeholder()"
       [type]="effectiveType()"

@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 06-TC-V-001..007, 06-TC-C-001..010, 06-TC-L-001..010, 06-TC-R-001..005, 06-TC-F-001..008, 06-TC-F-101..103
+// Traces to: 06-TC-V-001..007, 06-TC-C-001..010, 06-TC-L-001..010, 06-TC-R-001..005, 06-TC-F-001..008, 06-TC-F-101..104
 // Description: stats + profile page chrome.
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
@@ -45,6 +45,43 @@ async function authenticate(page: import('@playwright/test').Page): Promise<void
 }
 
 test.describe('Stats & Profile chrome', () => {
+  test('email read-only when provider forbids (06-TC-F-104)', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await authenticate(page);
+
+    await page.unroute('**/api/users/me**');
+    await page.route('**/api/users/me**', (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({
+          displayName: 'Quinn',
+          email: 'sso@example.com',
+          avatarUrl: null,
+          roles: [],
+          emailEditable: false,
+        }),
+      }),
+    );
+
+    await page.goto('/profile');
+    await expect(page.locator('[data-testid="profile-email"]')).toHaveText('sso@example.com');
+    await page.locator('[data-testid="profile-edit"]').click();
+    const emailInput = page
+      .locator('lib-profile hg-health-text-field')
+      .filter({ hasText: 'Email' })
+      .locator('input');
+    await expect(emailInput).toBeVisible();
+    const isReadonly = await emailInput.evaluate(
+      (el) => (el as HTMLInputElement).readOnly,
+    );
+    expect(isReadonly).toBe(true);
+
+    const note = page.locator('[data-testid="profile-email-locked"]');
+    await expect(note).toBeVisible();
+    await expect(note).toContainText(/sign-in provider|cannot be changed/i);
+  });
+
   test('edit email when provider permits (06-TC-F-103)', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await authenticate(page);

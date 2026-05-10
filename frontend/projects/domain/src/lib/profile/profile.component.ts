@@ -24,6 +24,7 @@ export class ProfileComponent {
   private readonly dialog = inject(MatDialog);
 
   readonly profile = signal<UserProfile | undefined>(undefined);
+  readonly emailEditable = computed(() => this.profile()?.emailEditable !== false);
   readonly memberSinceLabel = computed(() => {
     const since = this.profile()?.memberSince;
     if (!since) return null;

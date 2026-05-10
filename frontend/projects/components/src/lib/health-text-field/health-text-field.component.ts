@@ -25,12 +25,12 @@ export class HealthTextFieldComponent {
   readonly icon = input<string | null>(null);
   readonly label = input.required<string>();
   readonly placeholder = input('');
-  readonly readonly = input(false);
   readonly type = input<HealthTextFieldType>('text');
   readonly value = input('');
   readonly passwordToggle = input(false);
   readonly multiline = input(false);
   readonly rows = input(3);
+  readonly isReadonly = input(false);
 
   private readonly passwordRevealed = signal(false);
 
