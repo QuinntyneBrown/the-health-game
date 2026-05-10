@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 05-TC-V-001..008, 05-TC-C-001..010, 05-TC-L-001..010, 05-TC-R-001..005
+// Traces to: 05-TC-V-001..008, 05-TC-C-001..010, 05-TC-L-001..010, 05-TC-R-001..005, 05-TC-F-001
 // Description: rewards list page chrome.
 import { expect, test } from '@playwright/test';
 
@@ -74,6 +74,42 @@ const readyReward = {
 };
 
 test.describe('Rewards list', () => {
+  test('list shows only current user\'s rewards (05-TC-F-001)', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await authenticate(page);
+
+    const calls: string[] = [];
+    await page.unroute('**/api/rewards**');
+    await page.route('**/api/rewards**', (route, request) => {
+      calls.push(`${request.method()} ${new URL(request.url()).pathname}${new URL(request.url()).search}`);
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify(sampleRewards),
+      });
+    });
+
+    await page.goto('/rewards');
+    await expect(page.locator('lib-reward-list .reward-card').first()).toBeVisible();
+
+    // FE only hits /api/rewards (with optional query/path) — never /all,
+    // /admin, /:userId — relying on the bearer-token-scoped endpoint to
+    // do the ownership scoping server-side (L2-009 §1).
+    expect(calls.length).toBeGreaterThanOrEqual(1);
+    for (const c of calls) {
+      expect(c).toMatch(/^GET \/api\/rewards(\?.*)?$/);
+    }
+
+    // Renders only the rewards the server returned (and no extras).
+    const titles = await page
+      .locator('lib-reward-list .reward-card__name')
+      .allTextContents();
+    expect(titles.length).toBe(sampleRewards.length);
+    for (const r of sampleRewards) {
+      expect(titles).toContain(r.name);
+    }
+  });
+
   test('locked cards still legible at 360 px (05-TC-R-005)', async ({ page }) => {
     await page.setViewportSize({ width: 360, height: 780 });
     await authenticate(page);
