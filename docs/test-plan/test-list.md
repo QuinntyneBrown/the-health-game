@@ -544,7 +544,7 @@ and made green. The /loop process picks the first test with
 | 533 | 07 | TC-D-003 | Closing the tab clears the access token | `sessionStorage` is per-tab; new tab is unauthenticated | 2026-05-10T15:07:30Z |
 | 534 | 07 | TC-D-004 | Sign-out clears the token from `sessionStorage` | Yes | 2026-05-10T15:09:30Z |
 | 535 | 07 | TC-D-005 | Failed sign-in does not write any auth artifact | `sessionStorage` and `localStorage` unchanged | 2026-05-09T20:03:30Z |
-| 536 | 07 | TC-D-006 | Refresh token (if used) only stored as httpOnly cookie | Confirmed (L2-013 §3) | null |
+| 536 | 07 | TC-D-006 | Refresh token (if used) only stored as httpOnly cookie | Confirmed (L2-013 §3) | 2026-05-10T15:11:00Z |
 | 537 | 07 | TC-S-001 | Submitted password is never logged at any level | No `password` value in console / network / server logs (L2-017 §3, L2-036 §4) | 2026-05-09T20:03:30Z |
 | 538 | 07 | TC-S-002 | Issued JWT is never logged at any level | No bearer/JWT in console or server logs (L2-022) | 2026-05-09T20:03:30Z |
 | 539 | 07 | TC-S-003 | Sign-in request sent over HTTPS in non-dev environments | Confirmed (L2-036 §5) | null |

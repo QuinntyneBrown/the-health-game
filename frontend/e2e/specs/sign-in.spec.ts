@@ -6,6 +6,43 @@ import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
 
 test.describe('Sign In — page', () => {
+  test('refresh token never stored in JS-accessible storage (07-TC-D-006)', async ({
+    page,
+  }) => {
+    await page.route('**/api/auth/sign-in', (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({
+          accessToken: 't',
+          refreshToken: 'should-not-be-stored',
+          user: { id: 'u', displayName: 'A', roles: ['Player'] },
+        }),
+      }),
+    );
+    await page.goto('/sign-in');
+    await page.getByTestId('sign-in-username').locator('input').fill('alice');
+    await page.getByTestId('sign-in-password').locator('input').fill('Secret123!');
+    await page.getByTestId('sign-in-submit').click();
+    await page.waitForURL(/\/home/);
+    const leak = await page.evaluate(() => {
+      const all: string[] = [];
+      for (let i = 0; i < sessionStorage.length; i++) {
+        const k = sessionStorage.key(i)!;
+        all.push(`s:${k}=${sessionStorage.getItem(k) ?? ''}`);
+      }
+      for (let i = 0; i < localStorage.length; i++) {
+        const k = localStorage.key(i)!;
+        all.push(`l:${k}=${localStorage.getItem(k) ?? ''}`);
+      }
+      return all;
+    });
+    for (const entry of leak) {
+      expect(entry).not.toMatch(/refresh/i);
+      expect(entry).not.toContain('should-not-be-stored');
+    }
+  });
+
   test('sign-out clears the token from sessionStorage (07-TC-D-004)', async ({ page }) => {
     await page.route('**/api/auth/sign-in', (route) =>
       route.fulfill({
