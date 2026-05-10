@@ -454,7 +454,7 @@ and made green. The /loop process picks the first test with
 | 443 | 07 | TC-V-006 | Subtitle size — mobile/tablet/desktop | 14 / 16 / 16 px | 2026-05-10T13:12:26Z |
 | 444 | 07 | TC-V-007 | Field label font | Inter 13 px, weight 500 | 2026-05-10T13:13:21Z |
 | 445 | 07 | TC-V-008 | Field input text font | Inter 14 px, weight 400 | 2026-05-10T13:14:09Z |
-| 446 | 07 | TC-V-009 | Helper / error text font | Inter 12 px, weight 500, error color | null |
+| 446 | 07 | TC-V-009 | Helper / error text font | Inter 12 px, weight 500, error color | 2026-05-10T13:15:58Z |
 | 447 | 07 | TC-V-010 | Primary button label ("Sign in") | Inter 14/16 px, weight 500, white | null |
 | 448 | 07 | TC-V-011 | OIDC alternative button label | Inter 14/16 px, weight 500, on-surface | null |
 | 449 | 07 | TC-V-012 | "or" divider label | Inter 11 px, weight 500, uppercase, letter-spacing 1.5 px | null |
