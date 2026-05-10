@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 04-TC-V-001..007, 04-TC-C-001..010, 04-TC-L-001..010, 04-TC-R-001..006, 04-TC-F-001..012, 04-TC-F-101..109, 04-TC-B-001..010, 04-TC-A-001..007
+// Traces to: 04-TC-V-001..007, 04-TC-C-001..010, 04-TC-L-001..010, 04-TC-R-001..006, 04-TC-F-001..012, 04-TC-F-101..109, 04-TC-B-001..010, 04-TC-A-001..007, 04-TC-D-001
 // Description: log-activity dialog typography.
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
@@ -127,6 +127,59 @@ test.describe('Log activity sheet (mobile)', () => {
     });
     const accessibleName = meta.targetText || meta.ariaLabel || '';
     expect(accessibleName).toMatch(/Log activity/i);
+  });
+
+  test('logged activity survives reload (04-TC-D-001)', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await authenticate(page);
+
+    let activities: Array<Record<string, unknown>> = [];
+    const newEntry = {
+      id: 'persisted-1',
+      goalId: 'g1',
+      quantity: 7,
+      recordedAt: '2026-05-10T06:23:00Z',
+      newlyEarnedRewards: [],
+    };
+
+    await page.route('**/api/goals/g1', (route) =>
+      route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(goal) }),
+    );
+    await page.route('**/api/goals/g1/activities**', (route, request) => {
+      if (request.method() === 'POST') {
+        activities = [newEntry];
+        route.fulfill({
+          status: 201,
+          contentType: 'application/json',
+          body: JSON.stringify(newEntry),
+        });
+      } else {
+        route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify(activities),
+        });
+      }
+    });
+
+    await page.goto('/goals/g1');
+    await page
+      .locator('[data-testid="goal-detail-log-fab"]')
+      .evaluate((el: HTMLElement) => el.click());
+    await page.waitForTimeout(300);
+    const dialog = page.locator('mat-dialog-container');
+    await expect(dialog).toBeVisible();
+    await dialog.locator('input[type="number"]').fill('7');
+    await page.locator('[data-testid="log-activity-save"]').click();
+    await expect(dialog).toBeHidden();
+
+    const list = page.locator('lib-activity-list-item, hg-activity-list-item, [data-testid="activity-entry"]');
+    await expect(list.first()).toContainText(/7/);
+
+    await page.reload();
+    await page.waitForTimeout(400);
+    const listAfter = page.locator('lib-activity-list-item, hg-activity-list-item, [data-testid="activity-entry"]');
+    await expect(listAfter.first()).toContainText(/7/);
   });
 
   test('axe-core scan reports 0 critical/serious (04-TC-A-007)', async ({ page }) => {
