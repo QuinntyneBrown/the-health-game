@@ -378,7 +378,7 @@ and made green. The /loop process picks the first test with
 | 367 | 06 | TC-V-003 | Stat label | Inter 12 px, weight 500 | 2026-05-10T08:24:55Z |
 | 368 | 06 | TC-V-004 | Section headings | Inter 18 px, weight 500 | 2026-05-10T08:26:12Z |
 | 369 | 06 | TC-V-005 | Form field labels (email, display name) | Inter 13 px, weight 500 | 2026-05-10T08:27:01Z |
-| 370 | 06 | TC-V-006 | Body / paragraph copy | Inter 14 px, weight 400, line-height 1.5 | null |
+| 370 | 06 | TC-V-006 | Body / paragraph copy | Inter 14 px, weight 400, line-height 1.5 | 2026-05-10T08:28:08Z |
 | 371 | 06 | TC-V-007 | Destructive button label ("Delete account") | Inter 14 px, weight 500 | null |
 | 372 | 06 | TC-C-001 | Page background | `#F1F5ED` | null |
 | 373 | 06 | TC-C-002 | Stat tile backgrounds (rotation) | success `#94F7B4`, streak `#FFDCC4`, info `#BEEAF6`, reward `#FFD7EE` | null |

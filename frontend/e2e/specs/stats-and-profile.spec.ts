@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 06-TC-V-001..005
+// Traces to: 06-TC-V-001..006
 // Description: stats + profile page chrome.
 import { expect, test } from '@playwright/test';
 
@@ -44,6 +44,28 @@ async function authenticate(page: import('@playwright/test').Page): Promise<void
 }
 
 test.describe('Stats & Profile chrome', () => {
+  test('body copy Inter 14 px / 400 / line-height 1.5 (06-TC-V-006)', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await authenticate(page);
+    await page.goto('/profile');
+
+    const body = page.locator('lib-profile [data-testid="profile-email"]').first();
+    await expect(body).toBeVisible();
+    const result = await body.evaluate((el) => {
+      const s = getComputedStyle(el);
+      return {
+        family: s.fontFamily,
+        size: s.fontSize,
+        weight: s.fontWeight,
+        lineHeight: s.lineHeight,
+      };
+    });
+    expect(result.family).toMatch(/Inter/);
+    expect(result.size).toBe('14px');
+    expect(result.weight).toBe('400');
+    expect(result.lineHeight).toBe('21px');
+  });
+
   test('profile form labels Inter 13 px / 500 (06-TC-V-005)', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await authenticate(page);
