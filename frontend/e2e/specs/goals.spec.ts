@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 03-TC-V-001..009, 03-TC-C-001..011, 03-TC-L-001..011, 03-TC-R-001..006, 03-TC-F-001..011, 03-TC-F-101..108
+// Traces to: 03-TC-V-001..009, 03-TC-C-001..011, 03-TC-L-001..011, 03-TC-R-001..006, 03-TC-F-001..011, 03-TC-F-101..109
 // Description: /goals page title "Goals" renders with Inter weight 500 at 22/32 px.
 // Subtitle is Inter 13 px weight 400 with computed counts.
 import { expect, test } from '@playwright/test';
@@ -559,6 +559,61 @@ test.describe('Goals page — header typography', () => {
 
   test.describe('filter chip layout', () => {
     test.use({ viewport: { width: 1440, height: 900 } });
+
+    test('save while offline shows offline indicator and disables Save (03-TC-F-109)', async ({
+      page,
+      context,
+    }) => {
+      await page.setViewportSize({ width: 1440, height: 900 });
+      await authenticate(page);
+
+      let postCalls = 0;
+      await page.route('**/api/goals', (route) => {
+        if (route.request().method() === 'POST') {
+          postCalls += 1;
+          route.fulfill({ status: 201, contentType: 'application/json', body: '{}' });
+          return;
+        }
+        route.fulfill({ status: 200, contentType: 'application/json', body: '[]' });
+      });
+
+      await page.goto('/goals/new');
+      await page
+        .locator('hg-health-text-field')
+        .filter({ hasText: 'Name' })
+        .locator('input')
+        .fill('Walk');
+      await page
+        .locator('hg-health-text-field')
+        .filter({ hasText: 'Target' })
+        .locator('input')
+        .fill('10');
+      await page
+        .locator('hg-health-text-field')
+        .filter({ hasText: 'Unit' })
+        .locator('input')
+        .fill('min');
+
+      await context.setOffline(true);
+      await page.evaluate(() =>
+        window.dispatchEvent(new Event('offline')),
+      );
+
+      const offlineIndicator = page.locator('[data-testid="goal-form-offline-indicator"]');
+      await expect(offlineIndicator).toBeVisible();
+      await expect(page.locator('[data-testid="goal-form-save"]')).toBeDisabled();
+
+      // Even if user tries to coerce a submit dispatch, FE refuses to POST.
+      await page
+        .locator('form[data-testid="goal-form"]')
+        .evaluate((form: HTMLFormElement) => {
+          form.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
+        });
+
+      expect(postCalls).toBe(0);
+
+      await context.setOffline(false);
+    });
 
     for (const status of [403, 404] as const) {
       test(`edit/view another user's goal returns ${status}; FE shows not-found (03-TC-F-108 — ${status})`, async ({

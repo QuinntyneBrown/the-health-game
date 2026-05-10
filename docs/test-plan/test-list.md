@@ -199,7 +199,7 @@ and made green. The /loop process picks the first test with
 | 188 | 03 | TC-F-106 | Custom cadence with N <= 0 | Validation error (L2-012 §2) | 2026-05-10T01:27:19Z |
 | 189 | 03 | TC-F-107 | Edit goal — change cadence from daily to weekly | Streak windows recomputed forward; historical entries unchanged (L2-003 §3) | 2026-05-10T01:28:36Z |
 | 190 | 03 | TC-F-108 | Edit goal owned by another user via crafted request | 403 / 404 (L2-003 §2) | 2026-05-10T01:29:40Z |
-| 191 | 03 | TC-F-109 | Save while offline | Disabled or queued with offline indicator | null |
+| 191 | 03 | TC-F-109 | Save while offline | Disabled or queued with offline indicator | 2026-05-10T01:34:09Z |
 | 192 | 03 | TC-F-201 | Click delete | Confirmation dialog appears (L2-004 §3) | null |
 | 193 | 03 | TC-F-202 | Cancel confirmation | Goal preserved | null |
 | 194 | 03 | TC-F-203 | Confirm delete | Goal + activity entries + linked rewards removed from view (L2-004 §1) | null |

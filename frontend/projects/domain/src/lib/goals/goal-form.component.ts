@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, DestroyRef, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -99,9 +99,22 @@ export class GoalFormComponent {
   readonly customCountError = computed(() =>
     this.attemptedSubmit() ? this.errors().customCount ?? '' : '',
   );
-  readonly canSave = computed(() => Object.keys(this.errors()).length === 0);
+  readonly isOffline = signal(typeof navigator !== 'undefined' && navigator.onLine === false);
+  readonly canSave = computed(
+    () => Object.keys(this.errors()).length === 0 && !this.isOffline(),
+  );
 
   constructor() {
+    if (typeof window !== 'undefined') {
+      const onOffline = () => this.isOffline.set(true);
+      const onOnline = () => this.isOffline.set(false);
+      window.addEventListener('offline', onOffline);
+      window.addEventListener('online', onOnline);
+      inject(DestroyRef).onDestroy(() => {
+        window.removeEventListener('offline', onOffline);
+        window.removeEventListener('online', onOnline);
+      });
+    }
     if (this.editingId) {
       this.goalsService.getGoal(this.editingId).subscribe((goal) => {
         this.name.set(goal.name);

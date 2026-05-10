@@ -1,5 +1,14 @@
 <form class="goal-form" (ngSubmit)="submit()" data-testid="goal-form">
   <h1 class="goal-form__title">{{ title }}</h1>
+  @if (isOffline()) {
+    <p
+      class="goal-form__offline"
+      data-testid="goal-form-offline-indicator"
+      role="status"
+    >
+      You're offline. Changes will be saved when your connection is back.
+    </p>
+  }
   <hg-health-text-field
     label="Name"
     [value]="name()"
