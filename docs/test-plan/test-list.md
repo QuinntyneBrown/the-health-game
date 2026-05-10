@@ -482,7 +482,7 @@ and made green. The /loop process picks the first test with
 | 471 | 07 | TC-L-002 | Tablet body padding | 40 px top/bottom, 80 px left/right | 2026-05-10T13:51:57Z |
 | 472 | 07 | TC-L-003 | Desktop split — hero ~50% / form ~50% | hero on left, form on right | 2026-05-10T13:52:54Z |
 | 473 | 07 | TC-L-004 | Form card corner radius | 24 px | 2026-05-10T13:54:14Z |
-| 474 | 07 | TC-L-005 | Form card max-width | 440 px (mobile/tablet) / 480 px (desktop) | null |
+| 474 | 07 | TC-L-005 | Form card max-width | 440 px (mobile/tablet) / 480 px (desktop) | 2026-05-10T13:55:26Z |
 | 475 | 07 | TC-L-006 | Form card padding | 32 px (mobile) / 40 px (tablet/desktop) | null |
 | 476 | 07 | TC-L-007 | Inter-element vertical gap inside card | 20 px | null |
 | 477 | 07 | TC-L-008 | Inter-field gap inside form | 16 px | null |
