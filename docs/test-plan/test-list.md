@@ -173,7 +173,7 @@ and made green. The /loop process picks the first test with
 | 162 | 03 | TC-L-008 | List inter-row gap (mobile) | 8 px | 2026-05-10T00:12:47Z |
 | 163 | 03 | TC-L-009 | Grid columns (desktop) | 3 cards across; gap 16 px | 2026-05-10T00:13:43Z |
 | 164 | 03 | TC-L-010 | Floating action button (mobile) | 56 px, bottom-right with 24 px inset | 2026-05-10T00:18:00Z |
-| 165 | 03 | TC-L-011 | Detail view — section spacing | 24 px between header / streak / activity history | null |
+| 165 | 03 | TC-L-011 | Detail view — section spacing | 24 px between header / streak / activity history | 2026-05-10T00:19:09Z |
 | 166 | 03 | TC-R-001 | 360 px | Single-column list; FAB visible | null |
 | 167 | 03 | TC-R-002 | 768 px | Two-column grid; "New goal" pill in top bar | null |
 | 168 | 03 | TC-R-003 | 1440 px | Three-column grid; max content width <= 1152 px | null |

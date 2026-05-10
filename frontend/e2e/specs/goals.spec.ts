@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 03-TC-V-001..009, 03-TC-C-001..011, 03-TC-L-001..010
+// Traces to: 03-TC-V-001..009, 03-TC-C-001..011, 03-TC-L-001..011
 // Description: /goals page title "Goals" renders with Inter weight 500 at 22/32 px.
 // Subtitle is Inter 13 px weight 400 with computed counts.
 import { expect, test } from '@playwright/test';
@@ -559,6 +559,46 @@ test.describe('Goals page — header typography', () => {
 
   test.describe('filter chip layout', () => {
     test.use({ viewport: { width: 1440, height: 900 } });
+
+    test('detail view header → streaks → history gap is 24 px (03-TC-L-011)', async ({ page }) => {
+      await page.setViewportSize({ width: 1440, height: 900 });
+      await authenticate(page);
+      await page.route('**/api/goals/g1', (route) =>
+        route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify({
+            id: 'g1',
+            name: 'Walk',
+            description: '',
+            cadence: 'daily',
+            target: { value: 10, unit: 'min' },
+            completedQuantity: 0,
+            currentStreak: 0,
+            longestStreak: 0,
+            rewardName: '',
+          }),
+        }),
+      );
+      await page.route('**/api/goals/g1/activity**', (route) =>
+        route.fulfill({ status: 200, contentType: 'application/json', body: '[]' }),
+      );
+      await page.goto('/goals/g1');
+
+      const header = page.locator('lib-goal-detail hg-page-header').first();
+      const streaks = page.locator('lib-goal-detail .goal-detail__streaks').first();
+      const history = page.locator('lib-goal-detail .goal-detail__history').first();
+      await expect(header).toBeVisible();
+      await expect(streaks).toBeVisible();
+
+      const headerBottom = await header.evaluate((el) => el.getBoundingClientRect().bottom);
+      const streaksTop = await streaks.evaluate((el) => el.getBoundingClientRect().top);
+      expect(Math.round(streaksTop - headerBottom)).toBe(24);
+
+      const streaksBottom = await streaks.evaluate((el) => el.getBoundingClientRect().bottom);
+      const historyTop = await history.evaluate((el) => el.getBoundingClientRect().top);
+      expect(historyTop - streaksBottom).toBeGreaterThanOrEqual(24);
+    });
 
     test('mobile FAB is 56 px bottom-right with 24 px inset (03-TC-L-010)', async ({ page }) => {
       await page.setViewportSize({ width: 360, height: 780 });
