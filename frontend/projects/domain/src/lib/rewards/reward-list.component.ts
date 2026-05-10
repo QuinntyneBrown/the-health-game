@@ -110,9 +110,12 @@ const filterOptions: readonly SegmentedFilterOption[] = [
       }
 
       .reward-hero {
+        background: #ffd7ee;
+        border-radius: 24px;
         display: grid;
         gap: var(--hg-space-2);
         margin-bottom: var(--hg-space-6);
+        padding: 32px;
       }
 
       .reward-hero__eyebrow {

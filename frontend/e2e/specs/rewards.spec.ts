@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 05-TC-V-001..008
+// Traces to: 05-TC-V-001..008, 05-TC-C-001
 // Description: rewards list page chrome.
 import { expect, test } from '@playwright/test';
 
@@ -74,6 +74,25 @@ const readyReward = {
 };
 
 test.describe('Rewards list', () => {
+  test('hero background #FFD7EE for ready-to-claim (05-TC-C-001)', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await authenticate(page);
+    await page.unroute('**/api/rewards**');
+    await page.route('**/api/rewards**', (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify([readyReward, ...sampleRewards]),
+      }),
+    );
+
+    await page.goto('/rewards');
+    const hero = page.locator('lib-reward-list .reward-hero').first();
+    await expect(hero).toBeVisible();
+    const bg = await hero.evaluate((el) => getComputedStyle(el).backgroundColor);
+    expect(bg).toBe('rgb(255, 215, 238)');
+  });
+
   test('"New reward" button Inter 14 px / weight 500 / white (05-TC-V-008)', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await authenticate(page);
