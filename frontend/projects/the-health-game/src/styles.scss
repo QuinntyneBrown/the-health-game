@@ -209,6 +209,31 @@ hg-segmented-filter[data-testid='cadence-picker'] mat-button-toggle:not(.mat-but
   color: #191d17 !important;
 }
 
+hg-segmented-filter[data-testid='cadence-picker'] mat-button-toggle.mat-button-toggle {
+  border-radius: 9999px !important;
+  height: 40px !important;
+  min-height: 40px !important;
+  max-height: 40px !important;
+}
+
+hg-segmented-filter[data-testid='cadence-picker'] .segmented-filter__option {
+  min-height: 0 !important;
+}
+
+hg-segmented-filter[data-testid='cadence-picker'] mat-button-toggle .mat-button-toggle-button,
+hg-segmented-filter[data-testid='cadence-picker'] mat-button-toggle .mat-button-toggle-label-content {
+  height: 100% !important;
+  min-height: 0 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  line-height: 1 !important;
+}
+
+hg-segmented-filter[data-testid='cadence-picker'] mat-button-toggle-group.mat-button-toggle-group {
+  border: none !important;
+  gap: 8px !important;
+}
+
 mat-slide-toggle {
   --mdc-switch-selected-track-color: #006d3f;
   --mdc-switch-selected-handle-color: #ffffff;

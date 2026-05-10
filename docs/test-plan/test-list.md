@@ -249,7 +249,7 @@ and made green. The /loop process picks the first test with
 | 238 | 04 | TC-L-004 | Field height | 56 px | 2026-05-10T04:12:47Z |
 | 239 | 04 | TC-L-005 | Inter-field vertical gap | 16 px | 2026-05-10T04:14:55Z |
 | 240 | 04 | TC-L-006 | Section vertical gap | 24 px | 2026-05-10T04:16:30Z |
-| 241 | 04 | TC-L-007 | Cadence segmented control height | 40 px; corner radius 9999 | null |
+| 241 | 04 | TC-L-007 | Cadence segmented control height | 40 px; corner radius 9999 | 2026-05-10T04:18:50Z |
 | 242 | 04 | TC-L-008 | Submit button height | 48 px (mobile) / 56 px (tablet/desktop) | null |
 | 243 | 04 | TC-L-009 | Submit button width | full width on mobile / right-aligned on tablet/desktop | null |
 | 244 | 04 | TC-L-010 | Dialog max width on desktop | 720 px; centered with max content max-width respected | null |

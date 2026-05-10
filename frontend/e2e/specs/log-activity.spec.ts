@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 04-TC-V-001..007, 04-TC-C-001..010, 04-TC-L-001..006
+// Traces to: 04-TC-V-001..007, 04-TC-C-001..010, 04-TC-L-001..007
 // Description: log-activity dialog typography.
 import { expect, test } from '@playwright/test';
 
@@ -158,6 +158,26 @@ test.describe('Log activity sheet (mobile)', () => {
 
 test.describe('Log activity dialog (desktop)', () => {
   test.use({ viewport: { width: 1440, height: 900 } });
+
+  test('cadence picker height 40 px / pill radius (04-TC-L-007)', async ({ page }) => {
+    await authenticate(page);
+    await page.goto('/goals/new');
+
+    const chip = page
+      .locator('lib-goal-form hg-segmented-filter[data-testid="cadence-picker"] mat-button-toggle')
+      .first();
+    await expect(chip).toBeVisible();
+    const info = await chip.evaluate((el) => {
+      const r = el.getBoundingClientRect();
+      const s = getComputedStyle(el);
+      return {
+        height: Math.round(r.height),
+        radius: parseFloat(s.borderTopLeftRadius),
+      };
+    });
+    expect(info.height).toBe(40);
+    expect(info.radius).toBeGreaterThanOrEqual(20);
+  });
 
   test('section vertical gap is 24 px (04-TC-L-006)', async ({ page }) => {
     await authenticate(page);
