@@ -374,7 +374,7 @@ and made green. The /loop process picks the first test with
 | 363 | 05 | TC-P-001 | Read rewards list (up to 100) — p95 | <= 300 ms | 2026-05-10T08:18:35Z |
 | 364 | 05 | TC-P-002 | Claim reward — p95 | <= 500 ms | 2026-05-10T08:20:06Z |
 | 365 | 06 | TC-V-001 | Page title ("Stats", "Profile") | Inter 32 / 22 px (desktop / mobile), weight 500 | 2026-05-10T08:22:40Z |
-| 366 | 06 | TC-V-002 | Stat headline numbers (e.g., "87%", "1,240", "Lvl 8") | Inter 32 px, weight 600 | null |
+| 366 | 06 | TC-V-002 | Stat headline numbers (e.g., "87%", "1,240", "Lvl 8") | Inter 32 px, weight 600 | 2026-05-10T08:24:11Z |
 | 367 | 06 | TC-V-003 | Stat label | Inter 12 px, weight 500 | null |
 | 368 | 06 | TC-V-004 | Section headings | Inter 18 px, weight 500 | null |
 | 369 | 06 | TC-V-005 | Form field labels (email, display name) | Inter 13 px, weight 500 | null |

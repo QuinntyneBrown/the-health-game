@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 06-TC-V-001
+// Traces to: 06-TC-V-001..002
 // Description: stats + profile page chrome.
 import { expect, test } from '@playwright/test';
 
@@ -44,6 +44,22 @@ async function authenticate(page: import('@playwright/test').Page): Promise<void
 }
 
 test.describe('Stats & Profile chrome', () => {
+  test('stat headline numbers Inter 32 px / weight 600 (06-TC-V-002)', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await authenticate(page);
+    await page.goto('/stats');
+
+    const tile = page.locator('lib-stats .stat-tile__value').first();
+    await expect(tile).toBeVisible();
+    const result = await tile.evaluate((el) => {
+      const s = getComputedStyle(el);
+      return { family: s.fontFamily, size: s.fontSize, weight: s.fontWeight };
+    });
+    expect(result.family).toMatch(/Inter/);
+    expect(result.size).toBe('32px');
+    expect(result.weight).toBe('600');
+  });
+
   test('page titles "Stats"/"Profile" Inter 32 desktop / 22 mobile / 500 (06-TC-V-001)', async ({
     page,
   }) => {
