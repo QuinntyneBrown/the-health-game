@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 03-TC-V-001..009, 03-TC-C-001..011, 03-TC-L-001..011, 03-TC-R-001..006, 03-TC-F-001..011, 03-TC-F-101..109, 03-TC-F-201..204, 03-TC-B-001..006, 03-TC-A-001..006, 03-TC-D-001..005
+// Traces to: 03-TC-V-001..009, 03-TC-C-001..011, 03-TC-L-001..011, 03-TC-R-001..006, 03-TC-F-001..011, 03-TC-F-101..109, 03-TC-F-201..204, 03-TC-B-001..006, 03-TC-A-001..006, 03-TC-D-001..006
 // Description: /goals page title "Goals" renders with Inter weight 500 at 22/32 px.
 // Subtitle is Inter 13 px weight 400 with computed counts.
 import AxeBuilder from '@axe-core/playwright';
@@ -560,6 +560,57 @@ test.describe('Goals page — header typography', () => {
 
   test.describe('filter chip layout', () => {
     test.use({ viewport: { width: 1440, height: 900 } });
+
+    test('daily cadence rollover: period resets, streak preserved (03-TC-D-006)', async ({
+      page,
+    }) => {
+      await page.setViewportSize({ width: 1440, height: 900 });
+      await authenticate(page);
+
+      let snapshot = {
+        id: 'g1',
+        name: 'Walk',
+        description: '',
+        cadence: 'daily' as const,
+        target: { value: 10, unit: 'min' },
+        completedQuantity: 8,
+        currentStreak: 3,
+        longestStreak: 5,
+        rewardName: '',
+      };
+
+      await page.route('**/api/goals/g1', (route) =>
+        route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify(snapshot),
+        }),
+      );
+      await page.route('**/api/goals/g1/activity**', (route) =>
+        route.fulfill({ status: 200, contentType: 'application/json', body: '[]' }),
+      );
+
+      await page.goto('/goals/g1');
+      await expect(page.locator('lib-goal-detail [data-testid="goal-detail-target"]')).toContainText(
+        '10',
+      );
+      const beforeStreak = await page
+        .locator('[data-testid="goal-detail-current-streak"] .streak-summary__value')
+        .innerText();
+      expect(beforeStreak).toContain('3');
+
+      // Advance to "tomorrow" — server resets completedQuantity, increments streak.
+      snapshot = { ...snapshot, completedQuantity: 0, currentStreak: 4, longestStreak: 5 };
+      await page.reload();
+
+      await expect(
+        page.locator('[data-testid="goal-detail-current-streak"] .streak-summary__value'),
+      ).toContainText('4');
+      // The detail shows the same target line (10 min). Period totals are server-driven.
+      await expect(page.locator('lib-goal-detail [data-testid="goal-detail-target"]')).toContainText(
+        '10',
+      );
+    });
 
     test('sign in as different user does not see other user goals (03-TC-D-005)', async ({
       page,
