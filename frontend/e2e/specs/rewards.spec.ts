@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 05-TC-V-001..008, 05-TC-C-001..010, 05-TC-L-001..010, 05-TC-R-001..005, 05-TC-F-001..007, 05-TC-F-101..105, 05-TC-F-201..203, 05-TC-B-001..004, 05-TC-A-001..005, 05-TC-D-001..004
+// Traces to: 05-TC-V-001..008, 05-TC-C-001..010, 05-TC-L-001..010, 05-TC-R-001..005, 05-TC-F-001..007, 05-TC-F-101..105, 05-TC-F-201..203, 05-TC-B-001..004, 05-TC-A-001..005, 05-TC-D-001..005
 // Description: rewards list page chrome.
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
@@ -75,6 +75,74 @@ const readyReward = {
 };
 
 test.describe('Rewards list', () => {
+  test('different user sees only their own rewards (05-TC-D-005)', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await authenticate(page);
+
+    let currentUser: 'a' | 'b' = 'a';
+    const userARewards = [
+      {
+        id: 'r-a-1',
+        goalId: 'g1',
+        name: 'User A trophy',
+        description: '',
+        status: 'earned',
+        earnedAt: '2026-04-01T08:00:00Z',
+        condition: { type: 'streak-milestone', streakDays: 30 },
+      },
+    ];
+    const userBRewards = [
+      {
+        id: 'r-b-1',
+        goalId: 'g2',
+        name: 'User B medal',
+        description: '',
+        status: 'in-progress',
+        earnedAt: null,
+        progress: { current: 2, target: 10 },
+        condition: { type: 'streak-milestone', streakDays: 10 },
+      },
+    ];
+
+    await page.unroute('**/api/rewards**');
+    await page.route('**/api/rewards**', (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify(currentUser === 'a' ? userARewards : userBRewards),
+      }),
+    );
+
+    await page.goto('/rewards');
+    await expect(page.locator('lib-reward-list')).toContainText('User A trophy');
+    await expect(page.locator('lib-reward-list')).not.toContainText('User B medal');
+
+    // Simulate re-auth as user B: clear sessionStorage tokens, run a fresh
+    // authenticate flow, swap the rewards set on the server, and revisit.
+    currentUser = 'b';
+    await page.evaluate(() => {
+      sessionStorage.removeItem('hg.oidc.access-token');
+      sessionStorage.removeItem('hg.oidc.verifier');
+      sessionStorage.removeItem('hg.oidc.state');
+      sessionStorage.removeItem('hg.oidc.return-url');
+    });
+    await authenticate(page);
+    // authenticate() re-registers a generic /api/rewards** stub returning [].
+    // Re-install our user-aware route on top so it takes precedence.
+    await page.unroute('**/api/rewards**');
+    await page.route('**/api/rewards**', (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify(currentUser === 'a' ? userARewards : userBRewards),
+      }),
+    );
+    await page.goto('/rewards');
+
+    await expect(page.locator('lib-reward-list')).toContainText('User B medal');
+    await expect(page.locator('lib-reward-list')).not.toContainText('User A trophy');
+  });
+
   test('claimed timestamp is recorded and displayed (05-TC-D-004)', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await authenticate(page);
