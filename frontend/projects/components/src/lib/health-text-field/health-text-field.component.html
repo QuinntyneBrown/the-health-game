@@ -10,13 +10,32 @@
   <input
     class="health-text-field__input"
     matInput
+    [attr.aria-describedby]="errorText() ? errorId : null"
+    [attr.aria-invalid]="errorText() ? 'true' : null"
     [attr.readonly]="readonly() ? '' : null"
     [disabled]="disabled()"
     [placeholder]="placeholder()"
-    [type]="type()"
+    [type]="effectiveType()"
     [value]="value()"
     (input)="onInput($event)"
   />
+
+  @if (showPasswordToggle()) {
+    <button
+      class="health-text-field__visibility"
+      mat-icon-button
+      matSuffix
+      type="button"
+      [disabled]="disabled()"
+      [attr.aria-label]="isPasswordRevealed() ? 'Hide password' : 'Show password'"
+      [attr.aria-pressed]="isPasswordRevealed()"
+      (click)="togglePasswordVisibility()"
+    >
+      <mat-icon fontSet="material-symbols-rounded" aria-hidden="true">
+        {{ isPasswordRevealed() ? 'visibility_off' : 'visibility' }}
+      </mat-icon>
+    </button>
+  }
 
   @if (errorText()) {
     <mat-error>{{ errorText() }}</mat-error>
@@ -24,3 +43,9 @@
     <mat-hint>{{ helperText() }}</mat-hint>
   }
 </mat-form-field>
+<span
+  class="cdk-visually-hidden"
+  [attr.id]="errorId"
+  aria-live="polite"
+  role="status"
+>{{ errorText() }}</span>

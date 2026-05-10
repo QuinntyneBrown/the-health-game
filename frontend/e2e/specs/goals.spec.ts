@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 03-TC-V-001..009, 03-TC-C-001..011, 03-TC-L-001..011, 03-TC-R-001..006, 03-TC-F-001..011, 03-TC-F-101..109, 03-TC-F-201..204, 03-TC-B-001..006, 03-TC-A-001..003
+// Traces to: 03-TC-V-001..009, 03-TC-C-001..011, 03-TC-L-001..011, 03-TC-R-001..006, 03-TC-F-001..011, 03-TC-F-101..109, 03-TC-F-201..204, 03-TC-B-001..006, 03-TC-A-001..004
 // Description: /goals page title "Goals" renders with Inter weight 500 at 22/32 px.
 // Subtitle is Inter 13 px weight 400 with computed counts.
 import { expect, test } from '@playwright/test';
@@ -559,6 +559,44 @@ test.describe('Goals page — header typography', () => {
 
   test.describe('filter chip layout', () => {
     test.use({ viewport: { width: 1440, height: 900 } });
+
+    test('validation errors are linked via aria-describedby (03-TC-A-004)', async ({ page }) => {
+      await page.setViewportSize({ width: 1440, height: 900 });
+      await authenticate(page);
+
+      await page.goto('/goals/new');
+
+      // Leave Name empty, fill required Target/Unit, dispatch submit to flip attemptedSubmit.
+      await page
+        .locator('hg-health-text-field')
+        .filter({ hasText: 'Target' })
+        .locator('input')
+        .fill('10');
+      await page
+        .locator('hg-health-text-field')
+        .filter({ hasText: 'Unit' })
+        .locator('input')
+        .fill('min');
+      await page
+        .locator('form[data-testid="goal-form"]')
+        .evaluate((form: HTMLFormElement) => {
+          form.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
+        });
+
+      const nameInput = page
+        .locator('hg-health-text-field')
+        .filter({ hasText: 'Name' })
+        .locator('input');
+      await expect(nameInput).toBeVisible();
+      const linkage = await nameInput.evaluate((el) => {
+        const ids = (el.getAttribute('aria-describedby') ?? '').split(/\s+/).filter(Boolean);
+        const texts = ids.map((id) => document.getElementById(id)?.textContent?.trim() ?? '');
+        return { ids, texts };
+      });
+
+      expect(linkage.ids.length).toBeGreaterThan(0);
+      expect(linkage.texts.some((t) => /required/i.test(t))).toBe(true);
+    });
 
     test('all form inputs have an accessible label (03-TC-A-003)', async ({ page }) => {
       await page.setViewportSize({ width: 1440, height: 900 });
