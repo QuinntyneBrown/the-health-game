@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 06-TC-V-001..007, 06-TC-C-001..010, 06-TC-L-001..010, 06-TC-R-001..005, 06-TC-F-001..008, 06-TC-F-101..107, 06-TC-F-201..205, 06-TC-B-001..005
+// Traces to: 06-TC-V-001..007, 06-TC-C-001..010, 06-TC-L-001..010, 06-TC-R-001..005, 06-TC-F-001..008, 06-TC-F-101..107, 06-TC-F-201..205, 06-TC-B-001..006
 // Description: stats + profile page chrome.
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
@@ -45,6 +45,40 @@ async function authenticate(page: import('@playwright/test').Page): Promise<void
 }
 
 test.describe('Stats & Profile chrome', () => {
+  test('reduced-motion: bars + window switch instant (06-TC-B-006)', async ({ browser }) => {
+    const context = await browser.newContext({
+      viewport: { width: 1280, height: 900 },
+      reducedMotion: 'reduce',
+    });
+    const page = await context.newPage();
+    await authenticate(page);
+    await page.goto('/stats');
+
+    const bar = page.locator('lib-stats .activity-chart__bar').first();
+    await expect(bar).toBeVisible();
+    const meta = await bar.evaluate((el) => {
+      const s = getComputedStyle(el);
+      return {
+        animationDuration: s.animationDuration,
+        transitionDuration: s.transitionDuration,
+        transform: s.transform,
+      };
+    });
+    // No animation / transition runs under reduced-motion.
+    expect(meta.animationDuration === '0s' || meta.animationDuration === 'none').toBe(true);
+    expect(meta.transitionDuration === '0s' || meta.transitionDuration === '').toBe(true);
+
+    // Window switch — no animation between week and year states.
+    await page
+      .locator('lib-stats hg-segmented-filter mat-button-toggle')
+      .filter({ hasText: 'Year' })
+      .click();
+    await page.waitForTimeout(40);
+    expect(await page.locator('lib-stats .activity-chart__bar').count()).toBe(12);
+
+    await context.close();
+  });
+
   test('Destructive Delete only enabled after typed match (06-TC-B-005)', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await authenticate(page);

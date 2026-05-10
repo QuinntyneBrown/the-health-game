@@ -430,7 +430,7 @@ and made green. The /loop process picks the first test with
 | 419 | 06 | TC-B-003 | Save shows loading state during in-flight call | Yes | 2026-05-10T12:29:50Z |
 | 420 | 06 | TC-B-004 | Delete dialog focus-traps and restores focus on close | Yes | 2026-05-10T12:33:54Z |
 | 421 | 06 | TC-B-005 | Destructive button only enabled after typed confirmation | Yes | 2026-05-10T12:35:26Z |
-| 422 | 06 | TC-B-006 | Reduced-motion | Bars do not animate; selector switch is instant | null |
+| 422 | 06 | TC-B-006 | Reduced-motion | Bars do not animate; selector switch is instant | 2026-05-10T12:37:01Z |
 | 423 | 06 | TC-A-001 | Page title rendered as `<h1>` | Yes | null |
 | 424 | 06 | TC-A-002 | Stat tile values have visible label and accessible relationship (label + value grouped) | Yes | null |
 | 425 | 06 | TC-A-003 | Bar chart has accessible summary (table fallback or `aria-label`) | Yes | null |
