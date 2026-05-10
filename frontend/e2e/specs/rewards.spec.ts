@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 05-TC-V-001..002
+// Traces to: 05-TC-V-001..003
 // Description: rewards list page chrome.
 import { expect, test } from '@playwright/test';
 
@@ -74,6 +74,31 @@ const readyReward = {
 };
 
 test.describe('Rewards list', () => {
+  test('hero reward title Inter 36 px desktop weight 500 (05-TC-V-003)', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await authenticate(page);
+    await page.unroute('**/api/rewards**');
+    await page.route('**/api/rewards**', (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify([readyReward, ...sampleRewards]),
+      }),
+    );
+
+    await page.goto('/rewards');
+    const title = page.locator('lib-reward-list .reward-hero__title').first();
+    await expect(title).toBeVisible();
+    await expect(title).toHaveText(readyReward.name);
+    const result = await title.evaluate((el) => {
+      const s = getComputedStyle(el);
+      return { family: s.fontFamily, size: s.fontSize, weight: s.fontWeight };
+    });
+    expect(result.family).toMatch(/Inter/);
+    expect(result.size).toBe('36px');
+    expect(result.weight).toBe('500');
+  });
+
   test('hero eyebrow "READY TO CLAIM" Inter 11px/600/1.5px upper (05-TC-V-002)', async ({
     page,
   }) => {
