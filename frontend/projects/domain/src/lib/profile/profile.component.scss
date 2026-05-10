@@ -85,6 +85,7 @@
 .profile__form {
   display: grid;
   gap: var(--hg-space-4);
+  max-width: 480px;
 }
 
 .profile__actions {
