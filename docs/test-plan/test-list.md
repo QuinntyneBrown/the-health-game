@@ -429,7 +429,7 @@ and made green. The /loop process picks the first test with
 | 418 | 06 | TC-B-002 | Save button disabled until form is dirty AND valid | Yes | 2026-05-10T12:28:13Z |
 | 419 | 06 | TC-B-003 | Save shows loading state during in-flight call | Yes | 2026-05-10T12:29:50Z |
 | 420 | 06 | TC-B-004 | Delete dialog focus-traps and restores focus on close | Yes | 2026-05-10T12:33:54Z |
-| 421 | 06 | TC-B-005 | Destructive button only enabled after typed confirmation | Yes | null |
+| 421 | 06 | TC-B-005 | Destructive button only enabled after typed confirmation | Yes | 2026-05-10T12:35:26Z |
 | 422 | 06 | TC-B-006 | Reduced-motion | Bars do not animate; selector switch is instant | null |
 | 423 | 06 | TC-A-001 | Page title rendered as `<h1>` | Yes | null |
 | 424 | 06 | TC-A-002 | Stat tile values have visible label and accessible relationship (label + value grouped) | Yes | null |

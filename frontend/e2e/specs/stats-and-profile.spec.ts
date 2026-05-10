@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 06-TC-V-001..007, 06-TC-C-001..010, 06-TC-L-001..010, 06-TC-R-001..005, 06-TC-F-001..008, 06-TC-F-101..107, 06-TC-F-201..205, 06-TC-B-001..004
+// Traces to: 06-TC-V-001..007, 06-TC-C-001..010, 06-TC-L-001..010, 06-TC-R-001..005, 06-TC-F-001..008, 06-TC-F-101..107, 06-TC-F-201..205, 06-TC-B-001..005
 // Description: stats + profile page chrome.
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
@@ -45,6 +45,29 @@ async function authenticate(page: import('@playwright/test').Page): Promise<void
 }
 
 test.describe('Stats & Profile chrome', () => {
+  test('Destructive Delete only enabled after typed match (06-TC-B-005)', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await authenticate(page);
+    await page.goto('/profile');
+
+    await page.locator('[data-testid="profile-delete"]').click();
+    const confirm = page.locator('[data-testid="delete-account-confirm"]');
+    const input = page.locator('lib-delete-account-dialog input').first();
+
+    expect(await confirm.isDisabled()).toBe(true);
+    await input.fill('q@q.q '); // trailing space — should match (trimmed)
+    expect(await confirm.isDisabled()).toBe(false);
+
+    await input.fill('Q@Q.Q'); // case-mismatch — should NOT match
+    expect(await confirm.isDisabled()).toBe(true);
+
+    await input.fill('q@q.q');
+    expect(await confirm.isDisabled()).toBe(false);
+
+    await input.fill('');
+    expect(await confirm.isDisabled()).toBe(true);
+  });
+
   test('Delete dialog traps focus + restores on close (06-TC-B-004)', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await authenticate(page);
