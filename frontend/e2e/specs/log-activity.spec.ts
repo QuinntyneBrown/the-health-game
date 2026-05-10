@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 04-TC-V-001..007, 04-TC-C-001..010, 04-TC-L-001..010, 04-TC-R-001..006, 04-TC-F-001..012, 04-TC-F-101..109, 04-TC-B-001..003
+// Traces to: 04-TC-V-001..007, 04-TC-C-001..010, 04-TC-L-001..010, 04-TC-R-001..006, 04-TC-F-001..012, 04-TC-F-101..109, 04-TC-B-001..004
 // Description: log-activity dialog typography.
 import { expect, test } from '@playwright/test';
 
@@ -1023,6 +1023,27 @@ test.describe('Log activity dialog (desktop)', () => {
       page.locator('lib-goal-detail [data-testid="activity-list"]'),
     ).toBeVisible();
     expect(postBody).toMatchObject({ quantity: 5 });
+  });
+
+  test('Esc closes the desktop dialog (04-TC-B-004)', async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await authenticate(page);
+    await page.route('**/api/goals/g1', (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify(goal),
+      }),
+    );
+    await page.route('**/api/goals/g1/activities**', (route) =>
+      route.fulfill({ status: 200, contentType: 'application/json', body: '[]' }),
+    );
+    await page.goto('/goals/g1');
+    await page.locator('[data-testid="goal-detail-log-fab"]').click();
+    await expect(page.locator('lib-log-activity-dialog')).toBeVisible();
+
+    await page.keyboard.press('Escape');
+    await expect(page.locator('lib-log-activity-dialog')).toHaveCount(0);
   });
 
   test('submit while unauthenticated → 401 routes to re-auth (04-TC-F-109)', async ({ page }) => {
