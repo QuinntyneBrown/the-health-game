@@ -428,7 +428,7 @@ and made green. The /loop process picks the first test with
 | 417 | 06 | TC-B-001 | Tab order: window selector -> stat tiles -> chart -> profile fields -> save -> destructive | Logical | 2026-05-10T12:26:46Z |
 | 418 | 06 | TC-B-002 | Save button disabled until form is dirty AND valid | Yes | 2026-05-10T12:28:13Z |
 | 419 | 06 | TC-B-003 | Save shows loading state during in-flight call | Yes | 2026-05-10T12:29:50Z |
-| 420 | 06 | TC-B-004 | Delete dialog focus-traps and restores focus on close | Yes | null |
+| 420 | 06 | TC-B-004 | Delete dialog focus-traps and restores focus on close | Yes | 2026-05-10T12:33:54Z |
 | 421 | 06 | TC-B-005 | Destructive button only enabled after typed confirmation | Yes | null |
 | 422 | 06 | TC-B-006 | Reduced-motion | Bars do not animate; selector switch is instant | null |
 | 423 | 06 | TC-A-001 | Page title rendered as `<h1>` | Yes | null |

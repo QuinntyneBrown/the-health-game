@@ -98,7 +98,13 @@ export class ProfileComponent {
       DeleteAccountDialogComponent,
       DeleteAccountDialogData,
       boolean
-    >(DeleteAccountDialogComponent, { data: { email: current.email } });
+    >(DeleteAccountDialogComponent, {
+      data: { email: current.email },
+      ariaModal: true,
+      role: 'alertdialog',
+      autoFocus: 'first-tabbable',
+      restoreFocus: true,
+    });
     const confirmed = await firstValueFrom(ref.afterClosed());
     if (!confirmed) return;
     await firstValueFrom(this.users.deleteCurrentUser());

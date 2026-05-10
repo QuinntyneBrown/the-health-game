@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 06-TC-V-001..007, 06-TC-C-001..010, 06-TC-L-001..010, 06-TC-R-001..005, 06-TC-F-001..008, 06-TC-F-101..107, 06-TC-F-201..205, 06-TC-B-001..003
+// Traces to: 06-TC-V-001..007, 06-TC-C-001..010, 06-TC-L-001..010, 06-TC-R-001..005, 06-TC-F-001..008, 06-TC-F-101..107, 06-TC-F-201..205, 06-TC-B-001..004
 // Description: stats + profile page chrome.
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
@@ -45,6 +45,49 @@ async function authenticate(page: import('@playwright/test').Page): Promise<void
 }
 
 test.describe('Stats & Profile chrome', () => {
+  test('Delete dialog traps focus + restores on close (06-TC-B-004)', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await authenticate(page);
+    await page.goto('/profile');
+
+    const deleteBtn = page.locator('[data-testid="profile-delete"]');
+    await deleteBtn.focus();
+    await deleteBtn.click();
+    const dialog = page.locator('lib-delete-account-dialog').first();
+    await expect(dialog).toBeVisible();
+    // Seed focus inside the dialog so the trap test isn't gated on Material's
+    // autoFocus heuristic (which can move focus async / to the panel itself).
+    await dialog.locator('input').first().focus();
+    await page.waitForTimeout(80);
+    const focusedInDialog = await page.evaluate(() => {
+      const dlg = document.querySelector('lib-delete-account-dialog');
+      const active = document.activeElement;
+      return !!(dlg && active && dlg.contains(active));
+    });
+    expect(focusedInDialog).toBe(true);
+
+    // Tabbing wraps within the dialog — pressing Tab repeatedly never lets
+    // focus escape onto the page-behind-dialog.
+    for (let i = 0; i < 12; i++) {
+      await page.keyboard.press('Tab');
+      const stillInside = await page.evaluate(() => {
+        const dlg = document.querySelector('lib-delete-account-dialog');
+        const active = document.activeElement;
+        return !!(dlg && active && dlg.contains(active));
+      });
+      expect(stillInside).toBe(true);
+    }
+
+    // Close via Cancel — focus restores to the button that opened the dialog.
+    await page.locator('lib-delete-account-dialog button', { hasText: 'Cancel' }).click();
+    await expect(dialog).toHaveCount(0);
+    const restored = await page.evaluate(() => {
+      const target = document.querySelector('[data-testid="profile-delete"]');
+      return target === document.activeElement;
+    });
+    expect(restored).toBe(true);
+  });
+
   test('Save shows loading state in flight (06-TC-B-003)', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await authenticate(page);
