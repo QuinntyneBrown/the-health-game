@@ -6,6 +6,29 @@ import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
 
 test.describe('Sign In — page', () => {
+  test('submit shows busy state while in-flight (07-TC-B-007)', async ({ page }) => {
+    await page.route('**/api/auth/sign-in', async (route) => {
+      await new Promise((r) => setTimeout(r, 800));
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({
+          accessToken: 't',
+          user: { id: 'u', displayName: 'A', roles: ['Player'] },
+        }),
+      });
+    });
+    await page.goto('/sign-in');
+    await page.getByTestId('sign-in-username').locator('input').fill('alice');
+    await page.getByTestId('sign-in-password').locator('input').fill('Secret123!');
+    const submit = page.getByTestId('sign-in-submit');
+    await submit.click();
+    const busy = page.getByTestId('sign-in-busy');
+    await expect(busy).toBeVisible();
+    await expect(busy).toHaveText(/Signing in/);
+    await expect(submit).toBeDisabled();
+  });
+
   test('double-click submit emits only one POST (07-TC-B-006)', async ({ page }) => {
     let count = 0;
     await page.route('**/api/auth/sign-in', async (route) => {
