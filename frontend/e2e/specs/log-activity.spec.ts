@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 04-TC-V-001..007, 04-TC-C-001..010, 04-TC-L-001..010, 04-TC-R-001..006, 04-TC-F-001..012, 04-TC-F-101..109, 04-TC-B-001..010, 04-TC-A-001..007, 04-TC-D-001..006
+// Traces to: 04-TC-V-001..007, 04-TC-C-001..010, 04-TC-L-001..010, 04-TC-R-001..006, 04-TC-F-001..012, 04-TC-F-101..109, 04-TC-B-001..010, 04-TC-A-001..007, 04-TC-D-001..006, 04-TC-S-001
 // Description: log-activity dialog typography.
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
@@ -127,6 +127,61 @@ test.describe('Log activity sheet (mobile)', () => {
     });
     const accessibleName = meta.targetText || meta.ariaLabel || '';
     expect(accessibleName).toMatch(/Log activity/i);
+  });
+
+  test('XSS payload in goal name and note is escaped (04-TC-S-001)', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await authenticate(page);
+
+    const xssName = '<img src=x onerror="window.__xss=1">Walk';
+    const xssNote = '<script>window.__xssNote=1</script>note';
+
+    let popupCount = 0;
+    page.on('dialog', async (d) => {
+      popupCount += 1;
+      await d.dismiss();
+    });
+
+    const xssGoal = { ...goal, name: xssName };
+    await page.route('**/api/goals/g1', (route) =>
+      route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(xssGoal) }),
+    );
+    await page.route('**/api/goals/g1/activities**', (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify([
+          {
+            id: 'a-xss',
+            goalId: 'g1',
+            quantity: 5,
+            notes: xssNote,
+            recordedAt: '2026-05-10T06:25:00Z',
+            newlyEarnedRewards: [],
+          },
+        ]),
+      }),
+    );
+
+    await page.goto('/goals/g1');
+    await page.waitForTimeout(400);
+
+    // Goal name renders as text — the payload string appears verbatim in DOM,
+    // and the <img>/<script> tags are NOT live elements.
+    const detail = page.locator('lib-goal-detail');
+    await expect(detail).toContainText('Walk');
+
+    const exec = await page.evaluate(() => ({
+      xss: (window as Window & { __xss?: number }).__xss ?? null,
+      xssNote: (window as Window & { __xssNote?: number }).__xssNote ?? null,
+      injectedImg: !!document.querySelector('lib-goal-detail img[src="x"]'),
+      injectedScript: !!document.querySelector('lib-goal-detail script'),
+    }));
+    expect(exec.xss).toBeNull();
+    expect(exec.xssNote).toBeNull();
+    expect(exec.injectedImg).toBe(false);
+    expect(exec.injectedScript).toBe(false);
+    expect(popupCount).toBe(0);
   });
 
   test('concurrent log from another device updates streak (04-TC-D-006)', async ({ page }) => {
