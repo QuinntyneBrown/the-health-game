@@ -389,7 +389,7 @@ and made green. The /loop process picks the first test with
 | 378 | 06 | TC-C-007 | Profile primary action ("Save") | `#006D3F` bg, white label | 2026-05-10T11:00:59Z |
 | 379 | 06 | TC-C-008 | Destructive ("Delete account") | `#BA1A1A` bg, white label | 2026-05-10T11:02:19Z |
 | 380 | 06 | TC-C-009 | Form outline (default / focus / error) | `#C2C9BE` / `#006D3F` 2 px / `#BA1A1A` 2 px | 2026-05-10T11:07:28Z |
-| 381 | 06 | TC-C-010 | Color contrast all text | WCAG AA | null |
+| 381 | 06 | TC-C-010 | Color contrast all text | WCAG AA | 2026-05-10T11:08:44Z |
 | 382 | 06 | TC-L-001 | Stat tile grid — desktop/tablet/mobile | 5 / 3 / 2 columns | null |
 | 383 | 06 | TC-L-002 | Stat tile corner radius | 16 px | null |
 | 384 | 06 | TC-L-003 | Stat tile padding | 16 px | null |

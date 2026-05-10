@@ -1,6 +1,7 @@
 // Acceptance Test
-// Traces to: 06-TC-V-001..007, 06-TC-C-001..009
+// Traces to: 06-TC-V-001..007, 06-TC-C-001..010
 // Description: stats + profile page chrome.
+import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
 
 async function authenticate(page: import('@playwright/test').Page): Promise<void> {
@@ -44,6 +45,27 @@ async function authenticate(page: import('@playwright/test').Page): Promise<void
 }
 
 test.describe('Stats & Profile chrome', () => {
+  test('color contrast WCAG AA on Stats + Profile (06-TC-C-010)', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await authenticate(page);
+
+    for (const path of ['/stats', '/profile']) {
+      await page.goto(path);
+      await expect(page.locator(path === '/stats' ? 'lib-stats' : 'lib-profile')).toBeVisible();
+      const result = await new AxeBuilder({ page })
+        .include(path === '/stats' ? 'lib-stats' : 'lib-profile')
+        .withRules(['color-contrast'])
+        .analyze();
+      const blocking = result.violations.filter(
+        (v) => v.impact === 'critical' || v.impact === 'serious',
+      );
+      if (blocking.length) {
+        console.log(`${path}: ${blocking.map((v) => v.help).join(' | ')}`);
+      }
+      expect(blocking).toHaveLength(0);
+    }
+  });
+
   test('form outline default / focus / error (06-TC-C-009)', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await authenticate(page);
