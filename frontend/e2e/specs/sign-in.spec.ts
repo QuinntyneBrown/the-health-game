@@ -6,6 +6,32 @@ import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
 
 test.describe('Sign In — page', () => {
+  test('successful sign-in writes token to sessionStorage only (07-TC-D-001)', async ({
+    page,
+  }) => {
+    await page.route('**/api/auth/sign-in', (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({
+          accessToken: 'd001-token',
+          user: { id: 'u', displayName: 'A', roles: ['Player'] },
+        }),
+      }),
+    );
+    await page.goto('/sign-in');
+    await page.getByTestId('sign-in-username').locator('input').fill('alice');
+    await page.getByTestId('sign-in-password').locator('input').fill('Secret123!');
+    await page.getByTestId('sign-in-submit').click();
+    await page.waitForURL(/\/home/);
+    const r = await page.evaluate(() => ({
+      session: sessionStorage.getItem('hg.oidc.access-token'),
+      local: localStorage.getItem('hg.oidc.access-token'),
+    }));
+    expect(r.session).toBe('d001-token');
+    expect(r.local).toBeNull();
+  });
+
   test('axe-core: 0 critical / serious violations (07-TC-A-010)', async ({ page }) => {
     await page.goto('/sign-in');
     const result = await new AxeBuilder({ page })
