@@ -552,7 +552,7 @@ and made green. The /loop process picks the first test with
 | 541 | 07 | TC-S-005 | XSS payload in username field | Escaped on render; nothing executes (L2-016 §3) | 2026-05-10T15:15:00Z |
 | 542 | 07 | TC-S-006 | CSRF protection on `POST /api/auth/sign-in` (cookie-bearing) | Yes (L2-016 §4) | 2026-05-10T15:16:00Z |
 | 543 | 07 | TC-S-007 | Repeated failed attempts trigger lockout / throttle | Configured threshold; security event logged at Information+ without password (L2-036 §7) | 2026-05-10T15:17:30Z |
-| 544 | 07 | TC-S-008 | Sign-in attempt for deleted / disabled account | 401 regardless of credential correctness (L2-036 §8) | null |
+| 544 | 07 | TC-S-008 | Sign-in attempt for deleted / disabled account | 401 regardless of credential correctness (L2-036 §8) | 2026-05-10T15:18:30Z |
 | 545 | 07 | TC-P-001 | Cold load LCP on simulated 4G | <= 2.5 s (L2-019 §1) | null |
 | 546 | 07 | TC-P-002 | Sign-in route lazy-loaded — no dashboard / goals code in chunk | Confirmed via bundle analyzer (L2-019 §2) | null |
 | 547 | 07 | TC-P-003 | Submit p95 server time | <= 500 ms (L2-018 §2) | null |

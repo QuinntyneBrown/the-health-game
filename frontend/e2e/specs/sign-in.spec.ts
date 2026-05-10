@@ -9,6 +9,27 @@ import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
 
 test.describe('Sign In — page', () => {
+  test('deleted/disabled account treated identically to bad creds (07-TC-S-008)', async ({
+    page,
+  }) => {
+    await page.route('**/api/auth/sign-in', (route) =>
+      route.fulfill({
+        status: 401,
+        contentType: 'application/problem+json',
+        body: JSON.stringify({ status: 401, title: 'Account disabled' }),
+      }),
+    );
+    await page.goto('/sign-in');
+    await page.getByTestId('sign-in-username').locator('input').fill('deleted-user');
+    await page.getByTestId('sign-in-password').locator('input').fill('CorrectPassword!');
+    await page.getByTestId('sign-in-submit').click();
+    const err = page.getByTestId('sign-in-error');
+    await expect(err).toBeVisible();
+    const text = (await err.textContent()) ?? '';
+    expect(text).toMatch(/Invalid username or password\./);
+    expect(text).not.toMatch(/disabled|deleted|deactivat|account/i);
+  });
+
   test('repeated failed attempts: client emits one POST per click, no leak (07-TC-S-007)', async ({
     page,
   }) => {
