@@ -1,10 +1,26 @@
 // Acceptance Test
-// Traces to: L2-036, 07-TC-V-001..007
+// Traces to: L2-036, 07-TC-V-001..008
 // Description: Username + password sign-in page. Each test exercises one
 //              vertical slice end-to-end against the running app.
 import { expect, test } from '@playwright/test';
 
 test.describe('Sign In — page', () => {
+  test('field input Inter 14 px / 400 (07-TC-V-008)', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await page.goto('/sign-in');
+    const inputs = await page.locator('lib-sign-in mat-form-field input').all();
+    expect(inputs.length).toBeGreaterThanOrEqual(2);
+    for (const inp of inputs) {
+      const r = await inp.evaluate((el) => {
+        const s = getComputedStyle(el);
+        return { family: s.fontFamily, size: s.fontSize, weight: s.fontWeight };
+      });
+      expect(r.family).toMatch(/Inter/);
+      expect(r.size).toBe('14px');
+      expect(r.weight).toBe('400');
+    }
+  });
+
   test('field label Inter 13 px / 500 (07-TC-V-007)', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await page.goto('/sign-in');
