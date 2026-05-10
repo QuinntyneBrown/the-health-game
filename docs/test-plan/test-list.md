@@ -282,7 +282,7 @@ and made green. The /loop process picks the first test with
 | 271 | 04 | TC-F-109 | Submit while unauthenticated (token expired) | 401; client routes to re-auth (L2-013 §4) | 2026-05-10T05:31:07Z |
 | 272 | 04 | TC-B-001 | Open log sheet via FAB | Slide-up animation 200 ms; respects reduced-motion | 2026-05-10T05:32:53Z |
 | 273 | 04 | TC-B-002 | Backdrop click closes sheet (no unsaved changes) | Yes | 2026-05-10T05:34:49Z |
-| 274 | 04 | TC-B-003 | Backdrop click with unsaved changes | Confirmation dialog ("Discard?") | null |
+| 274 | 04 | TC-B-003 | Backdrop click with unsaved changes | Confirmation dialog ("Discard?") | 2026-05-10T05:37:54Z |
 | 275 | 04 | TC-B-004 | Esc closes dialog (desktop) | Yes | null |
 | 276 | 04 | TC-B-005 | Focus moves into first form field on open | Yes | null |
 | 277 | 04 | TC-B-006 | Focus returns to FAB / trigger on close | Yes | null |

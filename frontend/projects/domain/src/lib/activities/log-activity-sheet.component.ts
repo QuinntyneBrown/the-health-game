@@ -1,12 +1,14 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { MatBottomSheetRef, MAT_BOTTOM_SHEET_DATA } from '@angular/material/bottom-sheet';
 import { MatButtonModule } from '@angular/material/button';
+import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ACTIVITIES_SERVICE, ActivityEntry } from 'api';
 import { firstValueFrom } from 'rxjs';
 import { HealthTextFieldComponent } from 'components';
 
 import { formatRewardEarnedMessage } from '../rewards/format-reward-earned';
+import { DiscardChangesDialogComponent } from './discard-changes-dialog.component';
 import { LogActivityDraftService } from './log-activity-draft.service';
 
 export interface LogActivitySheetData {
@@ -88,6 +90,27 @@ export class LogActivitySheetComponent {
   private readonly activities = inject(ACTIVITIES_SERVICE);
   private readonly snackBar = inject(MatSnackBar);
   private readonly draft = inject(LogActivityDraftService);
+  private readonly dialog = inject(MatDialog);
+
+  constructor() {
+    this.sheetRef.backdropClick().subscribe(() => this.maybeDiscard());
+  }
+
+  private async maybeDiscard(): Promise<void> {
+    if (!this.quantity() && !this.notes()) {
+      this.draft.reset();
+      this.sheetRef.dismiss();
+      return;
+    }
+    const ref = this.dialog.open<DiscardChangesDialogComponent, undefined, boolean>(
+      DiscardChangesDialogComponent,
+    );
+    const confirmed = await firstValueFrom(ref.afterClosed());
+    if (confirmed) {
+      this.draft.reset();
+      this.sheetRef.dismiss();
+    }
+  }
 
   readonly quantity = signal(this.draft.draft().quantity);
   readonly notes = signal(this.draft.draft().notes);

@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 04-TC-V-001..007, 04-TC-C-001..010, 04-TC-L-001..010, 04-TC-R-001..006, 04-TC-F-001..012, 04-TC-F-101..109, 04-TC-B-001..002
+// Traces to: 04-TC-V-001..007, 04-TC-C-001..010, 04-TC-L-001..010, 04-TC-R-001..006, 04-TC-F-001..012, 04-TC-F-101..109, 04-TC-B-001..003
 // Description: log-activity dialog typography.
 import { expect, test } from '@playwright/test';
 
@@ -56,6 +56,44 @@ const goal = {
 };
 
 test.describe('Log activity sheet (mobile)', () => {
+  test('backdrop with unsaved changes shows discard confirm (04-TC-B-003)', async ({ page }) => {
+    await page.setViewportSize({ width: 360, height: 780 });
+    await authenticate(page);
+    await page.route('**/api/goals/g1', (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify(goal),
+      }),
+    );
+    await page.route('**/api/goals/g1/activities**', (route) =>
+      route.fulfill({ status: 200, contentType: 'application/json', body: '[]' }),
+    );
+    await page.goto('/goals/g1');
+    await page
+      .locator('[data-testid="goal-detail-log-fab"]')
+      .evaluate((el: HTMLElement) => el.click());
+    await page.waitForTimeout(300);
+
+    // Make a change so the sheet has "unsaved" content.
+    await page
+      .locator('lib-log-activity-sheet hg-health-text-field')
+      .filter({ hasText: 'Quantity' })
+      .locator('input')
+      .fill('5');
+
+    const backdrop = page
+      .locator('.cdk-overlay-backdrop:not(.cdk-overlay-transparent-backdrop)')
+      .first();
+    await backdrop.click({ position: { x: 5, y: 5 } });
+
+    // The discard-confirm dialog appears; the sheet stays mounted.
+    const confirm = page.locator('lib-discard-changes-dialog');
+    await expect(confirm).toBeVisible();
+    await expect(confirm).toContainText(/discard/i);
+    await expect(page.locator('mat-bottom-sheet-container')).toBeVisible();
+  });
+
   test('backdrop click closes the sheet (04-TC-B-002)', async ({ page }) => {
     await page.setViewportSize({ width: 360, height: 780 });
     await authenticate(page);
