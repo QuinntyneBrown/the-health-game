@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 05-TC-V-001..008, 05-TC-C-001..010, 05-TC-L-001
+// Traces to: 05-TC-V-001..008, 05-TC-C-001..010, 05-TC-L-001..002
 // Description: rewards list page chrome.
 import { expect, test } from '@playwright/test';
 
@@ -74,6 +74,36 @@ const readyReward = {
 };
 
 test.describe('Rewards list', () => {
+  test('hero padding 32 px on all sides (05-TC-L-002)', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await authenticate(page);
+    await page.unroute('**/api/rewards**');
+    await page.route('**/api/rewards**', (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify([readyReward, ...sampleRewards]),
+      }),
+    );
+
+    await page.goto('/rewards');
+    const hero = page.locator('lib-reward-list .reward-hero').first();
+    await expect(hero).toBeVisible();
+    const result = await hero.evaluate((el) => {
+      const s = getComputedStyle(el);
+      return {
+        top: s.paddingTop,
+        right: s.paddingRight,
+        bottom: s.paddingBottom,
+        left: s.paddingLeft,
+      };
+    });
+    expect(result.top).toBe('32px');
+    expect(result.right).toBe('32px');
+    expect(result.bottom).toBe('32px');
+    expect(result.left).toBe('32px');
+  });
+
   test('hero corner radius 24 px (05-TC-L-001)', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await authenticate(page);
