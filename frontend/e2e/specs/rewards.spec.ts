@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 05-TC-V-001..008, 05-TC-C-001..009
+// Traces to: 05-TC-V-001..008, 05-TC-C-001..010
 // Description: rewards list page chrome.
 import { expect, test } from '@playwright/test';
 
@@ -74,6 +74,27 @@ const readyReward = {
 };
 
 test.describe('Rewards list', () => {
+  test('rewards page background #F1F5ED (05-TC-C-010)', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await authenticate(page);
+    await page.goto('/rewards');
+
+    const list = page.locator('lib-reward-list');
+    await expect(list).toBeVisible();
+    const meta = await page.evaluate(() => {
+      const target = ['lib-reward-list', 'app-root', 'body', 'html']
+        .map((sel) => document.querySelector(sel) as HTMLElement | null)
+        .filter((el): el is HTMLElement => !!el);
+      return target.map((el) => ({
+        tag: el.tagName,
+        bg: getComputedStyle(el).backgroundColor,
+      }));
+    });
+    const accepted = ['rgb(241, 245, 237)'];
+    const found = meta.find((m) => accepted.includes(m.bg));
+    expect(found, `expected #F1F5ED on rewards page, got ${JSON.stringify(meta)}`).toBeTruthy();
+  });
+
   test('earned reward chip #94F7B4 bg, #00210F label (05-TC-C-009)', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await authenticate(page);

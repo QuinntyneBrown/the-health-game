@@ -116,7 +116,9 @@ const filterOptions: readonly SegmentedFilterOption[] = [
   styles: [
     `
       :host {
+        background: #f1f5ed;
         display: block;
+        min-height: 100%;
         padding: var(--hg-space-6);
       }
 
