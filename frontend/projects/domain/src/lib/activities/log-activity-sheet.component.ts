@@ -7,6 +7,7 @@ import { firstValueFrom } from 'rxjs';
 import { HealthTextFieldComponent } from 'components';
 
 import { formatRewardEarnedMessage } from '../rewards/format-reward-earned';
+import { LogActivityDraftService } from './log-activity-draft.service';
 
 export interface LogActivitySheetData {
   readonly goalId: string;
@@ -25,12 +26,12 @@ export interface LogActivitySheetData {
         type="number"
         [value]="quantity()"
         [errorText]="quantityError()"
-        (valueChange)="quantity.set($event)"
+        (valueChange)="onQuantity($event)"
       />
       <hg-health-text-field
         label="Notes (optional)"
         [value]="notes()"
-        (valueChange)="notes.set($event)"
+        (valueChange)="onNotes($event)"
       />
       <div class="sheet__actions">
         <button mat-stroked-button type="button" (click)="cancel()">Cancel</button>
@@ -84,9 +85,10 @@ export class LogActivitySheetComponent {
   );
   private readonly activities = inject(ACTIVITIES_SERVICE);
   private readonly snackBar = inject(MatSnackBar);
+  private readonly draft = inject(LogActivityDraftService);
 
-  readonly quantity = signal('');
-  readonly notes = signal('');
+  readonly quantity = signal(this.draft.draft().quantity);
+  readonly notes = signal(this.draft.draft().notes);
   private readonly attemptedSubmit = signal(false);
 
   readonly quantityError = computed(() =>
@@ -96,7 +98,18 @@ export class LogActivitySheetComponent {
   );
   readonly canSave = computed(() => Number(this.quantity()) > 0);
 
+  onQuantity(value: string): void {
+    this.quantity.set(value);
+    this.draft.patch({ quantity: value });
+  }
+
+  onNotes(value: string): void {
+    this.notes.set(value);
+    this.draft.patch({ notes: value });
+  }
+
   cancel(): void {
+    this.draft.reset();
     this.sheetRef.dismiss();
   }
 
@@ -110,6 +123,7 @@ export class LogActivitySheetComponent {
       }),
     );
     this.notifyRewards(entry);
+    this.draft.reset();
     this.sheetRef.dismiss(entry);
   }
 

@@ -168,15 +168,72 @@ export class GoalDetailComponent {
     void this.router.navigateByUrl('/goals');
   }
 
+  private currentLogContainer: 'sheet' | 'dialog' | null = null;
+  private currentLogData: LogActivitySheetData | null = null;
+  private currentSheetRef: ReturnType<MatBottomSheet['open']> | null = null;
+  private currentDialogRef: ReturnType<MatDialog['open']> | null = null;
+  private resizeListener: (() => void) | null = null;
+
   onLogActivity(): void {
     const goal = this.goal();
     if (!goal) return;
     const data: LogActivitySheetData = { goalId: goal.id, unit: goal.target.unit };
-    const variant: NavigationBarVariant = window.innerWidth >= 768 ? 'rail' : 'bottom';
-    if (pickLogActivityContainer(variant) === 'sheet') {
-      this.bottomSheet.open(LogActivitySheetComponent, { data });
-    } else {
-      this.dialog.open(LogActivityDialogComponent, { data, width: '35rem' });
+    this.currentLogData = data;
+    this.openLogContainerForViewport(data);
+    if (!this.resizeListener) {
+      this.resizeListener = () => this.maybeSwapLogContainer();
+      window.addEventListener('resize', this.resizeListener);
     }
+  }
+
+  private openLogContainerForViewport(data: LogActivitySheetData): void {
+    const variant: NavigationBarVariant = window.innerWidth >= 768 ? 'rail' : 'bottom';
+    const container = pickLogActivityContainer(variant);
+    this.currentLogContainer = container;
+    if (container === 'sheet') {
+      const ref = this.bottomSheet.open(LogActivitySheetComponent, { data });
+      this.currentSheetRef = ref;
+      ref.afterDismissed().subscribe(() => this.cleanupLogContainer());
+    } else {
+      const ref = this.dialog.open(LogActivityDialogComponent, { data, width: '35rem' });
+      this.currentDialogRef = ref;
+      ref.afterClosed().subscribe(() => this.cleanupLogContainer());
+    }
+  }
+
+  private maybeSwapLogContainer(): void {
+    const data = this.currentLogData;
+    if (!data || !this.currentLogContainer) return;
+    const variant: NavigationBarVariant = window.innerWidth >= 768 ? 'rail' : 'bottom';
+    const next = pickLogActivityContainer(variant);
+    if (next === this.currentLogContainer) return;
+    if (this.currentSheetRef) {
+      this.currentSheetRef.dismiss();
+      this.currentSheetRef = null;
+    }
+    if (this.currentDialogRef) {
+      this.currentDialogRef.close();
+      this.currentDialogRef = null;
+    }
+    // Open the other container with the persisted draft state.
+    this.currentLogContainer = null;
+    this.openLogContainerForViewport(data);
+  }
+
+  private cleanupLogContainer(): void {
+    this.currentLogContainer = null;
+    this.currentSheetRef = null;
+    this.currentDialogRef = null;
+    if (!this.currentLogData) return;
+    // Only clear if both refs are gone (true close, not a swap).
+    setTimeout(() => {
+      if (!this.currentLogContainer) {
+        this.currentLogData = null;
+        if (this.resizeListener) {
+          window.removeEventListener('resize', this.resizeListener);
+          this.resizeListener = null;
+        }
+      }
+    }, 50);
   }
 }

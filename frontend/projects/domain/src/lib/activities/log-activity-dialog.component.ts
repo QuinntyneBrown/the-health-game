@@ -7,6 +7,7 @@ import { firstValueFrom } from 'rxjs';
 import { HealthTextFieldComponent } from 'components';
 
 import { formatRewardEarnedMessage } from '../rewards/format-reward-earned';
+import { LogActivityDraftService } from './log-activity-draft.service';
 import { LogActivitySheetData } from './log-activity-sheet.component';
 
 @Component({
@@ -21,12 +22,12 @@ import { LogActivitySheetData } from './log-activity-sheet.component';
         [helperText]="data.unit"
         [value]="quantity()"
         [errorText]="quantityError()"
-        (valueChange)="quantity.set($event)"
+        (valueChange)="onQuantity($event)"
       />
       <hg-health-text-field
         label="Notes (optional)"
         [value]="notes()"
-        (valueChange)="notes.set($event)"
+        (valueChange)="onNotes($event)"
       />
     </mat-dialog-content>
     <mat-dialog-actions align="end">
@@ -60,9 +61,10 @@ export class LogActivityDialogComponent {
   >(MatDialogRef);
   private readonly activities = inject(ACTIVITIES_SERVICE);
   private readonly snackBar = inject(MatSnackBar);
+  private readonly draft = inject(LogActivityDraftService);
 
-  readonly quantity = signal('');
-  readonly notes = signal('');
+  readonly quantity = signal(this.draft.draft().quantity);
+  readonly notes = signal(this.draft.draft().notes);
   private readonly attemptedSubmit = signal(false);
 
   readonly quantityError = computed(() =>
@@ -72,7 +74,18 @@ export class LogActivityDialogComponent {
   );
   readonly canSave = computed(() => true);
 
+  onQuantity(value: string): void {
+    this.quantity.set(value);
+    this.draft.patch({ quantity: value });
+  }
+
+  onNotes(value: string): void {
+    this.notes.set(value);
+    this.draft.patch({ notes: value });
+  }
+
   cancel(): void {
+    this.draft.reset();
     this.dialogRef.close(undefined);
   }
 
@@ -89,6 +102,7 @@ export class LogActivityDialogComponent {
     if (message) {
       this.snackBar.open(message, 'View', { duration: 5_000 });
     }
+    this.draft.reset();
     this.dialogRef.close(entry);
   }
 }

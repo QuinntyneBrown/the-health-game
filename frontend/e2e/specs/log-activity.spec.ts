@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 04-TC-V-001..007, 04-TC-C-001..010, 04-TC-L-001..010, 04-TC-R-001..003
+// Traces to: 04-TC-V-001..007, 04-TC-C-001..010, 04-TC-L-001..010, 04-TC-R-001..004
 // Description: log-activity dialog typography.
 import { expect, test } from '@playwright/test';
 
@@ -56,6 +56,48 @@ const goal = {
 };
 
 test.describe('Log activity sheet (mobile)', () => {
+  test('resize mobile→tablet swaps sheet→dialog, preserves form state (04-TC-R-004)', async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 360, height: 780 });
+    await authenticate(page);
+    await page.route('**/api/goals/g1', (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify(goal),
+      }),
+    );
+    await page.route('**/api/goals/g1/activity**', (route) =>
+      route.fulfill({ status: 200, contentType: 'application/json', body: '[]' }),
+    );
+    await page.goto('/goals/g1');
+    await page
+      .locator('[data-testid="goal-detail-log-fab"]')
+      .evaluate((el: HTMLElement) => el.click());
+    await page.waitForTimeout(400);
+
+    // Fill quantity in the sheet.
+    const sheetInput = page
+      .locator('lib-log-activity-sheet hg-health-text-field')
+      .filter({ hasText: 'Quantity' })
+      .locator('input');
+    await sheetInput.fill('5');
+
+    // Resize across the breakpoint.
+    await page.setViewportSize({ width: 1024, height: 800 });
+    await page.waitForTimeout(500);
+
+    // Sheet is gone; dialog has appeared with the persisted quantity.
+    await expect(page.locator('lib-log-activity-sheet')).toHaveCount(0);
+    const dialogInput = page
+      .locator('lib-log-activity-dialog hg-health-text-field')
+      .filter({ hasText: 'Quantity' })
+      .locator('input');
+    await expect(dialogInput).toBeVisible();
+    await expect(dialogInput).toHaveValue('5');
+  });
+
   test('360 px: sheet rises from bottom + ≤75% viewport + handle visible (04-TC-R-001)', async ({
     page,
   }) => {
