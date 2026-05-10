@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 05-TC-V-001..008, 05-TC-C-001..010, 05-TC-L-001..010, 05-TC-R-001..004
+// Traces to: 05-TC-V-001..008, 05-TC-C-001..010, 05-TC-L-001..010, 05-TC-R-001..005
 // Description: rewards list page chrome.
 import { expect, test } from '@playwright/test';
 
@@ -74,6 +74,58 @@ const readyReward = {
 };
 
 test.describe('Rewards list', () => {
+  test('locked cards still legible at 360 px (05-TC-R-005)', async ({ page }) => {
+    await page.setViewportSize({ width: 360, height: 780 });
+    await authenticate(page);
+    await page.unroute('**/api/rewards**');
+    await page.route('**/api/rewards**', (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify([
+          {
+            id: 'r-locked',
+            goalId: 'g1',
+            name: 'Long-term reward title that should still be legible',
+            description: 'Earned by hitting a 60-day streak',
+            status: 'locked',
+            earnedAt: null,
+            condition: { type: 'streak-milestone', streakDays: 60 },
+          },
+        ]),
+      }),
+    );
+    await page.goto('/rewards');
+
+    const item = page
+      .locator('lib-reward-list .reward-section[data-status="locked"] .reward-list__item')
+      .first();
+    await expect(item).toBeVisible();
+    const titleEl = item.locator('.reward-card__name').first();
+    await expect(titleEl).toBeVisible();
+    const meta = await titleEl.evaluate((el) => {
+      const cs = getComputedStyle(el);
+      const itemEl = el.closest('.reward-list__item') as HTMLElement;
+      const itemOpacity = itemEl ? parseFloat(getComputedStyle(itemEl).opacity) : 1;
+      const rect = el.getBoundingClientRect();
+      const text = el.textContent?.trim() ?? '';
+      return {
+        fontSize: parseFloat(cs.fontSize),
+        opacity: itemOpacity,
+        clientWidth: rect.width,
+        viewportWidth: window.innerWidth,
+        textLength: text.length,
+        textTruncated: el.scrollWidth > el.clientWidth + 1,
+      };
+    });
+    // ≥ 13 px effective text size, opacity ≥ 0.6 still meets reading threshold,
+    // and the card fits inside the viewport (no horizontal overflow).
+    expect(meta.fontSize).toBeGreaterThanOrEqual(13);
+    expect(meta.opacity).toBeGreaterThanOrEqual(0.6);
+    expect(meta.clientWidth).toBeGreaterThan(0);
+    expect(meta.clientWidth).toBeLessThanOrEqual(meta.viewportWidth);
+  });
+
   test('hero CTAs stack on mobile with 12 px gap (05-TC-R-004)', async ({ page }) => {
     await page.setViewportSize({ width: 360, height: 780 });
     await authenticate(page);

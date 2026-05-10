@@ -341,7 +341,7 @@ and made green. The /loop process picks the first test with
 | 330 | 05 | TC-R-002 | 768 px | Two-column grid; hero side-by-side icon + text | 2026-05-10T07:34:29Z |
 | 331 | 05 | TC-R-003 | 1440 px | Three-column grid; bounded by max content width | 2026-05-10T07:35:49Z |
 | 332 | 05 | TC-R-004 | Hero CTA buttons stack on mobile | 12 px gap | 2026-05-10T07:37:09Z |
-| 333 | 05 | TC-R-005 | Locked cards still legible at smallest viewport | Yes | null |
+| 333 | 05 | TC-R-005 | Locked cards still legible at smallest viewport | Yes | 2026-05-10T07:38:10Z |
 | 334 | 05 | TC-F-001 | List shows only the current user's rewards | Yes (ownership scoping) | null |
 | 335 | 05 | TC-F-002 | Earned rewards visually distinguished from pending | Distinct accent + earned date displayed (L2-010 §2) | null |
 | 336 | 05 | TC-F-003 | Counts in subtitle accurate ("1 ready · 2 in progress · 3 locked") | Sums match list | null |
