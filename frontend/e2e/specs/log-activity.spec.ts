@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 04-TC-V-001..007, 04-TC-C-001..010, 04-TC-L-001..010, 04-TC-R-001..006, 04-TC-F-001..011
+// Traces to: 04-TC-V-001..007, 04-TC-C-001..010, 04-TC-L-001..010, 04-TC-R-001..006, 04-TC-F-001..012
 // Description: log-activity dialog typography.
 import { expect, test } from '@playwright/test';
 
@@ -323,6 +323,41 @@ test.describe('Log activity sheet (mobile)', () => {
 
 test.describe('Log activity dialog (desktop)', () => {
   test.use({ viewport: { width: 1440, height: 900 } });
+
+  for (const status of [403, 404] as const) {
+    for (const method of ['PUT', 'DELETE'] as const) {
+      test(`crafted ${method} on another user's activity yields ${status} (04-TC-F-012 — ${method} ${status})`, async ({
+        page,
+      }) => {
+        await page.setViewportSize({ width: 1440, height: 900 });
+        await authenticate(page);
+
+        let calls = 0;
+        await page.route('**/api/activities/other-user-activity', (route) => {
+          calls += 1;
+          route.fulfill({ status, contentType: 'application/json', body: '{}' });
+        });
+        await page.goto('/home');
+
+        const responseStatus = await page.evaluate(
+          async ({ status, method }) => {
+            const r = await fetch('/api/activities/other-user-activity', {
+              method,
+              headers: {
+                Authorization: 'Bearer test-access-token',
+                'Content-Type': 'application/json',
+              },
+              body: method === 'PUT' ? JSON.stringify({ quantity: 99 }) : undefined,
+            });
+            return r.status;
+          },
+          { status, method },
+        );
+        expect(responseStatus).toBe(status);
+        expect(calls).toBe(1);
+      });
+    }
+  }
 
   test('delete existing activity entry persists (04-TC-F-011)', async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 900 });
