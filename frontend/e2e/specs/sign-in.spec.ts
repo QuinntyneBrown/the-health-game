@@ -6,6 +6,27 @@ import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
 
 test.describe('Sign In — page', () => {
+  test('lockout response surfaces generic error, no lockout leak (07-TC-F-013)', async ({
+    page,
+  }) => {
+    await page.route('**/api/auth/sign-in', (route) =>
+      route.fulfill({
+        status: 401,
+        contentType: 'application/problem+json',
+        body: JSON.stringify({ status: 401, title: 'Authentication is required.' }),
+      }),
+    );
+    await page.goto('/sign-in');
+    await page.getByTestId('sign-in-username').locator('input').fill('locked@example.com');
+    await page.getByTestId('sign-in-password').locator('input').fill('AnyPassword!');
+    await page.getByTestId('sign-in-submit').click();
+    const err = page.getByTestId('sign-in-error');
+    await expect(err).toBeVisible();
+    const text = (await err.textContent()) ?? '';
+    expect(text).toMatch(/Invalid username or password\./);
+    expect(text).not.toMatch(/lock|attempt|too many|disabled/i);
+  });
+
   test('disabled/deleted account shows generic 401 error (07-TC-F-012)', async ({
     page,
   }) => {
