@@ -1,5 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 import { Router } from '@angular/router';
 import { GOALS_SERVICE, GoalSummary } from 'api';
 import {
@@ -24,7 +26,14 @@ const cadenceOptions: readonly SegmentedFilterOption[] = [
 
 @Component({
   selector: 'lib-goal-list',
-  imports: [EmptyStateComponent, GoalCardComponent, PageHeaderComponent, SegmentedFilterComponent],
+  imports: [
+    EmptyStateComponent,
+    GoalCardComponent,
+    MatButtonModule,
+    MatIconModule,
+    PageHeaderComponent,
+    SegmentedFilterComponent,
+  ],
   templateUrl: './goal-list.component.html',
   styleUrl: './goal-list.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

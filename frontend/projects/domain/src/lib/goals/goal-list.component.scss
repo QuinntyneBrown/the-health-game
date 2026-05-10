@@ -19,3 +19,20 @@
 .goal-list__item {
   display: contents;
 }
+
+.goal-list__fab {
+  display: none;
+}
+
+@media (max-width: 767px) {
+  .goal-list__fab {
+    display: inline-flex !important;
+    position: fixed;
+    right: 24px;
+    bottom: 24px;
+    width: 56px !important;
+    height: 56px !important;
+    min-height: 56px !important;
+    z-index: 5;
+  }
+}

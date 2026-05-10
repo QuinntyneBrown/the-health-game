@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 03-TC-V-001..009, 03-TC-C-001..011, 03-TC-L-001..009
+// Traces to: 03-TC-V-001..009, 03-TC-C-001..011, 03-TC-L-001..010
 // Description: /goals page title "Goals" renders with Inter weight 500 at 22/32 px.
 // Subtitle is Inter 13 px weight 400 with computed counts.
 import { expect, test } from '@playwright/test';
@@ -559,6 +559,28 @@ test.describe('Goals page — header typography', () => {
 
   test.describe('filter chip layout', () => {
     test.use({ viewport: { width: 1440, height: 900 } });
+
+    test('mobile FAB is 56 px bottom-right with 24 px inset (03-TC-L-010)', async ({ page }) => {
+      await page.setViewportSize({ width: 360, height: 780 });
+      await authenticate(page);
+      await page.goto('/goals');
+
+      const fab = page.locator('lib-goal-list [data-testid="goals-new-fab"]');
+      await expect(fab).toBeVisible();
+      const box = await fab.evaluate((el) => {
+        const r = el.getBoundingClientRect();
+        return {
+          width: Math.round(r.width),
+          height: Math.round(r.height),
+          right: Math.round(window.innerWidth - r.right),
+          bottom: Math.round(window.innerHeight - r.bottom),
+        };
+      });
+      expect(box.width).toBe(56);
+      expect(box.height).toBe(56);
+      expect(box.right).toBe(24);
+      expect(box.bottom).toBe(24);
+    });
 
     test('desktop grid is 3 cards across with 16 px gap (03-TC-L-009)', async ({ page }) => {
       await page.setViewportSize({ width: 1440, height: 900 });
