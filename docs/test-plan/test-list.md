@@ -240,7 +240,7 @@ and made green. The /loop process picks the first test with
 | 229 | 04 | TC-C-005 | Cadence segmented selected | `#94F7B4` background, `#00210F` label | 2026-05-10T03:36:01Z |
 | 230 | 04 | TC-C-006 | Cadence segmented unselected | transparent fill, outline 1 px, `#191D17` label | 2026-05-10T03:38:17Z |
 | 231 | 04 | TC-C-007 | Switch on color | `#006D3F` track, `#FFFFFF` thumb | 2026-05-10T03:44:14Z |
-| 232 | 04 | TC-C-008 | Submit button | `#006D3F` bg, white label | null |
+| 232 | 04 | TC-C-008 | Submit button | `#006D3F` bg, white label | 2026-05-10T03:45:40Z |
 | 233 | 04 | TC-C-009 | Mobile sheet handle | `#C2C9BE`, 4 px tall, 32 px wide | null |
 | 234 | 04 | TC-C-010 | Backdrop scrim (when modal) | `#0000007A` | null |
 | 235 | 04 | TC-L-001 | Mobile bottom sheet corner radius | 28 px top, 0 bottom | null |
