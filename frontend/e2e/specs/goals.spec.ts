@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 03-TC-V-001..009, 03-TC-C-001..011, 03-TC-L-001..004
+// Traces to: 03-TC-V-001..009, 03-TC-C-001..011, 03-TC-L-001..005
 // Description: /goals page title "Goals" renders with Inter weight 500 at 22/32 px.
 // Subtitle is Inter 13 px weight 400 with computed counts.
 import { expect, test } from '@playwright/test';
@@ -559,6 +559,15 @@ test.describe('Goals page — header typography', () => {
 
   test.describe('filter chip layout', () => {
     test.use({ viewport: { width: 1440, height: 900 } });
+
+    test('goal card corner radius is 16 px (03-TC-L-005)', async ({ page }) => {
+      await authenticate(page);
+      await page.goto('/goals');
+      const card = page.locator('lib-goal-list .goal-card').first();
+      await expect(card).toBeVisible();
+      const radius = await card.evaluate((el) => getComputedStyle(el).borderRadius);
+      expect(radius).toBe('16px');
+    });
 
     test('chip height is 36 px on desktop (03-TC-L-004)', async ({ page }) => {
       await page.setViewportSize({ width: 1440, height: 900 });
