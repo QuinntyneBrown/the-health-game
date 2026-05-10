@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 06-TC-V-001..007, 06-TC-C-001..007
+// Traces to: 06-TC-V-001..007, 06-TC-C-001..008
 // Description: stats + profile page chrome.
 import { expect, test } from '@playwright/test';
 
@@ -44,6 +44,29 @@ async function authenticate(page: import('@playwright/test').Page): Promise<void
 }
 
 test.describe('Stats & Profile chrome', () => {
+  test('Delete account button #BA1A1A / white (06-TC-C-008)', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await authenticate(page);
+    await page.goto('/profile');
+
+    const btn = page.locator('[data-testid="profile-delete"]');
+    const bg = await btn.evaluate((el) => getComputedStyle(el).backgroundColor);
+    const labelColor = await btn.evaluate((el) => {
+      const walker = document.createTreeWalker(el, NodeFilter.SHOW_ELEMENT);
+      let node: Element | null = el;
+      let target: Element | null = null;
+      while ((node = walker.nextNode() as Element | null)) {
+        if ((node.textContent ?? '').trim() === 'Delete account') {
+          target = node;
+          break;
+        }
+      }
+      return getComputedStyle(target ?? el).color;
+    });
+    expect(bg).toBe('rgb(186, 26, 26)');
+    expect(labelColor).toBe('rgb(255, 255, 255)');
+  });
+
   test('profile Save button #006D3F / white (06-TC-C-007)', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await authenticate(page);
