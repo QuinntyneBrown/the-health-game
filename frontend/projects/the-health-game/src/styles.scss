@@ -211,6 +211,16 @@ lib-goal-list .goal-card:not(.goal-card--complete):not(.goal-card--streak) {
   background-color: #ebefe7 !important;
 }
 
+lib-goal-list .goal-card .goal-card__content {
+  padding: 20px !important;
+}
+
+@media (max-width: 767px) {
+  lib-goal-list .goal-card .goal-card__content {
+    padding: 12px !important;
+  }
+}
+
 lib-goal-list .goal-list__item:nth-child(4n + 1) .goal-card__icon-frame {
   background-color: #94f7b4 !important;
 }
