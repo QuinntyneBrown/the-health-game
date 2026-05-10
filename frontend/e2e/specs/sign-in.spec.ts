@@ -6,6 +6,20 @@ import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
 
 test.describe('Sign In — page', () => {
+  test('password toggle reveals and re-masks (07-TC-B-008)', async ({ page }) => {
+    await page.goto('/sign-in');
+    const input = page.getByTestId('sign-in-password').locator('input');
+    await input.fill('Secret123!');
+    await expect(input).toHaveAttribute('type', 'password');
+    const toggle = page
+      .getByTestId('sign-in-password')
+      .locator('button.health-text-field__visibility');
+    await toggle.click();
+    await expect(input).toHaveAttribute('type', 'text');
+    await toggle.click();
+    await expect(input).toHaveAttribute('type', 'password');
+  });
+
   test('submit shows busy state while in-flight (07-TC-B-007)', async ({ page }) => {
     await page.route('**/api/auth/sign-in', async (route) => {
       await new Promise((r) => setTimeout(r, 800));
