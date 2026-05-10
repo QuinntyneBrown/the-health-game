@@ -58,9 +58,9 @@ export interface LogActivitySheetData {
         background: var(--hg-color-outline);
         border-radius: var(--hg-radius-full);
         display: block;
-        height: 0.25rem;
+        height: 4px;
         justify-self: center;
-        width: 2.5rem;
+        width: 32px;
       }
 
       .sheet__title {

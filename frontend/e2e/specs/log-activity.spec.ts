@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 04-TC-V-001..007, 04-TC-C-001..008
+// Traces to: 04-TC-V-001..007, 04-TC-C-001..009
 // Description: log-activity dialog typography.
 import { expect, test } from '@playwright/test';
 
@@ -54,6 +54,46 @@ const goal = {
   longestStreak: 0,
   rewardName: '',
 };
+
+test.describe('Log activity sheet (mobile)', () => {
+  test('mobile sheet handle #C2C9BE / 4 px tall / 32 px wide (04-TC-C-009)', async ({ page }) => {
+    await page.setViewportSize({ width: 360, height: 780 });
+    await authenticate(page);
+    await page.route('**/api/goals/g1', (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify(goal),
+      }),
+    );
+    await page.route('**/api/goals/g1/activity**', (route) =>
+      route.fulfill({ status: 200, contentType: 'application/json', body: '[]' }),
+    );
+    await page.goto('/goals/g1');
+    // Scroll the FAB into view (mobile bottom nav can overlap it) then click via JS dispatch
+    // to bypass any overlap issues.
+    await page.locator('[data-testid="goal-detail-log-fab"]').evaluate((el: HTMLElement) => el.click());
+    await page.waitForTimeout(800);
+    const handle = page
+      .locator(
+        '.cdk-overlay-container .sheet__handle, lib-log-activity-sheet .sheet__handle',
+      )
+      .first();
+    await expect(handle).toBeVisible();
+    const box = await handle.evaluate((el) => {
+      const r = el.getBoundingClientRect();
+      const s = getComputedStyle(el);
+      return {
+        width: Math.round(r.width),
+        height: Math.round(r.height),
+        bg: s.backgroundColor,
+      };
+    });
+    expect(box.bg).toBe('rgb(194, 201, 190)');
+    expect(box.height).toBe(4);
+    expect(box.width).toBe(32);
+  });
+});
 
 test.describe('Log activity dialog (desktop)', () => {
   test.use({ viewport: { width: 1440, height: 900 } });
