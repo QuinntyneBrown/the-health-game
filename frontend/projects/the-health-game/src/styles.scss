@@ -157,6 +157,18 @@ h2[mat-dialog-title],
   font-weight: 500 !important;
 }
 
+input.mat-mdc-input-element,
+.mat-mdc-form-field input,
+.mat-mdc-form-field textarea {
+  font-family:
+    Inter,
+    Roboto,
+    Arial,
+    sans-serif !important;
+  font-size: 14px !important;
+  font-weight: 400 !important;
+}
+
 hg-action-button button.action-button,
 hg-action-button button.action-button .mdc-button__label {
   font-family:
