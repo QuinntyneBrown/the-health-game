@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 04-TC-V-001..007, 04-TC-C-001..010, 04-TC-L-001..004
+// Traces to: 04-TC-V-001..007, 04-TC-C-001..010, 04-TC-L-001..005
 // Description: log-activity dialog typography.
 import { expect, test } from '@playwright/test';
 
@@ -158,6 +158,23 @@ test.describe('Log activity sheet (mobile)', () => {
 
 test.describe('Log activity dialog (desktop)', () => {
   test.use({ viewport: { width: 1440, height: 900 } });
+
+  test('inter-field vertical gap is 16 px (04-TC-L-005)', async ({ page }) => {
+    await authenticate(page);
+    await page.goto('/goals/new');
+
+    // Measure the gap between the Name field and the Target/Unit row directly below it.
+    const nameField = page
+      .locator('lib-goal-form hg-health-text-field')
+      .filter({ hasText: 'Name' })
+      .first();
+    const targetRow = page.locator('lib-goal-form .goal-form__target').first();
+    const nameBottom = await nameField.evaluate(
+      (el) => el.getBoundingClientRect().bottom,
+    );
+    const targetTop = await targetRow.evaluate((el) => el.getBoundingClientRect().top);
+    expect(Math.round(targetTop - nameBottom)).toBe(16);
+  });
 
   test('form field height is 56 px (04-TC-L-004)', async ({ page }) => {
     await authenticate(page);

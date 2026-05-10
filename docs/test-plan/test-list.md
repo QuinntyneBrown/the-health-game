@@ -247,7 +247,7 @@ and made green. The /loop process picks the first test with
 | 236 | 04 | TC-L-002 | Mobile sheet padding | 24 px horizontal, 16 px top, 24 px bottom (above safe-area inset) | 2026-05-10T04:08:05Z |
 | 237 | 04 | TC-L-003 | Tablet form padding | 32 px | 2026-05-10T04:10:10Z |
 | 238 | 04 | TC-L-004 | Field height | 56 px | 2026-05-10T04:12:47Z |
-| 239 | 04 | TC-L-005 | Inter-field vertical gap | 16 px | null |
+| 239 | 04 | TC-L-005 | Inter-field vertical gap | 16 px | 2026-05-10T04:14:55Z |
 | 240 | 04 | TC-L-006 | Section vertical gap | 24 px | null |
 | 241 | 04 | TC-L-007 | Cadence segmented control height | 40 px; corner radius 9999 | null |
 | 242 | 04 | TC-L-008 | Submit button height | 48 px (mobile) / 56 px (tablet/desktop) | null |
