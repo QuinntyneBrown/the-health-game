@@ -60,6 +60,14 @@ const filterOptions: readonly SegmentedFilterOption[] = [
             >
               Claim
             </button>
+            <button
+              class="reward-hero__secondary"
+              type="button"
+              data-testid="reward-hero-secondary"
+              (click)="onMaybeLater(hero)"
+            >
+              Maybe later
+            </button>
           </div>
         </div>
       </section>
@@ -189,6 +197,23 @@ const filterOptions: readonly SegmentedFilterOption[] = [
         outline-offset: 2px;
       }
 
+      .reward-hero__secondary {
+        background: transparent;
+        border: 1px solid #c2c9be;
+        border-radius: 9999px;
+        color: inherit;
+        cursor: pointer;
+        font-family: Inter, Roboto, Arial, sans-serif;
+        font-size: 14px;
+        font-weight: 500;
+        padding: 12px 24px;
+      }
+
+      .reward-hero__secondary:focus-visible {
+        outline: 2px solid #006d3f;
+        outline-offset: 2px;
+      }
+
       .reward-hero__eyebrow {
         font-family: Inter, Roboto, Arial, sans-serif;
         font-size: 11px;
@@ -272,5 +297,9 @@ export class RewardListComponent {
 
   onClaim(_reward: Reward): void {
     // Wired in 05-TC-F-004; visual + structural only for now.
+  }
+
+  onMaybeLater(_reward: Reward): void {
+    // Visual placeholder; defer-claim flow not yet specified.
   }
 }

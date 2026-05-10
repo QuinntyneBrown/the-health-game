@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 05-TC-V-001..008, 05-TC-C-001..003
+// Traces to: 05-TC-V-001..008, 05-TC-C-001..004
 // Description: rewards list page chrome.
 import { expect, test } from '@playwright/test';
 
@@ -74,6 +74,36 @@ const readyReward = {
 };
 
 test.describe('Rewards list', () => {
+  test('hero secondary CTA transparent bg / #C2C9BE outline (05-TC-C-004)', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await authenticate(page);
+    await page.unroute('**/api/rewards**');
+    await page.route('**/api/rewards**', (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify([readyReward, ...sampleRewards]),
+      }),
+    );
+
+    await page.goto('/rewards');
+    const secondary = page
+      .locator('lib-reward-list [data-testid="reward-hero-secondary"]')
+      .first();
+    await expect(secondary).toBeVisible();
+    const result = await secondary.evaluate((el) => {
+      const s = getComputedStyle(el);
+      return {
+        bg: s.backgroundColor,
+        borderColor: s.borderTopColor,
+        borderWidth: s.borderTopWidth,
+      };
+    });
+    expect(result.bg).toBe('rgba(0, 0, 0, 0)');
+    expect(result.borderColor).toBe('rgb(194, 201, 190)');
+    expect(parseFloat(result.borderWidth)).toBeGreaterThan(0);
+  });
+
   test('hero "Claim" CTA #9B2680 bg, white label (05-TC-C-003)', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await authenticate(page);
