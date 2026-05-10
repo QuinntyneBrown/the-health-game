@@ -337,7 +337,7 @@ and made green. The /loop process picks the first test with
 | 326 | 05 | TC-L-008 | Inter-card gap | 16 px | 2026-05-10T07:30:02Z |
 | 327 | 05 | TC-L-009 | Page padding desktop / tablet / mobile | 32 / 24 / 16 px | 2026-05-10T07:31:15Z |
 | 328 | 05 | TC-L-010 | Top bar height | 80 px | 2026-05-10T07:32:23Z |
-| 329 | 05 | TC-R-001 | 360 px | Single column; hero stacks icon-then-text vertically | null |
+| 329 | 05 | TC-R-001 | 360 px | Single column; hero stacks icon-then-text vertically | 2026-05-10T07:33:31Z |
 | 330 | 05 | TC-R-002 | 768 px | Two-column grid; hero side-by-side icon + text | null |
 | 331 | 05 | TC-R-003 | 1440 px | Three-column grid; bounded by max content width | null |
 | 332 | 05 | TC-R-004 | Hero CTA buttons stack on mobile | 12 px gap | null |

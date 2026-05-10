@@ -170,9 +170,15 @@ const filterOptions: readonly SegmentedFilterOption[] = [
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.149);
         display: grid;
         gap: var(--hg-space-4);
-        grid-template-columns: auto 1fr;
+        grid-template-columns: 1fr;
         margin-bottom: var(--hg-space-6);
         padding: 32px;
+      }
+
+      @media (min-width: 768px) {
+        .reward-hero {
+          grid-template-columns: auto 1fr;
+        }
       }
 
       .reward-hero__icon-frame {
