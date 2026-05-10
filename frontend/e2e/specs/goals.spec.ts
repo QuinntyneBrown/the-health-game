@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 03-TC-V-001..009, 03-TC-C-001..011, 03-TC-L-001..011, 03-TC-R-001..006
+// Traces to: 03-TC-V-001..009, 03-TC-C-001..011, 03-TC-L-001..011, 03-TC-R-001..006, 03-TC-F-001
 // Description: /goals page title "Goals" renders with Inter weight 500 at 22/32 px.
 // Subtitle is Inter 13 px weight 400 with computed counts.
 import { expect, test } from '@playwright/test';
@@ -559,6 +559,65 @@ test.describe('Goals page — header typography', () => {
 
   test.describe('filter chip layout', () => {
     test.use({ viewport: { width: 1440, height: 900 } });
+
+    test('list shows only goals returned by GET /api/goals for the current user (03-TC-F-001)', async ({
+      page,
+    }) => {
+      await page.setViewportSize({ width: 1440, height: 900 });
+      await authenticate(page);
+      await page.unroute('**/api/goals**');
+
+      let bearer = '';
+      const requestedUrls: string[] = [];
+      await page.route('**/api/goals**', (route) => {
+        const req = route.request();
+        bearer = req.headers()['authorization'] ?? '';
+        requestedUrls.push(req.url());
+        route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify([
+            {
+              id: 'mine-1',
+              name: 'Mine: walk',
+              description: '',
+              cadence: 'daily',
+              target: { value: 10, unit: 'min' },
+              completedQuantity: 0,
+              currentStreak: 0,
+              longestStreak: 0,
+              rewardName: '',
+            },
+            {
+              id: 'mine-2',
+              name: 'Mine: read',
+              description: '',
+              cadence: 'daily',
+              target: { value: 30, unit: 'min' },
+              completedQuantity: 0,
+              currentStreak: 0,
+              longestStreak: 0,
+              rewardName: '',
+            },
+          ]),
+        });
+      });
+
+      await page.goto('/goals');
+
+      const cards = page.locator('lib-goal-list .goal-card');
+      await expect(cards).toHaveCount(2);
+
+      const titles = await cards.locator('.goal-card__title').allInnerTexts();
+      expect(titles.sort()).toEqual(['Mine: read', 'Mine: walk']);
+
+      // Request was authenticated (so the server can scope to the current user)
+      expect(bearer).toMatch(/^Bearer /);
+      // No other entity ID in the URL (i.e., we didn't ask for another user's goals)
+      requestedUrls.forEach((url) => {
+        expect(url).not.toMatch(/userId=|user=/);
+      });
+    });
 
     test('detail streaks row stays readable at <576 px without horizontal scroll (03-TC-R-006)', async ({
       page,

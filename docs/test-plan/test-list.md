@@ -180,7 +180,7 @@ and made green. The /loop process picks the first test with
 | 169 | 03 | TC-R-004 | Filter row scrolls horizontally on mobile if overflowing | yes, no clipping | 2026-05-10T00:26:24Z |
 | 170 | 03 | TC-R-005 | Long goal names truncate at 1 line on cards | ellipsis + accessible full name on hover/focus | 2026-05-10T00:35:28Z |
 | 171 | 03 | TC-R-006 | Detail view streaks row stays readable at <576 px | no horizontal scroll (L2-008 §3) | 2026-05-10T00:36:38Z |
-| 172 | 03 | TC-F-001 | List shows only goals owned by current user | per L2-002 §1 | null |
+| 172 | 03 | TC-F-001 | List shows only goals owned by current user | per L2-002 §1 | 2026-05-10T00:37:42Z |
 | 173 | 03 | TC-F-002 | Searching filters by name (case-insensitive substring) | Yes | null |
 | 174 | 03 | TC-F-003 | Filter chip "All" shows count of total goals | matches list size | null |
 | 175 | 03 | TC-F-004 | Filter chip "Daily" shows count of daily-cadence goals | counts match | null |
