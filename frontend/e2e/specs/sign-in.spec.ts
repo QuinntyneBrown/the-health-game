@@ -6,6 +6,34 @@ import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
 
 test.describe('Sign In — page', () => {
+  test('reload after sign-in stays authenticated for the tab session (07-TC-D-002)', async ({
+    page,
+  }) => {
+    await page.route('**/api/auth/sign-in', (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({
+          accessToken: 'd002-token',
+          user: { id: 'u', displayName: 'A', roles: ['Player'] },
+        }),
+      }),
+    );
+    await page.goto('/sign-in');
+    await page.getByTestId('sign-in-username').locator('input').fill('alice');
+    await page.getByTestId('sign-in-password').locator('input').fill('Secret123!');
+    await page.getByTestId('sign-in-submit').click();
+    await page.waitForURL(/\/home/);
+    await page.reload();
+    expect(page.url()).toContain('/home');
+    const t = await page.evaluate(() =>
+      sessionStorage.getItem('hg.oidc.access-token'),
+    );
+    expect(t).toBe('d002-token');
+    await page.goto('/sign-in');
+    await page.waitForURL(/\/home/);
+  });
+
   test('successful sign-in writes token to sessionStorage only (07-TC-D-001)', async ({
     page,
   }) => {
