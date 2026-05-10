@@ -1,10 +1,35 @@
 // Acceptance Test
-// Traces to: L2-036, 07-TC-V-001..009
+// Traces to: L2-036, 07-TC-V-001..010
 // Description: Username + password sign-in page. Each test exercises one
 //              vertical slice end-to-end against the running app.
 import { expect, test } from '@playwright/test';
 
 test.describe('Sign In — page', () => {
+  test('Sign in button Inter 14/16 px / 500 / white (07-TC-V-010)', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await page.goto('/sign-in');
+    const btn = page.locator('lib-sign-in form button[type="submit"]');
+    await expect(btn).toBeVisible();
+    const meta = await btn.evaluate((el) => {
+      const walker = document.createTreeWalker(el, NodeFilter.SHOW_ELEMENT);
+      let target: Element | null = el;
+      let node: Element | null = el;
+      while ((node = walker.nextNode() as Element | null)) {
+        const txt = (node.textContent ?? '').trim();
+        if (/Sign in/i.test(txt) && txt.length < 30) {
+          target = node;
+          break;
+        }
+      }
+      const s = getComputedStyle(target ?? el);
+      return { family: s.fontFamily, size: s.fontSize, weight: s.fontWeight, color: s.color };
+    });
+    expect(meta.family).toMatch(/Inter/);
+    expect(['14px', '16px']).toContain(meta.size);
+    expect(meta.weight).toBe('500');
+    expect(meta.color).toBe('rgb(255, 255, 255)');
+  });
+
   test('helper/error Inter 12 px / 500 / error color (07-TC-V-009)', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await page.goto('/sign-in');

@@ -492,6 +492,24 @@ lib-profile button[data-testid='profile-save'] .mdc-button__label {
   color: #ffffff !important;
 }
 
+lib-sign-in form button[type='submit'] {
+  background-color: #006d3f !important;
+  color: #ffffff !important;
+}
+lib-sign-in form button[type='submit'] .mdc-button__label,
+lib-sign-in form button[type='submit'] span {
+  color: #ffffff !important;
+  font-family: Inter, Roboto, Arial, sans-serif !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+}
+@media (min-width: 768px) {
+  lib-sign-in form button[type='submit'] .mdc-button__label,
+  lib-sign-in form button[type='submit'] span {
+    font-size: 16px !important;
+  }
+}
+
 lib-reward-list .reward-card {
   transition: box-shadow 150ms ease-out;
 }
