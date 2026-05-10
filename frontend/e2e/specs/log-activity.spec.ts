@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 04-TC-V-001..007, 04-TC-C-001..010, 04-TC-L-001..005
+// Traces to: 04-TC-V-001..007, 04-TC-C-001..010, 04-TC-L-001..006
 // Description: log-activity dialog typography.
 import { expect, test } from '@playwright/test';
 
@@ -158,6 +158,22 @@ test.describe('Log activity sheet (mobile)', () => {
 
 test.describe('Log activity dialog (desktop)', () => {
   test.use({ viewport: { width: 1440, height: 900 } });
+
+  test('section vertical gap is 24 px (04-TC-L-006)', async ({ page }) => {
+    await authenticate(page);
+    await page.goto('/goals/new');
+
+    // Gap above the Cadence section label (after the target row).
+    const target = page.locator('lib-goal-form .goal-form__target').first();
+    const sectionLabel = page
+      .locator('lib-goal-form .goal-form__section-label')
+      .filter({ hasText: 'Cadence' })
+      .first();
+    await expect(sectionLabel).toBeVisible();
+    const targetBottom = await target.evaluate((el) => el.getBoundingClientRect().bottom);
+    const labelTop = await sectionLabel.evaluate((el) => el.getBoundingClientRect().top);
+    expect(Math.round(labelTop - targetBottom)).toBe(24);
+  });
 
   test('inter-field vertical gap is 16 px (04-TC-L-005)', async ({ page }) => {
     await authenticate(page);
