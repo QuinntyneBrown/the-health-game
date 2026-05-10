@@ -13,6 +13,7 @@ interface StatTile {
   imports: [PageHeaderComponent],
   template: `
     <hg-page-header title="Stats" />
+    <h2 class="stats-section__title">This week</h2>
     <ul class="stat-tiles" data-testid="stat-tiles">
       @for (tile of tiles; track tile.id) {
         <li
@@ -98,6 +99,13 @@ interface StatTile {
         font-family: Inter, Roboto, Arial, sans-serif;
         font-size: 12px;
         font-weight: 500;
+      }
+
+      .stats-section__title {
+        font-family: Inter, Roboto, Arial, sans-serif;
+        font-size: 18px;
+        font-weight: 500;
+        margin: 0 0 var(--hg-space-3);
       }
     `,
   ],
