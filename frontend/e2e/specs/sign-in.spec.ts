@@ -6,6 +6,15 @@ import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
 
 test.describe('Sign In — page', () => {
+  test('username over 254 chars: client blocks submit (07-TC-F-017)', async ({ page }) => {
+    await page.goto('/sign-in');
+    const submit = page.getByTestId('sign-in-submit');
+    const longUser = 'a'.repeat(255) + '@x.io';
+    await page.getByTestId('sign-in-username').locator('input').fill(longUser);
+    await page.getByTestId('sign-in-password').locator('input').fill('Secret123!');
+    await expect(submit).toBeDisabled();
+  });
+
   test('whitespace-only credentials keep submit disabled (07-TC-F-016)', async ({
     page,
   }) => {

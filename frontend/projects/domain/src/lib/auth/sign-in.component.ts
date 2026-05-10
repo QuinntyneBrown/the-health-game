@@ -51,12 +51,14 @@ export class SignInComponent {
     this.submitted() && this.password().length === 0 ? 'Enter your password' : '',
   );
 
-  readonly canSubmit = computed(
-    () =>
-      !this.busy() &&
-      this.usernameOrEmail().trim().length > 0 &&
-      this.password().trim().length > 0,
-  );
+  readonly canSubmit = computed(() => {
+    if (this.busy()) return false;
+    const id = this.usernameOrEmail().trim();
+    const pw = this.password();
+    if (id.length === 0 || id.length > 254) return false;
+    if (pw.trim().length === 0 || pw.length > 256) return false;
+    return true;
+  });
 
   async onSubmit(event: Event): Promise<void> {
     event.preventDefault();

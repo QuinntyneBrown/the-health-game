@@ -516,7 +516,7 @@ and made green. The /loop process picks the first test with
 | 505 | 07 | TC-F-014 | Click "New to HealthQuest? Get started" | Navigates to `/onboarding` | 2026-05-10T14:37:30Z |
 | 506 | 07 | TC-F-015 | Network failure during submit | Submit re-enables; values preserved; non-disclosing error | 2026-05-10T14:39:30Z |
 | 507 | 07 | TC-F-016 | Whitespace-only credentials | Submit remains disabled (trim before evaluating) | 2026-05-10T14:41:30Z |
-| 508 | 07 | TC-F-017 | Username over 254 chars | Client blocks submit; backend rejects as 400 | null |
+| 508 | 07 | TC-F-017 | Username over 254 chars | Client blocks submit; backend rejects as 400 | 2026-05-10T14:42:30Z |
 | 509 | 07 | TC-F-018 | Password over 256 chars | Client blocks submit; backend rejects as 400 | null |
 | 510 | 07 | TC-B-001 | Tab order: username -> password -> toggle -> submit -> OIDC -> "Get started" | Logical, no skipped controls | null |
 | 511 | 07 | TC-B-002 | Visible focus ring on every interactive element | Yes, contrast >= 3:1 | null |
