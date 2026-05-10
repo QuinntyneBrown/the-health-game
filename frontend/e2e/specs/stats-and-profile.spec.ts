@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 06-TC-V-001..007, 06-TC-C-001..010, 06-TC-L-001..010, 06-TC-R-001..005, 06-TC-F-001..008, 06-TC-F-101..102
+// Traces to: 06-TC-V-001..007, 06-TC-C-001..010, 06-TC-L-001..010, 06-TC-R-001..005, 06-TC-F-001..008, 06-TC-F-101..103
 // Description: stats + profile page chrome.
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
@@ -45,6 +45,54 @@ async function authenticate(page: import('@playwright/test').Page): Promise<void
 }
 
 test.describe('Stats & Profile chrome', () => {
+  test('edit email when provider permits (06-TC-F-103)', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await authenticate(page);
+
+    let user = {
+      displayName: 'Quinn',
+      email: 'q@old.example',
+      avatarUrl: null as string | null,
+      roles: [] as string[],
+    };
+    let putBody: { displayName: string; email: string } | null = null;
+    let verificationFlag = false;
+    await page.unroute('**/api/users/me**');
+    await page.route('**/api/users/me**', (route, request) => {
+      if (request.method() === 'PUT') {
+        putBody = request.postDataJSON();
+        const next = { ...user, ...(putBody as { displayName: string; email: string }) };
+        if (next.email !== user.email) verificationFlag = true;
+        user = next;
+        route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify({ ...user, emailVerificationPending: verificationFlag }),
+        });
+        return;
+      }
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify(user),
+      });
+    });
+
+    await page.goto('/profile');
+    await page.locator('[data-testid="profile-edit"]').click();
+    await page
+      .locator('lib-profile hg-health-text-field')
+      .filter({ hasText: 'Email' })
+      .locator('input')
+      .fill('q@new.example');
+    await page.locator('[data-testid="profile-save"]').click();
+    await expect(page.locator('lib-profile [data-testid="profile-form"]')).toHaveCount(0);
+
+    expect(putBody).toMatchObject({ email: 'q@new.example' });
+    expect(verificationFlag).toBe(true);
+    await expect(page.locator('[data-testid="profile-email"]')).toHaveText('q@new.example');
+  });
+
   test('edit display name persists + reflects in greeting (06-TC-F-102)', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await page.route('**/connect/token', (route) =>
