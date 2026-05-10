@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 06-TC-V-001..007, 06-TC-C-001..010, 06-TC-L-001..010
+// Traces to: 06-TC-V-001..007, 06-TC-C-001..010, 06-TC-L-001..010, 06-TC-R-001
 // Description: stats + profile page chrome.
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
@@ -45,6 +45,37 @@ async function authenticate(page: import('@playwright/test').Page): Promise<void
 }
 
 test.describe('Stats & Profile chrome', () => {
+  test('mobile 360: tiles 2 cols + chart full width (06-TC-R-001)', async ({ page }) => {
+    await page.setViewportSize({ width: 360, height: 780 });
+    await authenticate(page);
+    await page.goto('/stats');
+
+    const grid = page.locator('lib-stats .stat-tiles');
+    await expect(grid).toBeVisible();
+    const cols = await grid.evaluate(
+      (el) => getComputedStyle(el).gridTemplateColumns.split(/\s+/).filter(Boolean).length,
+    );
+    expect(cols).toBe(2);
+
+    // Bar chart sits full-width within the page padding (i.e. its width
+    // matches the host content box, not split into a side-by-side column).
+    const meta = await page.evaluate(() => {
+      const host = document.querySelector('lib-stats') as HTMLElement | null;
+      const chart = document.querySelector('lib-stats .activity-chart') as HTMLElement | null;
+      if (!host || !chart) return null;
+      const hostRect = host.getBoundingClientRect();
+      const chartRect = chart.getBoundingClientRect();
+      const padX =
+        parseFloat(getComputedStyle(host).paddingLeft) +
+        parseFloat(getComputedStyle(host).paddingRight);
+      return {
+        ratio: chartRect.width / (hostRect.width - padX),
+      };
+    });
+    expect(meta).not.toBeNull();
+    expect(meta!.ratio).toBeGreaterThan(0.95);
+  });
+
   test('page padding 32 / 24 / 16 by viewport (06-TC-L-010)', async ({ page }) => {
     await authenticate(page);
     const measure = async (path: string) => {

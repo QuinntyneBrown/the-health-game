@@ -400,7 +400,7 @@ and made green. The /loop process picks the first test with
 | 389 | 06 | TC-L-008 | Avatar size — desktop | 48 px | 2026-05-10T11:19:30Z |
 | 390 | 06 | TC-L-009 | Avatar size — mobile | 32 px | 2026-05-10T11:20:49Z |
 | 391 | 06 | TC-L-010 | Page padding desktop / tablet / mobile | 32 / 24 / 16 px | 2026-05-10T11:22:07Z |
-| 392 | 06 | TC-R-001 | 360 px | Stat tiles 2 columns; bar chart full width below | null |
+| 392 | 06 | TC-R-001 | 360 px | Stat tiles 2 columns; bar chart full width below | 2026-05-10T11:23:14Z |
 | 393 | 06 | TC-R-002 | 768 px | Stat tiles 3 columns | null |
 | 394 | 06 | TC-R-003 | 1440 px | Stat tiles 5 columns; profile right-rail or below per layout | null |
 | 395 | 06 | TC-R-004 | Print stylesheet | Renders without nav chrome | null |
