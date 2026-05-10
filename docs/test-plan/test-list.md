@@ -397,7 +397,7 @@ and made green. The /loop process picks the first test with
 | 386 | 06 | TC-L-005 | Profile form field height | 56 px | 2026-05-10T11:13:46Z |
 | 387 | 06 | TC-L-006 | Profile form column max width | 480 px | 2026-05-10T11:15:48Z |
 | 388 | 06 | TC-L-007 | Section vertical rhythm | 24 px | 2026-05-10T11:16:57Z |
-| 389 | 06 | TC-L-008 | Avatar size — desktop | 48 px | null |
+| 389 | 06 | TC-L-008 | Avatar size — desktop | 48 px | 2026-05-10T11:19:30Z |
 | 390 | 06 | TC-L-009 | Avatar size — mobile | 32 px | null |
 | 391 | 06 | TC-L-010 | Page padding desktop / tablet / mobile | 32 / 24 / 16 px | null |
 | 392 | 06 | TC-R-001 | 360 px | Stat tiles 2 columns; bar chart full width below | null |

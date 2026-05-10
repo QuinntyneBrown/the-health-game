@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 06-TC-V-001..007, 06-TC-C-001..010, 06-TC-L-001..007
+// Traces to: 06-TC-V-001..007, 06-TC-C-001..010, 06-TC-L-001..008
 // Description: stats + profile page chrome.
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
@@ -45,6 +45,21 @@ async function authenticate(page: import('@playwright/test').Page): Promise<void
 }
 
 test.describe('Stats & Profile chrome', () => {
+  test('avatar 48 px on desktop (06-TC-L-008)', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await authenticate(page);
+    await page.goto('/profile');
+
+    const avatar = page.locator('lib-profile .profile__avatar').first();
+    await expect(avatar).toBeVisible();
+    const result = await avatar.evaluate((el) => {
+      const s = getComputedStyle(el);
+      return { width: s.width, height: s.height };
+    });
+    expect(result.width).toBe('48px');
+    expect(result.height).toBe('48px');
+  });
+
   test('section vertical rhythm 24 px (06-TC-L-007)', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await authenticate(page);
