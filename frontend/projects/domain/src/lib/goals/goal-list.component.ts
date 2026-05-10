@@ -20,6 +20,7 @@ import {
   GoalSortOrder,
   sortGoals,
 } from './filter-goals';
+import { GoalsOptimisticService } from './goals.optimistic.service';
 
 const baseCadenceOptions: readonly SegmentedFilterOption[] = [
   { value: 'all', label: 'All' },
@@ -47,12 +48,16 @@ const baseCadenceOptions: readonly SegmentedFilterOption[] = [
 export class GoalListComponent {
   private readonly goalsService = inject(GOALS_SERVICE);
   private readonly router = inject(Router);
+  private readonly optimistic = inject(GoalsOptimisticService);
 
   readonly cadence = signal<CadenceFilter>('all');
   readonly searchQuery = signal('');
   readonly sortOrder = signal<GoalSortOrder>('name');
 
-  readonly goals = toSignal(this.goalsService.getGoals(), { initialValue: [] as const });
+  private readonly serverGoals = toSignal(this.goalsService.getGoals(), {
+    initialValue: [] as const,
+  });
+  readonly goals = computed(() => [...this.serverGoals(), ...this.optimistic.pending()]);
   readonly cadenceOptions = computed<readonly SegmentedFilterOption[]>(() => {
     const goals = this.goals();
     return baseCadenceOptions.map((opt) => {

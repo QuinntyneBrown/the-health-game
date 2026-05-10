@@ -3,6 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
   CreateGoalInput,
@@ -14,6 +15,7 @@ import {
 import { HealthTextFieldComponent } from 'components';
 
 import { GoalFormState, validateGoalForm } from './goal-form.validate';
+import { GoalsOptimisticService } from './goals.optimistic.service';
 
 const cadences: readonly { id: GoalCadence; label: string }[] = [
   { id: 'hourly', label: 'Hourly' },
@@ -55,6 +57,8 @@ export class GoalFormComponent {
   private readonly goalsService = inject(GOALS_SERVICE);
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
+  private readonly optimistic = inject(GoalsOptimisticService);
+  private readonly snackBar = inject(MatSnackBar);
 
   readonly cadences = cadences;
   readonly weekDays = weekDays;
@@ -150,11 +154,39 @@ export class GoalFormComponent {
           }
         : {}),
     };
-    const request$ = this.editingId
-      ? this.goalsService.updateGoal(this.editingId, input)
-      : this.goalsService.createGoal(input);
-    request$.subscribe((goal) => {
-      void this.router.navigateByUrl(`/goals/${goal.id}`);
+
+    if (this.editingId) {
+      this.goalsService.updateGoal(this.editingId, input).subscribe((goal) => {
+        void this.router.navigateByUrl(`/goals/${goal.id}`);
+      });
+      return;
+    }
+
+    const tempId = `pending-${Date.now()}`;
+    this.optimistic.add({
+      id: tempId,
+      name: input.name,
+      description: '',
+      cadence: input.cadence,
+      target: input.target,
+      completedQuantity: 0,
+      currentStreak: 0,
+      longestStreak: 0,
+      rewardName: '',
+    });
+    void this.router.navigateByUrl('/goals');
+
+    this.goalsService.createGoal(input).subscribe({
+      next: (goal) => {
+        this.optimistic.remove(tempId);
+        void this.router.navigateByUrl(`/goals/${goal.id}`);
+      },
+      error: () => {
+        this.optimistic.remove(tempId);
+        this.snackBar.open('Could not create goal — please try again.', 'Dismiss', {
+          duration: 5000,
+        });
+      },
     });
   }
 }

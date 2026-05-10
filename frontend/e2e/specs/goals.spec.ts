@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 03-TC-V-001..009, 03-TC-C-001..011, 03-TC-L-001..011, 03-TC-R-001..006, 03-TC-F-001..011, 03-TC-F-101..109, 03-TC-F-201..204, 03-TC-B-001..004
+// Traces to: 03-TC-V-001..009, 03-TC-C-001..011, 03-TC-L-001..011, 03-TC-R-001..006, 03-TC-F-001..011, 03-TC-F-101..109, 03-TC-F-201..204, 03-TC-B-001..005
 // Description: /goals page title "Goals" renders with Inter weight 500 at 22/32 px.
 // Subtitle is Inter 13 px weight 400 with computed counts.
 import { expect, test } from '@playwright/test';
@@ -559,6 +559,119 @@ test.describe('Goals page — header typography', () => {
 
   test.describe('filter chip layout', () => {
     test.use({ viewport: { width: 1440, height: 900 } });
+
+    test('optimistic UI on create rolls back with toast on failure (03-TC-B-005)', async ({
+      page,
+    }) => {
+      await page.setViewportSize({ width: 1440, height: 900 });
+      await authenticate(page);
+
+      await page.unroute('**/api/goals**');
+      await page.route('**/api/goals**', (route) => {
+        const req = route.request();
+        if (req.method() === 'POST') {
+          route.fulfill({ status: 500, contentType: 'application/json', body: '{}' });
+          return;
+        }
+        route.fulfill({ status: 200, contentType: 'application/json', body: '[]' });
+      });
+
+      await page.goto('/goals/new');
+      await page
+        .locator('hg-health-text-field')
+        .filter({ hasText: 'Name' })
+        .locator('input')
+        .fill('Walk');
+      await page
+        .locator('hg-health-text-field')
+        .filter({ hasText: 'Target' })
+        .locator('input')
+        .fill('10');
+      await page
+        .locator('hg-health-text-field')
+        .filter({ hasText: 'Unit' })
+        .locator('input')
+        .fill('min');
+
+      await page.locator('[data-testid="goal-form-save"]').click();
+
+      // The form navigates to /goals immediately (optimistic redirect).
+      await page.waitForURL(/\/goals$/);
+
+      // Toast surfaces the failure.
+      const snack = page.locator('mat-snack-bar-container, .mat-mdc-snack-bar-container').first();
+      await expect(snack).toBeVisible();
+      await expect(snack).toContainText(/could not create goal/i);
+
+      // After rollback the list is empty (server returns []).
+      await expect(page.locator('lib-goal-list .goal-card')).toHaveCount(0);
+    });
+
+    test('optimistic UI on create shows card immediately (03-TC-B-005 — happy)', async ({
+      page,
+    }) => {
+      await page.setViewportSize({ width: 1440, height: 900 });
+      await authenticate(page);
+
+      const real = {
+        id: 'real-1',
+        name: 'Walk',
+        description: '',
+        cadence: 'daily' as const,
+        target: { value: 10, unit: 'min' },
+        completedQuantity: 0,
+        currentStreak: 0,
+        longestStreak: 0,
+        rewardName: '',
+      };
+      let resolvePost: (() => void) | null = null;
+      const postHeld = new Promise<void>((r) => {
+        resolvePost = r;
+      });
+
+      await page.unroute('**/api/goals**');
+      await page.route('**/api/goals**', async (route) => {
+        const req = route.request();
+        if (req.method() === 'POST') {
+          await postHeld;
+          route.fulfill({
+            status: 201,
+            contentType: 'application/json',
+            body: JSON.stringify(real),
+          });
+          return;
+        }
+        route.fulfill({ status: 200, contentType: 'application/json', body: '[]' });
+      });
+
+      await page.goto('/goals/new');
+      await page
+        .locator('hg-health-text-field')
+        .filter({ hasText: 'Name' })
+        .locator('input')
+        .fill('Walk');
+      await page
+        .locator('hg-health-text-field')
+        .filter({ hasText: 'Target' })
+        .locator('input')
+        .fill('10');
+      await page
+        .locator('hg-health-text-field')
+        .filter({ hasText: 'Unit' })
+        .locator('input')
+        .fill('min');
+
+      await page.locator('[data-testid="goal-form-save"]').click();
+
+      // Form navigates to /goals immediately while POST is held; optimistic card visible.
+      await page.waitForURL(/\/goals$/);
+      const optimisticCard = page
+        .locator('lib-goal-list .goal-card')
+        .filter({ hasText: 'Walk' });
+      await expect(optimisticCard).toBeVisible();
+
+      resolvePost!();
+    });
 
     test('Enter from any text field submits the goal form (03-TC-B-004)', async ({ page }) => {
       await page.setViewportSize({ width: 1440, height: 900 });
