@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 04-TC-V-001..007, 04-TC-C-001..010, 04-TC-L-001..010, 04-TC-R-001..006, 04-TC-F-001..002
+// Traces to: 04-TC-V-001..007, 04-TC-C-001..010, 04-TC-L-001..010, 04-TC-R-001..006, 04-TC-F-001..003
 // Description: log-activity dialog typography.
 import { expect, test } from '@playwright/test';
 
@@ -323,6 +323,46 @@ test.describe('Log activity sheet (mobile)', () => {
 
 test.describe('Log activity dialog (desktop)', () => {
   test.use({ viewport: { width: 1440, height: 900 } });
+
+  test('log negative quantity is rejected with inline error (04-TC-F-003)', async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await authenticate(page);
+
+    let postCalls = 0;
+    await page.route('**/api/goals/g1', (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify(goal),
+      }),
+    );
+    await page.route('**/api/goals/g1/activities**', (route) => {
+      if (route.request().method() === 'POST') {
+        postCalls += 1;
+        route.fulfill({ status: 201, contentType: 'application/json', body: '{}' });
+        return;
+      }
+      route.fulfill({ status: 200, contentType: 'application/json', body: '[]' });
+    });
+
+    await page.goto('/goals/g1');
+    await page.locator('[data-testid="goal-detail-log-fab"]').click();
+
+    const qty = page
+      .locator('lib-log-activity-dialog hg-health-text-field')
+      .filter({ hasText: 'Quantity' })
+      .locator('input');
+
+    for (const bad of ['-1', '-25']) {
+      await qty.fill(bad);
+      await page.locator('[data-testid="log-activity-save"]').click();
+      await expect(
+        page.locator('lib-log-activity-dialog .health-text-field__error').first(),
+      ).toBeVisible();
+    }
+    await expect(page.locator('lib-log-activity-dialog')).toBeVisible();
+    expect(postCalls).toBe(0);
+  });
 
   test('log quantity 0 is rejected with inline error (04-TC-F-002)', async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 900 });
