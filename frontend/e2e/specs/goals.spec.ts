@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 03-TC-V-001..009, 03-TC-C-001..011, 03-TC-L-001..011, 03-TC-R-001
+// Traces to: 03-TC-V-001..009, 03-TC-C-001..011, 03-TC-L-001..011, 03-TC-R-001..002
 // Description: /goals page title "Goals" renders with Inter weight 500 at 22/32 px.
 // Subtitle is Inter 13 px weight 400 with computed counts.
 import { expect, test } from '@playwright/test';
@@ -559,6 +559,50 @@ test.describe('Goals page — header typography', () => {
 
   test.describe('filter chip layout', () => {
     test.use({ viewport: { width: 1440, height: 900 } });
+
+    test('768 px viewport: two-column grid + page-header New goal (03-TC-R-002)', async ({
+      page,
+    }) => {
+      await page.setViewportSize({ width: 768, height: 1024 });
+      await authenticate(page);
+      await page.unroute('**/api/goals**');
+      const baseGoal = {
+        description: '',
+        cadence: 'daily' as const,
+        target: { value: 10, unit: 'min' },
+        completedQuantity: 0,
+        currentStreak: 0,
+        longestStreak: 0,
+        rewardName: '',
+      };
+      await page.route('**/api/goals**', (route) =>
+        route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify(
+            ['Walk', 'Read', 'Stretch', 'Hydrate'].map((name, i) => ({
+              id: `g${i + 1}`,
+              name,
+              ...baseGoal,
+            })),
+          ),
+        }),
+      );
+      await page.goto('/goals');
+
+      const cards = page.locator('lib-goal-list .goal-card');
+      await expect(cards).toHaveCount(4);
+      const lefts = await cards.evaluateAll((els) =>
+        els.map((el) => Math.round(el.getBoundingClientRect().left)),
+      );
+      const uniqueColumns = Array.from(new Set(lefts));
+      expect(uniqueColumns.length).toBe(2);
+
+      const pill = page
+        .locator('lib-goal-list .page-header__action button')
+        .filter({ hasText: 'New goal' });
+      await expect(pill).toBeVisible();
+    });
 
     test('360 px viewport: single-column list + FAB visible (03-TC-R-001)', async ({ page }) => {
       await page.setViewportSize({ width: 360, height: 780 });

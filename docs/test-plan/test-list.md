@@ -175,7 +175,7 @@ and made green. The /loop process picks the first test with
 | 164 | 03 | TC-L-010 | Floating action button (mobile) | 56 px, bottom-right with 24 px inset | 2026-05-10T00:18:00Z |
 | 165 | 03 | TC-L-011 | Detail view — section spacing | 24 px between header / streak / activity history | 2026-05-10T00:19:09Z |
 | 166 | 03 | TC-R-001 | 360 px | Single-column list; FAB visible | 2026-05-10T00:20:07Z |
-| 167 | 03 | TC-R-002 | 768 px | Two-column grid; "New goal" pill in top bar | null |
+| 167 | 03 | TC-R-002 | 768 px | Two-column grid; "New goal" pill in top bar | 2026-05-10T00:21:06Z |
 | 168 | 03 | TC-R-003 | 1440 px | Three-column grid; max content width <= 1152 px | null |
 | 169 | 03 | TC-R-004 | Filter row scrolls horizontally on mobile if overflowing | yes, no clipping | null |
 | 170 | 03 | TC-R-005 | Long goal names truncate at 1 line on cards | ellipsis + accessible full name on hover/focus | null |
