@@ -367,7 +367,7 @@ and made green. The /loop process picks the first test with
 | 356 | 05 | TC-A-004 | "Claim" button has descriptive accessible name (`Claim "{reward name}"`) | Yes | 2026-05-10T08:10:32Z |
 | 357 | 05 | TC-A-005 | axe-core | 0 critical / serious | 2026-05-10T08:11:47Z |
 | 358 | 05 | TC-D-001 | Defined reward survives reload | Yes | 2026-05-10T08:12:59Z |
-| 359 | 05 | TC-D-002 | Earned reward survives reload | Yes | null |
+| 359 | 05 | TC-D-002 | Earned reward survives reload | Yes | 2026-05-10T08:13:45Z |
 | 360 | 05 | TC-D-003 | Earned reward NOT revoked when streak later breaks | Yes (L2-010 §3) | null |
 | 361 | 05 | TC-D-004 | Claimed timestamp recorded | Yes; displayed on detail view | null |
 | 362 | 05 | TC-D-005 | Sign in as different user | Other users' rewards not visible | null |

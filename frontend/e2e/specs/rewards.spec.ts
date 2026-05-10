@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 05-TC-V-001..008, 05-TC-C-001..010, 05-TC-L-001..010, 05-TC-R-001..005, 05-TC-F-001..007, 05-TC-F-101..105, 05-TC-F-201..203, 05-TC-B-001..004, 05-TC-A-001..005, 05-TC-D-001
+// Traces to: 05-TC-V-001..008, 05-TC-C-001..010, 05-TC-L-001..010, 05-TC-R-001..005, 05-TC-F-001..007, 05-TC-F-101..105, 05-TC-F-201..203, 05-TC-B-001..004, 05-TC-A-001..005, 05-TC-D-001..002
 // Description: rewards list page chrome.
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
@@ -75,6 +75,46 @@ const readyReward = {
 };
 
 test.describe('Rewards list', () => {
+  test('earned reward survives reload (05-TC-D-002)', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await authenticate(page);
+    await page.unroute('**/api/rewards**');
+    await page.route('**/api/rewards**', (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify([
+          {
+            id: 'r-earned',
+            goalId: 'g1',
+            name: 'Earned trophy',
+            description: '',
+            status: 'earned',
+            earnedAt: '2026-04-01T08:00:00Z',
+            condition: { type: 'streak-milestone', streakDays: 30 },
+          },
+        ]),
+      }),
+    );
+
+    await page.goto('/rewards');
+    const earnedSection = page.locator('lib-reward-list .reward-section[data-status="earned"]');
+    await expect(earnedSection).toContainText('Earned trophy');
+    const dateBefore = (await earnedSection
+      .locator('.reward-card__date')
+      .first()
+      .textContent())?.trim();
+    expect((dateBefore ?? '').length).toBeGreaterThan(0);
+
+    await page.reload();
+    await expect(earnedSection).toContainText('Earned trophy');
+    const dateAfter = (await earnedSection
+      .locator('.reward-card__date')
+      .first()
+      .textContent())?.trim();
+    expect(dateAfter).toBe(dateBefore);
+  });
+
   test('defined reward survives reload (05-TC-D-001)', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await authenticate(page);
