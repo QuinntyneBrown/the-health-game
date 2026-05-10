@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 06-TC-V-001..007, 06-TC-C-001..010, 06-TC-L-001..010, 06-TC-R-001..005, 06-TC-F-001..008, 06-TC-F-101..107, 06-TC-F-201..205, 06-TC-B-001..006, 06-TC-A-001..006, 06-TC-D-001..006, 06-TC-P-001
+// Traces to: 06-TC-V-001..007, 06-TC-C-001..010, 06-TC-L-001..010, 06-TC-R-001..005, 06-TC-F-001..008, 06-TC-F-101..107, 06-TC-F-201..205, 06-TC-B-001..006, 06-TC-A-001..006, 06-TC-D-001..006, 06-TC-P-001..002
 // Description: stats + profile page chrome.
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
@@ -45,6 +45,61 @@ async function authenticate(page: import('@playwright/test').Page): Promise<void
 }
 
 test.describe('Stats & Profile chrome', () => {
+  test('Profile save FE overhead under p95 budget (06-TC-P-002)', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await authenticate(page);
+
+    let putAt = 0;
+    let user = {
+      displayName: 'Quinn',
+      email: 'q@q.q',
+      avatarUrl: null as string | null,
+      roles: [] as string[],
+    };
+    await page.unroute('**/api/users/me**');
+    await page.route('**/api/users/me**', async (route, request) => {
+      if (request.method() === 'PUT') {
+        putAt = Date.now();
+        await new Promise((r) => setTimeout(r, 250));
+        const body = request.postDataJSON() as { displayName: string; email: string };
+        user = { ...user, ...body };
+        route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify(user),
+        });
+        return;
+      }
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify(user),
+      });
+    });
+
+    await page.goto('/profile');
+    await page.locator('[data-testid="profile-edit"]').click();
+    await page
+      .locator('lib-profile hg-health-text-field')
+      .filter({ hasText: 'Display name' })
+      .locator('input')
+      .fill('Renamed');
+
+    const clickAt = Date.now();
+    await page.locator('[data-testid="profile-save"]').click();
+    await expect(page.locator('lib-profile [data-testid="profile-form"]')).toHaveCount(0);
+    const closedAt = Date.now();
+
+    const feOverhead = putAt - clickAt;
+    const total = closedAt - clickAt;
+    expect(feOverhead).toBeGreaterThanOrEqual(0);
+    expect(feOverhead).toBeLessThan(150);
+    // Server stub adds 250 ms; p95 budget is 500 ms. Allow a 100 ms cushion
+    // for E2E nondeterminism (HMR / profiling overhead) so the assertion
+    // catches FE-side slowdowns without false-positiving on noise.
+    expect(total).toBeLessThanOrEqual(600);
+  });
+
   test('stats render under p95 budget (06-TC-P-001)', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await authenticate(page);

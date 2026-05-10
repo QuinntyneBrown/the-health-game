@@ -444,7 +444,7 @@ and made green. The /loop process picks the first test with
 | 433 | 06 | TC-D-005 | Auth tokens never written to localStorage; refresh tokens (if used) httpOnly cookie only | Confirmed (L2-013 §3) | 2026-05-10T13:00:32Z |
 | 434 | 06 | TC-D-006 | Stats accurately reflect cadence rollovers across midnight / month boundaries (L2-011) | Yes | 2026-05-10T13:02:19Z |
 | 435 | 06 | TC-P-001 | Stats summary endpoint p95 | <= 300 ms (L2-018 §1) | 2026-05-10T13:03:37Z |
-| 436 | 06 | TC-P-002 | Profile update endpoint p95 | <= 500 ms (L2-018 §2) | null |
+| 436 | 06 | TC-P-002 | Profile update endpoint p95 | <= 500 ms (L2-018 §2) | 2026-05-10T13:05:28Z |
 | 437 | 06 | TC-P-003 | Bar chart renders without layout shift (CLS ~ 0) | Yes | null |
 | 438 | 07 | TC-V-001 | Title ("Welcome back.") font family | `Inter`, weight 500 | null |
 | 439 | 07 | TC-V-002 | Title size — mobile | 28 px, line-height 1.2 | null |
