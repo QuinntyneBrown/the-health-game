@@ -292,7 +292,7 @@ and made green. The /loop process picks the first test with
 | 281 | 04 | TC-B-010 | Drag handle on mobile sheet supports swipe-to-dismiss | Yes | 2026-05-10T05:52:25Z |
 | 282 | 04 | TC-A-001 | Sheet exposes `role="dialog"` with `aria-modal="true"` | Yes | 2026-05-10T05:55:07Z |
 | 283 | 04 | TC-A-002 | Title programmatically associated via `aria-labelledby` | Yes | 2026-05-10T05:57:21Z |
-| 284 | 04 | TC-A-003 | Each input has visible label and matching `<label for>` | Yes | null |
+| 284 | 04 | TC-A-003 | Each input has visible label and matching `<label for>` | Yes | 2026-05-10T06:02:01Z |
 | 285 | 04 | TC-A-004 | Inline errors announced via `aria-live="polite"` | Yes | null |
 | 286 | 04 | TC-A-005 | Submit button announces loading state via `aria-busy` | Yes | null |
 | 287 | 04 | TC-A-006 | Sheet handle has `aria-label="Drag to close"` (or button alternative) | Yes | null |
