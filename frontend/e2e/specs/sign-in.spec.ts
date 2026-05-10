@@ -6,6 +6,14 @@ import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
 
 test.describe('Sign In — page', () => {
+  test('brand mark is decorative (aria-hidden) (07-TC-A-003)', async ({ page }) => {
+    await page.goto('/sign-in');
+    const ariaHidden = await page
+      .locator('lib-sign-in [data-testid="sign-in-brand"] .app-brand__mark')
+      .getAttribute('aria-hidden');
+    expect(ariaHidden).toBe('true');
+  });
+
   test('title rendered as h1 (07-TC-A-002)', async ({ page }) => {
     await page.goto('/sign-in');
     const tag = await page
