@@ -277,7 +277,7 @@ and made green. The /loop process picks the first test with
 | 266 | 04 | TC-F-104 | Cadence Hourly | Persisted; period rolls at top of next hour (L2-011 §4) | 2026-05-10T05:12:42Z |
 | 267 | 04 | TC-F-105 | Cadence Weekly with week-start = Monday | Persisted; rollover at next Monday (L2-011 §2) | 2026-05-10T05:14:18Z |
 | 268 | 04 | TC-F-106 | Cadence Monthly | Persisted; rollover on first of next month (L2-011 §3) | 2026-05-10T05:15:47Z |
-| 269 | 04 | TC-F-107 | Custom cadence "every 3 days" | Persisted with start date; period boundaries 3-day increments (L2-012 §1) | null |
+| 269 | 04 | TC-F-107 | Custom cadence "every 3 days" | Persisted with start date; period boundaries 3-day increments (L2-012 §1) | 2026-05-10T05:17:21Z |
 | 270 | 04 | TC-F-108 | Custom cadence N=0 | Validation error (L2-012 §2) | null |
 | 271 | 04 | TC-F-109 | Submit while unauthenticated (token expired) | 401; client routes to re-auth (L2-013 §4) | null |
 | 272 | 04 | TC-B-001 | Open log sheet via FAB | Slide-up animation 200 ms; respects reduced-motion | null |

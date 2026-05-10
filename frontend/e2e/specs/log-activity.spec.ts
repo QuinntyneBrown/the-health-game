@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 04-TC-V-001..007, 04-TC-C-001..010, 04-TC-L-001..010, 04-TC-R-001..006, 04-TC-F-001..012, 04-TC-F-101..106
+// Traces to: 04-TC-V-001..007, 04-TC-C-001..010, 04-TC-L-001..010, 04-TC-R-001..006, 04-TC-F-001..012, 04-TC-F-101..107
 // Description: log-activity dialog typography.
 import { expect, test } from '@playwright/test';
 
@@ -907,6 +907,85 @@ test.describe('Log activity dialog (desktop)', () => {
       page.locator('lib-goal-detail [data-testid="activity-list"]'),
     ).toBeVisible();
     expect(postBody).toMatchObject({ quantity: 5 });
+  });
+
+  test('custom cadence "every 3 days" persists customInterval (04-TC-F-107)', async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await authenticate(page);
+
+    let postBody: Record<string, unknown> | null = null;
+    const created = {
+      id: 'c-1',
+      name: 'Stretch',
+      description: '',
+      cadence: 'custom' as const,
+      target: { value: 5, unit: 'min' },
+      completedQuantity: 0,
+      currentStreak: 0,
+      longestStreak: 0,
+      rewardName: '',
+      customInterval: { count: 3, unit: 'days' },
+    };
+    await page.unroute('**/api/goals**');
+    await page.route('**/api/goals**', (route) => {
+      const req = route.request();
+      if (req.url().endsWith('/api/goals/c-1')) {
+        route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify(created),
+        });
+        return;
+      }
+      if (req.method() === 'POST') {
+        postBody = req.postDataJSON();
+        route.fulfill({
+          status: 201,
+          contentType: 'application/json',
+          body: JSON.stringify(created),
+        });
+        return;
+      }
+      route.fulfill({ status: 200, contentType: 'application/json', body: '[]' });
+    });
+    await page.route('**/api/goals/c-1/activities**', (route) =>
+      route.fulfill({ status: 200, contentType: 'application/json', body: '[]' }),
+    );
+
+    await page.goto('/goals/new');
+    await page
+      .locator('hg-health-text-field')
+      .filter({ hasText: 'Name' })
+      .locator('input')
+      .fill('Stretch');
+    await page
+      .locator('hg-health-text-field')
+      .filter({ hasText: 'Target' })
+      .locator('input')
+      .fill('5');
+    await page
+      .locator('hg-health-text-field')
+      .filter({ hasText: 'Unit' })
+      .locator('input')
+      .fill('min');
+    await page
+      .locator('hg-segmented-filter[data-testid="cadence-picker"] mat-button-toggle')
+      .filter({ hasText: /^Custom$/ })
+      .click();
+    await page
+      .locator('hg-health-text-field')
+      .filter({ hasText: 'Every' })
+      .locator('input')
+      .fill('3');
+
+    await page.locator('[data-testid="goal-form-save"]').click();
+    await page.waitForURL(/\/goals\/c-1$/);
+
+    expect(postBody).toMatchObject({
+      name: 'Stretch',
+      cadence: 'custom',
+      customInterval: { count: 3, unit: 'days' },
+    });
   });
 
   test('create monthly goal persists with cadence: monthly (04-TC-F-106)', async ({ page }) => {
