@@ -9,6 +9,24 @@ import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
 
 test.describe('Sign In — page', () => {
+  test('sign-in route is lazy-loaded (07-TC-P-002)', () => {
+    const routesPath = path.join(
+      __dirname,
+      '..',
+      '..',
+      'projects',
+      'the-health-game',
+      'src',
+      'app',
+      'app.routes.ts',
+    );
+    const src = fs.readFileSync(routesPath, 'utf8');
+    const block = src.match(/path:\s*'sign-in'[^}]*}/m);
+    expect(block, 'sign-in route block not found').not.toBeNull();
+    expect(block![0]).toMatch(/loadChildren|loadComponent/);
+    expect(block![0]).not.toMatch(/component:\s*\w+Component/);
+  });
+
   test('cold-load LCP <= 2.5 s (07-TC-P-001)', async ({ page }) => {
     await page.goto('/sign-in');
     const lcp = await page.evaluate(
