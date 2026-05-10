@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 05-TC-V-001..008, 05-TC-C-001..010, 05-TC-L-001..010, 05-TC-R-001..005, 05-TC-F-001..007, 05-TC-F-101..105, 05-TC-F-201..203, 05-TC-B-001..004, 05-TC-A-001..005, 05-TC-D-001..003
+// Traces to: 05-TC-V-001..008, 05-TC-C-001..010, 05-TC-L-001..010, 05-TC-R-001..005, 05-TC-F-001..007, 05-TC-F-101..105, 05-TC-F-201..203, 05-TC-B-001..004, 05-TC-A-001..005, 05-TC-D-001..004
 // Description: rewards list page chrome.
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
@@ -75,6 +75,71 @@ const readyReward = {
 };
 
 test.describe('Rewards list', () => {
+  test('claimed timestamp is recorded and displayed (05-TC-D-004)', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await authenticate(page);
+
+    const claimedAt = '2026-05-10T07:30:00Z';
+    let claimBody: Record<string, unknown> | null = null;
+    let serverRewards: Array<Record<string, unknown>> = [readyReward, ...sampleRewards];
+
+    await page.unroute('**/api/rewards**');
+    await page.route('**/api/rewards**', (route, request) => {
+      const url = new URL(request.url());
+      if (request.method() === 'POST' && /\/api\/rewards\/.+\/claim$/.test(url.pathname)) {
+        const id = url.pathname.split('/').slice(-2, -1)[0];
+        claimBody = request.postDataJSON();
+        const updated = {
+          ...readyReward,
+          status: 'earned',
+          earnedAt: claimedAt,
+        };
+        serverRewards = serverRewards.map((r) =>
+          (r as { id: string }).id === id ? updated : r,
+        );
+        route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify(updated),
+        });
+        return;
+      }
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify(serverRewards),
+      });
+    });
+
+    await page.goto('/rewards');
+    await page.locator('[data-testid="reward-hero-claim"]').click();
+    await expect(page.locator('lib-reward-list .reward-hero')).toBeHidden();
+
+    // Body is empty/{} — server stamps the timestamp; FE doesn't send one.
+    expect(claimBody === null || Object.keys(claimBody).length === 0).toBe(true);
+
+    const earnedDate = page
+      .locator('lib-reward-list .reward-section[data-status="earned"] .reward-card', {
+        hasText: readyReward.name,
+      })
+      .locator('.reward-card__date')
+      .first();
+    await expect(earnedDate).toBeVisible();
+    const dateText = (await earnedDate.textContent())?.trim() ?? '';
+    expect(dateText.length).toBeGreaterThan(0);
+    expect(new Date(dateText).toString()).not.toBe('Invalid Date');
+
+    // Reload — the claimedAt persists.
+    await page.reload();
+    const earnedDateAfter = page
+      .locator('lib-reward-list .reward-section[data-status="earned"] .reward-card', {
+        hasText: readyReward.name,
+      })
+      .locator('.reward-card__date')
+      .first();
+    await expect(earnedDateAfter).toHaveText(dateText);
+  });
+
   test('earned reward NOT revoked when streak later breaks (05-TC-D-003)', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await authenticate(page);
