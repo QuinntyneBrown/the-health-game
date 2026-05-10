@@ -1,6 +1,14 @@
-import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  effect,
+  inject,
+  signal,
+} from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { MatIconModule } from '@angular/material/icon';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 import { REWARDS_SERVICE, Reward } from 'api';
@@ -308,6 +316,18 @@ const filterOptions: readonly SegmentedFilterOption[] = [
 export class RewardListComponent {
   private readonly rewardsService = inject(REWARDS_SERVICE);
   private readonly router = inject(Router);
+  private readonly snackBar = inject(MatSnackBar);
+
+  private readonly notified = new Set<string>();
+
+  constructor() {
+    effect(() => {
+      const ready = this.readyToClaim();
+      if (!ready || this.notified.has(ready.id)) return;
+      this.notified.add(ready.id);
+      this.snackBar.open(`Reward ready to claim: ${ready.name}`, 'View', { duration: 6_000 });
+    });
+  }
 
   readonly filterOptions = filterOptions;
   readonly status = signal<RewardStatusFilter>('all');

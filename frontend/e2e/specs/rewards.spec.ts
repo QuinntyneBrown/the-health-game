@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 05-TC-V-001..008, 05-TC-C-001..010, 05-TC-L-001..010, 05-TC-R-001..005, 05-TC-F-001..007, 05-TC-F-101..105, 05-TC-F-201
+// Traces to: 05-TC-V-001..008, 05-TC-C-001..010, 05-TC-L-001..010, 05-TC-R-001..005, 05-TC-F-001..007, 05-TC-F-101..105, 05-TC-F-201..202
 // Description: rewards list page chrome.
 import { expect, test } from '@playwright/test';
 
@@ -74,6 +74,26 @@ const readyReward = {
 };
 
 test.describe('Rewards list', () => {
+  test('queued offline earn surfaces on next /rewards visit (05-TC-F-202)', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await authenticate(page);
+    await page.unroute('**/api/rewards**');
+    await page.route('**/api/rewards**', (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify([readyReward, ...sampleRewards]),
+      }),
+    );
+
+    await page.goto('/rewards');
+    const snack = page
+      .locator('mat-snack-bar-container, .mat-mdc-snack-bar-container')
+      .first();
+    await expect(snack).toBeVisible({ timeout: 4000 });
+    await expect(snack).toContainText(/Spa day|Reward/i);
+  });
+
   test('streak crossing threshold mid-session shows reward toast (05-TC-F-201)', async ({
     page,
   }) => {
