@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 04-TC-V-001..007, 04-TC-C-001..010, 04-TC-L-001..010, 04-TC-R-001..006, 04-TC-F-001..012, 04-TC-F-101..105
+// Traces to: 04-TC-V-001..007, 04-TC-C-001..010, 04-TC-L-001..010, 04-TC-R-001..006, 04-TC-F-001..012, 04-TC-F-101..106
 // Description: log-activity dialog typography.
 import { expect, test } from '@playwright/test';
 
@@ -907,6 +907,79 @@ test.describe('Log activity dialog (desktop)', () => {
       page.locator('lib-goal-detail [data-testid="activity-list"]'),
     ).toBeVisible();
     expect(postBody).toMatchObject({ quantity: 5 });
+  });
+
+  test('create monthly goal persists with cadence: monthly (04-TC-F-106)', async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await authenticate(page);
+
+    let postBody: Record<string, unknown> | null = null;
+    const created = {
+      id: 'm-1',
+      name: 'Read 5 books',
+      description: '',
+      cadence: 'monthly' as const,
+      target: { value: 5, unit: 'books' },
+      completedQuantity: 0,
+      currentStreak: 0,
+      longestStreak: 0,
+      rewardName: '',
+    };
+    await page.unroute('**/api/goals**');
+    await page.route('**/api/goals**', (route) => {
+      const req = route.request();
+      if (req.url().endsWith('/api/goals/m-1')) {
+        route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify(created),
+        });
+        return;
+      }
+      if (req.method() === 'POST') {
+        postBody = req.postDataJSON();
+        route.fulfill({
+          status: 201,
+          contentType: 'application/json',
+          body: JSON.stringify(created),
+        });
+        return;
+      }
+      route.fulfill({ status: 200, contentType: 'application/json', body: '[]' });
+    });
+    await page.route('**/api/goals/m-1/activities**', (route) =>
+      route.fulfill({ status: 200, contentType: 'application/json', body: '[]' }),
+    );
+
+    await page.goto('/goals/new');
+    await page
+      .locator('hg-health-text-field')
+      .filter({ hasText: 'Name' })
+      .locator('input')
+      .fill('Read 5 books');
+    await page
+      .locator('hg-health-text-field')
+      .filter({ hasText: 'Target' })
+      .locator('input')
+      .fill('5');
+    await page
+      .locator('hg-health-text-field')
+      .filter({ hasText: 'Unit' })
+      .locator('input')
+      .fill('books');
+    await page
+      .locator('hg-segmented-filter[data-testid="cadence-picker"] mat-button-toggle')
+      .filter({ hasText: /^Monthly$/ })
+      .click();
+
+    await page.locator('[data-testid="goal-form-save"]').click();
+    await page.waitForURL(/\/goals\/m-1$/);
+
+    expect(postBody).toMatchObject({
+      name: 'Read 5 books',
+      cadence: 'monthly',
+      target: { value: 5, unit: 'books' },
+    });
   });
 
   test('create weekly goal Monday week-start persists (04-TC-F-105)', async ({ page }) => {
