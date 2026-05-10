@@ -13,6 +13,21 @@ interface StatTile {
   imports: [PageHeaderComponent],
   template: `
     <hg-page-header title="Stats" />
+    <h2 class="stats-section__title">Activity over time</h2>
+    <section class="activity-chart" data-testid="activity-chart" aria-label="Daily activity minutes">
+      <ol class="activity-chart__bars">
+        @for (day of activity; track day.label) {
+          <li class="activity-chart__column">
+            <span
+              class="activity-chart__bar"
+              [style.height.%]="day.value"
+              [attr.aria-label]="day.label + ': ' + day.value + '%'"
+            ></span>
+            <span class="activity-chart__axis-label">{{ day.label }}</span>
+          </li>
+        }
+      </ol>
+    </section>
     <h2 class="stats-section__title">This week</h2>
     <ul class="stat-tiles" data-testid="stat-tiles">
       @for (tile of tiles; track tile.id) {
@@ -107,11 +122,62 @@ interface StatTile {
         font-weight: 500;
         margin: 0 0 var(--hg-space-3);
       }
+
+      .activity-chart {
+        background: #ffffff;
+        border-radius: 16px;
+        margin-bottom: var(--hg-space-6);
+        padding: 24px;
+      }
+
+      .activity-chart__bars {
+        align-items: end;
+        display: grid;
+        gap: 12px;
+        grid-template-columns: repeat(7, 1fr);
+        height: 160px;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+
+      .activity-chart__column {
+        display: grid;
+        gap: 8px;
+        grid-template-rows: 1fr auto;
+        height: 100%;
+      }
+
+      .activity-chart__bar {
+        align-self: end;
+        background: #006d3f;
+        border-radius: 6px;
+        display: block;
+        min-height: 4px;
+        width: 100%;
+      }
+
+      .activity-chart__axis-label {
+        color: #424940;
+        font-family: Inter, Roboto, Arial, sans-serif;
+        font-size: 12px;
+        text-align: center;
+      }
     `,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class StatsComponent {
+  readonly activity: ReadonlyArray<{ label: string; value: number }> = [
+    { label: 'Mon', value: 60 },
+    { label: 'Tue', value: 80 },
+    { label: 'Wed', value: 45 },
+    { label: 'Thu', value: 90 },
+    { label: 'Fri', value: 70 },
+    { label: 'Sat', value: 30 },
+    { label: 'Sun', value: 55 },
+  ];
+
   readonly tiles: readonly StatTile[] = [
     { id: 'completion', label: 'Goal completion', value: '87%', tone: 'success' },
     { id: 'streak', label: 'Current streak', value: '14 days', tone: 'streak' },
