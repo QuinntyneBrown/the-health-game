@@ -516,6 +516,7 @@ lib-sign-in [data-testid='sign-in-oidc'] {
 }
 lib-sign-in [data-testid='sign-in-oidc'] .mdc-button__label,
 lib-sign-in [data-testid='sign-in-oidc'] span {
+  color: #191d17 !important;
   font-family: Inter, Roboto, Arial, sans-serif !important;
   font-size: 14px !important;
   font-weight: 500 !important;

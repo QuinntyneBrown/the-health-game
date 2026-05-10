@@ -1,10 +1,21 @@
 // Acceptance Test
-// Traces to: L2-036, 07-TC-V-001..014, 07-TC-C-001..011
+// Traces to: L2-036, 07-TC-V-001..014, 07-TC-C-001..012
 // Description: Username + password sign-in page. Each test exercises one
 //              vertical slice end-to-end against the running app.
 import { expect, test } from '@playwright/test';
 
 test.describe('Sign In — page', () => {
+  test('OIDC button label color #191D17 (07-TC-C-012)', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await page.goto('/sign-in');
+    const sso = page.locator('[data-testid="sign-in-oidc"]');
+    const color = await sso.evaluate((el) => {
+      const span = el.querySelector('span');
+      return getComputedStyle(span ?? el).color;
+    });
+    expect(color).toBe('rgb(25, 29, 23)');
+  });
+
   test('OIDC button 1 px #C2C9BE outline / transparent fill (07-TC-C-011)', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await page.goto('/sign-in');
