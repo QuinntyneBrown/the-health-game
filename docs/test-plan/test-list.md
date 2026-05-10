@@ -298,7 +298,7 @@ and made green. The /loop process picks the first test with
 | 287 | 04 | TC-A-006 | Sheet handle has `aria-label="Drag to close"` (or button alternative) | Yes | 2026-05-10T06:21:24Z |
 | 288 | 04 | TC-A-007 | axe-core | 0 critical / serious | 2026-05-10T06:22:25Z |
 | 289 | 04 | TC-D-001 | Logged activity survives reload | Yes (server-persisted) | 2026-05-10T06:23:35Z |
-| 290 | 04 | TC-D-002 | Created goal survives reload | Yes | null |
+| 290 | 04 | TC-D-002 | Created goal survives reload | Yes | 2026-05-10T06:26:22Z |
 | 291 | 04 | TC-D-003 | Logged note text round-trips exactly (incl. unicode, newlines) | Yes | null |
 | 292 | 04 | TC-D-004 | Quantity decimal precision preserved (per goal unit definition) | Yes | null |
 | 293 | 04 | TC-D-005 | Network failure mid-submit | Form remains open with values preserved; retry works | null |

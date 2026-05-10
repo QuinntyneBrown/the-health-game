@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 04-TC-V-001..007, 04-TC-C-001..010, 04-TC-L-001..010, 04-TC-R-001..006, 04-TC-F-001..012, 04-TC-F-101..109, 04-TC-B-001..010, 04-TC-A-001..007, 04-TC-D-001
+// Traces to: 04-TC-V-001..007, 04-TC-C-001..010, 04-TC-L-001..010, 04-TC-R-001..006, 04-TC-F-001..012, 04-TC-F-101..109, 04-TC-B-001..010, 04-TC-A-001..007, 04-TC-D-001..002
 // Description: log-activity dialog typography.
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
@@ -127,6 +127,82 @@ test.describe('Log activity sheet (mobile)', () => {
     });
     const accessibleName = meta.targetText || meta.ariaLabel || '';
     expect(accessibleName).toMatch(/Log activity/i);
+  });
+
+  test('created goal survives reload (04-TC-D-002)', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await authenticate(page);
+
+    const created = {
+      id: 'persisted-04',
+      name: 'Walk',
+      description: '',
+      cadence: 'daily' as const,
+      target: { value: 10, unit: 'min' },
+      completedQuantity: 0,
+      currentStreak: 0,
+      longestStreak: 0,
+      rewardName: '',
+    };
+    let serverGoals: Array<Record<string, unknown>> = [];
+
+    await page.route('**/api/goals**', (route) => {
+      const req = route.request();
+      if (req.url().endsWith('/api/goals/persisted-04')) {
+        route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify(created),
+        });
+        return;
+      }
+      if (req.method() === 'POST') {
+        serverGoals = [created];
+        route.fulfill({
+          status: 201,
+          contentType: 'application/json',
+          body: JSON.stringify(created),
+        });
+        return;
+      }
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify(serverGoals),
+      });
+    });
+    await page.route('**/api/goals/persisted-04/activities**', (route) =>
+      route.fulfill({ status: 200, contentType: 'application/json', body: '[]' }),
+    );
+
+    await page.goto('/goals/new');
+    await page
+      .locator('hg-health-text-field')
+      .filter({ hasText: 'Name' })
+      .locator('input')
+      .fill('Walk');
+    await page
+      .locator('hg-health-text-field')
+      .filter({ hasText: 'Target' })
+      .locator('input')
+      .fill('10');
+    await page
+      .locator('hg-health-text-field')
+      .filter({ hasText: 'Unit' })
+      .locator('input')
+      .fill('min');
+    await page.locator('[data-testid="goal-form-save"]').click();
+    await page.waitForURL(/\/goals\/persisted-04$/);
+
+    await expect(page.locator('lib-goal-detail')).toContainText('Walk');
+
+    await page.reload();
+    await expect(page.locator('lib-goal-detail')).toContainText('Walk');
+
+    await page.goto('/goals');
+    await expect(
+      page.locator('lib-goal-list .goal-card').filter({ hasText: 'Walk' }),
+    ).toBeVisible();
   });
 
   test('logged activity survives reload (04-TC-D-001)', async ({ page }) => {
