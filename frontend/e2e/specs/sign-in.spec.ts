@@ -1,11 +1,31 @@
 // Acceptance Test
-// Traces to: L2-036, 07-TC-V-001..014, 07-TC-C-001..018, 07-TC-L-001..013
+// Traces to: L2-036, 07-TC-V-001..014, 07-TC-C-001..018, 07-TC-L-001..014
 // Description: Username + password sign-in page. Each test exercises one
 //              vertical slice end-to-end against the running app.
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
 
 test.describe('Sign In — page', () => {
+  test('desktop hero outer radius 0 (07-TC-L-014)', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await page.goto('/sign-in');
+    const r = await page
+      .locator('lib-sign-in [data-testid="sign-in-hero"]')
+      .evaluate((el) => {
+        const s = getComputedStyle(el as HTMLElement);
+        return {
+          tl: s.borderTopLeftRadius,
+          tr: s.borderTopRightRadius,
+          bl: s.borderBottomLeftRadius,
+          br: s.borderBottomRightRadius,
+        };
+      });
+    expect(r.tl).toBe('0px');
+    expect(r.tr).toBe('0px');
+    expect(r.bl).toBe('0px');
+    expect(r.br).toBe('0px');
+  });
+
   test('"or" divider has 1 px lines flanking centered label (07-TC-L-013)', async ({
     page,
   }) => {
