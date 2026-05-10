@@ -6,6 +6,16 @@ import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
 
 test.describe('Sign In — page', () => {
+  test('title rendered as h1 (07-TC-A-002)', async ({ page }) => {
+    await page.goto('/sign-in');
+    const tag = await page
+      .getByTestId('sign-in-title')
+      .evaluate((el) => el.tagName);
+    expect(tag).toBe('H1');
+    const h1Count = await page.locator('lib-sign-in h1').count();
+    expect(h1Count).toBe(1);
+  });
+
   test('pasted credentials are trimmed before submit (07-TC-B-011)', async ({ page }) => {
     let body: { usernameOrEmail?: string; password?: string } = {};
     await page.route('**/api/auth/sign-in', (route) => {
