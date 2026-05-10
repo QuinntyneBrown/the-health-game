@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 03-TC-V-001..009, 03-TC-C-001..011, 03-TC-L-001..011, 03-TC-R-001..006, 03-TC-F-001..011, 03-TC-F-101..109, 03-TC-F-201..204, 03-TC-B-001..006, 03-TC-A-001..006, 03-TC-D-001..007, 03-TC-P-001
+// Traces to: 03-TC-V-001..009, 03-TC-C-001..011, 03-TC-L-001..011, 03-TC-R-001..006, 03-TC-F-001..011, 03-TC-F-101..109, 03-TC-F-201..204, 03-TC-B-001..006, 03-TC-A-001..006, 03-TC-D-001..007, 03-TC-P-001..002
 // Description: /goals page title "Goals" renders with Inter weight 500 at 22/32 px.
 // Subtitle is Inter 13 px weight 400 with computed counts.
 import AxeBuilder from '@axe-core/playwright';
@@ -560,6 +560,71 @@ test.describe('Goals page — header typography', () => {
 
   test.describe('filter chip layout', () => {
     test.use({ viewport: { width: 1440, height: 900 } });
+
+    test('POST + PUT /api/goals: p95 ≤ 500 ms (03-TC-P-002)', async ({ page }) => {
+      await page.setViewportSize({ width: 1440, height: 900 });
+      await authenticate(page);
+
+      const created = {
+        id: 'g-perf',
+        name: 'Walk',
+        description: '',
+        cadence: 'daily' as const,
+        target: { value: 10, unit: 'min' },
+        completedQuantity: 0,
+        currentStreak: 0,
+        longestStreak: 0,
+        rewardName: '',
+      };
+      await page.unroute('**/api/goals**');
+      await page.route('**/api/goals**', (route) => {
+        const req = route.request();
+        if (req.method() === 'POST' || req.method() === 'PUT') {
+          route.fulfill({
+            status: req.method() === 'POST' ? 201 : 200,
+            contentType: 'application/json',
+            body: JSON.stringify(created),
+          });
+          return;
+        }
+        route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify([created]) });
+      });
+
+      const post: number[] = [];
+      const put: number[] = [];
+      for (let i = 0; i < 10; i++) {
+        const t1 = Date.now();
+        await page.evaluate(async () => {
+          const r = await fetch('/api/goals', {
+            method: 'POST',
+            headers: {
+              Authorization: 'Bearer test-access-token',
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ name: 'Walk', cadence: 'daily', target: { value: 10, unit: 'min' } }),
+          });
+          await r.json();
+        });
+        post.push(Date.now() - t1);
+
+        const t2 = Date.now();
+        await page.evaluate(async () => {
+          const r = await fetch('/api/goals/g-perf', {
+            method: 'PUT',
+            headers: {
+              Authorization: 'Bearer test-access-token',
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ name: 'Walk', cadence: 'daily', target: { value: 12, unit: 'min' } }),
+          });
+          await r.json();
+        });
+        put.push(Date.now() - t2);
+      }
+      const p95 = (xs: number[]) => xs.sort((a, b) => a - b)[Math.ceil(xs.length * 0.95) - 1];
+      expect(p95(post), `POST samples: ${post.join(', ')}`).toBeLessThanOrEqual(500);
+      expect(p95(put), `PUT samples: ${put.join(', ')}`).toBeLessThanOrEqual(500);
+    });
 
     test('GET /api/goals with 100 goals: p95 fetch ≤ 300 ms (03-TC-P-001)', async ({ page }) => {
       await page.setViewportSize({ width: 1440, height: 900 });
