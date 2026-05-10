@@ -182,11 +182,17 @@ export class StatsComponent {
     { label: 'Sat', value: 30 },
     { label: 'Sun', value: 55 },
   ];
+  readonly weekTotal = this.activity.reduce((sum, day) => sum + day.value, 0);
 
   readonly tiles = computed<readonly StatTile[]>(() => [
     { id: 'goals', label: 'Active goals', value: String(this.goals().length), tone: 'success' },
     { id: 'streak', label: 'Current streak', value: '14 days', tone: 'streak' },
-    { id: 'minutes', label: 'Active minutes', value: '1,240', tone: 'info' },
+    {
+      id: 'week-total',
+      label: 'Activities this week',
+      value: String(this.weekTotal),
+      tone: 'info',
+    },
     { id: 'rewards', label: 'Rewards earned', value: '6', tone: 'reward' },
     { id: 'level', label: 'Level', value: 'Lvl 8', tone: 'success' },
   ]);

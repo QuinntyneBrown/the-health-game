@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 06-TC-V-001..007, 06-TC-C-001..010, 06-TC-L-001..010, 06-TC-R-001..005, 06-TC-F-001
+// Traces to: 06-TC-V-001..007, 06-TC-C-001..010, 06-TC-L-001..010, 06-TC-R-001..005, 06-TC-F-001..002
 // Description: stats + profile page chrome.
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
@@ -45,6 +45,39 @@ async function authenticate(page: import('@playwright/test').Page): Promise<void
 }
 
 test.describe('Stats & Profile chrome', () => {
+  test('weekly total tile matches sum of bars (06-TC-F-002)', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await authenticate(page);
+    await page.goto('/stats');
+
+    const meta = await page.evaluate(() => {
+      const bars = Array.from(
+        document.querySelectorAll('lib-stats .activity-chart__bar'),
+      ) as HTMLElement[];
+      const sumFromBars = bars.reduce((sum, bar) => {
+        const label = bar.getAttribute('aria-label') ?? '';
+        const m = label.match(/(\d+)%/);
+        return sum + (m ? Number(m[1]) : 0);
+      }, 0);
+      const tile = document.querySelector(
+        'lib-stats .stat-tile [class$="__value"]',
+      );
+      const tileValue = (
+        document.querySelector(
+          'lib-stats .stat-tile:has(.stat-tile__label) .stat-tile__value',
+        ) as HTMLElement | null
+      )?.textContent ?? '';
+      const targetTile = Array.from(
+        document.querySelectorAll('lib-stats .stat-tile'),
+      ).find((el) => el.textContent?.includes('Activities this week')) as HTMLElement | null;
+      const targetValue = targetTile
+        ?.querySelector('.stat-tile__value')
+        ?.textContent?.trim() ?? '';
+      return { sumFromBars, tileValue, targetValue };
+    });
+    expect(Number(meta.targetValue)).toBe(meta.sumFromBars);
+  });
+
   test('active goals count matches API (06-TC-F-001)', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await authenticate(page);
