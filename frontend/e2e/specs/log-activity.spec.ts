@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 04-TC-V-001..007, 04-TC-C-001..010, 04-TC-L-001..010, 04-TC-R-001..006, 04-TC-F-001..012, 04-TC-F-101..109, 04-TC-B-001..010, 04-TC-A-001..005
+// Traces to: 04-TC-V-001..007, 04-TC-C-001..010, 04-TC-L-001..010, 04-TC-R-001..006, 04-TC-F-001..012, 04-TC-F-101..109, 04-TC-B-001..010, 04-TC-A-001..006
 // Description: log-activity dialog typography.
 import { expect, test } from '@playwright/test';
 
@@ -126,6 +126,47 @@ test.describe('Log activity sheet (mobile)', () => {
     });
     const accessibleName = meta.targetText || meta.ariaLabel || '';
     expect(accessibleName).toMatch(/Log activity/i);
+  });
+
+  test('sheet handle is labeled or a button alternative exists (04-TC-A-006)', async ({ page }) => {
+    await page.setViewportSize({ width: 360, height: 780 });
+    await authenticate(page);
+    await page.route('**/api/goals/g1', (route) =>
+      route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(goal) }),
+    );
+    await page.route('**/api/goals/g1/activities**', (route) =>
+      route.fulfill({ status: 200, contentType: 'application/json', body: '[]' }),
+    );
+    await page.goto('/goals/g1');
+    await page
+      .locator('[data-testid="goal-detail-log-fab"]')
+      .evaluate((el: HTMLElement) => el.click());
+    await page.waitForTimeout(300);
+
+    const sheet = page.locator('mat-bottom-sheet-container').first();
+    await expect(sheet).toBeVisible();
+
+    const meta = await sheet.evaluate((el) => {
+      const handle = el.querySelector('.sheet__handle');
+      const handleLabel = handle?.getAttribute('aria-label') ?? '';
+      const handleRole = handle?.getAttribute('role') ?? '';
+      const buttons = Array.from(el.querySelectorAll('button'));
+      const closeButton = buttons.find((b) => {
+        const txt = (b.textContent ?? '').trim().toLowerCase();
+        const lbl = (b.getAttribute('aria-label') ?? '').trim().toLowerCase();
+        return /close|cancel|dismiss|drag to close/.test(txt) || /close|cancel|dismiss|drag to close/.test(lbl);
+      });
+      return {
+        handleLabel,
+        handleRole,
+        hasCloseButton: !!closeButton,
+        closeButtonName: closeButton ? (closeButton.getAttribute('aria-label') || closeButton.textContent || '').trim() : '',
+      };
+    });
+
+    const handleLabeled = /drag.*close|close|dismiss/i.test(meta.handleLabel) && meta.handleRole === 'button';
+    const buttonAlt = meta.hasCloseButton;
+    expect(handleLabeled || buttonAlt).toBe(true);
   });
 
   test('submit button toggles aria-busy while logging (04-TC-A-005)', async ({ page }) => {
