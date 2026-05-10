@@ -548,7 +548,7 @@ and made green. The /loop process picks the first test with
 | 537 | 07 | TC-S-001 | Submitted password is never logged at any level | No `password` value in console / network / server logs (L2-017 §3, L2-036 §4) | 2026-05-09T20:03:30Z |
 | 538 | 07 | TC-S-002 | Issued JWT is never logged at any level | No bearer/JWT in console or server logs (L2-022) | 2026-05-09T20:03:30Z |
 | 539 | 07 | TC-S-003 | Sign-in request sent over HTTPS in non-dev environments | Confirmed (L2-036 §5) | 2026-05-10T15:12:30Z |
-| 540 | 07 | TC-S-004 | Backend never reveals whether username or password was wrong | 401 with generic message; constant-time-ish response (L2-036 §3) | null |
+| 540 | 07 | TC-S-004 | Backend never reveals whether username or password was wrong | 401 with generic message; constant-time-ish response (L2-036 §3) | 2026-05-10T15:14:00Z |
 | 541 | 07 | TC-S-005 | XSS payload in username field | Escaped on render; nothing executes (L2-016 §3) | null |
 | 542 | 07 | TC-S-006 | CSRF protection on `POST /api/auth/sign-in` (cookie-bearing) | Yes (L2-016 §4) | null |
 | 543 | 07 | TC-S-007 | Repeated failed attempts trigger lockout / throttle | Configured threshold; security event logged at Information+ without password (L2-036 §7) | null |

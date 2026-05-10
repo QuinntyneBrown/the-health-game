@@ -9,6 +9,36 @@ import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
 
 test.describe('Sign In — page', () => {
+  test('client surfaces generic message regardless of 401 body content (07-TC-S-004)', async ({
+    page,
+  }) => {
+    const bodies = [
+      JSON.stringify({ status: 401, detail: 'No such user' }),
+      JSON.stringify({ status: 401, detail: 'Wrong password for alice' }),
+      JSON.stringify({ status: 401, detail: 'Account locked, try again later' }),
+      JSON.stringify({ status: 401 }),
+    ];
+    for (const body of bodies) {
+      await page.unroute('**/api/auth/sign-in').catch(() => {});
+      await page.route('**/api/auth/sign-in', (route) =>
+        route.fulfill({
+          status: 401,
+          contentType: 'application/problem+json',
+          body,
+        }),
+      );
+      await page.goto('/sign-in');
+      await page.getByTestId('sign-in-username').locator('input').fill('alice');
+      await page.getByTestId('sign-in-password').locator('input').fill('Secret123!');
+      await page.getByTestId('sign-in-submit').click();
+      const err = page.getByTestId('sign-in-error');
+      await expect(err).toBeVisible();
+      const text = (await err.textContent()) ?? '';
+      expect(text).toMatch(/Invalid username or password\./);
+      expect(text).not.toMatch(/no such|wrong password|locked|alice/i);
+    }
+  });
+
   test('production apiBaseUrl is HTTPS (07-TC-S-003)', () => {
     const envPath = path.join(
       __dirname,
