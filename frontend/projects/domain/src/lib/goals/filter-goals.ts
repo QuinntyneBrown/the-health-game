@@ -18,7 +18,7 @@ export function filterGoalsByName(
   return goals.filter((goal) => goal.name.toLowerCase().includes(needle));
 }
 
-export type GoalSortOrder = 'name' | 'streak';
+export type GoalSortOrder = 'name' | 'streak' | 'recent';
 
 export function sortGoals(
   goals: readonly GoalSummary[],
@@ -29,6 +29,13 @@ export function sortGoals(
     copy.sort((a, b) => {
       const diff = b.currentStreak - a.currentStreak;
       return diff !== 0 ? diff : a.name.localeCompare(b.name);
+    });
+  } else if (order === 'recent') {
+    copy.sort((a, b) => {
+      const aTs = a.lastActivityAt ? Date.parse(a.lastActivityAt) : -Infinity;
+      const bTs = b.lastActivityAt ? Date.parse(b.lastActivityAt) : -Infinity;
+      if (bTs !== aTs) return bTs - aTs;
+      return a.name.localeCompare(b.name);
     });
   } else {
     copy.sort((a, b) => a.name.localeCompare(b.name));

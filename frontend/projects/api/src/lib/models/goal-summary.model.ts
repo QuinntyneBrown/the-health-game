@@ -15,4 +15,5 @@ export interface GoalSummary {
   readonly currentStreak: number;
   readonly longestStreak: number;
   readonly rewardName: string;
+  readonly lastActivityAt?: string | null;
 }

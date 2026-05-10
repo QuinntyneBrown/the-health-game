@@ -186,7 +186,7 @@ and made green. The /loop process picks the first test with
 | 175 | 03 | TC-F-004 | Filter chip "Daily" shows count of daily-cadence goals | counts match | 2026-05-10T00:51:46Z |
 | 176 | 03 | TC-F-005 | Filter chip "Hourly/Weekly/Monthly" similarly accurate | yes | 2026-05-10T00:52:55Z |
 | 177 | 03 | TC-F-006 | Sort: Streak length | descending current streak; tiebreak alphabetical | 2026-05-10T00:58:03Z |
-| 178 | 03 | TC-F-007 | Sort: Recently active | descending last-activity timestamp | null |
+| 178 | 03 | TC-F-007 | Sort: Recently active | descending last-activity timestamp | 2026-05-10T01:03:43Z |
 | 179 | 03 | TC-F-008 | Sort: Name | ascending | null |
 | 180 | 03 | TC-F-009 | Empty state — 0 goals | Shows onboarding card with "Create your first goal" CTA | null |
 | 181 | 03 | TC-F-010 | Click on a goal card | Navigates to `/goals/{id}` | null |

@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 03-TC-V-001..009, 03-TC-C-001..011, 03-TC-L-001..011, 03-TC-R-001..006, 03-TC-F-001..006
+// Traces to: 03-TC-V-001..009, 03-TC-C-001..011, 03-TC-L-001..011, 03-TC-R-001..006, 03-TC-F-001..007
 // Description: /goals page title "Goals" renders with Inter weight 500 at 22/32 px.
 // Subtitle is Inter 13 px weight 400 with computed counts.
 import { expect, test } from '@playwright/test';
@@ -559,6 +559,40 @@ test.describe('Goals page — header typography', () => {
 
   test.describe('filter chip layout', () => {
     test.use({ viewport: { width: 1440, height: 900 } });
+
+    test('sort by recently active: desc lastActivityAt (03-TC-F-007)', async ({ page }) => {
+      await page.setViewportSize({ width: 1440, height: 900 });
+      await authenticate(page);
+      await page.unroute('**/api/goals**');
+      const baseGoal = {
+        description: '',
+        cadence: 'daily' as const,
+        target: { value: 10, unit: 'min' },
+        completedQuantity: 0,
+        currentStreak: 0,
+        longestStreak: 0,
+        rewardName: '',
+      };
+      await page.route('**/api/goals**', (route) =>
+        route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify([
+            { id: 'g1', name: 'Walk', lastActivityAt: '2026-05-01T10:00:00Z', ...baseGoal },
+            { id: 'g2', name: 'Read', lastActivityAt: '2026-05-09T08:00:00Z', ...baseGoal },
+            { id: 'g3', name: 'Stretch', lastActivityAt: '2026-05-05T12:00:00Z', ...baseGoal },
+            { id: 'g4', name: 'Hydrate', lastActivityAt: null, ...baseGoal },
+          ]),
+        }),
+      );
+      await page.goto('/goals');
+
+      const sort = page.locator('lib-goal-list [data-testid="goals-sort"]');
+      await sort.selectOption('recent');
+
+      const titles = await page.locator('lib-goal-list .goal-card__title').allInnerTexts();
+      expect(titles).toEqual(['Read', 'Stretch', 'Walk', 'Hydrate']);
+    });
 
     test('sort by streak length: desc currentStreak, alpha tiebreak (03-TC-F-006)', async ({
       page,
