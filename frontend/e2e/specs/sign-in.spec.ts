@@ -1,10 +1,25 @@
 // Acceptance Test
-// Traces to: L2-036, 07-TC-V-001..014, 07-TC-C-001..017
+// Traces to: L2-036, 07-TC-V-001..014, 07-TC-C-001..018
 // Description: Username + password sign-in page. Each test exercises one
 //              vertical slice end-to-end against the running app.
+import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
 
 test.describe('Sign In — page', () => {
+  test('color contrast WCAG AA on /sign-in (07-TC-C-018)', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await page.goto('/sign-in');
+    await expect(page.locator('lib-sign-in')).toBeVisible();
+    const result = await new AxeBuilder({ page })
+      .include('lib-sign-in')
+      .withRules(['color-contrast'])
+      .analyze();
+    const blocking = result.violations.filter(
+      (v) => v.impact === 'critical' || v.impact === 'serious',
+    );
+    expect(blocking).toHaveLength(0);
+  });
+
   test('signup link color #006D3F (07-TC-C-017)', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await page.goto('/sign-in');
