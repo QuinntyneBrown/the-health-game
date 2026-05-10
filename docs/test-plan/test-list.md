@@ -285,7 +285,7 @@ and made green. The /loop process picks the first test with
 | 274 | 04 | TC-B-003 | Backdrop click with unsaved changes | Confirmation dialog ("Discard?") | 2026-05-10T05:37:54Z |
 | 275 | 04 | TC-B-004 | Esc closes dialog (desktop) | Yes | 2026-05-10T05:39:27Z |
 | 276 | 04 | TC-B-005 | Focus moves into first form field on open | Yes | 2026-05-10T05:41:01Z |
-| 277 | 04 | TC-B-006 | Focus returns to FAB / trigger on close | Yes | null |
+| 277 | 04 | TC-B-006 | Focus returns to FAB / trigger on close | Yes | 2026-05-10T05:42:18Z |
 | 278 | 04 | TC-B-007 | Tab cycles within dialog (focus trap) | Yes | null |
 | 279 | 04 | TC-B-008 | Submit button shows loading spinner during in-flight call | Yes; disabled until done | null |
 | 280 | 04 | TC-B-009 | Double-click submit | Only one create / log POST emitted | null |
