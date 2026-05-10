@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 03-TC-V-001..009, 03-TC-C-001..011, 03-TC-L-001..011, 03-TC-R-001..006, 03-TC-F-001..011, 03-TC-F-101..107
+// Traces to: 03-TC-V-001..009, 03-TC-C-001..011, 03-TC-L-001..011, 03-TC-R-001..006, 03-TC-F-001..011, 03-TC-F-101..108
 // Description: /goals page title "Goals" renders with Inter weight 500 at 22/32 px.
 // Subtitle is Inter 13 px weight 400 with computed counts.
 import { expect, test } from '@playwright/test';
@@ -559,6 +559,35 @@ test.describe('Goals page — header typography', () => {
 
   test.describe('filter chip layout', () => {
     test.use({ viewport: { width: 1440, height: 900 } });
+
+    for (const status of [403, 404] as const) {
+      test(`edit/view another user's goal returns ${status}; FE shows not-found (03-TC-F-108 — ${status})`, async ({
+        page,
+      }) => {
+        await page.setViewportSize({ width: 1440, height: 900 });
+        await authenticate(page);
+
+        let putCalls = 0;
+        await page.route('**/api/goals/other-user-goal', (route) => {
+          if (route.request().method() === 'PUT') {
+            putCalls += 1;
+            route.fulfill({ status, contentType: 'application/json', body: '{}' });
+            return;
+          }
+          route.fulfill({ status, contentType: 'application/json', body: '{}' });
+        });
+        await page.route('**/api/goals/other-user-goal/activity**', (route) =>
+          route.fulfill({ status: 200, contentType: 'application/json', body: '[]' }),
+        );
+
+        await page.goto('/goals/other-user-goal');
+
+        const notFound = page.locator('lib-goal-detail [data-testid="goal-detail-not-found"]');
+        await expect(notFound).toBeVisible();
+        await expect(page.locator('lib-goal-detail [data-testid="goal-detail"]')).toHaveCount(0);
+        expect(putCalls).toBe(0);
+      });
+    }
 
     test('edit goal: change cadence daily → weekly persists update (03-TC-F-107)', async ({
       page,
