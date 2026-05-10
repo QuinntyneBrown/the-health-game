@@ -456,6 +456,11 @@ lib-reward-list .reward-section[data-status='earned'] mat-chip .mat-mdc-chip-act
   color: #00210f !important;
 }
 
+lib-reward-list .reward-card .reward-card__content,
+lib-reward-list .reward-card .mat-mdc-card-content.reward-card__content {
+  padding: 20px !important;
+}
+
 button[data-testid='delete-goal-confirm'] {
   background-color: #ba1a1a !important;
   color: #ffffff !important;

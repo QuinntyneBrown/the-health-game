@@ -20,7 +20,7 @@
   display: grid;
   gap: var(--hg-space-3);
   grid-template-columns: auto minmax(0, 1fr) auto;
-  padding: var(--hg-space-4);
+  padding: 20px !important;
 }
 
 .reward-card__icon-frame {
