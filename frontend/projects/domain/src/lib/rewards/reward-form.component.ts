@@ -4,6 +4,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { GOALS_SERVICE, GoalSummary, REWARDS_SERVICE, RewardConditionType } from 'api';
 import { firstValueFrom } from 'rxjs';
@@ -130,6 +131,7 @@ export class RewardFormComponent {
   private readonly rewardsService = inject(REWARDS_SERVICE);
   private readonly goalsService = inject(GOALS_SERVICE);
   private readonly router = inject(Router);
+  private readonly snackBar = inject(MatSnackBar);
 
   readonly goals = signal<readonly GoalSummary[]>([]);
   readonly name = signal('');
@@ -181,13 +183,21 @@ export class RewardFormComponent {
       this.conditionType() === 'goal-target'
         ? ({ type: 'goal-target' } as const)
         : ({ type: 'streak-milestone', streakDays: Number(this.streakDays()) } as const);
-    await firstValueFrom(
-      this.rewardsService.createReward(goalId, {
-        name: this.name().trim(),
-        description: this.description().trim(),
-        condition,
-      }),
-    );
+    try {
+      await firstValueFrom(
+        this.rewardsService.createReward(goalId, {
+          name: this.name().trim(),
+          description: this.description().trim(),
+          condition,
+        }),
+      );
+    } catch (err: unknown) {
+      const message =
+        (err as { message?: string } | null)?.message ??
+        'Could not create reward — please try again.';
+      this.snackBar.open(message, 'Dismiss', { duration: 6_000 });
+      return;
+    }
     void this.router.navigateByUrl('/rewards');
   }
 }
