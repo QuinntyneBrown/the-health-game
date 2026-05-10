@@ -1,10 +1,29 @@
 // Acceptance Test
-// Traces to: L2-036, 07-TC-V-001..014, 07-TC-C-001..009
+// Traces to: L2-036, 07-TC-V-001..014, 07-TC-C-001..010
 // Description: Username + password sign-in page. Each test exercises one
 //              vertical slice end-to-end against the running app.
 import { expect, test } from '@playwright/test';
 
 test.describe('Sign In — page', () => {
+  test('primary button label white (07-TC-C-010)', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await page.goto('/sign-in');
+    const btn = page.locator('lib-sign-in form button[type="submit"]');
+    const meta = await btn.evaluate((el) => {
+      const walker = document.createTreeWalker(el, NodeFilter.SHOW_ELEMENT);
+      let node: Element | null = el;
+      let target: Element | null = el;
+      while ((node = walker.nextNode() as Element | null)) {
+        if ((node.textContent ?? '').trim() === 'Sign in') {
+          target = node;
+          break;
+        }
+      }
+      return getComputedStyle(target).color;
+    });
+    expect(meta).toBe('rgb(255, 255, 255)');
+  });
+
   test('primary button bg #006D3F (07-TC-C-009)', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await page.goto('/sign-in');
