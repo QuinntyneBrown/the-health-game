@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 03-TC-V-001..009, 03-TC-C-001..011, 03-TC-L-001..011, 03-TC-R-001..006, 03-TC-F-001..011, 03-TC-F-101..109, 03-TC-F-201..204, 03-TC-B-001..006
+// Traces to: 03-TC-V-001..009, 03-TC-C-001..011, 03-TC-L-001..011, 03-TC-R-001..006, 03-TC-F-001..011, 03-TC-F-101..109, 03-TC-F-201..204, 03-TC-B-001..006, 03-TC-A-001
 // Description: /goals page title "Goals" renders with Inter weight 500 at 22/32 px.
 // Subtitle is Inter 13 px weight 400 with computed counts.
 import { expect, test } from '@playwright/test';
@@ -559,6 +559,55 @@ test.describe('Goals page — header typography', () => {
 
   test.describe('filter chip layout', () => {
     test.use({ viewport: { width: 1440, height: 900 } });
+
+    test('goal card has a single accessible button (03-TC-A-001)', async ({ page }) => {
+      await page.setViewportSize({ width: 1440, height: 900 });
+      await authenticate(page);
+      await page.unroute('**/api/goals**');
+      await page.route('**/api/goals**', (route) =>
+        route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify([
+            {
+              id: 'g1',
+              name: 'Walk',
+              description: '',
+              cadence: 'daily',
+              target: { value: 10, unit: 'min' },
+              completedQuantity: 0,
+              currentStreak: 0,
+              longestStreak: 0,
+              rewardName: '',
+            },
+          ]),
+        }),
+      );
+      await page.goto('/goals');
+
+      const card = page.locator('lib-goal-list .goal-card').first();
+      await expect(card).toBeVisible();
+
+      const counts = await card.evaluate((el) => {
+        const interactive = el.querySelectorAll(
+          'a[href], button, [role=button], [role=link], input, select, textarea, [tabindex]:not([tabindex="-1"])',
+        );
+        const filtered = Array.from(interactive).filter((node) => {
+          const tabindex = (node as HTMLElement).getAttribute('tabindex');
+          if (tabindex === '-1') return false;
+          // Material chips render with role=row/option for the chip-set; exclude listbox internals.
+          if (node.matches('mat-chip, [role=option], [role=row]')) return false;
+          // The host outer mat-card is not interactive itself.
+          return true;
+        });
+        return {
+          total: filtered.length,
+          tags: filtered.map((n) => `${n.tagName.toLowerCase()}.${(n as HTMLElement).className.split(' ')[0] || ''}`),
+        };
+      });
+
+      expect(counts.total, `unexpected interactive nodes: ${counts.tags.join(', ')}`).toBe(1);
+    });
 
     test('streak count has transition when motion allowed; none when reduced (03-TC-B-006)', async ({
       browser,
