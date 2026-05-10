@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 03-TC-V-001..009, 03-TC-C-001..011, 03-TC-L-001..011, 03-TC-R-001..005
+// Traces to: 03-TC-V-001..009, 03-TC-C-001..011, 03-TC-L-001..011, 03-TC-R-001..006
 // Description: /goals page title "Goals" renders with Inter weight 500 at 22/32 px.
 // Subtitle is Inter 13 px weight 400 with computed counts.
 import { expect, test } from '@playwright/test';
@@ -559,6 +559,48 @@ test.describe('Goals page — header typography', () => {
 
   test.describe('filter chip layout', () => {
     test.use({ viewport: { width: 1440, height: 900 } });
+
+    test('detail streaks row stays readable at <576 px without horizontal scroll (03-TC-R-006)', async ({
+      page,
+    }) => {
+      await page.setViewportSize({ width: 360, height: 780 });
+      await authenticate(page);
+      await page.route('**/api/goals/g1', (route) =>
+        route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify({
+            id: 'g1',
+            name: 'Walk',
+            description: '',
+            cadence: 'daily',
+            target: { value: 10, unit: 'min' },
+            completedQuantity: 0,
+            currentStreak: 0,
+            longestStreak: 0,
+            rewardName: '',
+          }),
+        }),
+      );
+      await page.route('**/api/goals/g1/activity**', (route) =>
+        route.fulfill({ status: 200, contentType: 'application/json', body: '[]' }),
+      );
+      await page.goto('/goals/g1');
+
+      const streaks = page.locator('lib-goal-detail .goal-detail__streaks').first();
+      await expect(streaks).toBeVisible();
+      const sizes = await streaks.evaluate((el) => ({
+        scrollWidth: el.scrollWidth,
+        clientWidth: el.clientWidth,
+      }));
+      expect(sizes.scrollWidth).toBeLessThanOrEqual(sizes.clientWidth);
+
+      const docOverflow = await page.evaluate(() => ({
+        scroll: document.documentElement.scrollWidth,
+        client: document.documentElement.clientWidth,
+      }));
+      expect(docOverflow.scroll).toBeLessThanOrEqual(docOverflow.client);
+    });
 
     test('long goal names truncate to 1 line + accessible full name (03-TC-R-005)', async ({
       page,
