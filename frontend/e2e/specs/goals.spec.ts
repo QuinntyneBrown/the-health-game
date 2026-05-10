@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 03-TC-V-001..009, 03-TC-C-001..011, 03-TC-L-001..011, 03-TC-R-001..006, 03-TC-F-001..011, 03-TC-F-101..109, 03-TC-F-201..204
+// Traces to: 03-TC-V-001..009, 03-TC-C-001..011, 03-TC-L-001..011, 03-TC-R-001..006, 03-TC-F-001..011, 03-TC-F-101..109, 03-TC-F-201..204, 03-TC-B-001
 // Description: /goals page title "Goals" renders with Inter weight 500 at 22/32 px.
 // Subtitle is Inter 13 px weight 400 with computed counts.
 import { expect, test } from '@playwright/test';
@@ -559,6 +559,66 @@ test.describe('Goals page — header typography', () => {
 
   test.describe('filter chip layout', () => {
     test.use({ viewport: { width: 1440, height: 900 } });
+
+    test('tab order: search → chips → sort → cards → FAB (03-TC-B-001)', async ({ page }) => {
+      await page.setViewportSize({ width: 360, height: 780 });
+      await authenticate(page);
+      await page.unroute('**/api/goals**');
+      const baseGoal = {
+        description: '',
+        cadence: 'daily' as const,
+        target: { value: 10, unit: 'min' },
+        completedQuantity: 0,
+        currentStreak: 0,
+        longestStreak: 0,
+        rewardName: '',
+      };
+      await page.route('**/api/goals**', (route) =>
+        route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify([
+            { id: 'g1', name: 'Walk', ...baseGoal },
+            { id: 'g2', name: 'Read', ...baseGoal },
+          ]),
+        }),
+      );
+      await page.goto('/goals');
+
+      // Seed focus on the search input then collect the next several Tab targets.
+      const searchInput = page.locator(
+        'lib-goal-list [data-testid="goals-search"] input',
+      );
+      await searchInput.focus();
+
+      const tagOf = async () =>
+        await page.evaluate(() => {
+          const el = document.activeElement as HTMLElement | null;
+          if (!el) return '';
+          if (el.closest('lib-goal-list [data-testid="goals-search"]')) return 'search';
+          if (el.closest('lib-goal-list mat-button-toggle')) return 'chip';
+          if (el.closest('lib-goal-list [data-testid="goals-sort"]')) return 'sort';
+          if (el.closest('lib-goal-list [data-testid="goals-new-fab"]')) return 'fab';
+          if (el.closest('lib-goal-list .goal-card')) return 'card';
+          return el.tagName.toLowerCase();
+        });
+
+      const focused: string[] = ['search'];
+      for (let i = 0; i < 30 && focused[focused.length - 1] !== 'fab'; i++) {
+        await page.keyboard.press('Tab');
+        focused.push(await tagOf());
+      }
+
+      const firstChip = focused.indexOf('chip');
+      const sortIdx = focused.indexOf('sort');
+      const firstCard = focused.indexOf('card');
+      const fabIdx = focused.indexOf('fab');
+
+      expect(firstChip).toBeGreaterThan(0);
+      expect(sortIdx).toBeGreaterThan(firstChip);
+      expect(firstCard).toBeGreaterThan(sortIdx);
+      expect(fabIdx).toBeGreaterThan(firstCard);
+    });
 
     for (const status of [403, 404] as const) {
       test(`crafted DELETE on another user's goal yields ${status} and no list mutation (03-TC-F-204 — ${status})`, async ({
