@@ -364,7 +364,7 @@ and made green. The /loop process picks the first test with
 | 353 | 05 | TC-A-001 | Hero is `<section aria-labelledby>` with title as `<h2>` | Yes | 2026-05-10T08:06:44Z |
 | 354 | 05 | TC-A-002 | Earned/in-progress/locked state communicated via text and icon, not color alone | Yes | 2026-05-10T08:08:21Z |
 | 355 | 05 | TC-A-003 | Progress bar exposes `role="progressbar"` with `aria-valuenow / valuemax` | Yes | 2026-05-10T08:09:45Z |
-| 356 | 05 | TC-A-004 | "Claim" button has descriptive accessible name (`Claim "{reward name}"`) | Yes | null |
+| 356 | 05 | TC-A-004 | "Claim" button has descriptive accessible name (`Claim "{reward name}"`) | Yes | 2026-05-10T08:10:32Z |
 | 357 | 05 | TC-A-005 | axe-core | 0 critical / serious | null |
 | 358 | 05 | TC-D-001 | Defined reward survives reload | Yes | null |
 | 359 | 05 | TC-D-002 | Earned reward survives reload | Yes | null |
