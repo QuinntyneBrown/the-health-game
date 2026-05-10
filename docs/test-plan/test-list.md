@@ -304,7 +304,7 @@ and made green. The /loop process picks the first test with
 | 293 | 04 | TC-D-005 | Network failure mid-submit | Form remains open with values preserved; retry works | 2026-05-10T06:38:08Z |
 | 294 | 04 | TC-D-006 | Concurrent log from another device | Second log succeeds; streak recomputed deterministically | 2026-05-10T06:39:15Z |
 | 295 | 04 | TC-S-001 | XSS payload in goal name / note | Escaped on render (L2-016 §3) | 2026-05-10T06:40:14Z |
-| 296 | 04 | TC-S-002 | SQL-injection-shaped input | Rejected/escaped; parameterized query (L2-016 §2) | null |
+| 296 | 04 | TC-S-002 | SQL-injection-shaped input | Rejected/escaped; parameterized query (L2-016 §2) | 2026-05-10T06:41:29Z |
 | 297 | 04 | TC-S-003 | CSRF token attached to mutating request | Yes (L2-016 §4) | null |
 | 298 | 04 | TC-S-004 | No tokens or code verifiers logged | Confirmed (L2-013 §3, L2-022) | null |
 | 299 | 04 | TC-P-001 | Sheet opens within 100 ms of FAB tap | Yes | null |

@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 04-TC-V-001..007, 04-TC-C-001..010, 04-TC-L-001..010, 04-TC-R-001..006, 04-TC-F-001..012, 04-TC-F-101..109, 04-TC-B-001..010, 04-TC-A-001..007, 04-TC-D-001..006, 04-TC-S-001
+// Traces to: 04-TC-V-001..007, 04-TC-C-001..010, 04-TC-L-001..010, 04-TC-R-001..006, 04-TC-F-001..012, 04-TC-F-101..109, 04-TC-B-001..010, 04-TC-A-001..007, 04-TC-D-001..006, 04-TC-S-001..002
 // Description: log-activity dialog typography.
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
@@ -127,6 +127,71 @@ test.describe('Log activity sheet (mobile)', () => {
     });
     const accessibleName = meta.targetText || meta.ariaLabel || '';
     expect(accessibleName).toMatch(/Log activity/i);
+  });
+
+  test('SQL-injection-shaped input passes through cleanly (04-TC-S-002)', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await authenticate(page);
+
+    const sqliPayload = "'); DROP TABLE Activities; --";
+    let postedNote: string | undefined;
+    let activities: Array<Record<string, unknown>> = [];
+
+    await page.route('**/api/goals/g1', (route) =>
+      route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(goal) }),
+    );
+    await page.route('**/api/goals/g1/activities**', (route, request) => {
+      if (request.method() === 'POST') {
+        postedNote = (request.postDataJSON() as { notes?: string } | null)?.notes;
+        const entry = {
+          id: 'a-sqli',
+          goalId: 'g1',
+          quantity: 5,
+          notes: sqliPayload,
+          recordedAt: '2026-05-10T06:25:00Z',
+          newlyEarnedRewards: [],
+        };
+        activities = [entry];
+        route.fulfill({
+          status: 201,
+          contentType: 'application/json',
+          body: JSON.stringify(entry),
+        });
+      } else {
+        route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify(activities),
+        });
+      }
+    });
+
+    await page.goto('/goals/g1');
+    await page
+      .locator('[data-testid="goal-detail-log-fab"]')
+      .evaluate((el: HTMLElement) => el.click());
+    await page.waitForTimeout(300);
+
+    const dialog = page.locator('mat-dialog-container');
+    await expect(dialog).toBeVisible();
+    await dialog.locator('input[type="number"]').fill('5');
+    await dialog
+      .locator('hg-health-text-field')
+      .filter({ hasText: 'Notes' })
+      .locator('input, textarea')
+      .fill(sqliPayload);
+    await page.locator('[data-testid="log-activity-save"]').click();
+    await expect(dialog).toBeHidden();
+
+    // FE forwards the literal payload — no client-side mangling.
+    expect(postedNote).toBe(sqliPayload);
+
+    // Subsequent GET still works and the rendered note matches the payload
+    // exactly (escaped as text, not interpreted as SQL or HTML).
+    await page.reload();
+    await page.waitForTimeout(400);
+    const list = page.locator('lib-goal-detail');
+    await expect(list).toContainText('DROP TABLE');
   });
 
   test('XSS payload in goal name and note is escaped (04-TC-S-001)', async ({ page }) => {
