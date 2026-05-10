@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 06-TC-V-001..007, 06-TC-C-001..010, 06-TC-L-001..010, 06-TC-R-001..005, 06-TC-F-001..008, 06-TC-F-101..107, 06-TC-F-201..205, 06-TC-B-001..006
+// Traces to: 06-TC-V-001..007, 06-TC-C-001..010, 06-TC-L-001..010, 06-TC-R-001..005, 06-TC-F-001..008, 06-TC-F-101..107, 06-TC-F-201..205, 06-TC-B-001..006, 06-TC-A-001
 // Description: stats + profile page chrome.
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
@@ -45,6 +45,21 @@ async function authenticate(page: import('@playwright/test').Page): Promise<void
 }
 
 test.describe('Stats & Profile chrome', () => {
+  test('Stats + Profile titles render as <h1> (06-TC-A-001)', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await authenticate(page);
+
+    for (const path of ['/stats', '/profile']) {
+      await page.goto(path);
+      const h1 = page
+        .locator(`${path === '/stats' ? 'lib-stats' : 'lib-profile'} h1.page-header__title`)
+        .first();
+      await expect(h1).toBeVisible();
+      const tag = await h1.evaluate((el) => el.tagName);
+      expect(tag).toBe('H1');
+    }
+  });
+
   test('reduced-motion: bars + window switch instant (06-TC-B-006)', async ({ browser }) => {
     const context = await browser.newContext({
       viewport: { width: 1280, height: 900 },
