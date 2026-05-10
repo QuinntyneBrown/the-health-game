@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 04-TC-V-001..007, 04-TC-C-001..010, 04-TC-L-001..010, 04-TC-R-001..006, 04-TC-F-001..012, 04-TC-F-101..109, 04-TC-B-001..008
+// Traces to: 04-TC-V-001..007, 04-TC-C-001..010, 04-TC-L-001..010, 04-TC-R-001..006, 04-TC-F-001..012, 04-TC-F-101..109, 04-TC-B-001..009
 // Description: log-activity dialog typography.
 import { expect, test } from '@playwright/test';
 
@@ -1023,6 +1023,65 @@ test.describe('Log activity dialog (desktop)', () => {
       page.locator('lib-goal-detail [data-testid="activity-list"]'),
     ).toBeVisible();
     expect(postBody).toMatchObject({ quantity: 5 });
+  });
+
+  test('double-click submit emits only one POST (04-TC-B-009)', async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await authenticate(page);
+
+    let postCalls = 0;
+    let resolveResponse: (() => void) | null = null;
+    const held = new Promise<void>((r) => {
+      resolveResponse = r;
+    });
+
+    await page.route('**/api/goals/g1', (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify(goal),
+      }),
+    );
+    await page.route('**/api/goals/g1/activities**', async (route) => {
+      const req = route.request();
+      if (req.method() === 'POST') {
+        postCalls += 1;
+        await held;
+        route.fulfill({
+          status: 201,
+          contentType: 'application/json',
+          body: JSON.stringify({
+            id: 'a-1',
+            goalId: 'g1',
+            quantity: 5,
+            unit: 'min',
+            notes: '',
+            recordedAt: new Date().toISOString(),
+            newlyEarnedRewards: [],
+          }),
+        });
+        return;
+      }
+      route.fulfill({ status: 200, contentType: 'application/json', body: '[]' });
+    });
+
+    await page.goto('/goals/g1');
+    await page.locator('[data-testid="goal-detail-log-fab"]').click();
+    await page
+      .locator('lib-log-activity-dialog hg-health-text-field')
+      .filter({ hasText: 'Quantity' })
+      .locator('input')
+      .fill('5');
+
+    const save = page.locator('[data-testid="log-activity-save"]');
+    await save.click();
+    await save.click({ force: true });
+    await save.click({ force: true });
+    await page.waitForTimeout(300);
+
+    expect(postCalls).toBe(1);
+    resolveResponse!();
+    await expect(page.locator('lib-log-activity-dialog')).toHaveCount(0);
   });
 
   test('submit shows spinner + disabled while in-flight (04-TC-B-008)', async ({ page }) => {

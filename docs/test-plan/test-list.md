@@ -288,7 +288,7 @@ and made green. The /loop process picks the first test with
 | 277 | 04 | TC-B-006 | Focus returns to FAB / trigger on close | Yes | 2026-05-10T05:42:18Z |
 | 278 | 04 | TC-B-007 | Tab cycles within dialog (focus trap) | Yes | 2026-05-10T05:45:29Z |
 | 279 | 04 | TC-B-008 | Submit button shows loading spinner during in-flight call | Yes; disabled until done | 2026-05-10T05:48:20Z |
-| 280 | 04 | TC-B-009 | Double-click submit | Only one create / log POST emitted | null |
+| 280 | 04 | TC-B-009 | Double-click submit | Only one create / log POST emitted | 2026-05-10T05:49:50Z |
 | 281 | 04 | TC-B-010 | Drag handle on mobile sheet supports swipe-to-dismiss | Yes | null |
 | 282 | 04 | TC-A-001 | Sheet exposes `role="dialog"` with `aria-modal="true"` | Yes | null |
 | 283 | 04 | TC-A-002 | Title programmatically associated via `aria-labelledby` | Yes | null |
