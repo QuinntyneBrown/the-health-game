@@ -479,7 +479,7 @@ and made green. The /loop process picks the first test with
 | 468 | 07 | TC-C-017 | Sign-up link color | `#006D3F` (primary) | 2026-05-10T13:48:19Z |
 | 469 | 07 | TC-C-018 | Text/background contrast meets WCAG AA | >= 4.5:1 normal, >= 3:1 large | 2026-05-10T13:49:14Z |
 | 470 | 07 | TC-L-001 | Mobile body padding | 24 px on all sides | 2026-05-10T13:50:45Z |
-| 471 | 07 | TC-L-002 | Tablet body padding | 40 px top/bottom, 80 px left/right | null |
+| 471 | 07 | TC-L-002 | Tablet body padding | 40 px top/bottom, 80 px left/right | 2026-05-10T13:51:57Z |
 | 472 | 07 | TC-L-003 | Desktop split — hero ~50% / form ~50% | hero on left, form on right | null |
 | 473 | 07 | TC-L-004 | Form card corner radius | 24 px | null |
 | 474 | 07 | TC-L-005 | Form card max-width | 440 px (mobile/tablet) / 480 px (desktop) | null |
