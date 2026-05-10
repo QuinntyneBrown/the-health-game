@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 06-TC-V-001..007, 06-TC-C-001..010, 06-TC-L-001..010, 06-TC-R-001..005, 06-TC-F-001..008, 06-TC-F-101..107, 06-TC-F-201..205, 06-TC-B-001..006, 06-TC-A-001..004
+// Traces to: 06-TC-V-001..007, 06-TC-C-001..010, 06-TC-L-001..010, 06-TC-R-001..005, 06-TC-F-001..008, 06-TC-F-101..107, 06-TC-F-201..205, 06-TC-B-001..006, 06-TC-A-001..005
 // Description: stats + profile page chrome.
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
@@ -45,6 +45,22 @@ async function authenticate(page: import('@playwright/test').Page): Promise<void
 }
 
 test.describe('Stats & Profile chrome', () => {
+  test('delete dialog has role=alertdialog + focus trap (06-TC-A-005)', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await authenticate(page);
+    await page.goto('/profile');
+    await page.locator('[data-testid="profile-delete"]').click();
+
+    const container = page.locator('mat-dialog-container').first();
+    await expect(container).toBeVisible();
+    const meta = await container.evaluate((el) => ({
+      role: el.getAttribute('role'),
+      ariaModal: el.getAttribute('aria-modal'),
+    }));
+    expect(meta.role).toBe('alertdialog');
+    expect(meta.ariaModal).toBe('true');
+  });
+
   test('form fields labelled + errors via aria-describedby (06-TC-A-004)', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await authenticate(page);
