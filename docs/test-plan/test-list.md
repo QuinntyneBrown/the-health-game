@@ -393,7 +393,7 @@ and made green. The /loop process picks the first test with
 | 382 | 06 | TC-L-001 | Stat tile grid — desktop/tablet/mobile | 5 / 3 / 2 columns | 2026-05-10T11:09:47Z |
 | 383 | 06 | TC-L-002 | Stat tile corner radius | 16 px | 2026-05-10T11:10:45Z |
 | 384 | 06 | TC-L-003 | Stat tile padding | 16 px | 2026-05-10T11:11:56Z |
-| 385 | 06 | TC-L-004 | Bar-chart panel padding | 24 px | null |
+| 385 | 06 | TC-L-004 | Bar-chart panel padding | 24 px | 2026-05-10T11:12:50Z |
 | 386 | 06 | TC-L-005 | Profile form field height | 56 px | null |
 | 387 | 06 | TC-L-006 | Profile form column max width | 480 px | null |
 | 388 | 06 | TC-L-007 | Section vertical rhythm | 24 px | null |

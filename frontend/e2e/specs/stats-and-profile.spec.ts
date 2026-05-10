@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 06-TC-V-001..007, 06-TC-C-001..010, 06-TC-L-001..003
+// Traces to: 06-TC-V-001..007, 06-TC-C-001..010, 06-TC-L-001..004
 // Description: stats + profile page chrome.
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
@@ -45,6 +45,28 @@ async function authenticate(page: import('@playwright/test').Page): Promise<void
 }
 
 test.describe('Stats & Profile chrome', () => {
+  test('bar-chart panel padding 24 px (06-TC-L-004)', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await authenticate(page);
+    await page.goto('/stats');
+
+    const panel = page.locator('lib-stats .activity-chart').first();
+    await expect(panel).toBeVisible();
+    const result = await panel.evaluate((el) => {
+      const s = getComputedStyle(el);
+      return {
+        top: s.paddingTop,
+        right: s.paddingRight,
+        bottom: s.paddingBottom,
+        left: s.paddingLeft,
+      };
+    });
+    expect(result.top).toBe('24px');
+    expect(result.right).toBe('24px');
+    expect(result.bottom).toBe('24px');
+    expect(result.left).toBe('24px');
+  });
+
   test('stat tile padding 16 px (06-TC-L-003)', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await authenticate(page);
