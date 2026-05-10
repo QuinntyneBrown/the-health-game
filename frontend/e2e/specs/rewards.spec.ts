@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 05-TC-V-001..008, 05-TC-C-001..010, 05-TC-L-001..010, 05-TC-R-001..005, 05-TC-F-001..007, 05-TC-F-101..105, 05-TC-F-201..203, 05-TC-B-001..002
+// Traces to: 05-TC-V-001..008, 05-TC-C-001..010, 05-TC-L-001..010, 05-TC-R-001..005, 05-TC-F-001..007, 05-TC-F-101..105, 05-TC-F-201..203, 05-TC-B-001..003
 // Description: rewards list page chrome.
 import { expect, test } from '@playwright/test';
 
@@ -74,6 +74,40 @@ const readyReward = {
 };
 
 test.describe('Rewards list', () => {
+  test('reduced-motion: no celebratory animation on Claim (05-TC-B-003)', async ({ browser }) => {
+    const context = await browser.newContext({
+      viewport: { width: 1280, height: 900 },
+      reducedMotion: 'reduce',
+    });
+    const page = await context.newPage();
+    await authenticate(page);
+    await page.unroute('**/api/rewards**');
+    await page.route('**/api/rewards**', (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify([readyReward, ...sampleRewards]),
+      }),
+    );
+    await page.goto('/rewards');
+
+    const hero = page.locator('lib-reward-list .reward-hero').first();
+    await expect(hero).toBeVisible();
+    const result = await hero.evaluate((el) => {
+      const s = getComputedStyle(el);
+      return {
+        animationName: s.animationName,
+        animationDuration: s.animationDuration,
+        transitionDuration: s.transitionDuration,
+        transform: s.transform,
+      };
+    });
+    expect(result.animationName === 'none' || result.animationDuration === '0s').toBe(true);
+    expect(result.transitionDuration === '0s' || result.transitionDuration === '').toBe(true);
+
+    await context.close();
+  });
+
   test('Claim button shows loading state until done (05-TC-B-002)', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await authenticate(page);
