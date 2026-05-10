@@ -259,7 +259,7 @@ and made green. The /loop process picks the first test with
 | 248 | 04 | TC-R-004 | Resize from mobile to tablet while open | Component swaps from sheet to dialog without losing form state | 2026-05-10T04:34:25Z |
 | 249 | 04 | TC-R-005 | Soft keyboard on mobile | Sheet content scrolls; submit button stays visible above keyboard | 2026-05-10T04:36:34Z |
 | 250 | 04 | TC-R-006 | Long content (e.g., notes textarea grows) | Sheet remains scrollable; submit pinned to bottom | 2026-05-10T04:37:47Z |
-| 251 | 04 | TC-F-001 | Log a positive quantity for a daily goal | Persisted; appears in goal's activity history (L2-005 §1) | null |
+| 251 | 04 | TC-F-001 | Log a positive quantity for a daily goal | Persisted; appears in goal's activity history (L2-005 §1) | 2026-05-10T04:43:45Z |
 | 252 | 04 | TC-F-002 | Log a quantity of 0 | Allowed (counts as "checked in") OR rejected per design — confirm with spec; current expectation: rejected | null |
 | 253 | 04 | TC-F-003 | Log a negative quantity | Validation error (L2-001 §3 / L2-016) | null |
 | 254 | 04 | TC-F-004 | Log activity with future timestamp beyond cadence window | Validation error (L2-005 §2) | null |

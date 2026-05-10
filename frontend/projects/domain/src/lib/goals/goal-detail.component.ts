@@ -193,12 +193,26 @@ export class GoalDetailComponent {
     if (container === 'sheet') {
       const ref = this.bottomSheet.open(LogActivitySheetComponent, { data });
       this.currentSheetRef = ref;
-      ref.afterDismissed().subscribe(() => this.cleanupLogContainer());
+      ref.afterDismissed().subscribe((entry) => {
+        if (entry) this.refreshActivities();
+        this.cleanupLogContainer();
+      });
     } else {
       const ref = this.dialog.open(LogActivityDialogComponent, { data, width: '35rem' });
       this.currentDialogRef = ref;
-      ref.afterClosed().subscribe(() => this.cleanupLogContainer());
+      ref.afterClosed().subscribe((entry) => {
+        if (entry) this.refreshActivities();
+        this.cleanupLogContainer();
+      });
     }
+  }
+
+  private refreshActivities(): void {
+    const id = this.goal()?.id;
+    if (!id) return;
+    this.activitiesService.getGoalActivities(id).subscribe({
+      next: (entries) => this.activities.set(entries),
+    });
   }
 
   private maybeSwapLogContainer(): void {
