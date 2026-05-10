@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 04-TC-V-001..005
+// Traces to: 04-TC-V-001..006
 // Description: log-activity dialog typography.
 import { expect, test } from '@playwright/test';
 
@@ -57,6 +57,53 @@ const goal = {
 
 test.describe('Log activity dialog (desktop)', () => {
   test.use({ viewport: { width: 1440, height: 900 } });
+
+  test('dialog validation error Inter 12 / 500 / error color (04-TC-V-006)', async ({ page }) => {
+    await authenticate(page);
+    await page.route('**/api/goals/g1', (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify(goal),
+      }),
+    );
+    await page.route('**/api/goals/g1/activity**', (route) =>
+      route.fulfill({ status: 200, contentType: 'application/json', body: '[]' }),
+    );
+    await page.goto('/goals/g1');
+    await page.locator('[data-testid="goal-detail-log-fab"]').click();
+
+    // Force the error: type 0 (≤ 0) and click Save (button is disabled when invalid, so use Enter on field).
+    const qty = page
+      .locator('.cdk-overlay-container hg-health-text-field')
+      .filter({ hasText: 'Quantity' })
+      .locator('input');
+    await qty.fill('0');
+    // Trigger attemptedSubmit by pressing Enter on the input — falls through to dialog submit.
+    await qty.press('Enter');
+    // Save click also triggers attemptedSubmit; re-enable in case button gates the click.
+    await page.locator('[data-testid="log-activity-save"]').click({ force: true });
+
+    const err = page
+      .locator('.cdk-overlay-container hg-health-text-field .health-text-field__error')
+      .first();
+    await expect(err).toBeVisible();
+
+    const computed = await err.evaluate((el) => {
+      const s = getComputedStyle(el);
+      return {
+        fontFamily: s.fontFamily,
+        fontWeight: s.fontWeight,
+        fontSize: s.fontSize,
+        color: s.color,
+      };
+    });
+    expect(computed.fontFamily.split(',')[0].replace(/['"]/g, '').trim()).toBe('Inter');
+    expect(computed.fontWeight).toBe('500');
+    expect(computed.fontSize).toBe('12px');
+    // Error color is the design's #BA1A1A red.
+    expect(computed.color).toBe('rgb(186, 26, 26)');
+  });
 
   test('dialog submit button Inter 14 px / 500 / white (04-TC-V-005)', async ({ page }) => {
     await authenticate(page);

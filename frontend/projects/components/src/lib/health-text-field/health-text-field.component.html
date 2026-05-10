@@ -43,9 +43,8 @@
     <mat-hint>{{ helperText() }}</mat-hint>
   }
 </mat-form-field>
-<span
-  class="cdk-visually-hidden"
-  [attr.id]="errorId"
-  aria-live="polite"
-  role="status"
->{{ errorText() }}</span>
+@if (errorText()) {
+  <p class="health-text-field__error" [attr.id]="errorId" role="alert">
+    {{ errorText() }}
+  </p>
+}

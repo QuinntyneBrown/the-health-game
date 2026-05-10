@@ -70,7 +70,7 @@ export class LogActivityDialogComponent {
       ? 'Quantity must be greater than zero'
       : '',
   );
-  readonly canSave = computed(() => Number(this.quantity()) > 0);
+  readonly canSave = computed(() => true);
 
   cancel(): void {
     this.dialogRef.close(undefined);
@@ -78,7 +78,7 @@ export class LogActivityDialogComponent {
 
   async submit(): Promise<void> {
     this.attemptedSubmit.set(true);
-    if (!this.canSave()) return;
+    if (!(Number(this.quantity()) > 0)) return;
     const entry = await firstValueFrom(
       this.activities.logActivity(this.data.goalId, {
         quantity: Number(this.quantity()),
