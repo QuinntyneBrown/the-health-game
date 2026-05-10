@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 03-TC-V-001..009, 03-TC-C-001..011, 03-TC-L-001..011, 03-TC-R-001..006, 03-TC-F-001..011, 03-TC-F-101..106
+// Traces to: 03-TC-V-001..009, 03-TC-C-001..011, 03-TC-L-001..011, 03-TC-R-001..006, 03-TC-F-001..011, 03-TC-F-101..107
 // Description: /goals page title "Goals" renders with Inter weight 500 at 22/32 px.
 // Subtitle is Inter 13 px weight 400 with computed counts.
 import { expect, test } from '@playwright/test';
@@ -559,6 +559,81 @@ test.describe('Goals page — header typography', () => {
 
   test.describe('filter chip layout', () => {
     test.use({ viewport: { width: 1440, height: 900 } });
+
+    test('edit goal: change cadence daily → weekly persists update (03-TC-F-107)', async ({
+      page,
+    }) => {
+      await page.setViewportSize({ width: 1440, height: 900 });
+      await authenticate(page);
+
+      const original = {
+        id: 'g1',
+        name: 'Walk',
+        description: '',
+        cadence: 'daily',
+        target: { value: 10, unit: 'min' },
+        completedQuantity: 0,
+        currentStreak: 4,
+        longestStreak: 7,
+        rewardName: '',
+      };
+      const updated = { ...original, cadence: 'weekly' };
+
+      let putBody: Record<string, unknown> | null = null;
+      let detailGet = original;
+
+      await page.route('**/api/goals/g1', (route) => {
+        const req = route.request();
+        if (req.method() === 'PUT') {
+          putBody = req.postDataJSON();
+          detailGet = updated;
+          route.fulfill({
+            status: 200,
+            contentType: 'application/json',
+            body: JSON.stringify(updated),
+          });
+          return;
+        }
+        route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify(detailGet),
+        });
+      });
+      await page.route('**/api/goals/g1/activity**', (route) =>
+        route.fulfill({ status: 200, contentType: 'application/json', body: '[]' }),
+      );
+
+      await page.goto('/goals/g1/edit');
+
+      // Change cadence to Weekly
+      await page
+        .locator('mat-form-field')
+        .filter({ hasText: 'Cadence' })
+        .locator('mat-select')
+        .click();
+      await page.locator('mat-option').filter({ hasText: /^Weekly$/ }).click();
+
+      // Cadence-changed hint should now be visible (already covered by 03-TC-V-009)
+      await expect(page.locator('[data-testid="goal-form-cadence-note"]')).toBeVisible();
+
+      const save = page.locator('[data-testid="goal-form-save"]');
+      await expect(save).toBeEnabled();
+      await save.click();
+      await page.waitForURL(/\/goals\/g1$/);
+
+      expect(putBody).toMatchObject({
+        name: 'Walk',
+        cadence: 'weekly',
+        target: { value: 10, unit: 'min' },
+      });
+
+      // Historical streak counts (currentStreak / longestStreak) come from the
+      // server snapshot; we just confirm the detail page renders the updated cadence.
+      await expect(page.locator('lib-goal-detail [data-testid="goal-detail"]')).toContainText(
+        /Weekly/i,
+      );
+    });
 
     test('custom cadence with N <= 0 shows validation error (03-TC-F-106)', async ({ page }) => {
       await page.setViewportSize({ width: 1440, height: 900 });
