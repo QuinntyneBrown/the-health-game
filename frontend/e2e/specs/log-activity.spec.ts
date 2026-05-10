@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 04-TC-V-001..007, 04-TC-C-001..010, 04-TC-L-001..010, 04-TC-R-001..006, 04-TC-F-001..012, 04-TC-F-101..107
+// Traces to: 04-TC-V-001..007, 04-TC-C-001..010, 04-TC-L-001..010, 04-TC-R-001..006, 04-TC-F-001..012, 04-TC-F-101..108
 // Description: log-activity dialog typography.
 import { expect, test } from '@playwright/test';
 
@@ -907,6 +907,63 @@ test.describe('Log activity dialog (desktop)', () => {
       page.locator('lib-goal-detail [data-testid="activity-list"]'),
     ).toBeVisible();
     expect(postBody).toMatchObject({ quantity: 5 });
+  });
+
+  test('custom cadence N=0 surfaces validation error (04-TC-F-108)', async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await authenticate(page);
+
+    let postCalls = 0;
+    await page.route('**/api/goals', (route) => {
+      if (route.request().method() === 'POST') {
+        postCalls += 1;
+        route.fulfill({ status: 201, contentType: 'application/json', body: '{}' });
+        return;
+      }
+      route.fulfill({ status: 200, contentType: 'application/json', body: '[]' });
+    });
+
+    await page.goto('/goals/new');
+    await page
+      .locator('hg-health-text-field')
+      .filter({ hasText: 'Name' })
+      .locator('input')
+      .fill('Stretch');
+    await page
+      .locator('hg-health-text-field')
+      .filter({ hasText: 'Target' })
+      .locator('input')
+      .fill('5');
+    await page
+      .locator('hg-health-text-field')
+      .filter({ hasText: 'Unit' })
+      .locator('input')
+      .fill('min');
+    await page
+      .locator('hg-segmented-filter[data-testid="cadence-picker"] mat-button-toggle')
+      .filter({ hasText: /^Custom$/ })
+      .click();
+
+    const everyInput = page
+      .locator('hg-health-text-field')
+      .filter({ hasText: 'Every' })
+      .locator('input');
+    const save = page.locator('[data-testid="goal-form-save"]');
+    for (const bad of ['0', '-2']) {
+      await everyInput.fill(bad);
+      await expect(save).toBeDisabled();
+    }
+    await page
+      .locator('form[data-testid="goal-form"]')
+      .evaluate((form: HTMLFormElement) => {
+        form.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
+      });
+    const everyError = page
+      .locator('hg-health-text-field')
+      .filter({ hasText: 'Every' })
+      .locator('.health-text-field__error');
+    await expect(everyError).toBeVisible();
+    expect(postCalls).toBe(0);
   });
 
   test('custom cadence "every 3 days" persists customInterval (04-TC-F-107)', async ({ page }) => {
