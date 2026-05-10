@@ -251,6 +251,12 @@ export class StatsComponent {
   });
   readonly weekTotal = this.weekSeries.reduce((sum, day) => sum + day.value, 0);
 
+  readonly currentStreakDays = computed(() => {
+    const all = this.goals();
+    if (all.length === 0) return 0;
+    return Math.max(...all.map((g) => g.currentStreak ?? 0));
+  });
+
   readonly completionPercent = computed(() => {
     const all = this.goals();
     if (all.length === 0) return 0;
@@ -271,7 +277,12 @@ export class StatsComponent {
       tone: 'success',
     },
     { id: 'goals', label: 'Active goals', value: String(this.goals().length), tone: 'success' },
-    { id: 'streak', label: 'Current streak', value: '14 days', tone: 'streak' },
+    {
+      id: 'streak',
+      label: 'Current streak',
+      value: `${this.currentStreakDays()} days`,
+      tone: 'streak',
+    },
     {
       id: 'week-total',
       label: 'Activities this week',

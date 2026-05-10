@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 06-TC-V-001..007, 06-TC-C-001..010, 06-TC-L-001..010, 06-TC-R-001..005, 06-TC-F-001..004
+// Traces to: 06-TC-V-001..007, 06-TC-C-001..010, 06-TC-L-001..010, 06-TC-R-001..005, 06-TC-F-001..005
 // Description: stats + profile page chrome.
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
@@ -45,6 +45,48 @@ async function authenticate(page: import('@playwright/test').Page): Promise<void
 }
 
 test.describe('Stats & Profile chrome', () => {
+  test('streak tile matches longest active goal streak (06-TC-F-005)', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await authenticate(page);
+    await page.unroute('**/api/goals**');
+    await page.route('**/api/goals**', (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify([
+          {
+            id: 'g1',
+            name: 'A',
+            cadence: 'daily',
+            target: { value: 10, unit: 'min' },
+            completedQuantity: 0,
+            currentStreak: 4,
+            longestStreak: 10,
+            rewardName: '',
+            description: '',
+          },
+          {
+            id: 'g2',
+            name: 'B',
+            cadence: 'daily',
+            target: { value: 10, unit: 'min' },
+            completedQuantity: 0,
+            currentStreak: 12,
+            longestStreak: 12,
+            rewardName: '',
+            description: '',
+          },
+        ]),
+      }),
+    );
+    await page.goto('/stats');
+    const tile = page
+      .locator('lib-stats .stat-tile')
+      .filter({ hasText: 'Current streak' })
+      .locator('.stat-tile__value');
+    await expect(tile).toHaveText('12 days');
+  });
+
   test('chart x-axis switches with window selector (06-TC-F-004)', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await authenticate(page);
