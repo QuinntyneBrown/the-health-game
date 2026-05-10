@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 04-TC-V-001..007, 04-TC-C-001..010, 04-TC-L-001..010, 04-TC-R-001..006, 04-TC-F-001..012, 04-TC-F-101..109, 04-TC-B-001..010, 04-TC-A-001..002
+// Traces to: 04-TC-V-001..007, 04-TC-C-001..010, 04-TC-L-001..010, 04-TC-R-001..006, 04-TC-F-001..012, 04-TC-F-101..109, 04-TC-B-001..010, 04-TC-A-001..003
 // Description: log-activity dialog typography.
 import { expect, test } from '@playwright/test';
 
@@ -126,6 +126,65 @@ test.describe('Log activity sheet (mobile)', () => {
     });
     const accessibleName = meta.targetText || meta.ariaLabel || '';
     expect(accessibleName).toMatch(/Log activity/i);
+  });
+
+  test('each input has a visible label programmatically associated (04-TC-A-003)', async ({ page }) => {
+    await page.setViewportSize({ width: 360, height: 780 });
+    await authenticate(page);
+    await page.route('**/api/goals/g1', (route) =>
+      route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(goal) }),
+    );
+    await page.route('**/api/goals/g1/activities**', (route) =>
+      route.fulfill({ status: 200, contentType: 'application/json', body: '[]' }),
+    );
+    await page.goto('/goals/g1');
+    await page
+      .locator('[data-testid="goal-detail-log-fab"]')
+      .evaluate((el: HTMLElement) => el.click());
+    await page.waitForTimeout(300);
+
+    const inputs = page.locator('mat-bottom-sheet-container input.mat-mdc-input-element');
+    const count = await inputs.count();
+    expect(count).toBeGreaterThanOrEqual(2);
+
+    for (let i = 0; i < count; i++) {
+      const meta = await inputs.nth(i).evaluate((el) => {
+        const id = el.id;
+        const labelFor = id ? document.querySelector(`label[for="${id}"]`) : null;
+        const labelForVisible =
+          !!labelFor && (labelFor as HTMLElement).offsetParent !== null;
+        const labelForText = labelFor?.textContent?.trim() ?? '';
+        const labelledBy = el.getAttribute('aria-labelledby');
+        const labelledByEls = labelledBy
+          ? labelledBy
+              .split(/\s+/)
+              .map((token) => document.getElementById(token))
+              .filter((node): node is HTMLElement => node !== null)
+          : [];
+        const labelledByVisible = labelledByEls.some((node) => node.offsetParent !== null);
+        const labelledByText = labelledByEls
+          .map((node) => node.textContent?.trim() ?? '')
+          .join(' ')
+          .trim();
+        return {
+          id,
+          labelFor: !!labelFor,
+          labelForVisible,
+          labelForText,
+          labelledBy,
+          labelledByVisible,
+          labelledByText,
+        };
+      });
+
+      const hasAssociation = meta.labelFor || (meta.labelledBy?.length ?? 0) > 0;
+      const isVisible = meta.labelForVisible || meta.labelledByVisible;
+      const text = meta.labelForText || meta.labelledByText;
+
+      expect(hasAssociation).toBe(true);
+      expect(isVisible).toBe(true);
+      expect(text.length).toBeGreaterThan(0);
+    }
   });
 
   test('sheet exposes role=dialog + aria-modal=true (04-TC-A-001)', async ({ page }) => {
