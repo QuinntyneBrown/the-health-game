@@ -15,7 +15,7 @@ import {
 
 import { CadenceFilter, filterGoalsByCadence, filterGoalsByName } from './filter-goals';
 
-const cadenceOptions: readonly SegmentedFilterOption[] = [
+const baseCadenceOptions: readonly SegmentedFilterOption[] = [
   { value: 'all', label: 'All' },
   { value: 'hourly', label: 'Hourly' },
   { value: 'daily', label: 'Daily' },
@@ -42,11 +42,16 @@ export class GoalListComponent {
   private readonly goalsService = inject(GOALS_SERVICE);
   private readonly router = inject(Router);
 
-  readonly cadenceOptions = cadenceOptions;
   readonly cadence = signal<CadenceFilter>('all');
   readonly searchQuery = signal('');
 
   readonly goals = toSignal(this.goalsService.getGoals(), { initialValue: [] as const });
+  readonly cadenceOptions = computed<readonly SegmentedFilterOption[]>(() => {
+    const total = this.goals().length;
+    return baseCadenceOptions.map((opt) =>
+      opt.value === 'all' ? { ...opt, label: `All (${total})` } : opt,
+    );
+  });
   readonly visibleGoals = computed(() =>
     filterGoalsByName(filterGoalsByCadence(this.goals(), this.cadence()), this.searchQuery()),
   );

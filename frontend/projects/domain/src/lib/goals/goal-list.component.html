@@ -30,7 +30,7 @@
     </label>
     <hg-segmented-filter
       ariaLabel="Cadence"
-      [options]="cadenceOptions"
+      [options]="cadenceOptions()"
       [value]="cadence()"
       (valueChange)="cadence.set($any($event))"
     />
