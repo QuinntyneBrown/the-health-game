@@ -1,10 +1,19 @@
 // Acceptance Test
-// Traces to: L2-036, 07-TC-V-001..014, 07-TC-C-001
+// Traces to: L2-036, 07-TC-V-001..014, 07-TC-C-001..002
 // Description: Username + password sign-in page. Each test exercises one
 //              vertical slice end-to-end against the running app.
 import { expect, test } from '@playwright/test';
 
 test.describe('Sign In — page', () => {
+  test('sign-in card surface #F7FBF3 (07-TC-C-002)', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await page.goto('/sign-in');
+    const card = page.locator('lib-sign-in .sign-in__card');
+    await expect(card).toBeVisible();
+    const bg = await card.evaluate((el) => getComputedStyle(el).backgroundColor);
+    expect(bg).toBe('rgb(247, 251, 243)');
+  });
+
   test('sign-in page background #F1F5ED (07-TC-C-001)', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await page.goto('/sign-in');
