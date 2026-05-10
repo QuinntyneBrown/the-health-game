@@ -6,6 +6,27 @@ import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
 
 test.describe('Sign In — page', () => {
+  test('browser autofill enables submit (07-TC-B-010)', async ({ page }) => {
+    await page.goto('/sign-in');
+    await page.evaluate(() => {
+      const set = (id: string, v: string) => {
+        const el = document.querySelector(
+          `lib-sign-in [data-testid="${id}"] input`,
+        ) as HTMLInputElement;
+        const desc = Object.getOwnPropertyDescriptor(
+          window.HTMLInputElement.prototype,
+          'value',
+        );
+        desc?.set?.call(el, v);
+        el.dispatchEvent(new Event('input', { bubbles: true }));
+        el.dispatchEvent(new Event('change', { bubbles: true }));
+      };
+      set('sign-in-username', 'auto@example.com');
+      set('sign-in-password', 'AutofillSecret!');
+    });
+    await expect(page.getByTestId('sign-in-submit')).toBeEnabled();
+  });
+
   test('reduced-motion: no transitions on submit / state changes (07-TC-B-009)', async ({
     page,
   }) => {
