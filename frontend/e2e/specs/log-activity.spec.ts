@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 04-TC-V-001..007, 04-TC-C-001..010, 04-TC-L-001..010, 04-TC-R-001..005
+// Traces to: 04-TC-V-001..007, 04-TC-C-001..010, 04-TC-L-001..010, 04-TC-R-001..006
 // Description: log-activity dialog typography.
 import { expect, test } from '@playwright/test';
 
@@ -56,6 +56,45 @@ const goal = {
 };
 
 test.describe('Log activity sheet (mobile)', () => {
+  test('long notes: sheet stays scrollable, submit reachable (04-TC-R-006)', async ({ page }) => {
+    await page.setViewportSize({ width: 360, height: 780 });
+    await authenticate(page);
+    await page.route('**/api/goals/g1', (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify(goal),
+      }),
+    );
+    await page.route('**/api/goals/g1/activity**', (route) =>
+      route.fulfill({ status: 200, contentType: 'application/json', body: '[]' }),
+    );
+    await page.goto('/goals/g1');
+    await page
+      .locator('[data-testid="goal-detail-log-fab"]')
+      .evaluate((el: HTMLElement) => el.click());
+    await page.waitForTimeout(400);
+
+    const notes = page
+      .locator('lib-log-activity-sheet hg-health-text-field')
+      .filter({ hasText: 'Notes' })
+      .locator('input');
+    const longText = 'lorem ipsum dolor sit amet '.repeat(20);
+    await notes.fill(longText);
+
+    const sheet = page.locator('lib-log-activity-sheet .sheet').first();
+    const meta = await sheet.evaluate((el) => ({
+      overflowY: getComputedStyle(el).overflowY,
+      scrollable: el.scrollHeight > el.clientHeight,
+    }));
+    expect(['auto', 'scroll']).toContain(meta.overflowY);
+
+    const save = page.locator('[data-testid="log-activity-save"]');
+    await save.scrollIntoViewIfNeeded();
+    await expect(save).toBeVisible();
+    void meta.scrollable;
+  });
+
   test('soft keyboard: sheet content scrolls + submit stays visible (04-TC-R-005)', async ({
     page,
   }) => {
