@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 05-TC-V-001..004
+// Traces to: 05-TC-V-001..005
 // Description: rewards list page chrome.
 import { expect, test } from '@playwright/test';
 
@@ -74,6 +74,51 @@ const readyReward = {
 };
 
 test.describe('Rewards list', () => {
+  test('section labels Inter 18 px / weight 500 (05-TC-V-005)', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await authenticate(page);
+    await page.unroute('**/api/rewards**');
+    await page.route('**/api/rewards**', (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify([
+          readyReward,
+          {
+            id: 'r-locked',
+            goalId: 'g1',
+            name: 'Massage',
+            description: 'A 60-min back massage',
+            status: 'locked',
+            earnedAt: null,
+            condition: { type: 'streak-milestone', streakDays: 60 },
+          },
+          ...sampleRewards,
+        ]),
+      }),
+    );
+
+    await page.goto('/rewards');
+    const labels = page.locator('lib-reward-list .reward-section__label');
+    const count = await labels.count();
+    expect(count).toBeGreaterThanOrEqual(2);
+
+    for (let i = 0; i < count; i++) {
+      const result = await labels.nth(i).evaluate((el) => {
+        const s = getComputedStyle(el);
+        return { family: s.fontFamily, size: s.fontSize, weight: s.fontWeight, text: el.textContent?.trim() ?? '' };
+      });
+      expect(result.family).toMatch(/Inter/);
+      expect(result.size).toBe('18px');
+      expect(result.weight).toBe('500');
+      expect(['In progress', 'Locked', 'Earned', 'Pending']).toContain(result.text);
+    }
+
+    const labelTexts = (await labels.allTextContents()).map((t) => t.trim());
+    expect(labelTexts).toContain('In progress');
+    expect(labelTexts).toContain('Locked');
+  });
+
   test('hero description Inter 16 px / 400 / line-height 1.5 (05-TC-V-004)', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await authenticate(page);

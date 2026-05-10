@@ -63,19 +63,24 @@ const filterOptions: readonly SegmentedFilterOption[] = [
         />
       </header>
 
-      <ul class="reward-list" data-testid="reward-list">
-        @for (reward of visibleRewards(); track reward.id) {
-          <li class="reward-list__item">
-            <hg-reward-card
-              [name]="reward.name"
-              [description]="reward.description"
-              [isEarned]="reward.status === 'earned'"
-              [statusLabel]="statusLabel(reward)"
-              [earnedDateLabel]="earnedLabel(reward)"
-            />
-          </li>
-        }
-      </ul>
+      @for (group of groupedRewards(); track group.label) {
+        <section class="reward-section" [attr.data-status]="group.status">
+          <h3 class="reward-section__label">{{ group.label }}</h3>
+          <ul class="reward-list" data-testid="reward-list">
+            @for (reward of group.rewards; track reward.id) {
+              <li class="reward-list__item">
+                <hg-reward-card
+                  [name]="reward.name"
+                  [description]="reward.description"
+                  [isEarned]="reward.status === 'earned'"
+                  [statusLabel]="statusLabel(reward)"
+                  [earnedDateLabel]="earnedLabel(reward)"
+                />
+              </li>
+            }
+          </ul>
+        </section>
+      }
     }
   `,
   styles: [
@@ -130,6 +135,17 @@ const filterOptions: readonly SegmentedFilterOption[] = [
         line-height: 1.5;
         margin: 0;
       }
+
+      .reward-section {
+        margin-bottom: var(--hg-space-6);
+      }
+
+      .reward-section__label {
+        font-family: Inter, Roboto, Arial, sans-serif;
+        font-size: 18px;
+        font-weight: 500;
+        margin: 0 0 var(--hg-space-3);
+      }
     `,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -148,6 +164,23 @@ export class RewardListComponent {
   readonly readyToClaim = computed(() =>
     this.rewards().find((r) => r.status === 'ready-to-claim') ?? null,
   );
+
+  readonly groupedRewards = computed(() => {
+    const visible = this.visibleRewards().filter((r) => r.status !== 'ready-to-claim');
+    const order: Array<{ status: Reward['status']; label: string }> = [
+      { status: 'in-progress', label: 'In progress' },
+      { status: 'pending', label: 'Pending' },
+      { status: 'earned', label: 'Earned' },
+      { status: 'locked', label: 'Locked' },
+    ];
+    return order
+      .map(({ status, label }) => ({
+        status,
+        label,
+        rewards: visible.filter((r) => r.status === status),
+      }))
+      .filter((group) => group.rewards.length > 0);
+  });
 
   statusLabel(reward: Reward): string {
     return reward.status === 'earned' ? 'Earned' : 'Pending';
