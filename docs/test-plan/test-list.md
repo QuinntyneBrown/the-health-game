@@ -268,7 +268,7 @@ and made green. The /loop process picks the first test with
 | 257 | 04 | TC-F-007 | Log against a goal owned by another user (crafted request) | 403 / 404 (L2-005 §3) | 2026-05-10T04:56:41Z |
 | 258 | 04 | TC-F-008 | After successful log, streak recomputed | L2-007 satisfied; UI reflects new current streak | 2026-05-10T04:59:39Z |
 | 259 | 04 | TC-F-009 | Successful submit closes sheet/dialog and shows toast | Yes | 2026-05-10T05:01:13Z |
-| 260 | 04 | TC-F-010 | Edit existing activity entry | Persists; recomputes streak (L2-006 §1) | null |
+| 260 | 04 | TC-F-010 | Edit existing activity entry | Persists; recomputes streak (L2-006 §1) | 2026-05-10T05:03:20Z |
 | 261 | 04 | TC-F-011 | Delete existing activity entry | Persists; recomputes streak (L2-006 §2) | null |
 | 262 | 04 | TC-F-012 | Edit/delete another user's entry via crafted request | 403 / 404 (L2-006 §3) | null |
 | 263 | 04 | TC-F-101 | Empty name | Validation error (L2-001 §2) | null |

@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 04-TC-V-001..007, 04-TC-C-001..010, 04-TC-L-001..010, 04-TC-R-001..006, 04-TC-F-001..009
+// Traces to: 04-TC-V-001..007, 04-TC-C-001..010, 04-TC-L-001..010, 04-TC-R-001..006, 04-TC-F-001..010
 // Description: log-activity dialog typography.
 import { expect, test } from '@playwright/test';
 
@@ -323,6 +323,67 @@ test.describe('Log activity sheet (mobile)', () => {
 
 test.describe('Log activity dialog (desktop)', () => {
   test.use({ viewport: { width: 1440, height: 900 } });
+
+  test('edit existing activity entry persists (04-TC-F-010)', async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await authenticate(page);
+
+    let putBody: Record<string, unknown> | null = null;
+    let entry = {
+      id: 'a-1',
+      goalId: 'g1',
+      quantity: 3,
+      unit: 'min',
+      notes: 'old',
+      recordedAt: '2026-05-09T08:00:00Z',
+      newlyEarnedRewards: [],
+    };
+
+    await page.route('**/api/goals/g1', (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify(goal),
+      }),
+    );
+    await page.route('**/api/goals/g1/activities**', (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify([entry]),
+      }),
+    );
+    await page.route('**/api/activities/a-1', (route) => {
+      const req = route.request();
+      if (req.method() === 'PUT') {
+        putBody = req.postDataJSON();
+        entry = { ...entry, ...putBody };
+        route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify(entry),
+        });
+        return;
+      }
+      route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(entry) });
+    });
+
+    await page.goto('/goals/g1');
+    await page.locator('lib-goal-detail .goal-detail__history').first().scrollIntoViewIfNeeded();
+    await page.locator('[data-testid="activity-edit"]').first().click();
+
+    const dialog = page.locator('lib-edit-activity-dialog');
+    await expect(dialog).toBeVisible();
+    const qty = dialog
+      .locator('hg-health-text-field')
+      .filter({ hasText: 'Quantity' })
+      .locator('input');
+    await qty.fill('7');
+    await dialog.getByRole('button', { name: /save/i }).click();
+
+    await expect(dialog).toHaveCount(0);
+    expect(putBody).toMatchObject({ quantity: 7 });
+  });
 
   test('successful submit closes dialog and shows toast (04-TC-F-009)', async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 900 });
