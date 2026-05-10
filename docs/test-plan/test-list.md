@@ -344,7 +344,7 @@ and made green. The /loop process picks the first test with
 | 333 | 05 | TC-R-005 | Locked cards still legible at smallest viewport | Yes | 2026-05-10T07:38:10Z |
 | 334 | 05 | TC-F-001 | List shows only the current user's rewards | Yes (ownership scoping) | 2026-05-10T07:38:59Z |
 | 335 | 05 | TC-F-002 | Earned rewards visually distinguished from pending | Distinct accent + earned date displayed (L2-010 §2) | 2026-05-10T07:39:55Z |
-| 336 | 05 | TC-F-003 | Counts in subtitle accurate ("1 ready · 2 in progress · 3 locked") | Sums match list | null |
+| 336 | 05 | TC-F-003 | Counts in subtitle accurate ("1 ready · 2 in progress · 3 locked") | Sums match list | 2026-05-10T07:41:14Z |
 | 337 | 05 | TC-F-004 | Click "Claim" on ready-to-claim hero | Marks the reward as claimed; appears in earned section with claimed timestamp | null |
 | 338 | 05 | TC-F-005 | Streak resets after a reward was earned | Earned reward remains earned (L2-010 §3) | null |
 | 339 | 05 | TC-F-006 | Filter / tabs by state (ready, in-progress, locked, earned) | Counts and grids match | null |

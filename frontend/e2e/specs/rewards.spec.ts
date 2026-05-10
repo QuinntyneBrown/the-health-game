@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 05-TC-V-001..008, 05-TC-C-001..010, 05-TC-L-001..010, 05-TC-R-001..005, 05-TC-F-001..002
+// Traces to: 05-TC-V-001..008, 05-TC-C-001..010, 05-TC-L-001..010, 05-TC-R-001..005, 05-TC-F-001..003
 // Description: rewards list page chrome.
 import { expect, test } from '@playwright/test';
 
@@ -74,6 +74,76 @@ const readyReward = {
 };
 
 test.describe('Rewards list', () => {
+  test('subtitle counts: 1 ready · 2 in progress · 3 locked (05-TC-F-003)', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await authenticate(page);
+    await page.unroute('**/api/rewards**');
+    await page.route('**/api/rewards**', (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify([
+          readyReward,
+          {
+            id: 'ip1',
+            goalId: 'g1',
+            name: 'In progress 1',
+            description: '',
+            status: 'in-progress',
+            earnedAt: null,
+            condition: { type: 'streak-milestone', streakDays: 5 },
+          },
+          {
+            id: 'ip2',
+            goalId: 'g1',
+            name: 'In progress 2',
+            description: '',
+            status: 'in-progress',
+            earnedAt: null,
+            condition: { type: 'streak-milestone', streakDays: 7 },
+          },
+          {
+            id: 'l1',
+            goalId: 'g1',
+            name: 'Locked 1',
+            description: '',
+            status: 'locked',
+            earnedAt: null,
+            condition: { type: 'streak-milestone', streakDays: 60 },
+          },
+          {
+            id: 'l2',
+            goalId: 'g1',
+            name: 'Locked 2',
+            description: '',
+            status: 'locked',
+            earnedAt: null,
+            condition: { type: 'streak-milestone', streakDays: 90 },
+          },
+          {
+            id: 'l3',
+            goalId: 'g1',
+            name: 'Locked 3',
+            description: '',
+            status: 'locked',
+            earnedAt: null,
+            condition: { type: 'streak-milestone', streakDays: 120 },
+          },
+        ]),
+      }),
+    );
+    await page.goto('/rewards');
+
+    const subtitle = page
+      .locator('lib-reward-list .page-header__description')
+      .first();
+    await expect(subtitle).toBeVisible();
+    const text = (await subtitle.textContent())?.trim() ?? '';
+    expect(text).toMatch(/1\s*ready/i);
+    expect(text).toMatch(/2\s*in\s*progress/i);
+    expect(text).toMatch(/3\s*locked/i);
+  });
+
   test('earned rewards distinguished from pending (05-TC-F-002)', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await authenticate(page);

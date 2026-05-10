@@ -31,6 +31,7 @@ const filterOptions: readonly SegmentedFilterOption[] = [
   template: `
     <hg-page-header
       title="Rewards"
+      [description]="countsSummary()"
       actionLabel="New reward"
       actionIcon="add"
       (actionSelected)="onCreate()"
@@ -314,6 +315,20 @@ export class RewardListComponent {
   readonly readyToClaim = computed(() =>
     this.rewards().find((r) => r.status === 'ready-to-claim') ?? null,
   );
+
+  readonly countsSummary = computed(() => {
+    const all = this.rewards();
+    const ready = all.filter((r) => r.status === 'ready-to-claim').length;
+    const inProgress = all.filter((r) => r.status === 'in-progress').length;
+    const locked = all.filter((r) => r.status === 'locked').length;
+    const earned = all.filter((r) => r.status === 'earned').length;
+    const parts: string[] = [];
+    if (ready) parts.push(`${ready} ready`);
+    if (inProgress) parts.push(`${inProgress} in progress`);
+    if (earned) parts.push(`${earned} earned`);
+    if (locked) parts.push(`${locked} locked`);
+    return parts.join(' · ');
+  });
 
   readonly groupedRewards = computed(() => {
     const visible = this.visibleRewards().filter((r) => r.status !== 'ready-to-claim');
