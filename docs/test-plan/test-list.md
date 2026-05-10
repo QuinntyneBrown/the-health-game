@@ -513,7 +513,7 @@ and made green. The /loop process picks the first test with
 | 502 | 07 | TC-F-011 | Authenticated user visiting `/sign-in` directly | Redirects to `/home` (notAuthenticatedGuard) | 2026-05-09T20:02:30Z |
 | 503 | 07 | TC-F-012 | Sign-in for a deleted or disabled account | 401; UI shows generic error (L2-036 §8) | 2026-05-10T14:35:30Z |
 | 504 | 07 | TC-F-013 | Lockout — repeated failed attempts beyond threshold | 401; generic error; no leak of lockout state to non-locked users (L2-036 §7) | 2026-05-10T14:36:30Z |
-| 505 | 07 | TC-F-014 | Click "New to HealthQuest? Get started" | Navigates to `/onboarding` | null |
+| 505 | 07 | TC-F-014 | Click "New to HealthQuest? Get started" | Navigates to `/onboarding` | 2026-05-10T14:37:30Z |
 | 506 | 07 | TC-F-015 | Network failure during submit | Submit re-enables; values preserved; non-disclosing error | null |
 | 507 | 07 | TC-F-016 | Whitespace-only credentials | Submit remains disabled (trim before evaluating) | null |
 | 508 | 07 | TC-F-017 | Username over 254 chars | Client blocks submit; backend rejects as 400 | null |

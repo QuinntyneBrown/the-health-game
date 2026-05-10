@@ -6,6 +6,13 @@ import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
 
 test.describe('Sign In — page', () => {
+  test('Get started link navigates to /onboarding (07-TC-F-014)', async ({ page }) => {
+    await page.goto('/sign-in');
+    await page.getByTestId('sign-in-get-started').click();
+    await page.waitForURL(/\/onboarding/);
+    expect(page.url()).toContain('/onboarding');
+  });
+
   test('lockout response surfaces generic error, no lockout leak (07-TC-F-013)', async ({
     page,
   }) => {
