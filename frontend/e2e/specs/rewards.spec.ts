@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 05-TC-V-001..007
+// Traces to: 05-TC-V-001..008
 // Description: rewards list page chrome.
 import { expect, test } from '@playwright/test';
 
@@ -74,6 +74,28 @@ const readyReward = {
 };
 
 test.describe('Rewards list', () => {
+  test('"New reward" button Inter 14 px / weight 500 / white (05-TC-V-008)', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await authenticate(page);
+    await page.goto('/rewards');
+
+    const button = page
+      .locator('lib-reward-list .page-header__action button')
+      .first();
+    await expect(button).toBeVisible();
+    await expect(button).toContainText('New reward');
+
+    const labelEl = button.locator('.action-button__label, span').first();
+    const result = await labelEl.evaluate((el) => {
+      const s = getComputedStyle(el);
+      return { family: s.fontFamily, size: s.fontSize, weight: s.fontWeight, color: s.color };
+    });
+    expect(result.family).toMatch(/Inter/);
+    expect(result.size).toBe('14px');
+    expect(result.weight).toBe('500');
+    expect(result.color).toBe('rgb(255, 255, 255)');
+  });
+
   test('reward progress text Inter 13 px / weight 600 (05-TC-V-007)', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await authenticate(page);
