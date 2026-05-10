@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 06-TC-V-001..007, 06-TC-C-001..010, 06-TC-L-001..010, 06-TC-R-001..005, 06-TC-F-001..002
+// Traces to: 06-TC-V-001..007, 06-TC-C-001..010, 06-TC-L-001..010, 06-TC-R-001..005, 06-TC-F-001..003
 // Description: stats + profile page chrome.
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
@@ -45,6 +45,51 @@ async function authenticate(page: import('@playwright/test').Page): Promise<void
 }
 
 test.describe('Stats & Profile chrome', () => {
+  test('completion % matches goals math (06-TC-F-003)', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await authenticate(page);
+    await page.unroute('**/api/goals**');
+    await page.route('**/api/goals**', (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify([
+          // 5/10 = 0.5
+          {
+            id: 'g1',
+            name: 'Walk',
+            cadence: 'daily',
+            target: { value: 10, unit: 'min' },
+            completedQuantity: 5,
+            currentStreak: 0,
+            longestStreak: 0,
+            rewardName: '',
+            description: '',
+          },
+          // 10/10 = 1.0 (clamps to 1)
+          {
+            id: 'g2',
+            name: 'Stretch',
+            cadence: 'daily',
+            target: { value: 10, unit: 'min' },
+            completedQuantity: 12,
+            currentStreak: 0,
+            longestStreak: 0,
+            rewardName: '',
+            description: '',
+          },
+        ]),
+      }),
+    );
+
+    await page.goto('/stats');
+    const tile = page
+      .locator('lib-stats .stat-tile')
+      .filter({ hasText: 'Goal completion' })
+      .locator('.stat-tile__value');
+    await expect(tile).toHaveText('75%'); // (0.5 + 1.0) / 2 = 0.75
+  });
+
   test('weekly total tile matches sum of bars (06-TC-F-002)', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await authenticate(page);

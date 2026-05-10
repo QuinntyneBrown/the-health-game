@@ -184,7 +184,25 @@ export class StatsComponent {
   ];
   readonly weekTotal = this.activity.reduce((sum, day) => sum + day.value, 0);
 
+  readonly completionPercent = computed(() => {
+    const all = this.goals();
+    if (all.length === 0) return 0;
+    const ratios = all.map((g) => {
+      const target = Math.max(g.target.value, 1);
+      const completed = Math.max(g.completedQuantity, 0);
+      return Math.min(completed / target, 1);
+    });
+    const avg = ratios.reduce((sum, r) => sum + r, 0) / ratios.length;
+    return Math.round(avg * 100);
+  });
+
   readonly tiles = computed<readonly StatTile[]>(() => [
+    {
+      id: 'completion',
+      label: 'Goal completion',
+      value: `${this.completionPercent()}%`,
+      tone: 'success',
+    },
     { id: 'goals', label: 'Active goals', value: String(this.goals().length), tone: 'success' },
     { id: 'streak', label: 'Current streak', value: '14 days', tone: 'streak' },
     {
@@ -194,6 +212,5 @@ export class StatsComponent {
       tone: 'info',
     },
     { id: 'rewards', label: 'Rewards earned', value: '6', tone: 'reward' },
-    { id: 'level', label: 'Level', value: 'Lvl 8', tone: 'success' },
   ]);
 }
