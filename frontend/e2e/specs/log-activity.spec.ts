@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 04-TC-V-001..007, 04-TC-C-001..010, 04-TC-L-001..010, 04-TC-R-001..006, 04-TC-F-001..012, 04-TC-F-101..109, 04-TC-B-001..010, 04-TC-A-001..007, 04-TC-D-001..006, 04-TC-S-001..003
+// Traces to: 04-TC-V-001..007, 04-TC-C-001..010, 04-TC-L-001..010, 04-TC-R-001..006, 04-TC-F-001..012, 04-TC-F-101..109, 04-TC-B-001..010, 04-TC-A-001..007, 04-TC-D-001..006, 04-TC-S-001..004
 // Description: log-activity dialog typography.
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
@@ -127,6 +127,97 @@ test.describe('Log activity sheet (mobile)', () => {
     });
     const accessibleName = meta.targetText || meta.ariaLabel || '';
     expect(accessibleName).toMatch(/Log activity/i);
+  });
+
+  test('no tokens or verifiers in console logs (04-TC-S-004)', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    const TOKEN_SENTINEL = 'tkn-secret-04S004-do-not-leak';
+    const VERIFIER_SENTINEL = 'verifier-secret-04S004-do-not-leak';
+
+    const messages: string[] = [];
+    page.on('console', (msg) => {
+      messages.push(`${msg.type()}|${msg.text()}`);
+    });
+    page.on('pageerror', (err) => {
+      messages.push(`pageerror|${err.message}|${err.stack ?? ''}`);
+    });
+
+    await page.route('**/connect/token', (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({
+          access_token: TOKEN_SENTINEL,
+          token_type: 'Bearer',
+          expires_in: 3600,
+        }),
+      }),
+    );
+    await page.route('**/api/goals**', (route) =>
+      route.fulfill({ status: 200, contentType: 'application/json', body: '[]' }),
+    );
+    await page.route('**/api/rewards**', (route) =>
+      route.fulfill({ status: 200, contentType: 'application/json', body: '[]' }),
+    );
+    await page.route('**/api/users/me**', (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({
+          displayName: 'Quinn',
+          email: 'q@q.q',
+          avatarUrl: null,
+          roles: [],
+        }),
+      }),
+    );
+
+    await page.goto('/onboarding');
+    await page.evaluate(
+      ([v]) => {
+        sessionStorage.setItem('hg.oidc.verifier', v);
+        sessionStorage.setItem('hg.oidc.state', 's');
+      },
+      [VERIFIER_SENTINEL],
+    );
+    await page.goto('/auth/callback?code=c&state=s');
+    await page.waitForURL(/\/home(\b|\/|$)/);
+
+    await page.route('**/api/goals/g1', (route) =>
+      route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(goal) }),
+    );
+    await page.unroute('**/api/goals**');
+    await page.route('**/api/goals/g1/activities**', (route) => {
+      if (route.request().method() === 'POST') {
+        route.fulfill({
+          status: 201,
+          contentType: 'application/json',
+          body: JSON.stringify({
+            id: 'a-s4',
+            goalId: 'g1',
+            quantity: 5,
+            recordedAt: '2026-05-10T06:25:00Z',
+            newlyEarnedRewards: [],
+          }),
+        });
+      } else {
+        route.fulfill({ status: 200, contentType: 'application/json', body: '[]' });
+      }
+    });
+
+    await page.goto('/goals/g1');
+    await page
+      .locator('[data-testid="goal-detail-log-fab"]')
+      .evaluate((el: HTMLElement) => el.click());
+    await page.waitForTimeout(300);
+    await page.locator('mat-dialog-container input[type="number"]').fill('5');
+    await page.locator('[data-testid="log-activity-save"]').click();
+    await page.waitForTimeout(400);
+
+    const leakedToken = messages.filter((m) => m.includes(TOKEN_SENTINEL));
+    const leakedVerifier = messages.filter((m) => m.includes(VERIFIER_SENTINEL));
+    expect(leakedToken).toHaveLength(0);
+    expect(leakedVerifier).toHaveLength(0);
   });
 
   test('mutating request carries CSRF/auth token (04-TC-S-003)', async ({ page }) => {
