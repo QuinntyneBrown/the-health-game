@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 04-TC-V-001..007, 04-TC-C-001..010, 04-TC-L-001..010, 04-TC-R-001..006, 04-TC-F-001..010
+// Traces to: 04-TC-V-001..007, 04-TC-C-001..010, 04-TC-L-001..010, 04-TC-R-001..006, 04-TC-F-001..011
 // Description: log-activity dialog typography.
 import { expect, test } from '@playwright/test';
 
@@ -323,6 +323,63 @@ test.describe('Log activity sheet (mobile)', () => {
 
 test.describe('Log activity dialog (desktop)', () => {
   test.use({ viewport: { width: 1440, height: 900 } });
+
+  test('delete existing activity entry persists (04-TC-F-011)', async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await authenticate(page);
+
+    let entries: Array<Record<string, unknown>> = [
+      {
+        id: 'a-1',
+        goalId: 'g1',
+        quantity: 3,
+        unit: 'min',
+        notes: '',
+        recordedAt: '2026-05-09T08:00:00Z',
+        newlyEarnedRewards: [],
+      },
+    ];
+    let deleteCalls = 0;
+
+    await page.route('**/api/goals/g1', (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify(goal),
+      }),
+    );
+    await page.route('**/api/goals/g1/activities**', (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify(entries),
+      }),
+    );
+    await page.route('**/api/activities/a-1', (route) => {
+      const req = route.request();
+      if (req.method() === 'DELETE') {
+        deleteCalls += 1;
+        entries = [];
+        route.fulfill({ status: 204, body: '' });
+        return;
+      }
+      route.fulfill({ status: 200, contentType: 'application/json', body: '{}' });
+    });
+
+    await page.goto('/goals/g1');
+    await page.locator('lib-goal-detail .goal-detail__history').first().scrollIntoViewIfNeeded();
+    await page.locator('[data-testid="activity-delete"]').first().click();
+
+    // Delete activity confirm dialog appears.
+    const dialog = page.locator('lib-delete-activity-dialog');
+    await expect(dialog).toBeVisible();
+    await dialog.getByRole('button', { name: /delete/i }).click();
+
+    await expect(dialog).toHaveCount(0);
+    expect(deleteCalls).toBe(1);
+    // Activity list re-fetches → no rows now.
+    await expect(page.locator('lib-goal-detail [data-testid="activity-list"]')).toHaveCount(0);
+  });
 
   test('edit existing activity entry persists (04-TC-F-010)', async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 900 });
