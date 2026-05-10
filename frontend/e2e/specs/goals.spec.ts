@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 03-TC-V-001..009, 03-TC-C-001..011, 03-TC-L-001..011, 03-TC-R-001..006, 03-TC-F-001..011, 03-TC-F-101..105
+// Traces to: 03-TC-V-001..009, 03-TC-C-001..011, 03-TC-L-001..011, 03-TC-R-001..006, 03-TC-F-001..011, 03-TC-F-101..106
 // Description: /goals page title "Goals" renders with Inter weight 500 at 22/32 px.
 // Subtitle is Inter 13 px weight 400 with computed counts.
 import { expect, test } from '@playwright/test';
@@ -559,6 +559,66 @@ test.describe('Goals page — header typography', () => {
 
   test.describe('filter chip layout', () => {
     test.use({ viewport: { width: 1440, height: 900 } });
+
+    test('custom cadence with N <= 0 shows validation error (03-TC-F-106)', async ({ page }) => {
+      await page.setViewportSize({ width: 1440, height: 900 });
+      await authenticate(page);
+
+      let postCalls = 0;
+      await page.route('**/api/goals', (route) => {
+        if (route.request().method() === 'POST') {
+          postCalls += 1;
+          route.fulfill({ status: 201, contentType: 'application/json', body: '{}' });
+          return;
+        }
+        route.fulfill({ status: 200, contentType: 'application/json', body: '[]' });
+      });
+
+      await page.goto('/goals/new');
+      await page
+        .locator('hg-health-text-field')
+        .filter({ hasText: 'Name' })
+        .locator('input')
+        .fill('Stretch');
+      await page
+        .locator('hg-health-text-field')
+        .filter({ hasText: 'Target' })
+        .locator('input')
+        .fill('5');
+      await page
+        .locator('hg-health-text-field')
+        .filter({ hasText: 'Unit' })
+        .locator('input')
+        .fill('min');
+
+      await page
+        .locator('mat-form-field')
+        .filter({ hasText: 'Cadence' })
+        .locator('mat-select')
+        .click();
+      await page.locator('mat-option').filter({ hasText: /^Custom$/ }).click();
+
+      const everyField = page
+        .locator('hg-health-text-field')
+        .filter({ hasText: 'Every' })
+        .first();
+      const everyInput = everyField.locator('input');
+      const save = page.locator('[data-testid="goal-form-save"]');
+
+      for (const bad of ['0', '-2']) {
+        await everyInput.fill(bad);
+        await expect(save).toBeDisabled();
+      }
+
+      await page
+        .locator('form[data-testid="goal-form"]')
+        .evaluate((form: HTMLFormElement) => {
+          form.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
+        });
+
+      await expect(everyField).toContainText(/positive|greater|every|0/i);
+      expect(postCalls).toBe(0);
+    });
 
     test('create custom cadence "every 3 days" persists customInterval (03-TC-F-105)', async ({
       page,

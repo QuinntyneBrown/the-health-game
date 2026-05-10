@@ -196,7 +196,7 @@ and made green. The /loop process picks the first test with
 | 185 | 03 | TC-F-103 | Create daily goal — happy path | Persisted; appears at top of list within 500 ms | 2026-05-10T01:19:46Z |
 | 186 | 03 | TC-F-104 | Create hourly / weekly / monthly | Persisted with correct cadence (L2-011) | 2026-05-10T01:25:03Z |
 | 187 | 03 | TC-F-105 | Create custom cadence "every 3 days" | Persisted; period boundaries from start date in 3-day increments (L2-012 §1) | 2026-05-10T01:26:07Z |
-| 188 | 03 | TC-F-106 | Custom cadence with N <= 0 | Validation error (L2-012 §2) | null |
+| 188 | 03 | TC-F-106 | Custom cadence with N <= 0 | Validation error (L2-012 §2) | 2026-05-10T01:27:19Z |
 | 189 | 03 | TC-F-107 | Edit goal — change cadence from daily to weekly | Streak windows recomputed forward; historical entries unchanged (L2-003 §3) | null |
 | 190 | 03 | TC-F-108 | Edit goal owned by another user via crafted request | 403 / 404 (L2-003 §2) | null |
 | 191 | 03 | TC-F-109 | Save while offline | Disabled or queued with offline indicator | null |
