@@ -191,7 +191,11 @@ export class GoalDetailComponent {
     const container = pickLogActivityContainer(variant);
     this.currentLogContainer = container;
     if (container === 'sheet') {
-      const ref = this.bottomSheet.open(LogActivitySheetComponent, { data });
+      const ref = this.bottomSheet.open(LogActivitySheetComponent, {
+        data,
+        ariaModal: true,
+        restoreFocus: true,
+      });
       this.currentSheetRef = ref;
       ref.afterDismissed().subscribe((entry) => {
         if (entry) this.refreshActivities();
