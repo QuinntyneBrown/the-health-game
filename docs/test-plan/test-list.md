@@ -496,7 +496,7 @@ and made green. The /loop process picks the first test with
 | 485 | 07 | TC-R-002 | Viewport 375x812 | Same layout as 360 (mobile) | 2026-05-10T14:11:30Z |
 | 486 | 07 | TC-R-003 | Viewport 768x1024 | Centered card with brand and form fields, no hero panel | 2026-05-10T14:13:30Z |
 | 487 | 07 | TC-R-004 | Viewport 1024x768 | Centered card; rail-variant app shell may apply | 2026-05-10T14:14:30Z |
-| 488 | 07 | TC-R-005 | Viewport 1440x900 | Desktop split layout — hero left, form right | null |
+| 488 | 07 | TC-R-005 | Viewport 1440x900 | Desktop split layout — hero left, form right | 2026-05-10T14:15:30Z |
 | 489 | 07 | TC-R-006 | Viewport >= 1920 wide | Content max-width respected (no edge-to-edge stretching) | null |
 | 490 | 07 | TC-R-007 | Window resize during render | Layout recomputes without flicker; inputs preserve focus and value | null |
 | 491 | 07 | TC-R-008 | Soft keyboard on mobile | Card scrolls; submit button stays accessible above the keyboard | null |
