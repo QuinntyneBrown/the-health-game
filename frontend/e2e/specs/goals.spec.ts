@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 03-TC-V-001..009, 03-TC-C-001..011, 03-TC-L-001..011, 03-TC-R-001..006, 03-TC-F-001..011, 03-TC-F-101..109, 03-TC-F-201..204, 03-TC-B-001..006, 03-TC-A-001..006
+// Traces to: 03-TC-V-001..009, 03-TC-C-001..011, 03-TC-L-001..011, 03-TC-R-001..006, 03-TC-F-001..011, 03-TC-F-101..109, 03-TC-F-201..204, 03-TC-B-001..006, 03-TC-A-001..006, 03-TC-D-001
 // Description: /goals page title "Goals" renders with Inter weight 500 at 22/32 px.
 // Subtitle is Inter 13 px weight 400 with computed counts.
 import AxeBuilder from '@axe-core/playwright';
@@ -560,6 +560,84 @@ test.describe('Goals page — header typography', () => {
 
   test.describe('filter chip layout', () => {
     test.use({ viewport: { width: 1440, height: 900 } });
+
+    test('created goal survives a full page reload (03-TC-D-001)', async ({ page }) => {
+      await page.setViewportSize({ width: 1440, height: 900 });
+      await authenticate(page);
+
+      const created = {
+        id: 'persisted-1',
+        name: 'Walk',
+        description: '',
+        cadence: 'daily' as const,
+        target: { value: 10, unit: 'min' },
+        completedQuantity: 0,
+        currentStreak: 0,
+        longestStreak: 0,
+        rewardName: '',
+      };
+      let serverGoals: typeof created[] = [];
+
+      await page.unroute('**/api/goals**');
+      await page.route('**/api/goals**', (route) => {
+        const req = route.request();
+        if (req.url().endsWith('/api/goals/persisted-1')) {
+          route.fulfill({
+            status: 200,
+            contentType: 'application/json',
+            body: JSON.stringify(created),
+          });
+          return;
+        }
+        if (req.method() === 'POST') {
+          serverGoals = [created];
+          route.fulfill({
+            status: 201,
+            contentType: 'application/json',
+            body: JSON.stringify(created),
+          });
+          return;
+        }
+        route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify(serverGoals),
+        });
+      });
+      await page.route('**/api/goals/persisted-1/activity**', (route) =>
+        route.fulfill({ status: 200, contentType: 'application/json', body: '[]' }),
+      );
+
+      await page.goto('/goals/new');
+      await page
+        .locator('hg-health-text-field')
+        .filter({ hasText: 'Name' })
+        .locator('input')
+        .fill('Walk');
+      await page
+        .locator('hg-health-text-field')
+        .filter({ hasText: 'Target' })
+        .locator('input')
+        .fill('10');
+      await page
+        .locator('hg-health-text-field')
+        .filter({ hasText: 'Unit' })
+        .locator('input')
+        .fill('min');
+      await page.locator('[data-testid="goal-form-save"]').click();
+      await page.waitForURL(/\/goals\/persisted-1$/);
+
+      // Hard reload — server-persisted goal must still be visible.
+      await page.reload();
+      await expect(page.locator('lib-goal-detail [data-testid="goal-detail"]')).toContainText(
+        'Walk',
+      );
+
+      await page.goto('/goals');
+      await expect(
+        page.locator('lib-goal-list .goal-card').filter({ hasText: 'Walk' }),
+      ).toBeVisible();
+    });
 
     test('axe-core: 0 critical/serious violations on /goals (03-TC-A-006)', async ({ page }) => {
       await page.setViewportSize({ width: 1440, height: 900 });
