@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 05-TC-V-001..008, 05-TC-C-001..010, 05-TC-L-001..009
+// Traces to: 05-TC-V-001..008, 05-TC-C-001..010, 05-TC-L-001..010
 // Description: rewards list page chrome.
 import { expect, test } from '@playwright/test';
 
@@ -74,6 +74,16 @@ const readyReward = {
 };
 
 test.describe('Rewards list', () => {
+  test('top bar height 80 px (05-TC-L-010)', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await authenticate(page);
+    await page.goto('/rewards');
+    const toolbar = page.locator('.app-shell__toolbar').first();
+    await expect(toolbar).toBeVisible();
+    const height = await toolbar.evaluate((el) => getComputedStyle(el).height);
+    expect(height).toBe('80px');
+  });
+
   test('page padding 32 / 24 / 16 by viewport (05-TC-L-009)', async ({ page }) => {
     await authenticate(page);
     await page.unroute('**/api/rewards**');
