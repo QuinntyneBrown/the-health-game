@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 06-TC-V-001..007, 06-TC-C-001..010, 06-TC-L-001..006
+// Traces to: 06-TC-V-001..007, 06-TC-C-001..010, 06-TC-L-001..007
 // Description: stats + profile page chrome.
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
@@ -45,6 +45,32 @@ async function authenticate(page: import('@playwright/test').Page): Promise<void
 }
 
 test.describe('Stats & Profile chrome', () => {
+  test('section vertical rhythm 24 px (06-TC-L-007)', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await authenticate(page);
+    await page.goto('/stats');
+
+    const meta = await page.evaluate(() => {
+      const chart = document.querySelector('lib-stats .activity-chart') as HTMLElement | null;
+      const tiles = document.querySelector('lib-stats .stat-tiles') as HTMLElement | null;
+      const sectionTitles = Array.from(
+        document.querySelectorAll('lib-stats .stats-section__title'),
+      ) as HTMLElement[];
+      return {
+        chartMb: chart ? getComputedStyle(chart).marginBottom : '',
+        firstTitleMb: sectionTitles[0]
+          ? getComputedStyle(sectionTitles[0]).marginBottom
+          : '',
+        tilesMt: tiles ? getComputedStyle(tiles).marginTop : '',
+      };
+    });
+    // Spec is "24 px section vertical rhythm" — accept either chart bottom
+    // margin or section title bottom margin reading 24 px (the rhythm
+    // anchor element).
+    const candidates = [meta.chartMb, meta.tilesMt, meta.firstTitleMb];
+    expect(candidates).toContain('24px');
+  });
+
   test('profile form column max-width 480 px (06-TC-L-006)', async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 900 });
     await authenticate(page);
