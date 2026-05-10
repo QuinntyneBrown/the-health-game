@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 05-TC-V-001..008, 05-TC-C-001..010, 05-TC-L-001..004
+// Traces to: 05-TC-V-001..008, 05-TC-C-001..010, 05-TC-L-001..005
 // Description: rewards list page chrome.
 import { expect, test } from '@playwright/test';
 
@@ -74,6 +74,53 @@ const readyReward = {
 };
 
 test.describe('Rewards list', () => {
+  test('reward grid columns 3 / 2 / 1 by viewport (05-TC-L-005)', async ({ page }) => {
+    await authenticate(page);
+    await page.unroute('**/api/rewards**');
+    const manyRewards = Array.from({ length: 6 }, (_, i) => ({
+      id: `r-grid-${i}`,
+      goalId: 'g1',
+      name: `In-progress reward ${i + 1}`,
+      description: '',
+      status: 'in-progress',
+      earnedAt: null,
+      progress: { current: i, target: 10 },
+      condition: { type: 'streak-milestone', streakDays: 10 + i },
+    }));
+    await page.route('**/api/rewards**', (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify(manyRewards),
+      }),
+    );
+
+    const measureCols = async () => {
+      const grid = page
+        .locator('lib-reward-list .reward-section[data-status="in-progress"] .reward-list')
+        .first();
+      await expect(grid).toBeVisible();
+      const cols = await grid.evaluate((el) => {
+        const tracks = getComputedStyle(el).gridTemplateColumns;
+        return tracks.split(/\s+/).filter((t) => t && t !== 'none').length;
+      });
+      return cols;
+    };
+
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.goto('/rewards');
+    await page.waitForTimeout(120);
+    expect(await measureCols()).toBe(3);
+
+    await page.setViewportSize({ width: 768, height: 1024 });
+    await page.waitForTimeout(120);
+    expect(await measureCols()).toBe(2);
+
+    await page.setViewportSize({ width: 360, height: 780 });
+    await page.waitForTimeout(120);
+    expect(await measureCols()).toBe(1);
+  });
+
   test('hero shadow offset 0 2 / blur 8 / #00000026 (05-TC-L-004)', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await authenticate(page);

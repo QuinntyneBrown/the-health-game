@@ -128,11 +128,23 @@ const filterOptions: readonly SegmentedFilterOption[] = [
 
       .reward-list {
         display: grid;
-        gap: var(--hg-space-4);
-        grid-template-columns: repeat(auto-fill, minmax(var(--hg-size-card-min), 1fr));
+        gap: 16px;
+        grid-template-columns: 1fr;
         list-style: none;
         margin: 0;
         padding: 0;
+      }
+
+      @media (min-width: 768px) {
+        .reward-list {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+
+      @media (min-width: 1200px) {
+        .reward-list {
+          grid-template-columns: repeat(3, 1fr);
+        }
       }
 
       .reward-list__item {
