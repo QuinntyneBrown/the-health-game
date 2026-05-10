@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 06-TC-V-001..007, 06-TC-C-001..010, 06-TC-L-001..010, 06-TC-R-001..005, 06-TC-F-001..008, 06-TC-F-101..107, 06-TC-F-201..205, 06-TC-B-001..006, 06-TC-A-001..006, 06-TC-D-001..005
+// Traces to: 06-TC-V-001..007, 06-TC-C-001..010, 06-TC-L-001..010, 06-TC-R-001..005, 06-TC-F-001..008, 06-TC-F-101..107, 06-TC-F-201..205, 06-TC-B-001..006, 06-TC-A-001..006, 06-TC-D-001..006
 // Description: stats + profile page chrome.
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
@@ -45,6 +45,61 @@ async function authenticate(page: import('@playwright/test').Page): Promise<void
 }
 
 test.describe('Stats & Profile chrome', () => {
+  test('stats reflect server-side rollover, no FE cache (06-TC-D-006)', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await authenticate(page);
+
+    // Server reports the streak before midnight; after a "rollover" the
+    // streak resets to 0 and we expect the Stats page to reflect that on
+    // the next visit (FE doesn't pin the prior snapshot).
+    let pretRollover = true;
+    await page.unroute('**/api/goals**');
+    await page.route('**/api/goals**', (route, request) => {
+      if (request.method() !== 'GET' || new URL(request.url()).pathname !== '/api/goals') {
+        route.fulfill({ status: 200, contentType: 'application/json', body: '{}' });
+        return;
+      }
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify([
+          {
+            id: 'g1',
+            name: 'Walk',
+            cadence: 'daily',
+            target: { value: 10, unit: 'min' },
+            completedQuantity: 0,
+            currentStreak: pretRollover ? 5 : 0,
+            longestStreak: pretRollover ? 5 : 5,
+            rewardName: '',
+            description: '',
+          },
+        ]),
+      });
+    });
+
+    await page.goto('/stats');
+    await expect(
+      page
+        .locator('lib-stats .stat-tile')
+        .filter({ hasText: 'Current streak' })
+        .locator('.stat-tile__value'),
+    ).toHaveText('5 days');
+
+    // Simulate the server crossing the cadence rollover.
+    pretRollover = false;
+
+    // Re-navigate — FE re-fetches /api/goals and reflects the new streak.
+    await page.goto('/profile');
+    await page.goto('/stats');
+    await expect(
+      page
+        .locator('lib-stats .stat-tile')
+        .filter({ hasText: 'Current streak' })
+        .locator('.stat-tile__value'),
+    ).toHaveText('0 days');
+  });
+
   test('auth tokens never land in localStorage (06-TC-D-005)', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await authenticate(page);

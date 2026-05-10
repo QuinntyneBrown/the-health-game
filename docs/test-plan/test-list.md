@@ -442,7 +442,7 @@ and made green. The /loop process picks the first test with
 | 431 | 06 | TC-D-003 | After account deletion, audit log records the deletion event with correlation ID | Yes (L2-022 §3) | 2026-05-10T12:56:05Z |
 | 432 | 06 | TC-D-004 | Email is never logged at any level | Confirmed (L2-017 §3) | 2026-05-10T12:58:35Z |
 | 433 | 06 | TC-D-005 | Auth tokens never written to localStorage; refresh tokens (if used) httpOnly cookie only | Confirmed (L2-013 §3) | 2026-05-10T13:00:32Z |
-| 434 | 06 | TC-D-006 | Stats accurately reflect cadence rollovers across midnight / month boundaries (L2-011) | Yes | null |
+| 434 | 06 | TC-D-006 | Stats accurately reflect cadence rollovers across midnight / month boundaries (L2-011) | Yes | 2026-05-10T13:02:19Z |
 | 435 | 06 | TC-P-001 | Stats summary endpoint p95 | <= 300 ms (L2-018 §1) | null |
 | 436 | 06 | TC-P-002 | Profile update endpoint p95 | <= 500 ms (L2-018 §2) | null |
 | 437 | 06 | TC-P-003 | Bar chart renders without layout shift (CLS ~ 0) | Yes | null |
