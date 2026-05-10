@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 06-TC-V-001..007, 06-TC-C-001..010, 06-TC-L-001..010, 06-TC-R-001..005, 06-TC-F-001..008, 06-TC-F-101..107, 06-TC-F-201..205, 06-TC-B-001..006, 06-TC-A-001..006, 06-TC-D-001
+// Traces to: 06-TC-V-001..007, 06-TC-C-001..010, 06-TC-L-001..010, 06-TC-R-001..005, 06-TC-F-001..008, 06-TC-F-101..107, 06-TC-F-201..205, 06-TC-B-001..006, 06-TC-A-001..006, 06-TC-D-001..002
 // Description: stats + profile page chrome.
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
@@ -45,6 +45,64 @@ async function authenticate(page: import('@playwright/test').Page): Promise<void
 }
 
 test.describe('Stats & Profile chrome', () => {
+  test('post-deletion FE has no token + no user data (06-TC-D-002)', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await authenticate(page);
+
+    // Server reports the user as deleted on every subsequent /api/users/me
+    // GET — modeling the L2-014 §2 contract that endpoints redact data.
+    let userDeleted = false;
+    await page.unroute('**/api/users/me**');
+    await page.route('**/api/users/me**', (route, request) => {
+      if (request.method() === 'DELETE') {
+        userDeleted = true;
+        route.fulfill({ status: 204, contentType: 'application/json', body: '' });
+        return;
+      }
+      if (userDeleted) {
+        route.fulfill({
+          status: 404,
+          contentType: 'application/json',
+          body: JSON.stringify({ message: 'User not found.' }),
+        });
+        return;
+      }
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({
+          displayName: 'Quinn',
+          email: 'q@q.q',
+          avatarUrl: null,
+          roles: [],
+        }),
+      });
+    });
+
+    await page.goto('/profile');
+    await page.locator('[data-testid="profile-delete"]').click();
+    await page
+      .locator('lib-delete-account-dialog input')
+      .fill('q@q.q');
+    await page.locator('[data-testid="delete-account-confirm"]').click();
+    await page.waitForTimeout(800);
+
+    // Local session is cleared.
+    const tokenStillPresent = await page
+      .evaluate(() => sessionStorage.getItem('hg.oidc.access-token'))
+      .catch(() => 'navigated-away');
+    expect(tokenStillPresent === null || tokenStillPresent === 'navigated-away').toBe(true);
+
+    // Direct same-origin fetch from a fresh navigation now resolves to 404,
+    // not the stale cached profile body.
+    await page.goto('/');
+    const status = await page.evaluate(async () => {
+      const r = await fetch('/api/users/me');
+      return r.status;
+    });
+    expect(status).toBe(404);
+  });
+
   test('profile edit survives reload (06-TC-D-001)', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await authenticate(page);
