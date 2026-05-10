@@ -24,6 +24,31 @@ interface TokenResponse {
   readonly id_token?: string;
 }
 
+interface PasswordSignInResponse {
+  readonly accessToken: string;
+  readonly tokenType: string;
+  readonly expiresAtUtc: string;
+  readonly user: {
+    readonly id: string;
+    readonly subjectId: string;
+    readonly displayName: string;
+    readonly email: string;
+    readonly timeZoneId: string;
+    readonly roles: readonly (string | number)[];
+    readonly createdAtUtc: string;
+    readonly updatedAtUtc: string | null;
+  };
+}
+
+const ROLE_NAMES = ['User', 'Admin'] as const;
+
+function normalizeRole(role: string | number): string {
+  if (typeof role === 'string') {
+    return role;
+  }
+  return ROLE_NAMES[role] ?? String(role);
+}
+
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private readonly config = inject(API_CONFIG);
@@ -56,6 +81,19 @@ export class AuthService {
     }
 
     this.redirect(url.toString());
+  }
+
+  async signInWithPassword(usernameOrEmail: string, password: string): Promise<void> {
+    const response = await firstValueFrom(
+      this.http.post<PasswordSignInResponse>(
+        `${this.config.apiBaseUrl}/api/auth/sign-in`,
+        { usernameOrEmail, password },
+      ),
+    );
+
+    this.accessToken.set(response.accessToken);
+    sessionStorage.setItem(ACCESS_TOKEN_KEY, response.accessToken);
+    this.rolesSignal.set(response.user.roles.map(normalizeRole));
   }
 
   async handleRedirect(code: string, state: string): Promise<void> {
@@ -107,6 +145,11 @@ export class AuthService {
     this.rolesSignal.set(roles);
   }
 
+  clearLocalSession(): void {
+    this.accessToken.set(null);
+    this.rolesSignal.set([]);
+  }
+
   signOut(): void {
     this.accessToken.set(null);
     sessionStorage.removeItem(VERIFIER_KEY);
@@ -131,6 +174,14 @@ export class AuthService {
       sessionStorage.removeItem(RETURN_URL_KEY);
     }
     return url;
+  }
+
+  setReturnUrl(url: string | null): void {
+    if (url) {
+      sessionStorage.setItem(RETURN_URL_KEY, url);
+    } else {
+      sessionStorage.removeItem(RETURN_URL_KEY);
+    }
   }
 }
 

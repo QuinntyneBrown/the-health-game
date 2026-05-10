@@ -7,7 +7,10 @@ import {
   provideHttpClientTesting,
 } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
+import { provideRouter } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
+
+import { API_CONFIG } from '../api.config';
 
 import {
   ApiError,
@@ -27,6 +30,18 @@ describe('errorInterceptor', () => {
       providers: [
         provideHttpClient(withInterceptors([errorInterceptor])),
         provideHttpClientTesting(),
+        provideRouter([]),
+        {
+          provide: API_CONFIG,
+          useValue: {
+            apiBaseUrl: '',
+            oidcAuthority: '',
+            oidcClientId: '',
+            oidcScopes: [],
+            oidcRedirectUri: '',
+            oidcPostLogoutRedirectUri: '',
+          },
+        },
       ],
     });
     http = TestBed.inject(HttpClient);

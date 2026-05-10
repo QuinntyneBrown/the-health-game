@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 04-TC-V-001..007, 04-TC-C-001..010, 04-TC-L-001..010, 04-TC-R-001..006, 04-TC-F-001..012, 04-TC-F-101..108
+// Traces to: 04-TC-V-001..007, 04-TC-C-001..010, 04-TC-L-001..010, 04-TC-R-001..006, 04-TC-F-001..012, 04-TC-F-101..109
 // Description: log-activity dialog typography.
 import { expect, test } from '@playwright/test';
 
@@ -907,6 +907,48 @@ test.describe('Log activity dialog (desktop)', () => {
       page.locator('lib-goal-detail [data-testid="activity-list"]'),
     ).toBeVisible();
     expect(postBody).toMatchObject({ quantity: 5 });
+  });
+
+  test('submit while unauthenticated → 401 routes to re-auth (04-TC-F-109)', async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await authenticate(page);
+
+    await page.unroute('**/api/goals**');
+    await page.route('**/api/goals**', (route) => {
+      const req = route.request();
+      if (req.method() === 'POST') {
+        route.fulfill({
+          status: 401,
+          contentType: 'application/json',
+          body: JSON.stringify({ title: 'Token expired' }),
+        });
+        return;
+      }
+      route.fulfill({ status: 200, contentType: 'application/json', body: '[]' });
+    });
+
+    await page.goto('/goals/new');
+    await page
+      .locator('hg-health-text-field')
+      .filter({ hasText: 'Name' })
+      .locator('input')
+      .fill('Walk');
+    await page
+      .locator('hg-health-text-field')
+      .filter({ hasText: 'Target' })
+      .locator('input')
+      .fill('10');
+    await page
+      .locator('hg-health-text-field')
+      .filter({ hasText: 'Unit' })
+      .locator('input')
+      .fill('min');
+    await page.locator('[data-testid="goal-form-save"]').click();
+
+    // FE clears the session and routes to /onboarding (the re-auth entry).
+    await page.waitForURL(/\/onboarding/, { timeout: 10000 });
+    const tokenLeft = await page.evaluate(() => sessionStorage.getItem('hg.oidc.access-token'));
+    expect(tokenLeft).toBeNull();
   });
 
   test('custom cadence N=0 surfaces validation error (04-TC-F-108)', async ({ page }) => {
