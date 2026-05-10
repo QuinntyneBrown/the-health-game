@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 06-TC-V-001..007, 06-TC-C-001..010, 06-TC-L-001..010, 06-TC-R-001..005, 06-TC-F-001..008, 06-TC-F-101..105
+// Traces to: 06-TC-V-001..007, 06-TC-C-001..010, 06-TC-L-001..010, 06-TC-R-001..005, 06-TC-F-001..008, 06-TC-F-101..106
 // Description: stats + profile page chrome.
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
@@ -45,6 +45,46 @@ async function authenticate(page: import('@playwright/test').Page): Promise<void
 }
 
 test.describe('Stats & Profile chrome', () => {
+  test('empty display name shows validation error (06-TC-F-106)', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await authenticate(page);
+
+    let putCalls = 0;
+    await page.unroute('**/api/users/me**');
+    await page.route('**/api/users/me**', (route, request) => {
+      if (request.method() === 'PUT') putCalls += 1;
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({
+          displayName: 'Quinn',
+          email: 'q@q.q',
+          avatarUrl: null,
+          roles: [],
+        }),
+      });
+    });
+
+    await page.goto('/profile');
+    await page.locator('[data-testid="profile-edit"]').click();
+    await page
+      .locator('lib-profile hg-health-text-field')
+      .filter({ hasText: 'Display name' })
+      .locator('input')
+      .fill('   ');
+    const saveBtn = page.locator('[data-testid="profile-save"]');
+    // Save is disabled when validation fails — but the visible error should
+    // still appear when the user tabs / interacts.
+    expect(await saveBtn.isDisabled()).toBe(true);
+    const error = page
+      .locator('lib-profile hg-health-text-field')
+      .filter({ hasText: 'Display name' })
+      .locator('.health-text-field__error');
+    await expect(error).toBeVisible();
+    await expect(error).toContainText(/required/i);
+    expect(putCalls).toBe(0);
+  });
+
   test('cancel edit reverts to last saved (06-TC-F-105)', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await authenticate(page);
