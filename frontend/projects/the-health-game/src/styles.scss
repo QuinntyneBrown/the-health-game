@@ -219,6 +219,10 @@ lib-goal-list .goal-card .goal-card__content {
   lib-goal-list .goal-card .goal-card__content {
     padding: 12px !important;
   }
+
+  lib-goal-list .goal-list {
+    gap: 8px !important;
+  }
 }
 
 lib-goal-list .goal-card__icon-frame {

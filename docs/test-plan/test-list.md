@@ -170,7 +170,7 @@ and made green. The /loop process picks the first test with
 | 159 | 03 | TC-L-005 | Goal card corner radius | 16 px | 2026-05-10T00:01:42Z |
 | 160 | 03 | TC-L-006 | Goal card padding | 12 px (mobile), 20 px (tablet/desktop) | 2026-05-10T00:05:50Z |
 | 161 | 03 | TC-L-007 | Goal card icon container size | 40 px square, 9999 corner radius | 2026-05-10T00:09:16Z |
-| 162 | 03 | TC-L-008 | List inter-row gap (mobile) | 8 px | null |
+| 162 | 03 | TC-L-008 | List inter-row gap (mobile) | 8 px | 2026-05-10T00:12:47Z |
 | 163 | 03 | TC-L-009 | Grid columns (desktop) | 3 cards across; gap 16 px | null |
 | 164 | 03 | TC-L-010 | Floating action button (mobile) | 56 px, bottom-right with 24 px inset | null |
 | 165 | 03 | TC-L-011 | Detail view — section spacing | 24 px between header / streak / activity history | null |
