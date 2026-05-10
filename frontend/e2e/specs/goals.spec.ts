@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 03-TC-V-001..009, 03-TC-C-001..011, 03-TC-L-001..011, 03-TC-R-001..006, 03-TC-F-001..011, 03-TC-F-101..109, 03-TC-F-201..204, 03-TC-B-001
+// Traces to: 03-TC-V-001..009, 03-TC-C-001..011, 03-TC-L-001..011, 03-TC-R-001..006, 03-TC-F-001..011, 03-TC-F-101..109, 03-TC-F-201..204, 03-TC-B-001..002
 // Description: /goals page title "Goals" renders with Inter weight 500 at 22/32 px.
 // Subtitle is Inter 13 px weight 400 with computed counts.
 import { expect, test } from '@playwright/test';
@@ -559,6 +559,68 @@ test.describe('Goals page — header typography', () => {
 
   test.describe('filter chip layout', () => {
     test.use({ viewport: { width: 1440, height: 900 } });
+
+    test('Enter activates focused chip, card Open, and FAB (03-TC-B-002)', async ({ page }) => {
+      await page.setViewportSize({ width: 360, height: 780 });
+      await authenticate(page);
+      await page.unroute('**/api/goals**');
+      const goal = {
+        id: 'g1',
+        name: 'Walk',
+        description: '',
+        cadence: 'hourly' as const,
+        target: { value: 10, unit: 'min' },
+        completedQuantity: 0,
+        currentStreak: 0,
+        longestStreak: 0,
+        rewardName: '',
+      };
+      await page.route('**/api/goals**', (route) => {
+        const url = route.request().url();
+        if (url.endsWith('/api/goals/g1')) {
+          route.fulfill({
+            status: 200,
+            contentType: 'application/json',
+            body: JSON.stringify(goal),
+          });
+          return;
+        }
+        route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify([goal]),
+        });
+      });
+      await page.route('**/api/goals/g1/activity**', (route) =>
+        route.fulfill({ status: 200, contentType: 'application/json', body: '[]' }),
+      );
+
+      // Filter chip via Enter — pick "Hourly" via keyboard.
+      await page.goto('/goals');
+      const chipGroup = page.locator('lib-goal-list mat-button-toggle-group').first();
+      await chipGroup
+        .locator('mat-button-toggle')
+        .filter({ hasText: /^Hourly/ })
+        .focus();
+      await page.keyboard.press('Enter');
+      await expect(page.locator('lib-goal-list .goal-card')).toHaveCount(1);
+
+      // Card Open via Enter — focus the Open action button.
+      const openBtn = page
+        .locator('lib-goal-list .goal-card hg-action-button button')
+        .filter({ hasText: 'Open' })
+        .first();
+      await openBtn.focus();
+      await page.keyboard.press('Enter');
+      await page.waitForURL(/\/goals\/g1$/);
+
+      // FAB via Enter — back to /goals, focus FAB, press Enter, expect /goals/new.
+      await page.goto('/goals');
+      const fab = page.locator('lib-goal-list [data-testid="goals-new-fab"]');
+      await fab.focus();
+      await page.keyboard.press('Enter');
+      await page.waitForURL(/\/goals\/new$/);
+    });
 
     test('tab order: search → chips → sort → cards → FAB (03-TC-B-001)', async ({ page }) => {
       await page.setViewportSize({ width: 360, height: 780 });
