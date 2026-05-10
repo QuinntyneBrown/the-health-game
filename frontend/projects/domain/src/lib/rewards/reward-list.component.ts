@@ -114,6 +114,7 @@ const filterOptions: readonly SegmentedFilterOption[] = [
                 <hg-reward-card
                   [name]="reward.name"
                   [description]="reward.description"
+                  [icon]="iconFor(reward)"
                   [isEarned]="reward.status === 'earned'"
                   [statusLabel]="statusLabel(reward)"
                   [earnedDateLabel]="earnedLabel(reward)"
@@ -379,7 +380,33 @@ export class RewardListComponent {
   });
 
   statusLabel(reward: Reward): string {
-    return reward.status === 'earned' ? 'Earned' : 'Pending';
+    switch (reward.status) {
+      case 'earned':
+        return 'Earned';
+      case 'ready-to-claim':
+        return 'Ready';
+      case 'in-progress':
+        return 'In progress';
+      case 'locked':
+        return 'Locked';
+      default:
+        return 'Pending';
+    }
+  }
+
+  iconFor(reward: Reward): string {
+    switch (reward.status) {
+      case 'earned':
+        return 'emoji_events';
+      case 'ready-to-claim':
+        return 'redeem';
+      case 'in-progress':
+        return 'trending_up';
+      case 'locked':
+        return 'lock';
+      default:
+        return 'card_giftcard';
+    }
   }
 
   earnedLabel(reward: Reward): string {

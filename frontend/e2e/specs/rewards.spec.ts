@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 05-TC-V-001..008, 05-TC-C-001..010, 05-TC-L-001..010, 05-TC-R-001..005, 05-TC-F-001..007, 05-TC-F-101..105, 05-TC-F-201..203, 05-TC-B-001..004, 05-TC-A-001
+// Traces to: 05-TC-V-001..008, 05-TC-C-001..010, 05-TC-L-001..010, 05-TC-R-001..005, 05-TC-F-001..007, 05-TC-F-101..105, 05-TC-F-201..203, 05-TC-B-001..004, 05-TC-A-001..002
 // Description: rewards list page chrome.
 import { expect, test } from '@playwright/test';
 
@@ -74,6 +74,62 @@ const readyReward = {
 };
 
 test.describe('Rewards list', () => {
+  test('state communicated via text + icon, not color alone (05-TC-A-002)', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await authenticate(page);
+    await page.unroute('**/api/rewards**');
+    await page.route('**/api/rewards**', (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify([
+          ...sampleRewards,
+          {
+            id: 'r-locked',
+            goalId: 'g1',
+            name: 'Locked one',
+            description: '',
+            status: 'locked',
+            earnedAt: null,
+            condition: { type: 'streak-milestone', streakDays: 60 },
+          },
+        ]),
+      }),
+    );
+    await page.goto('/rewards');
+
+    const measure = async (status: string) => {
+      const sel = `lib-reward-list .reward-section[data-status="${status}"] .reward-card`;
+      const card = page.locator(sel).first();
+      await expect(card).toBeVisible();
+      return card.evaluate((el) => {
+        const chip = el.querySelector('mat-chip');
+        const icon = el.querySelector('mat-icon');
+        return {
+          chipText: chip?.textContent?.trim() ?? '',
+          iconText: icon?.textContent?.trim() ?? '',
+        };
+      });
+    };
+
+    const earned = await measure('earned');
+    const inProgress = await measure('in-progress');
+    const locked = await measure('locked');
+
+    // Each state has a non-empty status label (text channel).
+    expect(earned.chipText.length).toBeGreaterThan(0);
+    expect(inProgress.chipText.length).toBeGreaterThan(0);
+    expect(locked.chipText.length).toBeGreaterThan(0);
+
+    // Each state surfaces an icon (icon channel) and the icon glyph differs
+    // between active states (earned vs not-earned) so the channel is real,
+    // not just a duplicate decoration.
+    expect(earned.iconText.length).toBeGreaterThan(0);
+    expect(inProgress.iconText.length).toBeGreaterThan(0);
+    expect(locked.iconText.length).toBeGreaterThan(0);
+    expect(earned.iconText).not.toBe(locked.iconText);
+  });
+
   test('hero is a section labelled by an h2 title (05-TC-A-001)', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await authenticate(page);
