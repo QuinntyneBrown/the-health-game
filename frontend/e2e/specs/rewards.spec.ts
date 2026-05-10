@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 05-TC-V-001..008, 05-TC-C-001..007
+// Traces to: 05-TC-V-001..008, 05-TC-C-001..008
 // Description: rewards list page chrome.
 import { expect, test } from '@playwright/test';
 
@@ -74,6 +74,27 @@ const readyReward = {
 };
 
 test.describe('Rewards list', () => {
+  test('reward progress bar track #E5E9E2 (05-TC-C-008)', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await authenticate(page);
+    await page.unroute('**/api/rewards**');
+    await page.route('**/api/rewards**', (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify(sampleRewards),
+      }),
+    );
+
+    await page.goto('/rewards');
+    const buffer = page
+      .locator('lib-reward-list .reward-card mat-progress-bar .mdc-linear-progress__buffer-bar')
+      .first();
+    await expect(buffer).toBeAttached();
+    const color = await buffer.evaluate((el) => getComputedStyle(el).backgroundColor);
+    expect(color).toBe('rgb(229, 233, 226)');
+  });
+
   test('reward progress bar fill #006D3F (05-TC-C-007)', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await authenticate(page);

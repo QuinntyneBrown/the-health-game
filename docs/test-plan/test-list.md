@@ -324,7 +324,7 @@ and made green. The /loop process picks the first test with
 | 313 | 05 | TC-C-005 | In-progress card | `#EBEFE7` bg | 2026-05-10T07:10:47Z |
 | 314 | 05 | TC-C-006 | Locked card | `#EBEFE7` bg with opacity 0.65 | 2026-05-10T07:11:58Z |
 | 315 | 05 | TC-C-007 | Progress bar fill | `#006D3F` | 2026-05-10T07:14:45Z |
-| 316 | 05 | TC-C-008 | Progress bar track | `#E5E9E2` | null |
+| 316 | 05 | TC-C-008 | Progress bar track | `#E5E9E2` | 2026-05-10T07:15:38Z |
 | 317 | 05 | TC-C-009 | Earned reward chip | `#94F7B4` bg, `#00210F` label | null |
 | 318 | 05 | TC-C-010 | Page background | `#F1F5ED` | null |
 | 319 | 05 | TC-L-001 | Hero corner radius | 24 px | null |
