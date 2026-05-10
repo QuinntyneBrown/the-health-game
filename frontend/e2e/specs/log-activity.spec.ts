@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 04-TC-V-001..007, 04-TC-C-001..010, 04-TC-L-001..010, 04-TC-R-001..006, 04-TC-F-001..006
+// Traces to: 04-TC-V-001..007, 04-TC-C-001..010, 04-TC-L-001..010, 04-TC-R-001..006, 04-TC-F-001..007
 // Description: log-activity dialog typography.
 import { expect, test } from '@playwright/test';
 
@@ -323,6 +323,45 @@ test.describe('Log activity sheet (mobile)', () => {
 
 test.describe('Log activity dialog (desktop)', () => {
   test.use({ viewport: { width: 1440, height: 900 } });
+
+  for (const status of [403, 404] as const) {
+    test(`crafted POST against another user's goal yields ${status} (04-TC-F-007 — ${status})`, async ({
+      page,
+    }) => {
+      await page.setViewportSize({ width: 1440, height: 900 });
+      await authenticate(page);
+
+      let postCalls = 0;
+      let lastStatus = 0;
+
+      await page.route('**/api/goals/other-user-goal/activities**', (route) => {
+        if (route.request().method() === 'POST') {
+          postCalls += 1;
+          lastStatus = status;
+          route.fulfill({ status, contentType: 'application/json', body: '{}' });
+          return;
+        }
+        route.fulfill({ status: 200, contentType: 'application/json', body: '[]' });
+      });
+
+      await page.goto('/home');
+
+      const responseStatus = await page.evaluate(async () => {
+        const r = await fetch('/api/goals/other-user-goal/activities', {
+          method: 'POST',
+          headers: {
+            Authorization: 'Bearer test-access-token',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ quantity: 5 }),
+        });
+        return r.status;
+      });
+      expect(responseStatus).toBe(status);
+      expect(postCalls).toBe(1);
+      expect(lastStatus).toBe(status);
+    });
+  }
 
   test('note exceeding 500 chars surfaces validation error (04-TC-F-006)', async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 900 });
