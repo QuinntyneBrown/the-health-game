@@ -1,0 +1,219 @@
+// Acceptance Test
+// Traces to: L2-036, 07-TC-V-001
+// Description: Username + password sign-in page. Each test exercises one
+//              vertical slice end-to-end against the running app.
+import { expect, test } from '@playwright/test';
+
+test.describe('Sign In — page', () => {
+  test('title family Inter weight 500 (07-TC-V-001)', async ({ page }) => {
+    await page.goto('/sign-in');
+    const title = page.getByTestId('sign-in-title');
+    await expect(title).toBeVisible();
+    const result = await title.evaluate((el) => {
+      const s = getComputedStyle(el);
+      return { family: s.fontFamily, weight: s.fontWeight };
+    });
+    expect(result.family).toMatch(/Inter/);
+    expect(result.weight).toBe('500');
+  });
+
+  test('Slice 1: /sign-in renders brand, title, and form landmark', async ({ page }) => {
+    await page.goto('/sign-in');
+
+    await expect(page.getByTestId('sign-in')).toBeVisible();
+    await expect(page.getByTestId('sign-in-brand')).toBeVisible();
+
+    const title = page.getByTestId('sign-in-title');
+    await expect(title).toBeVisible();
+    await expect(title).toHaveText('Welcome back.');
+
+    const mainCount = await page.locator('main').count();
+    expect(mainCount).toBe(1);
+  });
+
+  test('Slice 2: form exposes username/email and masked password inputs', async ({ page }) => {
+    await page.goto('/sign-in');
+
+    const username = page.getByTestId('sign-in-username').locator('input');
+    const password = page.getByTestId('sign-in-password').locator('input');
+
+    await expect(username).toBeVisible();
+    await expect(password).toBeVisible();
+
+    await expect(password).toHaveAttribute('type', 'password');
+
+    await username.fill('alex@example.com');
+    await password.fill('hunter2-secret');
+
+    await expect(username).toHaveValue('alex@example.com');
+    await expect(password).toHaveValue('hunter2-secret');
+  });
+
+  test('Slice 3: Sign in is disabled until both fields have a value', async ({ page }) => {
+    await page.goto('/sign-in');
+
+    const submit = page.getByTestId('sign-in-submit');
+    const username = page.getByTestId('sign-in-username').locator('input');
+    const password = page.getByTestId('sign-in-password').locator('input');
+
+    await expect(submit).toBeDisabled();
+
+    await username.fill('alex');
+    await expect(submit).toBeDisabled();
+
+    await password.fill('s3cret');
+    await expect(submit).toBeEnabled();
+
+    await password.fill('');
+    await expect(submit).toBeDisabled();
+  });
+
+  test('Slice 4: valid credentials POST to /api/auth/sign-in and route to /home', async ({
+    page,
+  }) => {
+    let captured: { url: string; body: unknown } | null = null;
+
+    await page.route('**/api/auth/sign-in', async (route) => {
+      const request = route.request();
+      captured = {
+        url: request.url(),
+        body: request.postDataJSON(),
+      };
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({
+          accessToken: 'test-access-token',
+          tokenType: 'Bearer',
+          expiresAtUtc: new Date(Date.now() + 3_600_000).toISOString(),
+          user: {
+            id: '00000000-0000-0000-0000-000000000001',
+            subjectId: 'subj-1',
+            displayName: 'Alex Tester',
+            email: 'alex@example.com',
+            timeZoneId: 'UTC',
+            roles: [0],
+            createdAtUtc: new Date().toISOString(),
+            updatedAtUtc: null,
+          },
+        }),
+      });
+    });
+
+    await page.goto('/sign-in');
+
+    const username = page.getByTestId('sign-in-username').locator('input');
+    const password = page.getByTestId('sign-in-password').locator('input');
+    await username.fill('alex@example.com');
+    await password.fill('hunter2-secret');
+
+    const navigation = page.waitForURL(/\/home(\b|\/|\?|$)/);
+    await page.getByTestId('sign-in-submit').click();
+    await navigation;
+
+    expect(page.url()).toContain('/home');
+    expect(captured).not.toBeNull();
+    expect(captured!.url).toMatch(/\/api\/auth\/sign-in$/);
+    expect(captured!.body).toEqual({
+      usernameOrEmail: 'alex@example.com',
+      password: 'hunter2-secret',
+    });
+  });
+
+  test('Slice 5: 401 shows generic error, clears password, stays on /sign-in', async ({
+    page,
+  }) => {
+    await page.route('**/api/auth/sign-in', (route) =>
+      route.fulfill({
+        status: 401,
+        contentType: 'application/problem+json',
+        body: JSON.stringify({
+          status: 401,
+          title: 'Authentication is required.',
+          detail: 'Invalid username or password.',
+        }),
+      }),
+    );
+
+    await page.goto('/sign-in');
+
+    const username = page.getByTestId('sign-in-username').locator('input');
+    const password = page.getByTestId('sign-in-password').locator('input');
+    await username.fill('alex@example.com');
+    await password.fill('wrong-password');
+    await page.getByTestId('sign-in-submit').click();
+
+    const error = page.getByTestId('sign-in-error');
+    await expect(error).toBeVisible();
+    const message = (await error.textContent())?.trim() ?? '';
+    expect(message).toMatch(/invalid/i);
+    // Must not pinpoint which field was wrong
+    expect(message).not.toMatch(/incorrect (username|email|password)/i);
+    expect(message).not.toMatch(/no such (user|account|email)/i);
+    expect(message).not.toMatch(/wrong password/i);
+    expect(message).not.toMatch(/user (not found|does not exist)/i);
+
+    await expect(password).toHaveValue('');
+    await expect(username).toHaveValue('alex@example.com');
+    expect(page.url()).toContain('/sign-in');
+  });
+
+  test('Slice 6: "Continue with Single Sign-On" starts the OIDC PKCE flow', async ({ page }) => {
+    await page.route('**/connect/authorize**', (route) =>
+      route.fulfill({ status: 200, contentType: 'text/html', body: '<html></html>' }),
+    );
+
+    await page.goto('/sign-in');
+
+    const navigation = page.waitForURL(/\/connect\/authorize/);
+    await page.getByTestId('sign-in-oidc').click();
+    await navigation;
+
+    const url = new URL(page.url());
+    expect(url.pathname).toBe('/connect/authorize');
+    expect(url.searchParams.get('response_type')).toBe('code');
+    expect(url.searchParams.get('code_challenge_method')).toBe('S256');
+    expect(url.searchParams.get('code_challenge')).toBeTruthy();
+    expect(url.searchParams.get('state')).toBeTruthy();
+    expect(url.searchParams.get('client_id')).toBeTruthy();
+  });
+
+  test('Slice 7: authenticated user visiting /sign-in is redirected to /home', async ({
+    page,
+  }) => {
+    // Land on a non-guarded page first so we can write to its sessionStorage.
+    await page.goto('/auth/signed-out');
+    await page.evaluate(() => {
+      sessionStorage.setItem('hg.oidc.access-token', 'test-access-token');
+    });
+
+    await page.goto('/sign-in');
+    await page.waitForURL(/\/home(\b|\/|\?|$)/);
+    expect(page.url()).toContain('/home');
+    expect(page.url()).not.toContain('/sign-in');
+  });
+
+  test('Slice 8: page load leaks no auth tokens to console or network', async ({ page }) => {
+    const consoleMessages: string[] = [];
+    page.on('console', (msg) => consoleMessages.push(`${msg.type()}:${msg.text()}`));
+
+    const requestsWithAuth: string[] = [];
+    page.on('request', (req) => {
+      const auth = req.headers()['authorization'];
+      if (auth) {
+        requestsWithAuth.push(`${req.method()} ${req.url()} -> ${auth.slice(0, 16)}…`);
+      }
+    });
+
+    await page.goto('/sign-in');
+    await expect(page.getByTestId('sign-in-title')).toBeVisible();
+    await page.waitForLoadState('networkidle');
+
+    expect(requestsWithAuth).toEqual([]);
+
+    const tokenPattern =
+      /\b(access[_-]?token|refresh[_-]?token|id[_-]?token|bearer\s+[a-z0-9._-]{16,})\b/i;
+    const leaks = consoleMessages.filter((m) => tokenPattern.test(m));
+    expect(leaks).toEqual([]);
+  });
+});

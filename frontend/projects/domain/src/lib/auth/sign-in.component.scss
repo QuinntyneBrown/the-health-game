@@ -1,0 +1,112 @@
+:host {
+  display: block;
+}
+
+.sign-in {
+  align-items: center;
+  background: var(--hg-color-surface, #f1f5ed);
+  display: flex;
+  justify-content: center;
+  min-height: 100vh;
+  padding: var(--hg-space-6);
+}
+
+.sign-in__card {
+  background: var(--hg-color-surface-container, #ffffff);
+  border-radius: var(--hg-radius-xl, 24px);
+  box-shadow: var(--hg-elevation-1);
+  display: grid;
+  gap: var(--hg-space-5);
+  max-width: 440px;
+  padding: var(--hg-space-7) var(--hg-space-6);
+  width: 100%;
+}
+
+.sign-in__brand {
+  justify-self: center;
+}
+
+.sign-in__title {
+  font-family: Inter, Roboto, Arial, sans-serif;
+  font-size: var(--hg-font-size-headline-md, 32px);
+  font-weight: 500;
+  line-height: var(--hg-line-height-tight, 1.2);
+  margin: 0;
+  text-align: center;
+}
+
+.sign-in__subtitle {
+  color: var(--hg-color-on-surface-variant);
+  font-size: var(--hg-font-size-body-md, 16px);
+  margin: 0;
+  text-align: center;
+}
+
+.sign-in__error {
+  background: var(--hg-color-error-container, #ffedea);
+  border-radius: var(--hg-radius-md, 12px);
+  color: var(--hg-color-on-error-container, #410002);
+  font-size: var(--hg-font-size-body-md);
+  margin: 0;
+  padding: var(--hg-space-3) var(--hg-space-4);
+}
+
+.sign-in__form {
+  display: grid;
+  gap: var(--hg-space-4);
+}
+
+.sign-in__submit {
+  align-self: stretch;
+  height: 48px;
+  margin-top: var(--hg-space-2);
+}
+
+.sign-in__divider {
+  align-items: center;
+  color: var(--hg-color-on-surface-variant);
+  display: grid;
+  gap: var(--hg-space-3);
+  grid-template-columns: 1fr auto 1fr;
+}
+
+.sign-in__divider-line {
+  background: var(--hg-color-outline-variant, #c2c9be);
+  height: 1px;
+}
+
+.sign-in__divider-label {
+  font-size: var(--hg-font-size-label-md);
+  text-transform: uppercase;
+}
+
+.sign-in__oidc {
+  align-items: center;
+  display: inline-flex;
+  gap: var(--hg-space-2);
+  justify-content: center;
+}
+
+.sign-in__signup {
+  color: var(--hg-color-on-surface-variant);
+  font-size: var(--hg-font-size-body-sm);
+  margin: 0;
+  text-align: center;
+}
+
+.sign-in__signup-link {
+  background: none;
+  border: 0;
+  color: var(--hg-color-primary);
+  cursor: pointer;
+  font: inherit;
+  padding: 0;
+  text-decoration: underline;
+}
+
+@media (min-width: 1024px) {
+  .sign-in__card {
+    max-width: 480px;
+    padding: var(--hg-space-8) var(--hg-space-7);
+  }
+}

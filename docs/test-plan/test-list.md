@@ -446,7 +446,7 @@ and made green. The /loop process picks the first test with
 | 435 | 06 | TC-P-001 | Stats summary endpoint p95 | <= 300 ms (L2-018 §1) | 2026-05-10T13:03:37Z |
 | 436 | 06 | TC-P-002 | Profile update endpoint p95 | <= 500 ms (L2-018 §2) | 2026-05-10T13:05:28Z |
 | 437 | 06 | TC-P-003 | Bar chart renders without layout shift (CLS ~ 0) | Yes | 2026-05-10T13:06:39Z |
-| 438 | 07 | TC-V-001 | Title ("Welcome back.") font family | `Inter`, weight 500 | null |
+| 438 | 07 | TC-V-001 | Title ("Welcome back.") font family | `Inter`, weight 500 | 2026-05-10T13:09:00Z |
 | 439 | 07 | TC-V-002 | Title size — mobile | 28 px, line-height 1.2 | null |
 | 440 | 07 | TC-V-003 | Title size — tablet | 36 px, line-height 1.2 | null |
 | 441 | 07 | TC-V-004 | Title size — desktop hero panel | 57 px, line-height 1.1 | null |
