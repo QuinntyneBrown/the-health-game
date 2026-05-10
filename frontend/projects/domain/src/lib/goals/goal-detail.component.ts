@@ -152,7 +152,12 @@ export class GoalDetailComponent {
       DeleteGoalDialogComponent,
       DeleteGoalDialogData,
       boolean
-    >(DeleteGoalDialogComponent, { data: { name: goal.name } });
+    >(DeleteGoalDialogComponent, {
+      data: { name: goal.name },
+      ariaModal: true,
+      role: 'alertdialog',
+      restoreFocus: true,
+    });
     const confirmed = await firstValueFrom(ref.afterClosed());
     if (!confirmed) return;
     await firstValueFrom(this.goalsService.deleteGoal(goal.id));

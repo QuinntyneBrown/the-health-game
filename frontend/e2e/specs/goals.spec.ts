@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 03-TC-V-001..009, 03-TC-C-001..011, 03-TC-L-001..011, 03-TC-R-001..006, 03-TC-F-001..011, 03-TC-F-101..109, 03-TC-F-201..204, 03-TC-B-001..006, 03-TC-A-001..004
+// Traces to: 03-TC-V-001..009, 03-TC-C-001..011, 03-TC-L-001..011, 03-TC-R-001..006, 03-TC-F-001..011, 03-TC-F-101..109, 03-TC-F-201..204, 03-TC-B-001..006, 03-TC-A-001..005
 // Description: /goals page title "Goals" renders with Inter weight 500 at 22/32 px.
 // Subtitle is Inter 13 px weight 400 with computed counts.
 import { expect, test } from '@playwright/test';
@@ -559,6 +559,62 @@ test.describe('Goals page — header typography', () => {
 
   test.describe('filter chip layout', () => {
     test.use({ viewport: { width: 1440, height: 900 } });
+
+    test('delete confirmation is a focus-trapping dialog (03-TC-A-005)', async ({ page }) => {
+      await page.setViewportSize({ width: 1440, height: 900 });
+      await authenticate(page);
+      const goal = {
+        id: 'g1',
+        name: 'Walk',
+        description: '',
+        cadence: 'daily' as const,
+        target: { value: 10, unit: 'min' },
+        completedQuantity: 0,
+        currentStreak: 0,
+        longestStreak: 0,
+        rewardName: '',
+      };
+      await page.route('**/api/goals/g1', (route) =>
+        route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify(goal),
+        }),
+      );
+      await page.route('**/api/goals/g1/activity**', (route) =>
+        route.fulfill({ status: 200, contentType: 'application/json', body: '[]' }),
+      );
+      await page.goto('/goals/g1');
+      await page.locator('[data-testid="goal-detail-delete"]').click();
+
+      // The dialog uses CDK overlay with role=alertdialog and aria-modal=true.
+      const overlay = page.locator('.cdk-overlay-container [role="alertdialog"], .cdk-overlay-container [role="dialog"]').first();
+      await expect(overlay).toBeVisible();
+      const ariaModal = await overlay.getAttribute('aria-modal');
+      expect(ariaModal === 'true' || ariaModal === '').toBe(true);
+
+      // Focus a button inside the dialog, then press Tab a few times — focus must remain inside.
+      const confirm = page.locator('[data-testid="delete-goal-confirm"]');
+      await confirm.focus();
+
+      const inDialog = async () =>
+        await page.evaluate(() => {
+          const ae = document.activeElement;
+          return {
+            inDialog: !!ae?.closest(
+              '.cdk-overlay-container [role="alertdialog"], .cdk-overlay-container [role="dialog"]',
+            ),
+            tag: ae?.tagName?.toLowerCase() ?? '',
+            text: (ae as HTMLElement | null)?.textContent?.trim()?.slice(0, 40) ?? '',
+          };
+        });
+
+      for (let i = 0; i < 6; i++) {
+        await page.keyboard.press('Tab');
+        const info = await inDialog();
+        expect(info.inDialog, `tab ${i}: focus on ${info.tag} "${info.text}"`).toBe(true);
+      }
+    });
 
     test('validation errors are linked via aria-describedby (03-TC-A-004)', async ({ page }) => {
       await page.setViewportSize({ width: 1440, height: 900 });
