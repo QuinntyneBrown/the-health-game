@@ -452,7 +452,7 @@ and made green. The /loop process picks the first test with
 | 441 | 07 | TC-V-004 | Title size — desktop hero panel | 57 px, line-height 1.1 | 2026-05-10T13:11:01Z |
 | 442 | 07 | TC-V-005 | Subtitle font weight | 400 (normal) | 2026-05-10T13:12:26Z |
 | 443 | 07 | TC-V-006 | Subtitle size — mobile/tablet/desktop | 14 / 16 / 16 px | 2026-05-10T13:12:26Z |
-| 444 | 07 | TC-V-007 | Field label font | Inter 13 px, weight 500 | null |
+| 444 | 07 | TC-V-007 | Field label font | Inter 13 px, weight 500 | 2026-05-10T13:13:21Z |
 | 445 | 07 | TC-V-008 | Field input text font | Inter 14 px, weight 400 | null |
 | 446 | 07 | TC-V-009 | Helper / error text font | Inter 12 px, weight 500, error color | null |
 | 447 | 07 | TC-V-010 | Primary button label ("Sign in") | Inter 14/16 px, weight 500, white | null |
