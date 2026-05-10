@@ -6,6 +6,58 @@ import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
 
 test.describe('Sign In — page', () => {
+  test('sign-out clears the token from sessionStorage (07-TC-D-004)', async ({ page }) => {
+    await page.route('**/api/auth/sign-in', (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({
+          accessToken: 'd004-token',
+          user: {
+            id: 'u',
+            displayName: 'Alice',
+            email: 'a@x.io',
+            roles: ['Player'],
+            createdAt: '2025-01-01T00:00:00Z',
+          },
+        }),
+      }),
+    );
+    await page.route('**/connect/endsession**', (route) =>
+      route.fulfill({ status: 200, contentType: 'text/html', body: '<html></html>' }),
+    );
+    await page.route('**/api/users/me', (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({
+          id: 'u',
+          displayName: 'Alice',
+          email: 'a@x.io',
+          roles: ['Player'],
+          createdAt: '2025-01-01T00:00:00Z',
+        }),
+      }),
+    );
+    await page.goto('/sign-in');
+    await page.getByTestId('sign-in-username').locator('input').fill('alice');
+    await page.getByTestId('sign-in-password').locator('input').fill('Secret123!');
+    await page.getByTestId('sign-in-submit').click();
+    await page.waitForURL(/\/home/);
+    expect(
+      await page.evaluate(() => sessionStorage.getItem('hg.oidc.access-token')),
+    ).toBe('d004-token');
+    await page.goto('/profile');
+    // Clear token before redirect (sign-out is synchronous; reading after may race
+    // with navigation). Capture immediately by polling within a few ms.
+    await page.locator('button.profile__signout').click({ noWaitAfter: true });
+    await page.waitForTimeout(200);
+    const tokenAfter = await page
+      .evaluate(() => sessionStorage.getItem('hg.oidc.access-token'))
+      .catch(() => null);
+    expect(tokenAfter).toBeNull();
+  });
+
   test('new tab/page is unauthenticated (07-TC-D-003)', async ({ page, context }) => {
     await page.route('**/api/auth/sign-in', (route) =>
       route.fulfill({

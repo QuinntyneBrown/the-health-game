@@ -542,7 +542,7 @@ and made green. The /loop process picks the first test with
 | 531 | 07 | TC-D-001 | Successful sign-in writes access token to `sessionStorage` only | Key `hg.oidc.access-token`; not in localStorage | 2026-05-10T15:05:30Z |
 | 532 | 07 | TC-D-002 | Reload after sign-in keeps the user authenticated | Token persists for the tab session | 2026-05-10T15:06:30Z |
 | 533 | 07 | TC-D-003 | Closing the tab clears the access token | `sessionStorage` is per-tab; new tab is unauthenticated | 2026-05-10T15:07:30Z |
-| 534 | 07 | TC-D-004 | Sign-out clears the token from `sessionStorage` | Yes | null |
+| 534 | 07 | TC-D-004 | Sign-out clears the token from `sessionStorage` | Yes | 2026-05-10T15:09:30Z |
 | 535 | 07 | TC-D-005 | Failed sign-in does not write any auth artifact | `sessionStorage` and `localStorage` unchanged | 2026-05-09T20:03:30Z |
 | 536 | 07 | TC-D-006 | Refresh token (if used) only stored as httpOnly cookie | Confirmed (L2-013 §3) | null |
 | 537 | 07 | TC-S-001 | Submitted password is never logged at any level | No `password` value in console / network / server logs (L2-017 §3, L2-036 §4) | 2026-05-09T20:03:30Z |
