@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 06-TC-V-001..007, 06-TC-C-001..010, 06-TC-L-001..010, 06-TC-R-001..002
+// Traces to: 06-TC-V-001..007, 06-TC-C-001..010, 06-TC-L-001..010, 06-TC-R-001..003
 // Description: stats + profile page chrome.
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
@@ -45,6 +45,28 @@ async function authenticate(page: import('@playwright/test').Page): Promise<void
 }
 
 test.describe('Stats & Profile chrome', () => {
+  test('desktop 1440 stats 5 cols + profile reads as column (06-TC-R-003)', async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await authenticate(page);
+    await page.goto('/stats');
+    const grid = page.locator('lib-stats .stat-tiles');
+    await expect(grid).toBeVisible();
+    const cols = await grid.evaluate(
+      (el) => getComputedStyle(el).gridTemplateColumns.split(/\s+/).filter(Boolean).length,
+    );
+    expect(cols).toBe(5);
+
+    // Profile reads as a single column constrained by the 480 px form max
+    // — i.e. the form does NOT stretch to a multi-column layout at desktop.
+    await page.goto('/profile');
+    await page.locator('[data-testid="profile-edit"]').click();
+    const formWidth = await page
+      .locator('lib-profile .profile__form')
+      .first()
+      .evaluate((el) => el.getBoundingClientRect().width);
+    expect(formWidth).toBeLessThanOrEqual(480);
+  });
+
   test('tablet 768 stats tiles 3 cols (06-TC-R-002)', async ({ page }) => {
     await page.setViewportSize({ width: 768, height: 1024 });
     await authenticate(page);
