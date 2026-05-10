@@ -6,6 +6,32 @@ import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
 
 test.describe('Sign In — page', () => {
+  test('new tab/page is unauthenticated (07-TC-D-003)', async ({ page, context }) => {
+    await page.route('**/api/auth/sign-in', (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({
+          accessToken: 'd003-token',
+          user: { id: 'u', displayName: 'A', roles: ['Player'] },
+        }),
+      }),
+    );
+    await page.goto('/sign-in');
+    await page.getByTestId('sign-in-username').locator('input').fill('alice');
+    await page.getByTestId('sign-in-password').locator('input').fill('Secret123!');
+    await page.getByTestId('sign-in-submit').click();
+    await page.waitForURL(/\/home/);
+
+    const newPage = await context.newPage();
+    await newPage.goto('/sign-in');
+    const t = await newPage.evaluate(() =>
+      sessionStorage.getItem('hg.oidc.access-token'),
+    );
+    expect(t).toBeNull();
+    await newPage.close();
+  });
+
   test('reload after sign-in stays authenticated for the tab session (07-TC-D-002)', async ({
     page,
   }) => {
