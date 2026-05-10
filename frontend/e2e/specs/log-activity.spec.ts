@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 04-TC-V-001..007, 04-TC-C-001..010, 04-TC-L-001..010, 04-TC-R-001..006, 04-TC-F-001..012, 04-TC-F-101..104
+// Traces to: 04-TC-V-001..007, 04-TC-C-001..010, 04-TC-L-001..010, 04-TC-R-001..006, 04-TC-F-001..012, 04-TC-F-101..105
 // Description: log-activity dialog typography.
 import { expect, test } from '@playwright/test';
 
@@ -907,6 +907,85 @@ test.describe('Log activity dialog (desktop)', () => {
       page.locator('lib-goal-detail [data-testid="activity-list"]'),
     ).toBeVisible();
     expect(postBody).toMatchObject({ quantity: 5 });
+  });
+
+  test('create weekly goal Monday week-start persists (04-TC-F-105)', async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await authenticate(page);
+
+    let postBody: Record<string, unknown> | null = null;
+    const created = {
+      id: 'w-1',
+      name: 'Long run',
+      description: '',
+      cadence: 'weekly' as const,
+      target: { value: 3, unit: 'runs' },
+      completedQuantity: 0,
+      currentStreak: 0,
+      longestStreak: 0,
+      rewardName: '',
+    };
+
+    await page.unroute('**/api/goals**');
+    await page.route('**/api/goals**', (route) => {
+      const req = route.request();
+      if (req.url().endsWith('/api/goals/w-1')) {
+        route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify(created),
+        });
+        return;
+      }
+      if (req.method() === 'POST') {
+        postBody = req.postDataJSON();
+        route.fulfill({
+          status: 201,
+          contentType: 'application/json',
+          body: JSON.stringify(created),
+        });
+        return;
+      }
+      route.fulfill({ status: 200, contentType: 'application/json', body: '[]' });
+    });
+    await page.route('**/api/goals/w-1/activities**', (route) =>
+      route.fulfill({ status: 200, contentType: 'application/json', body: '[]' }),
+    );
+
+    await page.goto('/goals/new');
+    await page
+      .locator('hg-health-text-field')
+      .filter({ hasText: 'Name' })
+      .locator('input')
+      .fill('Long run');
+    await page
+      .locator('hg-health-text-field')
+      .filter({ hasText: 'Target' })
+      .locator('input')
+      .fill('3');
+    await page
+      .locator('hg-health-text-field')
+      .filter({ hasText: 'Unit' })
+      .locator('input')
+      .fill('runs');
+    await page
+      .locator('hg-segmented-filter[data-testid="cadence-picker"] mat-button-toggle')
+      .filter({ hasText: /^Weekly$/ })
+      .click();
+
+    // Week-start mat-select appears; pick Monday (default already monday but force change to dispatch).
+    const weekStart = page.locator('mat-select[data-testid="goal-form-week-start"]');
+    await expect(weekStart).toBeVisible();
+
+    await page.locator('[data-testid="goal-form-save"]').click();
+    await page.waitForURL(/\/goals\/w-1$/);
+
+    expect(postBody).toMatchObject({
+      name: 'Long run',
+      cadence: 'weekly',
+      target: { value: 3, unit: 'runs' },
+      weekStart: 'monday',
+    });
   });
 
   test('create hourly goal persists with cadence: hourly (04-TC-F-104)', async ({ page }) => {
