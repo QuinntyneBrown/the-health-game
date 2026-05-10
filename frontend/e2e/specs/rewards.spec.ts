@@ -1,6 +1,7 @@
 // Acceptance Test
-// Traces to: 05-TC-V-001..008, 05-TC-C-001..010, 05-TC-L-001..010, 05-TC-R-001..005, 05-TC-F-001..007, 05-TC-F-101..105, 05-TC-F-201..203, 05-TC-B-001..004, 05-TC-A-001..004
+// Traces to: 05-TC-V-001..008, 05-TC-C-001..010, 05-TC-L-001..010, 05-TC-R-001..005, 05-TC-F-001..007, 05-TC-F-101..105, 05-TC-F-201..203, 05-TC-B-001..004, 05-TC-A-001..005
 // Description: rewards list page chrome.
+import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
 
 async function authenticate(page: import('@playwright/test').Page): Promise<void> {
@@ -74,6 +75,34 @@ const readyReward = {
 };
 
 test.describe('Rewards list', () => {
+  test('axe-core: 0 critical/serious on /rewards (05-TC-A-005)', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await authenticate(page);
+    await page.unroute('**/api/rewards**');
+    await page.route('**/api/rewards**', (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify([readyReward, ...sampleRewards]),
+      }),
+    );
+    await page.goto('/rewards');
+    await expect(page.locator('lib-reward-list')).toBeVisible();
+    await page.waitForTimeout(120);
+
+    const result = await new AxeBuilder({ page })
+      .include('lib-reward-list')
+      .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'])
+      .analyze();
+    const blocking = result.violations.filter(
+      (v) => v.impact === 'critical' || v.impact === 'serious',
+    );
+    if (blocking.length) {
+      console.log(blocking.map((v) => `${v.id} (${v.impact}) — ${v.help}`).join('\n'));
+    }
+    expect(blocking).toHaveLength(0);
+  });
+
   test('Claim button has descriptive accessible name (05-TC-A-004)', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await authenticate(page);
