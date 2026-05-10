@@ -50,6 +50,7 @@ const WINDOW_OPTIONS: readonly SegmentedFilterOption[] = [
           <li class="activity-chart__column">
             <span
               class="activity-chart__bar"
+              role="img"
               [style.height.%]="day.value"
               [attr.aria-label]="day.label + ': ' + day.value + '%'"
             ></span>

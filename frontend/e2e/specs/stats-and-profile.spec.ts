@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 06-TC-V-001..007, 06-TC-C-001..010, 06-TC-L-001..010, 06-TC-R-001..005, 06-TC-F-001..008, 06-TC-F-101..107, 06-TC-F-201..205, 06-TC-B-001..006, 06-TC-A-001..005
+// Traces to: 06-TC-V-001..007, 06-TC-C-001..010, 06-TC-L-001..010, 06-TC-R-001..005, 06-TC-F-001..008, 06-TC-F-101..107, 06-TC-F-201..205, 06-TC-B-001..006, 06-TC-A-001..006
 // Description: stats + profile page chrome.
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
@@ -45,6 +45,29 @@ async function authenticate(page: import('@playwright/test').Page): Promise<void
 }
 
 test.describe('Stats & Profile chrome', () => {
+  test('axe-core: 0 critical/serious on Stats + Profile (06-TC-A-006)', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await authenticate(page);
+
+    for (const path of ['/stats', '/profile']) {
+      await page.goto(path);
+      const host = path === '/stats' ? 'lib-stats' : 'lib-profile';
+      await expect(page.locator(host)).toBeVisible();
+      await page.waitForTimeout(120);
+      const result = await new AxeBuilder({ page })
+        .include(host)
+        .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'])
+        .analyze();
+      const blocking = result.violations.filter(
+        (v) => v.impact === 'critical' || v.impact === 'serious',
+      );
+      if (blocking.length) {
+        console.log(`${path}: ${blocking.map((v) => `${v.id} — ${v.help}`).join(' | ')}`);
+      }
+      expect(blocking).toHaveLength(0);
+    }
+  });
+
   test('delete dialog has role=alertdialog + focus trap (06-TC-A-005)', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await authenticate(page);

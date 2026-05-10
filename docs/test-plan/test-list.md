@@ -436,7 +436,7 @@ and made green. The /loop process picks the first test with
 | 425 | 06 | TC-A-003 | Bar chart has accessible summary (table fallback or `aria-label`) | Yes | 2026-05-10T12:41:37Z |
 | 426 | 06 | TC-A-004 | Form fields use `<label for>` and announce errors via `aria-describedby` | Yes | 2026-05-10T12:46:36Z |
 | 427 | 06 | TC-A-005 | Destructive action region uses `role="alertdialog"` with focus trap | Yes | 2026-05-10T12:48:10Z |
-| 428 | 06 | TC-A-006 | axe-core | 0 critical / serious | null |
+| 428 | 06 | TC-A-006 | axe-core | 0 critical / serious | 2026-05-10T12:50:45Z |
 | 429 | 06 | TC-D-001 | Profile edit survives reload | Yes | null |
 | 430 | 06 | TC-D-002 | After account deletion, no API endpoint reveals deleted user's data | Yes (L2-014 §2) | null |
 | 431 | 06 | TC-D-003 | After account deletion, audit log records the deletion event with correlation ID | Yes (L2-022 §3) | null |
