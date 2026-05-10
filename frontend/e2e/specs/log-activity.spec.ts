@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 04-TC-V-001..007
+// Traces to: 04-TC-V-001..007, 04-TC-C-001
 // Description: log-activity dialog typography.
 import { expect, test } from '@playwright/test';
 
@@ -57,6 +57,27 @@ const goal = {
 
 test.describe('Log activity dialog (desktop)', () => {
   test.use({ viewport: { width: 1440, height: 900 } });
+
+  test('dialog surface is #F7FBF3 (04-TC-C-001)', async ({ page }) => {
+    await authenticate(page);
+    await page.route('**/api/goals/g1', (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify(goal),
+      }),
+    );
+    await page.route('**/api/goals/g1/activity**', (route) =>
+      route.fulfill({ status: 200, contentType: 'application/json', body: '[]' }),
+    );
+    await page.goto('/goals/g1');
+    await page.locator('[data-testid="goal-detail-log-fab"]').click();
+
+    const surface = page.locator('.cdk-overlay-container .mat-mdc-dialog-surface').first();
+    await expect(surface).toBeVisible();
+    const bg = await surface.evaluate((el) => getComputedStyle(el).backgroundColor);
+    expect(bg).toBe('rgb(247, 251, 243)');
+  });
 
   test('goal-form Cadence section label Inter 13 / 600 / 0.5px (04-TC-V-007)', async ({ page }) => {
     await authenticate(page);
