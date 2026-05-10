@@ -1,11 +1,25 @@
 // Acceptance Test
-// Traces to: L2-036, 07-TC-V-001..014, 07-TC-C-001..018, 07-TC-L-001..014, 07-TC-R-001..003
+// Traces to: L2-036, 07-TC-V-001..014, 07-TC-C-001..018, 07-TC-L-001..014, 07-TC-R-001..004
 // Description: Username + password sign-in page. Each test exercises one
 //              vertical slice end-to-end against the running app.
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
 
 test.describe('Sign In — page', () => {
+  test('viewport 1024x768: centered card (07-TC-R-004)', async ({ page }) => {
+    await page.setViewportSize({ width: 1024, height: 768 });
+    await page.goto('/sign-in');
+    await expect(page.locator('lib-sign-in [data-testid="sign-in-brand"]')).toBeVisible();
+    const center = await page.evaluate(() => {
+      const card = document.querySelector('lib-sign-in .sign-in__card') as HTMLElement;
+      const main = card.closest('lib-sign-in')?.parentElement as HTMLElement;
+      const cr = card.getBoundingClientRect();
+      const mr = main.getBoundingClientRect();
+      return { left: cr.left - mr.left, right: mr.right - cr.right };
+    });
+    expect(Math.abs(center.left - center.right)).toBeLessThan(4);
+  });
+
   test('viewport 768x1024: centered card, no hero (07-TC-R-003)', async ({ page }) => {
     await page.setViewportSize({ width: 768, height: 1024 });
     await page.goto('/sign-in');
