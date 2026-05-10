@@ -222,7 +222,7 @@ and made green. The /loop process picks the first test with
 | 211 | 03 | TC-D-004 | Sign out + sign in same user | Same goals visible | 2026-05-10T02:38:15Z |
 | 212 | 03 | TC-D-005 | Sign in as different user | Other user's goals not visible | 2026-05-10T02:40:03Z |
 | 213 | 03 | TC-D-006 | Cadence rollover at local midnight (daily) | Period totals reset; streak preserved (L2-011 §1) | 2026-05-10T02:41:40Z |
-| 214 | 03 | TC-D-007 | Concurrent edit (two tabs) | Last-write-wins or server reports stale-version error; UI reconciles | null |
+| 214 | 03 | TC-D-007 | Concurrent edit (two tabs) | Last-write-wins or server reports stale-version error; UI reconciles | 2026-05-10T02:54:34Z |
 | 215 | 03 | TC-P-001 | Read 100 goals — p95 server time | <= 300 ms (L2-018 §1) | null |
 | 216 | 03 | TC-P-002 | Create / update — p95 | <= 500 ms (L2-018 §2) | null |
 | 217 | 03 | TC-P-003 | Goals route lazy-loaded | confirmed via bundle analyzer (L2-019 §2) | null |

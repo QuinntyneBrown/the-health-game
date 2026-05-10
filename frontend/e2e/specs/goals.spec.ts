@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 03-TC-V-001..009, 03-TC-C-001..011, 03-TC-L-001..011, 03-TC-R-001..006, 03-TC-F-001..011, 03-TC-F-101..109, 03-TC-F-201..204, 03-TC-B-001..006, 03-TC-A-001..006, 03-TC-D-001..006
+// Traces to: 03-TC-V-001..009, 03-TC-C-001..011, 03-TC-L-001..011, 03-TC-R-001..006, 03-TC-F-001..011, 03-TC-F-101..109, 03-TC-F-201..204, 03-TC-B-001..006, 03-TC-A-001..006, 03-TC-D-001..007
 // Description: /goals page title "Goals" renders with Inter weight 500 at 22/32 px.
 // Subtitle is Inter 13 px weight 400 with computed counts.
 import AxeBuilder from '@axe-core/playwright';
@@ -560,6 +560,72 @@ test.describe('Goals page — header typography', () => {
 
   test.describe('filter chip layout', () => {
     test.use({ viewport: { width: 1440, height: 900 } });
+
+    test('concurrent edit: stale PUT surfaces 409 reconcile toast (03-TC-D-007)', async ({
+      page,
+    }) => {
+      await page.setViewportSize({ width: 1440, height: 900 });
+      await authenticate(page);
+
+      const goal = {
+        id: 'g1',
+        name: 'Walk',
+        description: '',
+        cadence: 'daily' as const,
+        target: { value: 10, unit: 'min' },
+        completedQuantity: 0,
+        currentStreak: 0,
+        longestStreak: 0,
+        rewardName: '',
+      };
+
+      let putCalls = 0;
+      await page.unroute('**/api/goals**');
+      await page.route('**/api/goals**', (route) => {
+        const req = route.request();
+        if (req.url().endsWith('/api/goals/g1')) {
+          if (req.method() === 'PUT') {
+            putCalls += 1;
+            // Server reports a 409 Conflict — another tab already updated.
+            route.fulfill({
+              status: 409,
+              contentType: 'application/json',
+              body: JSON.stringify({ message: 'Goal was modified by another session.' }),
+            });
+            return;
+          }
+          route.fulfill({
+            status: 200,
+            contentType: 'application/json',
+            body: JSON.stringify(goal),
+          });
+          return;
+        }
+        route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify([goal]) });
+      });
+      await page.route('**/api/goals/g1/activity**', (route) =>
+        route.fulfill({ status: 200, contentType: 'application/json', body: '[]' }),
+      );
+
+      await page.goto('/goals/g1/edit');
+      await page
+        .locator('hg-health-text-field')
+        .filter({ hasText: 'Target' })
+        .locator('input')
+        .fill('25');
+      await page.locator('[data-testid="goal-form-save"]').click();
+
+      // FE should surface the conflict via a toast and stay on the form (or detail) — not silently lose data.
+      const snack = page.locator('mat-snack-bar-container, .mat-mdc-snack-bar-container').first();
+      await expect(snack).toBeVisible();
+      await expect(snack).toContainText(/another|stale|conflict|modified|update/i);
+      expect(putCalls).toBe(1);
+      // Source of truth on reload still shows the original target.
+      await page.reload();
+      await expect(
+        page.locator('hg-health-text-field').filter({ hasText: 'Target' }).locator('input'),
+      ).toHaveValue('10');
+    });
 
     test('daily cadence rollover: period resets, streak preserved (03-TC-D-006)', async ({
       page,

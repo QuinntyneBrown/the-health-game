@@ -156,8 +156,20 @@ export class GoalFormComponent {
     };
 
     if (this.editingId) {
-      this.goalsService.updateGoal(this.editingId, input).subscribe((goal) => {
-        void this.router.navigateByUrl(`/goals/${goal.id}`);
+      this.goalsService.updateGoal(this.editingId, input).subscribe({
+        next: (goal) => {
+          void this.router.navigateByUrl(`/goals/${goal.id}`);
+        },
+        error: (err: unknown) => {
+          const status =
+            (err as { status?: number } | null)?.status ??
+            (err as { response?: { status?: number } } | null)?.response?.status;
+          const message =
+            status === 409
+              ? 'Goal was modified by another session — please reload to see the latest.'
+              : 'Could not save goal — please try again.';
+          this.snackBar.open(message, 'Dismiss', { duration: 6000 });
+        },
       });
       return;
     }

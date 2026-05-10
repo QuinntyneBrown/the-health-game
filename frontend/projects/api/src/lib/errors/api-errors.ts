@@ -19,6 +19,12 @@ export class ValidationError extends ApiError {
   }
 }
 
+export class UnauthorizedError extends ApiError {
+  constructor(message: string, correlationId: string | null) {
+    super(message, 401, correlationId);
+  }
+}
+
 export class ForbiddenError extends ApiError {
   constructor(message: string, correlationId: string | null) {
     super(message, 403, correlationId);
@@ -32,8 +38,14 @@ export class NotFoundError extends ApiError {
 }
 
 export class ServerError extends ApiError {
+  constructor(message: string, correlationId: string | null, status = 500) {
+    super(message, status, correlationId);
+  }
+}
+
+export class ConflictError extends ApiError {
   constructor(message: string, correlationId: string | null) {
-    super(message, 500, correlationId);
+    super(message, 409, correlationId);
   }
 }
 
@@ -49,11 +61,15 @@ export function fromHttpErrorResponse(response: HttpLikeError): ApiError {
   switch (response.status) {
     case 400:
       return new ValidationError(message, correlationId, response.error?.errors ?? {});
+    case 401:
+      return new UnauthorizedError(message, correlationId);
     case 403:
       return new ForbiddenError(message, correlationId);
     case 404:
       return new NotFoundError(message, correlationId);
+    case 409:
+      return new ConflictError(message, correlationId);
     default:
-      return new ServerError(message, correlationId);
+      return new ServerError(message, correlationId, response.status);
   }
 }
