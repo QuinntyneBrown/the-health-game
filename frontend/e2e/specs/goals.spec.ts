@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 03-TC-V-001..009, 03-TC-C-001..011, 03-TC-L-001..011, 03-TC-R-001..006, 03-TC-F-001..011, 03-TC-F-101..103
+// Traces to: 03-TC-V-001..009, 03-TC-C-001..011, 03-TC-L-001..011, 03-TC-R-001..006, 03-TC-F-001..011, 03-TC-F-101..104
 // Description: /goals page title "Goals" renders with Inter weight 500 at 22/32 px.
 // Subtitle is Inter 13 px weight 400 with computed counts.
 import { expect, test } from '@playwright/test';
@@ -559,6 +559,92 @@ test.describe('Goals page — header typography', () => {
 
   test.describe('filter chip layout', () => {
     test.use({ viewport: { width: 1440, height: 900 } });
+
+    for (const cadence of ['hourly', 'weekly', 'monthly'] as const) {
+      test(`create ${cadence} goal persists with correct cadence (03-TC-F-104 — ${cadence})`, async ({
+        page,
+      }) => {
+        await page.setViewportSize({ width: 1440, height: 900 });
+        await authenticate(page);
+
+        let postBody: Record<string, unknown> | null = null;
+        const created = {
+          id: `c-${cadence}`,
+          name: `My ${cadence}`,
+          description: '',
+          cadence,
+          target: { value: 5, unit: 'min' },
+          completedQuantity: 0,
+          currentStreak: 0,
+          longestStreak: 0,
+          rewardName: '',
+        };
+
+        await page.unroute('**/api/goals**');
+        await page.route('**/api/goals**', (route) => {
+          const req = route.request();
+          if (req.method() === 'POST') {
+            postBody = req.postDataJSON();
+            route.fulfill({
+              status: 201,
+              contentType: 'application/json',
+              body: JSON.stringify(created),
+            });
+            return;
+          }
+          if (req.url().endsWith(`/api/goals/c-${cadence}`)) {
+            route.fulfill({
+              status: 200,
+              contentType: 'application/json',
+              body: JSON.stringify(created),
+            });
+            return;
+          }
+          route.fulfill({ status: 200, contentType: 'application/json', body: '[]' });
+        });
+        await page.route(`**/api/goals/c-${cadence}/activity**`, (route) =>
+          route.fulfill({ status: 200, contentType: 'application/json', body: '[]' }),
+        );
+
+        await page.goto('/goals/new');
+        await page
+          .locator('hg-health-text-field')
+          .filter({ hasText: 'Name' })
+          .locator('input')
+          .fill(`My ${cadence}`);
+        await page
+          .locator('hg-health-text-field')
+          .filter({ hasText: 'Target' })
+          .locator('input')
+          .fill('5');
+        await page
+          .locator('hg-health-text-field')
+          .filter({ hasText: 'Unit' })
+          .locator('input')
+          .fill('min');
+
+        await page
+          .locator('mat-form-field')
+          .filter({ hasText: 'Cadence' })
+          .locator('mat-select')
+          .click();
+        await page
+          .locator('mat-option')
+          .filter({ hasText: new RegExp(`^${cadence}$`, 'i') })
+          .click();
+
+        const save = page.locator('[data-testid="goal-form-save"]');
+        await expect(save).toBeEnabled();
+        await save.click();
+        await page.waitForURL(new RegExp(`/goals/c-${cadence}$`));
+
+        expect(postBody).toMatchObject({
+          name: `My ${cadence}`,
+          cadence,
+          target: { value: 5, unit: 'min' },
+        });
+      });
+    }
 
     test('create daily goal — happy path persists and appears in list (03-TC-F-103)', async ({
       page,
