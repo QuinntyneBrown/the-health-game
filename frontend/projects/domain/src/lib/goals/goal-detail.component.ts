@@ -213,6 +213,9 @@ export class GoalDetailComponent {
     this.activitiesService.getGoalActivities(id).subscribe({
       next: (entries) => this.activities.set(entries),
     });
+    this.goalsService.getGoal(id).subscribe({
+      next: (goal) => this.state.set({ status: 'loaded', goal }),
+    });
   }
 
   private maybeSwapLogContainer(): void {

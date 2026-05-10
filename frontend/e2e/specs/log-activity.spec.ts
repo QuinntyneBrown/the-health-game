@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 04-TC-V-001..007, 04-TC-C-001..010, 04-TC-L-001..010, 04-TC-R-001..006, 04-TC-F-001..007
+// Traces to: 04-TC-V-001..007, 04-TC-C-001..010, 04-TC-L-001..010, 04-TC-R-001..006, 04-TC-F-001..008
 // Description: log-activity dialog typography.
 import { expect, test } from '@playwright/test';
 
@@ -323,6 +323,59 @@ test.describe('Log activity sheet (mobile)', () => {
 
 test.describe('Log activity dialog (desktop)', () => {
   test.use({ viewport: { width: 1440, height: 900 } });
+
+  test('after successful log, UI reflects new current streak (04-TC-F-008)', async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await authenticate(page);
+
+    let currentStreak = 2;
+    await page.route('**/api/goals/g1', (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({ ...goal, currentStreak }),
+      }),
+    );
+    await page.route('**/api/goals/g1/activities**', (route) => {
+      const req = route.request();
+      if (req.method() === 'POST') {
+        currentStreak = 3;
+        route.fulfill({
+          status: 201,
+          contentType: 'application/json',
+          body: JSON.stringify({
+            id: 'a-1',
+            goalId: 'g1',
+            quantity: 5,
+            unit: 'min',
+            notes: '',
+            recordedAt: new Date().toISOString(),
+            newlyEarnedRewards: [],
+          }),
+        });
+        return;
+      }
+      route.fulfill({ status: 200, contentType: 'application/json', body: '[]' });
+    });
+
+    await page.goto('/goals/g1');
+    await expect(
+      page.locator('[data-testid="goal-detail-current-streak"] .streak-summary__value'),
+    ).toContainText('2');
+
+    await page.locator('[data-testid="goal-detail-log-fab"]').click();
+    await page
+      .locator('lib-log-activity-dialog hg-health-text-field')
+      .filter({ hasText: 'Quantity' })
+      .locator('input')
+      .fill('5');
+    await page.locator('[data-testid="log-activity-save"]').click();
+
+    // After successful POST, the goal-detail re-fetches the goal so current streak updates.
+    await expect(
+      page.locator('[data-testid="goal-detail-current-streak"] .streak-summary__value'),
+    ).toContainText('3');
+  });
 
   for (const status of [403, 404] as const) {
     test(`crafted POST against another user's goal yields ${status} (04-TC-F-007 — ${status})`, async ({
