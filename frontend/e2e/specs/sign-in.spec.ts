@@ -1,11 +1,20 @@
 // Acceptance Test
-// Traces to: L2-036, 07-TC-V-001..014, 07-TC-C-001..018, 07-TC-L-001..003
+// Traces to: L2-036, 07-TC-V-001..014, 07-TC-C-001..018, 07-TC-L-001..004
 // Description: Username + password sign-in page. Each test exercises one
 //              vertical slice end-to-end against the running app.
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
 
 test.describe('Sign In — page', () => {
+  test('card corner radius 24 px (07-TC-L-004)', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await page.goto('/sign-in');
+    const r = await page
+      .locator('lib-sign-in .sign-in__card')
+      .evaluate((el) => getComputedStyle(el).borderTopLeftRadius);
+    expect(r).toBe('24px');
+  });
+
   test('desktop hero ~50% / form ~50% split (07-TC-L-003)', async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 900 });
     await page.goto('/sign-in');
