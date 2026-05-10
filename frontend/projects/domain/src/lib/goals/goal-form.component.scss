@@ -49,3 +49,13 @@
   gap: var(--hg-space-3);
   justify-content: flex-end;
 }
+
+@media (max-width: 767px) {
+  .goal-form__actions {
+    flex-direction: column;
+  }
+
+  .goal-form__actions > button {
+    width: 100%;
+  }
+}

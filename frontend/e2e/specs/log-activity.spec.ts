@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 04-TC-V-001..007, 04-TC-C-001..010, 04-TC-L-001..008
+// Traces to: 04-TC-V-001..007, 04-TC-C-001..010, 04-TC-L-001..009
 // Description: log-activity dialog typography.
 import { expect, test } from '@playwright/test';
 
@@ -158,6 +158,34 @@ test.describe('Log activity sheet (mobile)', () => {
 
 test.describe('Log activity dialog (desktop)', () => {
   test.use({ viewport: { width: 1440, height: 900 } });
+
+  test('submit button is full-width on mobile (04-TC-L-009)', async ({ page }) => {
+    await page.setViewportSize({ width: 360, height: 780 });
+    await authenticate(page);
+    await page.goto('/goals/new');
+    const formWidth = await page
+      .locator('lib-goal-form form')
+      .first()
+      .evaluate((el) => Math.round(el.getBoundingClientRect().width));
+    const saveWidth = await page
+      .locator('lib-goal-form [data-testid="goal-form-save"]')
+      .evaluate((el) => Math.round(el.getBoundingClientRect().width));
+    // Within 4 px of full form width.
+    expect(Math.abs(saveWidth - formWidth)).toBeLessThanOrEqual(4);
+  });
+
+  test('submit button is right-aligned on desktop (04-TC-L-009)', async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await authenticate(page);
+    await page.goto('/goals/new');
+    const form = page.locator('lib-goal-form form').first();
+    const save = page.locator('lib-goal-form [data-testid="goal-form-save"]');
+    const formRect = await form.evaluate((el) => el.getBoundingClientRect());
+    const saveRect = await save.evaluate((el) => el.getBoundingClientRect());
+    // Save right edge ~ form right edge (within 4 px) and save width is much smaller than form width.
+    expect(Math.abs(saveRect.right - formRect.right)).toBeLessThanOrEqual(4);
+    expect(saveRect.width).toBeLessThan(formRect.width / 2);
+  });
 
   test('submit button is 56 px on tablet (04-TC-L-008)', async ({ page }) => {
     await page.setViewportSize({ width: 768, height: 1024 });
