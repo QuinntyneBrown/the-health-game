@@ -215,7 +215,7 @@ and made green. The /loop process picks the first test with
 | 204 | 03 | TC-A-003 | Form fields have `<label>` associations | Yes | 2026-05-10T02:00:29Z |
 | 205 | 03 | TC-A-004 | Validation errors associated via `aria-describedby` | Yes | 2026-05-10T02:24:11Z |
 | 206 | 03 | TC-A-005 | Delete confirmation is a focus-trapping `<dialog>` | Yes | 2026-05-10T02:29:07Z |
-| 207 | 03 | TC-A-006 | axe-core | 0 critical/serious | null |
+| 207 | 03 | TC-A-006 | axe-core | 0 critical/serious | 2026-05-10T02:32:28Z |
 | 208 | 03 | TC-D-001 | Created goal survives reload | Yes (server-persisted) | null |
 | 209 | 03 | TC-D-002 | Edit survives reload | Yes | null |
 | 210 | 03 | TC-D-003 | Deleted goal does not reappear after reload | Yes | null |

@@ -1,7 +1,8 @@
 // Acceptance Test
-// Traces to: 03-TC-V-001..009, 03-TC-C-001..011, 03-TC-L-001..011, 03-TC-R-001..006, 03-TC-F-001..011, 03-TC-F-101..109, 03-TC-F-201..204, 03-TC-B-001..006, 03-TC-A-001..005
+// Traces to: 03-TC-V-001..009, 03-TC-C-001..011, 03-TC-L-001..011, 03-TC-R-001..006, 03-TC-F-001..011, 03-TC-F-101..109, 03-TC-F-201..204, 03-TC-B-001..006, 03-TC-A-001..006
 // Description: /goals page title "Goals" renders with Inter weight 500 at 22/32 px.
 // Subtitle is Inter 13 px weight 400 with computed counts.
+import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
 
 async function authenticate(page: import('@playwright/test').Page): Promise<void> {
@@ -559,6 +560,25 @@ test.describe('Goals page — header typography', () => {
 
   test.describe('filter chip layout', () => {
     test.use({ viewport: { width: 1440, height: 900 } });
+
+    test('axe-core: 0 critical/serious violations on /goals (03-TC-A-006)', async ({ page }) => {
+      await page.setViewportSize({ width: 1440, height: 900 });
+      await authenticate(page);
+      await page.goto('/goals');
+      await expect(page.locator('lib-goal-list')).toBeVisible();
+
+      const result = await new AxeBuilder({ page })
+        .include('lib-goal-list')
+        .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'])
+        .analyze();
+      const blocking = result.violations.filter((v) =>
+        ['critical', 'serious'].includes(v.impact ?? ''),
+      );
+      expect(
+        blocking,
+        blocking.map((v) => `${v.impact}: ${v.id} — ${v.description}`).join('\n'),
+      ).toEqual([]);
+    });
 
     test('delete confirmation is a focus-trapping dialog (03-TC-A-005)', async ({ page }) => {
       await page.setViewportSize({ width: 1440, height: 900 });

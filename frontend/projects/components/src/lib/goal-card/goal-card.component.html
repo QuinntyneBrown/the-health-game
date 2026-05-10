@@ -33,7 +33,11 @@
     @if (progressLabel()) {
       <div class="goal-card__progress">
         <span class="goal-card__progress-label">{{ progressLabel() }}</span>
-        <mat-progress-bar mode="determinate" [value]="progressValue()" />
+        <mat-progress-bar
+          mode="determinate"
+          [value]="progressValue()"
+          [attr.aria-label]="title() + ' progress: ' + progressLabel()"
+        />
       </div>
     }
 
