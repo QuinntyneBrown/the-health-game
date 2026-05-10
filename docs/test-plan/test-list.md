@@ -403,7 +403,7 @@ and made green. The /loop process picks the first test with
 | 392 | 06 | TC-R-001 | 360 px | Stat tiles 2 columns; bar chart full width below | 2026-05-10T11:23:14Z |
 | 393 | 06 | TC-R-002 | 768 px | Stat tiles 3 columns | 2026-05-10T11:24:14Z |
 | 394 | 06 | TC-R-003 | 1440 px | Stat tiles 5 columns; profile right-rail or below per layout | 2026-05-10T11:25:23Z |
-| 395 | 06 | TC-R-004 | Print stylesheet | Renders without nav chrome | null |
+| 395 | 06 | TC-R-004 | Print stylesheet | Renders without nav chrome | 2026-05-10T11:27:00Z |
 | 396 | 06 | TC-R-005 | Bar chart axis labels remain readable at 360 px | Yes (no overlap) | null |
 | 397 | 06 | TC-F-001 | Active goals count matches API count | Yes | null |
 | 398 | 06 | TC-F-002 | Total activity count over selected window matches sum of entries | Yes | null |

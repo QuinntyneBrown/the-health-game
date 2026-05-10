@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 06-TC-V-001..007, 06-TC-C-001..010, 06-TC-L-001..010, 06-TC-R-001..003
+// Traces to: 06-TC-V-001..007, 06-TC-C-001..010, 06-TC-L-001..010, 06-TC-R-001..004
 // Description: stats + profile page chrome.
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
@@ -45,6 +45,28 @@ async function authenticate(page: import('@playwright/test').Page): Promise<void
 }
 
 test.describe('Stats & Profile chrome', () => {
+  test('print stylesheet hides nav chrome (06-TC-R-004)', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await authenticate(page);
+    await page.goto('/stats');
+    await page.emulateMedia({ media: 'print' });
+    await page.waitForTimeout(120);
+
+    const meta = await page.evaluate(() => {
+      const nav = document.querySelector('hg-navigation-bar') as HTMLElement | null;
+      const toolbar = document.querySelector('.app-shell__toolbar') as HTMLElement | null;
+      const main = document.querySelector('lib-stats') as HTMLElement | null;
+      return {
+        navDisplay: nav ? getComputedStyle(nav).display : '',
+        toolbarDisplay: toolbar ? getComputedStyle(toolbar).display : '',
+        mainDisplay: main ? getComputedStyle(main).display : '',
+      };
+    });
+    expect(meta.navDisplay).toBe('none');
+    expect(meta.toolbarDisplay).toBe('none');
+    expect(meta.mainDisplay).not.toBe('none');
+  });
+
   test('desktop 1440 stats 5 cols + profile reads as column (06-TC-R-003)', async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 900 });
     await authenticate(page);
