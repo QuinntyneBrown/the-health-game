@@ -167,6 +167,30 @@ lib-goal-list mat-button-toggle-group.mat-button-toggle-group {
 lib-goal-list mat-button-toggle.mat-button-toggle {
   border-radius: var(--hg-radius-control, 8px) !important;
   border-left: 1px solid #c2c9be !important;
+  height: 36px !important;
+  min-height: 36px !important;
+  max-height: 36px !important;
+}
+
+lib-goal-list .segmented-filter__option {
+  min-height: 0 !important;
+}
+
+@media (max-width: 767px) {
+  lib-goal-list mat-button-toggle.mat-button-toggle {
+    height: 32px !important;
+    min-height: 32px !important;
+    max-height: 32px !important;
+  }
+}
+
+lib-goal-list mat-button-toggle .mat-button-toggle-button,
+lib-goal-list mat-button-toggle .mat-button-toggle-label-content {
+  min-height: 0 !important;
+  height: 100% !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  line-height: 1 !important;
 }
 
 lib-goal-list mat-button-toggle:not(.mat-button-toggle-checked) {
