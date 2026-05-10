@@ -29,6 +29,12 @@ const WINDOW_OPTIONS: readonly SegmentedFilterOption[] = [
   imports: [PageHeaderComponent, SegmentedFilterComponent],
   template: `
     <hg-page-header title="Stats" />
+    @if (showEmptyState()) {
+      <section class="stats-empty" data-testid="stats-empty">
+        <p class="stats-empty__title">No activity yet</p>
+        <p class="stats-empty__description">Log your first activity to get started.</p>
+      </section>
+    }
     <header class="stats-window">
       <hg-segmented-filter
         ariaLabel="Activity window"
@@ -176,6 +182,27 @@ const WINDOW_OPTIONS: readonly SegmentedFilterOption[] = [
         margin-bottom: var(--hg-space-3);
       }
 
+      .stats-empty {
+        background: #ffffff;
+        border-radius: 16px;
+        margin-bottom: var(--hg-space-6);
+        padding: 24px;
+      }
+
+      .stats-empty__title {
+        font-family: Inter, Roboto, Arial, sans-serif;
+        font-size: 18px;
+        font-weight: 500;
+        margin: 0 0 8px;
+      }
+
+      .stats-empty__description {
+        font-family: Inter, Roboto, Arial, sans-serif;
+        font-size: 14px;
+        line-height: 1.5;
+        margin: 0;
+      }
+
       .activity-chart__column {
         display: grid;
         gap: 8px;
@@ -268,6 +295,10 @@ export class StatsComponent {
   // function of the same series the bar chart shows, so visual + tile
   // stay consistent without a server round-trip.
   readonly userLevel = Math.floor(this.weekTotal / 50);
+
+  readonly showEmptyState = computed(
+    () => this.goals().length === 0 && this.weekTotal === 0,
+  );
 
   readonly currentStreakDays = computed(() => {
     const all = this.goals();
