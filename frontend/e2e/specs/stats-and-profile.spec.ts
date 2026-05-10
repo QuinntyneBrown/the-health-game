@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 06-TC-V-001..007, 06-TC-C-001..010, 06-TC-L-001..010, 06-TC-R-001..005, 06-TC-F-001..008, 06-TC-F-101..107, 06-TC-F-201..205, 06-TC-B-001..006, 06-TC-A-001..006, 06-TC-D-001..006, 06-TC-P-001..002
+// Traces to: 06-TC-V-001..007, 06-TC-C-001..010, 06-TC-L-001..010, 06-TC-R-001..005, 06-TC-F-001..008, 06-TC-F-101..107, 06-TC-F-201..205, 06-TC-B-001..006, 06-TC-A-001..006, 06-TC-D-001..006, 06-TC-P-001..003
 // Description: stats + profile page chrome.
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
@@ -45,6 +45,42 @@ async function authenticate(page: import('@playwright/test').Page): Promise<void
 }
 
 test.describe('Stats & Profile chrome', () => {
+  test('bar chart renders without layout shift (06-TC-P-003)', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await authenticate(page);
+    await page.addInitScript(() => {
+      (window as Window & { __cls?: number }).__cls = 0;
+      const obs = new PerformanceObserver((list) => {
+        for (const entry of list.getEntries()) {
+          const cls = entry as PerformanceEntry & { hadRecentInput?: boolean; value?: number };
+          if (!cls.hadRecentInput && typeof cls.value === 'number') {
+            (window as Window & { __cls?: number }).__cls =
+              ((window as Window & { __cls?: number }).__cls ?? 0) + cls.value;
+          }
+        }
+      });
+      obs.observe({ type: 'layout-shift', buffered: true });
+    });
+
+    await page.goto('/stats');
+    await expect(page.locator('lib-stats .activity-chart__bar').first()).toBeVisible();
+    // Switch windows a few times to exercise reflow paths.
+    for (const w of ['Year', 'Month', 'Week']) {
+      await page
+        .locator('lib-stats hg-segmented-filter mat-button-toggle')
+        .filter({ hasText: w })
+        .click();
+      await page.waitForTimeout(120);
+    }
+
+    const cls = await page.evaluate(
+      () => (window as Window & { __cls?: number }).__cls ?? 0,
+    );
+    // Good CLS per web.dev is < 0.1; we ship 0 since the chart container
+    // reserves a fixed 160 px height that bars grow within.
+    expect(cls).toBeLessThan(0.1);
+  });
+
   test('Profile save FE overhead under p95 budget (06-TC-P-002)', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await authenticate(page);
