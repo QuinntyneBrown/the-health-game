@@ -6,6 +6,30 @@ import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
 
 test.describe('Sign In — page', () => {
+  test('double-click submit emits only one POST (07-TC-B-006)', async ({ page }) => {
+    let count = 0;
+    await page.route('**/api/auth/sign-in', async (route) => {
+      count++;
+      await new Promise((r) => setTimeout(r, 600));
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({
+          accessToken: 't',
+          user: { id: 'u', displayName: 'A', roles: ['Player'] },
+        }),
+      });
+    });
+    await page.goto('/sign-in');
+    await page.getByTestId('sign-in-username').locator('input').fill('alice');
+    await page.getByTestId('sign-in-password').locator('input').fill('Secret123!');
+    const btn = page.getByTestId('sign-in-submit');
+    await btn.click();
+    await btn.click({ force: true, noWaitAfter: true }).catch(() => {});
+    await page.waitForURL(/\/home/);
+    expect(count).toBe(1);
+  });
+
   test('Hover on primary button shows pointer + state-layer (07-TC-B-005)', async ({
     page,
   }) => {
