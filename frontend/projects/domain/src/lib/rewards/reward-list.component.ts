@@ -143,6 +143,7 @@ const filterOptions: readonly SegmentedFilterOption[] = [
         align-items: center;
         background: #ffd7ee;
         border-radius: 24px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.149);
         display: grid;
         gap: var(--hg-space-4);
         grid-template-columns: auto 1fr;

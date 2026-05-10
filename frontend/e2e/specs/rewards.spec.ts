@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 05-TC-V-001..008, 05-TC-C-001..010, 05-TC-L-001..003
+// Traces to: 05-TC-V-001..008, 05-TC-C-001..010, 05-TC-L-001..004
 // Description: rewards list page chrome.
 import { expect, test } from '@playwright/test';
 
@@ -74,6 +74,26 @@ const readyReward = {
 };
 
 test.describe('Rewards list', () => {
+  test('hero shadow offset 0 2 / blur 8 / #00000026 (05-TC-L-004)', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await authenticate(page);
+    await page.unroute('**/api/rewards**');
+    await page.route('**/api/rewards**', (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify([readyReward, ...sampleRewards]),
+      }),
+    );
+
+    await page.goto('/rewards');
+    const hero = page.locator('lib-reward-list .reward-hero').first();
+    await expect(hero).toBeVisible();
+    const shadow = await hero.evaluate((el) => getComputedStyle(el).boxShadow);
+    // 0x26 = 38 alpha → 38/255 ≈ 0.149 → some browsers print 0.15
+    expect(shadow).toMatch(/rgba\(0,\s*0,\s*0,\s*0\.1[45]\d*\)\s+0px\s+2px\s+8px/);
+  });
+
   test('hero icon 120 px square / 9999 radius (05-TC-L-003)', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await authenticate(page);
