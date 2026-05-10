@@ -13,7 +13,14 @@
   grid-template-columns: repeat(auto-fill, minmax(var(--hg-size-card-min), 1fr));
   list-style: none;
   margin: 0;
+  max-width: 1152px;
   padding: 0;
+}
+
+@media (min-width: 1200px) {
+  .goal-list {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
 }
 
 .goal-list__item {
