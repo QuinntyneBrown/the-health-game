@@ -528,7 +528,7 @@ and made green. The /loop process picks the first test with
 | 517 | 07 | TC-B-008 | Password toggle reveals and re-masks the password | Eye icon toggles `type=password` <-> `type=text` | 2026-05-10T14:53:30Z |
 | 518 | 07 | TC-B-009 | Reduced-motion preference honored | No animated transitions on submit / state change | 2026-05-10T14:54:30Z |
 | 519 | 07 | TC-B-010 | Browser autofill populates fields and re-evaluates submit-disabled | Submit becomes enabled | 2026-05-10T14:55:30Z |
-| 520 | 07 | TC-B-011 | Pasting credentials with leading/trailing whitespace | Whitespace is trimmed before submit | null |
+| 520 | 07 | TC-B-011 | Pasting credentials with leading/trailing whitespace | Whitespace is trimmed before submit | 2026-05-10T14:56:30Z |
 | 521 | 07 | TC-A-001 | Page rendered inside the app-shell `<main>`; no nested `<main>` | Exactly one `<main>` | 2026-05-09T19:45:30Z |
 | 522 | 07 | TC-A-002 | Title rendered as `<h1>` | Yes | null |
 | 523 | 07 | TC-A-003 | Brand mark has accessible name or `aria-hidden="true"` | Decorative — `aria-hidden` | null |
