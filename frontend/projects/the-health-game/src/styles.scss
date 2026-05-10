@@ -429,6 +429,21 @@ lib-goal-list mat-progress-bar .mdc-linear-progress__buffer {
   background-color: #e5e9e2 !important;
 }
 
+lib-reward-list mat-progress-bar .mdc-linear-progress__bar-inner {
+  border-top-color: #006d3f !important;
+  border-color: #006d3f !important;
+}
+lib-reward-list mat-progress-bar {
+  --mdc-linear-progress-active-indicator-color: #006d3f;
+  --mat-progress-bar-active-indicator-color: #006d3f;
+  --mdc-linear-progress-track-color: #e5e9e2;
+  --mat-progress-bar-track-color: #e5e9e2;
+}
+lib-reward-list mat-progress-bar .mdc-linear-progress__buffer-bar,
+lib-reward-list mat-progress-bar .mdc-linear-progress__buffer {
+  background-color: #e5e9e2 !important;
+}
+
 button[data-testid='delete-goal-confirm'] {
   background-color: #ba1a1a !important;
   color: #ffffff !important;

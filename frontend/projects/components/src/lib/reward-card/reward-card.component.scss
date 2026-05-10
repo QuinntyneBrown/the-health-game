@@ -73,6 +73,11 @@
   margin: 0;
 }
 
+.reward-card__progress-bar {
+  --mdc-linear-progress-active-indicator-color: #006d3f;
+  --mdc-linear-progress-track-color: #e5e9e2;
+}
+
 .reward-card__status,
 .reward-card__action {
   justify-self: end;

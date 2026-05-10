@@ -16,8 +16,17 @@
       @if (earnedDateLabel()) {
         <span class="reward-card__date">{{ earnedDateLabel() }}</span>
       }
-      @if (progressTarget() !== null && progressCurrent() !== null) {
+      @if (hasProgress()) {
         <span class="reward-card__progress-label">{{ progressCurrent() }} of {{ progressTarget() }}</span>
+        <mat-progress-bar
+          class="reward-card__progress-bar"
+          mode="determinate"
+          [value]="progressPercent()"
+          [attr.aria-valuenow]="progressCurrent()"
+          [attr.aria-valuemin]="0"
+          [attr.aria-valuemax]="progressTarget()"
+          [attr.aria-label]="name() + ' progress'"
+        />
       }
     </div>
 
