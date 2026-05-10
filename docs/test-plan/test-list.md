@@ -466,7 +466,7 @@ and made green. The /loop process picks the first test with
 | 455 | 07 | TC-C-004 | Title text color | `#191D17` (on surface) | 2026-05-10T13:29:19Z |
 | 456 | 07 | TC-C-005 | Subtitle text color | `#424940` (on surface variant) | 2026-05-10T13:30:31Z |
 | 457 | 07 | TC-C-006 | Field outline (default) | `#C2C9BE` (outline-variant), 1 px | 2026-05-10T13:31:35Z |
-| 458 | 07 | TC-C-007 | Field outline (focused) | `#006D3F` (primary), 2 px | null |
+| 458 | 07 | TC-C-007 | Field outline (focused) | `#006D3F` (primary), 2 px | 2026-05-10T13:32:36Z |
 | 459 | 07 | TC-C-008 | Field outline (error) | `#BA1A1A` (error), 2 px | null |
 | 460 | 07 | TC-C-009 | Primary button background | `#006D3F` (primary) | null |
 | 461 | 07 | TC-C-010 | Primary button label color | `#FFFFFF` | null |
