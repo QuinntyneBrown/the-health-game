@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 06-TC-V-001..007, 06-TC-C-001..010, 06-TC-L-001..004
+// Traces to: 06-TC-V-001..007, 06-TC-C-001..010, 06-TC-L-001..005
 // Description: stats + profile page chrome.
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
@@ -45,6 +45,21 @@ async function authenticate(page: import('@playwright/test').Page): Promise<void
 }
 
 test.describe('Stats & Profile chrome', () => {
+  test('profile form field height 56 px (06-TC-L-005)', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await authenticate(page);
+    await page.goto('/profile');
+    await page.locator('[data-testid="profile-edit"]').click();
+
+    const wrappers = page.locator('lib-profile mat-form-field .mat-mdc-text-field-wrapper');
+    const count = await wrappers.count();
+    expect(count).toBeGreaterThanOrEqual(2);
+    for (let i = 0; i < count; i++) {
+      const h = await wrappers.nth(i).evaluate((el) => getComputedStyle(el).height);
+      expect(h).toBe('56px');
+    }
+  });
+
   test('bar-chart panel padding 24 px (06-TC-L-004)', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await authenticate(page);
