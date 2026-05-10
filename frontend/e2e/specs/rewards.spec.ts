@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 05-TC-V-001..008, 05-TC-C-001..010, 05-TC-L-001..010, 05-TC-R-001..005, 05-TC-F-001..004
+// Traces to: 05-TC-V-001..008, 05-TC-C-001..010, 05-TC-L-001..010, 05-TC-R-001..005, 05-TC-F-001..005
 // Description: rewards list page chrome.
 import { expect, test } from '@playwright/test';
 
@@ -74,6 +74,72 @@ const readyReward = {
 };
 
 test.describe('Rewards list', () => {
+  test('streak reset after earn keeps reward earned (05-TC-F-005)', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await authenticate(page);
+
+    let getCount = 0;
+    await page.unroute('**/api/rewards**');
+    await page.route('**/api/rewards**', (route, request) => {
+      if (request.method() !== 'GET') {
+        route.fulfill({ status: 200, contentType: 'application/json', body: '{}' });
+        return;
+      }
+      getCount += 1;
+      // Both responses contain the earned reward — server never revokes it
+      // even after a hypothetical streak reset (L2-010 §3).
+      const earnedReward = {
+        id: 'r-earned-1',
+        goalId: 'g1',
+        name: 'Earned spa day',
+        description: 'You hit a 30-day streak earlier',
+        status: 'earned',
+        earnedAt: '2026-04-15T10:00:00Z',
+        condition: { type: 'streak-milestone', streakDays: 30 },
+      };
+      const inProgressReward = {
+        id: 'r-ip-1',
+        goalId: 'g1',
+        name: 'In progress',
+        description: '',
+        status: 'in-progress',
+        earnedAt: null,
+        progress: { current: 3, target: 30 },
+        condition: { type: 'streak-milestone', streakDays: 30 },
+      };
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify(
+          getCount === 1
+            ? [earnedReward, inProgressReward]
+            : [
+                earnedReward,
+                { ...inProgressReward, progress: { current: 0, target: 30 } },
+              ],
+        ),
+      });
+    });
+
+    await page.goto('/rewards');
+    await expect(
+      page.locator('lib-reward-list .reward-section[data-status="earned"]'),
+    ).toContainText('Earned spa day');
+
+    // Simulate "user lost their streak" by re-fetching: in-progress reward
+    // resets to 0/30 but the earned reward must still be present.
+    await page.reload();
+    await expect(
+      page.locator('lib-reward-list .reward-section[data-status="earned"]'),
+    ).toContainText('Earned spa day');
+
+    const earnedDate = page
+      .locator('lib-reward-list .reward-section[data-status="earned"] .reward-card__date')
+      .first();
+    await expect(earnedDate).toBeVisible();
+    await expect(earnedDate).not.toHaveText(/^$/);
+  });
+
   test('Claim moves reward to earned with timestamp (05-TC-F-004)', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await authenticate(page);
