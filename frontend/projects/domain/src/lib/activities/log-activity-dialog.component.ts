@@ -27,6 +27,7 @@ import { LogActivitySheetData } from './log-activity-sheet.component';
       <hg-health-text-field
         label="Notes (optional)"
         [value]="notes()"
+        [errorText]="notesError()"
         (valueChange)="onNotes($event)"
       />
     </mat-dialog-content>
@@ -72,6 +73,11 @@ export class LogActivityDialogComponent {
       ? 'Quantity must be greater than zero'
       : '',
   );
+  readonly notesError = computed(() =>
+    this.attemptedSubmit() && this.notes().length > 500
+      ? 'Note is too long (max 500 characters)'
+      : '',
+  );
   readonly canSave = computed(() => true);
 
   onQuantity(value: string): void {
@@ -91,7 +97,7 @@ export class LogActivityDialogComponent {
 
   async submit(): Promise<void> {
     this.attemptedSubmit.set(true);
-    if (!(Number(this.quantity()) > 0)) return;
+    if (!(Number(this.quantity()) > 0) || this.notes().length > 500) return;
     let entry;
     try {
       entry = await firstValueFrom(

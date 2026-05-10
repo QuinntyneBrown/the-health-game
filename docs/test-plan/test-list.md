@@ -264,7 +264,7 @@ and made green. The /loop process picks the first test with
 | 253 | 04 | TC-F-003 | Log a negative quantity | Validation error (L2-001 §3 / L2-016) | 2026-05-10T04:47:04Z |
 | 254 | 04 | TC-F-004 | Log activity with future timestamp beyond cadence window | Validation error (L2-005 §2) | 2026-05-10T04:49:33Z |
 | 255 | 04 | TC-F-005 | Log activity with optional note (1–500 chars) | Persisted | 2026-05-10T04:53:05Z |
-| 256 | 04 | TC-F-006 | Note exceeding 500 chars | Validation error | null |
+| 256 | 04 | TC-F-006 | Note exceeding 500 chars | Validation error | 2026-05-10T04:55:20Z |
 | 257 | 04 | TC-F-007 | Log against a goal owned by another user (crafted request) | 403 / 404 (L2-005 §3) | null |
 | 258 | 04 | TC-F-008 | After successful log, streak recomputed | L2-007 satisfied; UI reflects new current streak | null |
 | 259 | 04 | TC-F-009 | Successful submit closes sheet/dialog and shows toast | Yes | null |
