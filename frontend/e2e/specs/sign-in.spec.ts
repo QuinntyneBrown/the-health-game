@@ -2,10 +2,30 @@
 // Traces to: L2-036, 07-TC-V-001..014, 07-TC-C-001..018, 07-TC-L-001..014, 07-TC-R-001..008, 07-TC-F-004
 // Description: Username + password sign-in page. Each test exercises one
 //              vertical slice end-to-end against the running app.
+import * as fs from 'node:fs';
+import * as path from 'node:path';
+
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
 
 test.describe('Sign In — page', () => {
+  test('production apiBaseUrl is HTTPS (07-TC-S-003)', () => {
+    const envPath = path.join(
+      __dirname,
+      '..',
+      '..',
+      'projects',
+      'the-health-game',
+      'src',
+      'environments',
+      'environment.ts',
+    );
+    const src = fs.readFileSync(envPath, 'utf8');
+    const match = src.match(/apiBaseUrl:\s*'([^']+)'/);
+    expect(match).not.toBeNull();
+    expect(match![1]).toMatch(/^https:\/\//);
+  });
+
   test('refresh token never stored in JS-accessible storage (07-TC-D-006)', async ({
     page,
   }) => {
