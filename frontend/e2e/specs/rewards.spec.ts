@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 05-TC-V-001
+// Traces to: 05-TC-V-001..002
 // Description: rewards list page chrome.
 import { expect, test } from '@playwright/test';
 
@@ -63,7 +63,55 @@ const sampleRewards = [
   },
 ];
 
+const readyReward = {
+  id: 'r-ready',
+  goalId: 'g1',
+  name: 'Spa day',
+  description: 'You hit your 30-day streak — go enjoy it.',
+  status: 'ready-to-claim',
+  earnedAt: null,
+  condition: { type: 'streak-milestone', streakDays: 30 },
+};
+
 test.describe('Rewards list', () => {
+  test('hero eyebrow "READY TO CLAIM" Inter 11px/600/1.5px upper (05-TC-V-002)', async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await authenticate(page);
+    await page.unroute('**/api/rewards**');
+    await page.route('**/api/rewards**', (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify([readyReward, ...sampleRewards]),
+      }),
+    );
+
+    await page.goto('/rewards');
+    const eyebrow = page
+      .locator('lib-reward-list [data-testid="reward-hero-eyebrow"]')
+      .first();
+    await expect(eyebrow).toBeVisible();
+    await expect(eyebrow).toHaveText(/^READY TO CLAIM$/);
+
+    const result = await eyebrow.evaluate((el) => {
+      const s = getComputedStyle(el);
+      return {
+        family: s.fontFamily,
+        size: s.fontSize,
+        weight: s.fontWeight,
+        letterSpacing: s.letterSpacing,
+        textTransform: s.textTransform,
+      };
+    });
+    expect(result.family).toMatch(/Inter/);
+    expect(result.size).toBe('11px');
+    expect(result.weight).toBe('600');
+    expect(result.letterSpacing).toBe('1.5px');
+    expect(result.textTransform).toBe('uppercase');
+  });
+
   test('page title "Rewards" Inter 32 px desktop weight 500 (05-TC-V-001)', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await authenticate(page);

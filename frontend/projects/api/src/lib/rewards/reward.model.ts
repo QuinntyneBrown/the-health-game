@@ -11,7 +11,7 @@ export interface StreakMilestoneCondition {
 
 export type RewardCondition = GoalTargetCondition | StreakMilestoneCondition;
 
-export type RewardStatus = 'pending' | 'earned';
+export type RewardStatus = 'locked' | 'in-progress' | 'ready-to-claim' | 'pending' | 'earned';
 
 export interface Reward {
   readonly id: string;

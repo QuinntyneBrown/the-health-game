@@ -33,6 +33,17 @@ const filterOptions: readonly SegmentedFilterOption[] = [
       actionIcon="add"
       (actionSelected)="onCreate()"
     />
+    @if (readyToClaim(); as hero) {
+      <section
+        class="reward-hero"
+        data-testid="reward-hero"
+        aria-labelledby="reward-hero-title"
+      >
+        <p class="reward-hero__eyebrow" data-testid="reward-hero-eyebrow">READY TO CLAIM</p>
+        <h2 class="reward-hero__title" id="reward-hero-title">{{ hero.name }}</h2>
+        <p class="reward-hero__description">{{ hero.description }}</p>
+      </section>
+    }
     @if (rewards().length === 0) {
       <hg-empty-state
         title="No rewards yet"
@@ -90,6 +101,35 @@ const filterOptions: readonly SegmentedFilterOption[] = [
       .reward-list__item {
         display: contents;
       }
+
+      .reward-hero {
+        display: grid;
+        gap: var(--hg-space-2);
+        margin-bottom: var(--hg-space-6);
+      }
+
+      .reward-hero__eyebrow {
+        font-family: Inter, Roboto, Arial, sans-serif;
+        font-size: 11px;
+        font-weight: 600;
+        letter-spacing: 1.5px;
+        margin: 0;
+        text-transform: uppercase;
+      }
+
+      .reward-hero__title {
+        font-family: Inter, Roboto, Arial, sans-serif;
+        font-size: 36px;
+        font-weight: 500;
+        margin: 0;
+      }
+
+      .reward-hero__description {
+        font-family: Inter, Roboto, Arial, sans-serif;
+        font-size: 16px;
+        line-height: 1.5;
+        margin: 0;
+      }
     `,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -105,6 +145,9 @@ export class RewardListComponent {
     initialValue: [] as const,
   });
   readonly visibleRewards = computed(() => filterRewardsByStatus(this.rewards(), this.status()));
+  readonly readyToClaim = computed(() =>
+    this.rewards().find((r) => r.status === 'ready-to-claim') ?? null,
+  );
 
   statusLabel(reward: Reward): string {
     return reward.status === 'earned' ? 'Earned' : 'Pending';
