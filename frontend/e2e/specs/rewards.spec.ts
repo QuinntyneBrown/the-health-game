@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 05-TC-V-001..008, 05-TC-C-001..010, 05-TC-L-001..010, 05-TC-R-001..005, 05-TC-F-001
+// Traces to: 05-TC-V-001..008, 05-TC-C-001..010, 05-TC-L-001..010, 05-TC-R-001..005, 05-TC-F-001..002
 // Description: rewards list page chrome.
 import { expect, test } from '@playwright/test';
 
@@ -74,6 +74,54 @@ const readyReward = {
 };
 
 test.describe('Rewards list', () => {
+  test('earned rewards distinguished from pending (05-TC-F-002)', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await authenticate(page);
+    await page.unroute('**/api/rewards**');
+    await page.route('**/api/rewards**', (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify(sampleRewards),
+      }),
+    );
+    await page.goto('/rewards');
+
+    const earnedCard = page
+      .locator('lib-reward-list .reward-section[data-status="earned"] .reward-card')
+      .first();
+    const inProgressCard = page
+      .locator('lib-reward-list .reward-section[data-status="in-progress"] .reward-card')
+      .first();
+    await expect(earnedCard).toBeVisible();
+    await expect(inProgressCard).toBeVisible();
+
+    const meta = await page.evaluate(() => {
+      const earned = document.querySelector(
+        'lib-reward-list .reward-section[data-status="earned"] .reward-card',
+      );
+      const inProgress = document.querySelector(
+        'lib-reward-list .reward-section[data-status="in-progress"] .reward-card',
+      );
+      const earnedDate = document.querySelector(
+        'lib-reward-list .reward-section[data-status="earned"] .reward-card__date',
+      );
+      const earnedChip = document.querySelector(
+        'lib-reward-list .reward-section[data-status="earned"] .reward-card mat-chip',
+      );
+      return {
+        earnedBg: earned ? getComputedStyle(earned).backgroundColor : '',
+        inProgressBg: inProgress ? getComputedStyle(inProgress).backgroundColor : '',
+        earnedDateText: earnedDate?.textContent?.trim() ?? '',
+        chipText: earnedChip?.textContent?.trim() ?? '',
+      };
+    });
+
+    expect(meta.earnedBg).not.toBe(meta.inProgressBg);
+    expect(meta.earnedDateText.length).toBeGreaterThan(0);
+    expect(meta.chipText.toLowerCase()).toContain('earned');
+  });
+
   test('list shows only current user\'s rewards (05-TC-F-001)', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await authenticate(page);
