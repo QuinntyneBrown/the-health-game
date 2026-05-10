@@ -3,4 +3,5 @@ export interface UserProfile {
   readonly email: string;
   readonly avatarUrl: string | null;
   readonly roles: readonly string[];
+  readonly memberSince?: string;
 }

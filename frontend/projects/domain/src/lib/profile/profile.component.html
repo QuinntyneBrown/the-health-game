@@ -12,6 +12,9 @@
       <div class="profile__identity">
         <h1 class="profile__name" data-testid="profile-display-name">{{ user.displayName }}</h1>
         <p class="profile__email" data-testid="profile-email">{{ user.email }}</p>
+        @if (memberSinceLabel(); as label) {
+          <p class="profile__member-since" data-testid="profile-member-since">{{ label }}</p>
+        }
       </div>
     </header>
 

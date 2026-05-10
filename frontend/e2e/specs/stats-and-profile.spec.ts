@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 06-TC-V-001..007, 06-TC-C-001..010, 06-TC-L-001..010, 06-TC-R-001..005, 06-TC-F-001..008
+// Traces to: 06-TC-V-001..007, 06-TC-C-001..010, 06-TC-L-001..010, 06-TC-R-001..005, 06-TC-F-001..008, 06-TC-F-101
 // Description: stats + profile page chrome.
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
@@ -45,6 +45,57 @@ async function authenticate(page: import('@playwright/test').Page): Promise<void
 }
 
 test.describe('Stats & Profile chrome', () => {
+  test('profile shows name, email, avatar, member since (06-TC-F-101)', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await page.route('**/connect/token', (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({
+          access_token: 'test-access-token',
+          token_type: 'Bearer',
+          expires_in: 3600,
+        }),
+      }),
+    );
+    await page.route('**/api/goals**', (route) =>
+      route.fulfill({ status: 200, contentType: 'application/json', body: '[]' }),
+    );
+    await page.route('**/api/rewards**', (route) =>
+      route.fulfill({ status: 200, contentType: 'application/json', body: '[]' }),
+    );
+    await page.route('**/api/users/me**', (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({
+          displayName: 'Quinn',
+          email: 'q@q.q',
+          avatarUrl: null,
+          roles: [],
+          memberSince: '2024-04-15T08:00:00Z',
+        }),
+      }),
+    );
+
+    await page.goto('/onboarding');
+    await page.evaluate(() => {
+      sessionStorage.setItem('hg.oidc.verifier', 'v');
+      sessionStorage.setItem('hg.oidc.state', 's');
+    });
+    await page.goto('/auth/callback?code=c&state=s');
+    await page.waitForURL(/\/home(\b|\/|$)/);
+    await page.goto('/profile');
+
+    await expect(page.locator('[data-testid="profile-display-name"]')).toHaveText('Quinn');
+    await expect(page.locator('[data-testid="profile-email"]')).toHaveText('q@q.q');
+    await expect(page.locator('lib-profile .profile__avatar').first()).toBeVisible();
+    const since = page.locator('[data-testid="profile-member-since"]');
+    await expect(since).toBeVisible();
+    await expect(since).toContainText(/Member since /);
+    await expect(since).toContainText(/2024/);
+  });
+
   test('empty state appears when no goals + activity (06-TC-F-008)', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await authenticate(page);

@@ -23,6 +23,16 @@ export class ProfileComponent {
   private readonly dialog = inject(MatDialog);
 
   readonly profile = signal<UserProfile | undefined>(undefined);
+  readonly memberSinceLabel = computed(() => {
+    const since = this.profile()?.memberSince;
+    if (!since) return null;
+    const d = new Date(since);
+    if (Number.isNaN(d.valueOf())) return null;
+    return `Member since ${d.toLocaleDateString(undefined, {
+      year: 'numeric',
+      month: 'long',
+    })}`;
+  });
   readonly editing = signal(false);
   readonly displayName = signal('');
   readonly email = signal('');
