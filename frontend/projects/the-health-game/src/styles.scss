@@ -171,6 +171,14 @@ hg-health-text-field.health-text-field--error .mdc-notched-outline__trailing {
   border-width: 2px !important;
 }
 
+hg-segmented-filter[data-testid='cadence-picker'] mat-button-toggle.mat-button-toggle-checked .mat-button-toggle-button {
+  background-color: #94f7b4 !important;
+}
+
+hg-segmented-filter[data-testid='cadence-picker'] mat-button-toggle.mat-button-toggle-checked .segmented-filter__label {
+  color: #00210f !important;
+}
+
 h2[mat-dialog-title],
 .mat-mdc-dialog-title {
   font-family:

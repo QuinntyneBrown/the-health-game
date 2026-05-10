@@ -510,11 +510,12 @@ test.describe('Goals page — header typography', () => {
       );
       await page.goto('/goals/g1/edit');
 
-      const cadenceField = page.locator('mat-form-field').filter({ hasText: 'Cadence' });
-      await cadenceField.locator('mat-select').click();
-      await page.locator('mat-option').filter({ hasText: 'Weekly' }).click();
+      await page
+        .locator('hg-segmented-filter[data-testid="cadence-picker"] mat-button-toggle')
+        .filter({ hasText: /^Weekly$/ })
+        .click();
 
-      const hint = page.locator('mat-hint[data-testid="goal-form-cadence-note"]');
+      const hint = page.locator('[data-testid="goal-form-cadence-note"]');
       await expect(hint).toBeVisible();
 
       const computed = await hint.evaluate((el) => {
@@ -2193,11 +2194,9 @@ test.describe('Goals page — header typography', () => {
 
       // Change cadence to Weekly
       await page
-        .locator('mat-form-field')
-        .filter({ hasText: 'Cadence' })
-        .locator('mat-select')
+        .locator('hg-segmented-filter[data-testid="cadence-picker"] mat-button-toggle')
+        .filter({ hasText: /^Weekly$/ })
         .click();
-      await page.locator('mat-option').filter({ hasText: /^Weekly$/ }).click();
 
       // Cadence-changed hint should now be visible (already covered by 03-TC-V-009)
       await expect(page.locator('[data-testid="goal-form-cadence-note"]')).toBeVisible();
@@ -2252,11 +2251,9 @@ test.describe('Goals page — header typography', () => {
         .fill('min');
 
       await page
-        .locator('mat-form-field')
-        .filter({ hasText: 'Cadence' })
-        .locator('mat-select')
+        .locator('hg-segmented-filter[data-testid="cadence-picker"] mat-button-toggle')
+        .filter({ hasText: /^Custom$/ })
         .click();
-      await page.locator('mat-option').filter({ hasText: /^Custom$/ }).click();
 
       const everyField = page
         .locator('hg-health-text-field')
@@ -2344,11 +2341,9 @@ test.describe('Goals page — header typography', () => {
         .fill('min');
 
       await page
-        .locator('mat-form-field')
-        .filter({ hasText: 'Cadence' })
-        .locator('mat-select')
+        .locator('hg-segmented-filter[data-testid="cadence-picker"] mat-button-toggle')
+        .filter({ hasText: /^Custom$/ })
         .click();
-      await page.locator('mat-option').filter({ hasText: /^Custom$/ }).click();
 
       await page
         .locator('hg-health-text-field')
@@ -2437,12 +2432,7 @@ test.describe('Goals page — header typography', () => {
           .fill('min');
 
         await page
-          .locator('mat-form-field')
-          .filter({ hasText: 'Cadence' })
-          .locator('mat-select')
-          .click();
-        await page
-          .locator('mat-option')
+          .locator('hg-segmented-filter[data-testid="cadence-picker"] mat-button-toggle')
           .filter({ hasText: new RegExp(`^${cadence}$`, 'i') })
           .click();
 

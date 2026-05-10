@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 04-TC-V-001..007, 04-TC-C-001..004
+// Traces to: 04-TC-V-001..007, 04-TC-C-001..005
 // Description: log-activity dialog typography.
 import { expect, test } from '@playwright/test';
 
@@ -57,6 +57,26 @@ const goal = {
 
 test.describe('Log activity dialog (desktop)', () => {
   test.use({ viewport: { width: 1440, height: 900 } });
+
+  test('cadence segmented selected #94F7B4 / #00210F (04-TC-C-005)', async ({ page }) => {
+    await authenticate(page);
+    await page.goto('/goals/new');
+
+    const selected = page
+      .locator('lib-goal-form hg-segmented-filter[data-testid="cadence-picker"] mat-button-toggle.mat-button-toggle-checked')
+      .first();
+    await expect(selected).toBeVisible();
+    const styles = await selected.evaluate((host) => {
+      const inner = host.querySelector('.mat-button-toggle-button') ?? host;
+      const label = host.querySelector('.segmented-filter__label') ?? host;
+      return {
+        bg: getComputedStyle(inner).backgroundColor,
+        labelColor: getComputedStyle(label).color,
+      };
+    });
+    expect(styles.bg).toBe('rgb(148, 247, 180)');
+    expect(styles.labelColor).toBe('rgb(0, 33, 15)');
+  });
 
   test('field outline error #BA1A1A / 2 px (04-TC-C-004)', async ({ page }) => {
     await authenticate(page);

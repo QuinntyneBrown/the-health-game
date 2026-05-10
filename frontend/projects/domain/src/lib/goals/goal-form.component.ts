@@ -12,7 +12,7 @@ import {
   GoalCadence,
   WeekDay,
 } from 'api';
-import { HealthTextFieldComponent } from 'components';
+import { HealthTextFieldComponent, SegmentedFilterComponent, SegmentedFilterOption } from 'components';
 
 import { GoalFormState, validateGoalForm } from './goal-form.validate';
 import { GoalsOptimisticService } from './goals.optimistic.service';
@@ -48,6 +48,7 @@ const customUnits: readonly { id: CustomIntervalUnit; label: string }[] = [
     MatButtonModule,
     MatFormFieldModule,
     MatSelectModule,
+    SegmentedFilterComponent,
   ],
   templateUrl: './goal-form.component.html',
   styleUrl: './goal-form.component.scss',
@@ -63,6 +64,10 @@ export class GoalFormComponent {
   readonly cadences = cadences;
   readonly weekDays = weekDays;
   readonly customUnits = customUnits;
+  readonly cadenceOptions: readonly SegmentedFilterOption[] = cadences.map((c) => ({
+    value: c.id,
+    label: c.label,
+  }));
 
   private readonly editingId = this.route.snapshot.paramMap.get('id');
   readonly isEditing = this.editingId !== null;

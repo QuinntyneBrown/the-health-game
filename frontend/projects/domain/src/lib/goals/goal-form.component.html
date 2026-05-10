@@ -31,19 +31,18 @@
   </div>
 
   <h2 class="goal-form__section-label">Cadence</h2>
-  <mat-form-field appearance="outline">
-    <mat-label>Cadence</mat-label>
-    <mat-select [value]="cadence()" (valueChange)="cadence.set($event)">
-      @for (option of cadences; track option.id) {
-        <mat-option [value]="option.id">{{ option.label }}</mat-option>
-      }
-    </mat-select>
-    @if (isEditing && cadenceChanged()) {
-      <mat-hint data-testid="goal-form-cadence-note">
-        Streak windows recompute from now; existing entries kept.
-      </mat-hint>
-    }
-  </mat-form-field>
+  <hg-segmented-filter
+    data-testid="cadence-picker"
+    ariaLabel="Cadence"
+    [options]="cadenceOptions"
+    [value]="cadence()"
+    (valueChange)="cadence.set($any($event))"
+  />
+  @if (isEditing && cadenceChanged()) {
+    <p class="goal-form__hint" data-testid="goal-form-cadence-note">
+      Streak windows recompute from now; existing entries kept.
+    </p>
+  }
 
   @if (cadence() === 'weekly') {
     <mat-form-field appearance="outline">

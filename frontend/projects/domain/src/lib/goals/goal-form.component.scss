@@ -23,6 +23,14 @@
   text-transform: none;
 }
 
+.goal-form__hint {
+  color: var(--hg-color-on-surface-variant);
+  font-family: Inter, Roboto, Arial, sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  margin: 0;
+}
+
 .goal-form__target,
 .goal-form__custom {
   display: grid;
