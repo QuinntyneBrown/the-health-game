@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 03-TC-V-001..009, 03-TC-C-001..011, 03-TC-L-001..011, 03-TC-R-001..006, 03-TC-F-001..010
+// Traces to: 03-TC-V-001..009, 03-TC-C-001..011, 03-TC-L-001..011, 03-TC-R-001..006, 03-TC-F-001..011
 // Description: /goals page title "Goals" renders with Inter weight 500 at 22/32 px.
 // Subtitle is Inter 13 px weight 400 with computed counts.
 import { expect, test } from '@playwright/test';
@@ -559,6 +559,42 @@ test.describe('Goals page — header typography', () => {
 
   test.describe('filter chip layout', () => {
     test.use({ viewport: { width: 1440, height: 900 } });
+
+    test('streak chip on card reflects currentStreak from API (03-TC-F-011)', async ({ page }) => {
+      await page.setViewportSize({ width: 1440, height: 900 });
+      await authenticate(page);
+      await page.unroute('**/api/goals**');
+      const baseGoal = {
+        description: '',
+        cadence: 'daily' as const,
+        target: { value: 10, unit: 'min' },
+        completedQuantity: 0,
+        longestStreak: 12,
+        rewardName: '',
+      };
+      await page.route('**/api/goals**', (route) =>
+        route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify([
+            { id: 'g1', name: 'Walk', currentStreak: 5, ...baseGoal },
+            { id: 'g2', name: 'Read', currentStreak: 0, ...baseGoal, longestStreak: 0 },
+          ]),
+        }),
+      );
+      await page.goto('/goals');
+
+      const cards = page.locator('lib-goal-list .goal-card');
+      await expect(cards).toHaveCount(2);
+
+      const walkCard = cards.filter({ hasText: 'Walk' }).first();
+      const walkChips = await walkCard.locator('mat-chip').allInnerTexts();
+      expect(walkChips.some((t) => /5[-\s]?day streak/i.test(t))).toBe(true);
+
+      const readCard = cards.filter({ hasText: 'Read' }).first();
+      const readChips = await readCard.locator('mat-chip').allInnerTexts();
+      expect(readChips.some((t) => /0[-\s]?day streak/i.test(t))).toBe(true);
+    });
 
     test('clicking a goal card navigates to /goals/{id} (03-TC-F-010)', async ({ page }) => {
       await page.setViewportSize({ width: 1440, height: 900 });
