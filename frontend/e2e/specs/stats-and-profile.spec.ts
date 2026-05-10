@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 06-TC-V-001..007, 06-TC-C-001..002
+// Traces to: 06-TC-V-001..007, 06-TC-C-001..003
 // Description: stats + profile page chrome.
 import { expect, test } from '@playwright/test';
 
@@ -44,6 +44,27 @@ async function authenticate(page: import('@playwright/test').Page): Promise<void
 }
 
 test.describe('Stats & Profile chrome', () => {
+  test('on-tile text colors match on-* tokens (06-TC-C-003)', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await authenticate(page);
+    await page.goto('/stats');
+
+    const colors = await page.evaluate(() => {
+      const map: Record<string, string> = {};
+      for (const tone of ['success', 'streak', 'info', 'reward']) {
+        const tile = document.querySelector(
+          `lib-stats .stat-tile--${tone}`,
+        ) as HTMLElement | null;
+        if (tile) map[tone] = getComputedStyle(tile).color;
+      }
+      return map;
+    });
+    expect(colors.success).toBe('rgb(0, 33, 15)'); // #00210F on #94F7B4
+    expect(colors.streak).toBe('rgb(52, 17, 0)'); // #341100 on #FFDCC4
+    expect(colors.info).toBe('rgb(0, 31, 41)'); // #001F29 on #BEEAF6
+    expect(colors.reward).toBe('rgb(56, 7, 30)'); // #38071E on #FFD7EE
+  });
+
   test('stat tile palette success/streak/info/reward (06-TC-C-002)', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await authenticate(page);
