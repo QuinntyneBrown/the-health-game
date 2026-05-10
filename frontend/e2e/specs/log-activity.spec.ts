@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 04-TC-V-001..007, 04-TC-C-001..010, 04-TC-L-001..010, 04-TC-R-001
+// Traces to: 04-TC-V-001..007, 04-TC-C-001..010, 04-TC-L-001..010, 04-TC-R-001..002
 // Description: log-activity dialog typography.
 import { expect, test } from '@playwright/test';
 
@@ -194,6 +194,25 @@ test.describe('Log activity sheet (mobile)', () => {
 
 test.describe('Log activity dialog (desktop)', () => {
   test.use({ viewport: { width: 1440, height: 900 } });
+
+  test('768 px: full-page goal-form + rail nav visible (04-TC-R-002)', async ({ page }) => {
+    await page.setViewportSize({ width: 768, height: 1024 });
+    await authenticate(page);
+    await page.goto('/goals/new');
+
+    const form = page.locator('lib-goal-form form').first();
+    await expect(form).toBeVisible();
+    // Form fills most of the main content area on tablet.
+    const widths = await page.evaluate(() => ({
+      vw: window.innerWidth,
+      formWidth: document.querySelector('lib-goal-form form')!.getBoundingClientRect().width,
+    }));
+    expect(widths.formWidth).toBeGreaterThan(widths.vw * 0.5);
+
+    // Rail nav variant is rendered above 768 px.
+    const rail = page.locator('hg-navigation-bar.app-shell__navigation--rail');
+    await expect(rail).toBeVisible();
+  });
 
   test('dialog max width 720 px on desktop, centered (04-TC-L-010)', async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 900 });
