@@ -17,3 +17,21 @@ export function filterGoalsByName(
   if (!needle) return goals;
   return goals.filter((goal) => goal.name.toLowerCase().includes(needle));
 }
+
+export type GoalSortOrder = 'name' | 'streak';
+
+export function sortGoals(
+  goals: readonly GoalSummary[],
+  order: GoalSortOrder,
+): readonly GoalSummary[] {
+  const copy = [...goals];
+  if (order === 'streak') {
+    copy.sort((a, b) => {
+      const diff = b.currentStreak - a.currentStreak;
+      return diff !== 0 ? diff : a.name.localeCompare(b.name);
+    });
+  } else {
+    copy.sort((a, b) => a.name.localeCompare(b.name));
+  }
+  return copy;
+}

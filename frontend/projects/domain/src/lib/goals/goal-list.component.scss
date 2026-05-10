@@ -33,6 +33,19 @@
   padding: 8px 12px;
 }
 
+.goal-list__sort {
+  align-items: center;
+  display: inline-flex;
+  gap: var(--hg-space-2);
+}
+
+.goal-list__sort select {
+  border: 1px solid var(--hg-color-outline);
+  border-radius: var(--hg-radius-control);
+  font: inherit;
+  padding: 6px 10px;
+}
+
 .goal-list {
   display: grid;
   gap: var(--hg-space-4);

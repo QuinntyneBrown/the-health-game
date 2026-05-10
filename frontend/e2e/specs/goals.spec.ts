@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 03-TC-V-001..009, 03-TC-C-001..011, 03-TC-L-001..011, 03-TC-R-001..006, 03-TC-F-001..005
+// Traces to: 03-TC-V-001..009, 03-TC-C-001..011, 03-TC-L-001..011, 03-TC-R-001..006, 03-TC-F-001..006
 // Description: /goals page title "Goals" renders with Inter weight 500 at 22/32 px.
 // Subtitle is Inter 13 px weight 400 with computed counts.
 import { expect, test } from '@playwright/test';
@@ -559,6 +559,42 @@ test.describe('Goals page — header typography', () => {
 
   test.describe('filter chip layout', () => {
     test.use({ viewport: { width: 1440, height: 900 } });
+
+    test('sort by streak length: desc currentStreak, alpha tiebreak (03-TC-F-006)', async ({
+      page,
+    }) => {
+      await page.setViewportSize({ width: 1440, height: 900 });
+      await authenticate(page);
+      await page.unroute('**/api/goals**');
+      const baseGoal = {
+        description: '',
+        cadence: 'daily' as const,
+        target: { value: 10, unit: 'min' },
+        completedQuantity: 0,
+        longestStreak: 0,
+        rewardName: '',
+      };
+      await page.route('**/api/goals**', (route) =>
+        route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify([
+            { id: 'g1', name: 'Charlie', currentStreak: 3, ...baseGoal },
+            { id: 'g2', name: 'Alpha', currentStreak: 5, ...baseGoal },
+            { id: 'g3', name: 'Bravo', currentStreak: 5, ...baseGoal },
+            { id: 'g4', name: 'Delta', currentStreak: 0, ...baseGoal },
+          ]),
+        }),
+      );
+      await page.goto('/goals');
+
+      const sort = page.locator('lib-goal-list [data-testid="goals-sort"]');
+      await expect(sort).toBeVisible();
+      await sort.selectOption('streak');
+
+      const titles = await page.locator('lib-goal-list .goal-card__title').allInnerTexts();
+      expect(titles).toEqual(['Alpha', 'Bravo', 'Charlie', 'Delta']);
+    });
 
     test('Hourly/Weekly/Monthly/Custom chip counts are accurate (03-TC-F-005)', async ({
       page,

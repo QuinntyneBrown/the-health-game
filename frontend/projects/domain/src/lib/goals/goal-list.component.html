@@ -34,6 +34,18 @@
       [value]="cadence()"
       (valueChange)="cadence.set($any($event))"
     />
+    <label class="goal-list__sort">
+      <span class="goal-list__sort-label">Sort by</span>
+      <select
+        data-testid="goals-sort"
+        aria-label="Sort goals"
+        [value]="sortOrder()"
+        (change)="sortOrder.set($any($event.target).value)"
+      >
+        <option value="name">Name</option>
+        <option value="streak">Streak length</option>
+      </select>
+    </label>
   </header>
 
   <ul class="goal-list" data-testid="goal-list">

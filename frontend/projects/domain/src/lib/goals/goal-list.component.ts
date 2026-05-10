@@ -13,7 +13,13 @@ import {
   SegmentedFilterOption,
 } from 'components';
 
-import { CadenceFilter, filterGoalsByCadence, filterGoalsByName } from './filter-goals';
+import {
+  CadenceFilter,
+  filterGoalsByCadence,
+  filterGoalsByName,
+  GoalSortOrder,
+  sortGoals,
+} from './filter-goals';
 
 const baseCadenceOptions: readonly SegmentedFilterOption[] = [
   { value: 'all', label: 'All' },
@@ -44,6 +50,7 @@ export class GoalListComponent {
 
   readonly cadence = signal<CadenceFilter>('all');
   readonly searchQuery = signal('');
+  readonly sortOrder = signal<GoalSortOrder>('name');
 
   readonly goals = toSignal(this.goalsService.getGoals(), { initialValue: [] as const });
   readonly cadenceOptions = computed<readonly SegmentedFilterOption[]>(() => {
@@ -57,7 +64,10 @@ export class GoalListComponent {
     });
   });
   readonly visibleGoals = computed(() =>
-    filterGoalsByName(filterGoalsByCadence(this.goals(), this.cadence()), this.searchQuery()),
+    sortGoals(
+      filterGoalsByName(filterGoalsByCadence(this.goals(), this.cadence()), this.searchQuery()),
+      this.sortOrder(),
+    ),
   );
   readonly isEmpty = computed(() => this.goals().length === 0);
   readonly subtitle = computed(() => {
