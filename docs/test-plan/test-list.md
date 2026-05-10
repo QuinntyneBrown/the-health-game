@@ -319,7 +319,7 @@ and made green. The /loop process picks the first test with
 | 308 | 05 | TC-V-008 | "New reward" button | Inter 14 px, weight 500, white | 2026-05-10T07:03:25Z |
 | 309 | 05 | TC-C-001 | Hero background — ready-to-claim | `#FFD7EE` (reward-container) | 2026-05-10T07:04:30Z |
 | 310 | 05 | TC-C-002 | Hero icon container | `#9B2680` (reward) bg, white icon | 2026-05-10T07:06:10Z |
-| 311 | 05 | TC-C-003 | Hero primary CTA "Claim" | `#9B2680` bg, white label | null |
+| 311 | 05 | TC-C-003 | Hero primary CTA "Claim" | `#9B2680` bg, white label | 2026-05-10T07:07:42Z |
 | 312 | 05 | TC-C-004 | Hero secondary CTA | transparent bg, `#C2C9BE` outline | null |
 | 313 | 05 | TC-C-005 | In-progress card | `#EBEFE7` bg | null |
 | 314 | 05 | TC-C-006 | Locked card | `#EBEFE7` bg with opacity 0.65 | null |

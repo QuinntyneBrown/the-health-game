@@ -50,6 +50,17 @@ const filterOptions: readonly SegmentedFilterOption[] = [
           <p class="reward-hero__eyebrow" data-testid="reward-hero-eyebrow">READY TO CLAIM</p>
           <h2 class="reward-hero__title" id="reward-hero-title">{{ hero.name }}</h2>
           <p class="reward-hero__description">{{ hero.description }}</p>
+          <div class="reward-hero__actions">
+            <button
+              class="reward-hero__claim"
+              type="button"
+              data-testid="reward-hero-claim"
+              [attr.aria-label]="'Claim ' + hero.name"
+              (click)="onClaim(hero)"
+            >
+              Claim
+            </button>
+          </div>
         </div>
       </section>
     }
@@ -151,6 +162,33 @@ const filterOptions: readonly SegmentedFilterOption[] = [
         gap: var(--hg-space-2);
       }
 
+      .reward-hero__actions {
+        display: flex;
+        gap: 12px;
+        margin-top: var(--hg-space-3);
+      }
+
+      .reward-hero__claim {
+        background: #9b2680;
+        border: none;
+        border-radius: 9999px;
+        color: #ffffff;
+        cursor: pointer;
+        font-family: Inter, Roboto, Arial, sans-serif;
+        font-size: 14px;
+        font-weight: 500;
+        padding: 12px 24px;
+      }
+
+      .reward-hero__claim:hover {
+        filter: brightness(1.05);
+      }
+
+      .reward-hero__claim:focus-visible {
+        outline: 2px solid #006d3f;
+        outline-offset: 2px;
+      }
+
       .reward-hero__eyebrow {
         font-family: Inter, Roboto, Arial, sans-serif;
         font-size: 11px;
@@ -230,5 +268,9 @@ export class RewardListComponent {
 
   onCreate(): void {
     void this.router.navigateByUrl('/rewards/new');
+  }
+
+  onClaim(_reward: Reward): void {
+    // Wired in 05-TC-F-004; visual + structural only for now.
   }
 }
