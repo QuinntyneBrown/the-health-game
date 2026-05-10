@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 06-TC-V-001..007, 06-TC-C-001..010, 06-TC-L-001..010, 06-TC-R-001..004
+// Traces to: 06-TC-V-001..007, 06-TC-C-001..010, 06-TC-L-001..010, 06-TC-R-001..005
 // Description: stats + profile page chrome.
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
@@ -45,6 +45,40 @@ async function authenticate(page: import('@playwright/test').Page): Promise<void
 }
 
 test.describe('Stats & Profile chrome', () => {
+  test('chart axis labels readable at 360 px no overlap (06-TC-R-005)', async ({ page }) => {
+    await page.setViewportSize({ width: 360, height: 780 });
+    await authenticate(page);
+    await page.goto('/stats');
+    await page.waitForTimeout(120);
+
+    const labels = page.locator('lib-stats .activity-chart__axis-label');
+    const count = await labels.count();
+    expect(count).toBe(7);
+
+    const rects = await labels.evaluateAll((els) =>
+      (els as HTMLElement[]).map((el) => {
+        const r = el.getBoundingClientRect();
+        const cs = getComputedStyle(el);
+        return {
+          left: r.left,
+          right: r.right,
+          fontSize: parseFloat(cs.fontSize),
+          text: el.textContent?.trim() ?? '',
+        };
+      }),
+    );
+
+    // Every label is at least 9 px tall (still legible) and adjacent labels
+    // do not overlap horizontally.
+    for (const r of rects) {
+      expect(r.fontSize).toBeGreaterThanOrEqual(9);
+      expect(r.text.length).toBeGreaterThan(0);
+    }
+    for (let i = 1; i < rects.length; i++) {
+      expect(rects[i].left).toBeGreaterThanOrEqual(rects[i - 1].right - 1);
+    }
+  });
+
   test('print stylesheet hides nav chrome (06-TC-R-004)', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await authenticate(page);
