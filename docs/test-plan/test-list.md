@@ -273,7 +273,7 @@ and made green. The /loop process picks the first test with
 | 262 | 04 | TC-F-012 | Edit/delete another user's entry via crafted request | 403 / 404 (L2-006 §3) | 2026-05-10T05:06:17Z |
 | 263 | 04 | TC-F-101 | Empty name | Validation error (L2-001 §2) | 2026-05-10T05:08:00Z |
 | 264 | 04 | TC-F-102 | Non-positive target | Validation error (L2-001 §3) | 2026-05-10T05:09:28Z |
-| 265 | 04 | TC-F-103 | Cadence Daily — happy path | Persisted; appears in list with streak 0 | null |
+| 265 | 04 | TC-F-103 | Cadence Daily — happy path | Persisted; appears in list with streak 0 | 2026-05-10T05:11:13Z |
 | 266 | 04 | TC-F-104 | Cadence Hourly | Persisted; period rolls at top of next hour (L2-011 §4) | null |
 | 267 | 04 | TC-F-105 | Cadence Weekly with week-start = Monday | Persisted; rollover at next Monday (L2-011 §2) | null |
 | 268 | 04 | TC-F-106 | Cadence Monthly | Persisted; rollover on first of next month (L2-011 §3) | null |

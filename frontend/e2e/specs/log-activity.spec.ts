@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 04-TC-V-001..007, 04-TC-C-001..010, 04-TC-L-001..010, 04-TC-R-001..006, 04-TC-F-001..012, 04-TC-F-101..102
+// Traces to: 04-TC-V-001..007, 04-TC-C-001..010, 04-TC-L-001..010, 04-TC-R-001..006, 04-TC-F-001..012, 04-TC-F-101..103
 // Description: log-activity dialog typography.
 import { expect, test } from '@playwright/test';
 
@@ -907,6 +907,83 @@ test.describe('Log activity dialog (desktop)', () => {
       page.locator('lib-goal-detail [data-testid="activity-list"]'),
     ).toBeVisible();
     expect(postBody).toMatchObject({ quantity: 5 });
+  });
+
+  test('create daily goal happy path persists with streak 0 (04-TC-F-103)', async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await authenticate(page);
+
+    const created = {
+      id: 'd-1',
+      name: 'Walk',
+      description: '',
+      cadence: 'daily' as const,
+      target: { value: 10, unit: 'min' },
+      completedQuantity: 0,
+      currentStreak: 0,
+      longestStreak: 0,
+      rewardName: '',
+    };
+    let listed: typeof created[] = [];
+
+    await page.unroute('**/api/goals**');
+    await page.route('**/api/goals**', (route) => {
+      const req = route.request();
+      if (req.url().endsWith('/api/goals/d-1')) {
+        route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify(created),
+        });
+        return;
+      }
+      if (req.method() === 'POST') {
+        listed = [created];
+        route.fulfill({
+          status: 201,
+          contentType: 'application/json',
+          body: JSON.stringify(created),
+        });
+        return;
+      }
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify(listed),
+      });
+    });
+    await page.route('**/api/goals/d-1/activities**', (route) =>
+      route.fulfill({ status: 200, contentType: 'application/json', body: '[]' }),
+    );
+
+    await page.goto('/goals/new');
+    await page
+      .locator('hg-health-text-field')
+      .filter({ hasText: 'Name' })
+      .locator('input')
+      .fill('Walk');
+    await page
+      .locator('hg-health-text-field')
+      .filter({ hasText: 'Target' })
+      .locator('input')
+      .fill('10');
+    await page
+      .locator('hg-health-text-field')
+      .filter({ hasText: 'Unit' })
+      .locator('input')
+      .fill('min');
+    // Cadence picker default is 'daily' (first option), so no extra click needed.
+    await page.locator('[data-testid="goal-form-save"]').click();
+    await page.waitForURL(/\/goals\/d-1$/);
+
+    await page.goto('/goals');
+    const card = page
+      .locator('lib-goal-list .goal-card')
+      .filter({ hasText: 'Walk' })
+      .first();
+    await expect(card).toBeVisible();
+    const streakChip = card.locator('mat-chip').filter({ hasText: /streak/i }).first();
+    await expect(streakChip).toContainText(/0[-\s]?day streak/i);
   });
 
   test('create goal: non-positive target blocks submit (04-TC-F-102)', async ({ page }) => {
