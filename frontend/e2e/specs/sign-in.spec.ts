@@ -1,10 +1,23 @@
 // Acceptance Test
-// Traces to: L2-036, 07-TC-V-001
+// Traces to: L2-036, 07-TC-V-001..002
 // Description: Username + password sign-in page. Each test exercises one
 //              vertical slice end-to-end against the running app.
 import { expect, test } from '@playwright/test';
 
 test.describe('Sign In — page', () => {
+  test('title 28 px / line-height 1.2 mobile (07-TC-V-002)', async ({ page }) => {
+    await page.setViewportSize({ width: 360, height: 780 });
+    await page.goto('/sign-in');
+    const title = page.getByTestId('sign-in-title');
+    await expect(title).toBeVisible();
+    const result = await title.evaluate((el) => {
+      const s = getComputedStyle(el);
+      return { size: s.fontSize, lineHeight: s.lineHeight };
+    });
+    expect(result.size).toBe('28px');
+    expect(parseFloat(result.lineHeight) / 28).toBeCloseTo(1.2, 1);
+  });
+
   test('title family Inter weight 500 (07-TC-V-001)', async ({ page }) => {
     await page.goto('/sign-in');
     const title = page.getByTestId('sign-in-title');

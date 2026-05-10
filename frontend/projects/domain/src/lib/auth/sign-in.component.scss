@@ -28,11 +28,24 @@
 
 .sign-in__title {
   font-family: Inter, Roboto, Arial, sans-serif;
-  font-size: var(--hg-font-size-headline-md, 32px);
+  font-size: 28px;
   font-weight: 500;
-  line-height: var(--hg-line-height-tight, 1.2);
+  line-height: 1.2;
   margin: 0;
   text-align: center;
+}
+
+@media (min-width: 768px) {
+  .sign-in__title {
+    font-size: 36px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .sign-in__title {
+    font-size: 57px;
+    line-height: 1.1;
+  }
 }
 
 .sign-in__subtitle {
