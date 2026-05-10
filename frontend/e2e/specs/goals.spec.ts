@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 03-TC-V-001..009, 03-TC-C-001..011, 03-TC-L-001..011, 03-TC-R-001..003
+// Traces to: 03-TC-V-001..009, 03-TC-C-001..011, 03-TC-L-001..011, 03-TC-R-001..004
 // Description: /goals page title "Goals" renders with Inter weight 500 at 22/32 px.
 // Subtitle is Inter 13 px weight 400 with computed counts.
 import { expect, test } from '@playwright/test';
@@ -559,6 +559,32 @@ test.describe('Goals page — header typography', () => {
 
   test.describe('filter chip layout', () => {
     test.use({ viewport: { width: 1440, height: 900 } });
+
+    test('mobile filter row scrolls horizontally without clipping (03-TC-R-004)', async ({
+      page,
+    }) => {
+      await page.setViewportSize({ width: 360, height: 780 });
+      await authenticate(page);
+      await page.goto('/goals');
+
+      const scroller = page.locator('lib-goal-list .segmented-filter').first();
+      await expect(scroller).toBeVisible();
+
+      const sizes = await scroller.evaluate((el) => ({
+        clientWidth: el.clientWidth,
+        scrollWidth: el.scrollWidth,
+        overflowX: getComputedStyle(el).overflowX,
+      }));
+      expect(sizes.scrollWidth).toBeGreaterThan(sizes.clientWidth);
+      expect(['auto', 'scroll']).toContain(sizes.overflowX);
+
+      const lastChip = page.locator('lib-goal-list mat-button-toggle').last();
+      const before = await lastChip.evaluate((el) => el.getBoundingClientRect().left);
+      await scroller.evaluate((el) => el.scrollTo({ left: el.scrollWidth, behavior: 'instant' as ScrollBehavior }));
+      await page.waitForTimeout(50);
+      const after = await lastChip.evaluate((el) => el.getBoundingClientRect().left);
+      expect(after).toBeLessThan(before);
+    });
 
     test('1440 px viewport: 3-column grid + content width <= 1152 (03-TC-R-003)', async ({
       page,
