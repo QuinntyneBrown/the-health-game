@@ -1,11 +1,19 @@
 // Acceptance Test
-// Traces to: L2-036, 07-TC-V-001..014, 07-TC-C-001..018, 07-TC-L-001..007
+// Traces to: L2-036, 07-TC-V-001..014, 07-TC-C-001..018, 07-TC-L-001..008
 // Description: Username + password sign-in page. Each test exercises one
 //              vertical slice end-to-end against the running app.
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
 
 test.describe('Sign In — page', () => {
+  test('form inter-field gap 16 px (07-TC-L-008)', async ({ page }) => {
+    await page.goto('/sign-in');
+    const gap = await page
+      .locator('lib-sign-in .sign-in__form')
+      .evaluate((el) => getComputedStyle(el).rowGap);
+    expect(gap).toBe('16px');
+  });
+
   test('card vertical gap 20 px (07-TC-L-007)', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await page.goto('/sign-in');
