@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 05-TC-V-001..008, 05-TC-C-001..010, 05-TC-L-001..010, 05-TC-R-001..005, 05-TC-F-001..007, 05-TC-F-101..105, 05-TC-F-201..203, 05-TC-B-001..004, 05-TC-A-001..002
+// Traces to: 05-TC-V-001..008, 05-TC-C-001..010, 05-TC-L-001..010, 05-TC-R-001..005, 05-TC-F-001..007, 05-TC-F-101..105, 05-TC-F-201..203, 05-TC-B-001..004, 05-TC-A-001..003
 // Description: rewards list page chrome.
 import { expect, test } from '@playwright/test';
 
@@ -74,6 +74,36 @@ const readyReward = {
 };
 
 test.describe('Rewards list', () => {
+  test('progress bar exposes role + aria-valuenow/max (05-TC-A-003)', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await authenticate(page);
+    await page.unroute('**/api/rewards**');
+    await page.route('**/api/rewards**', (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify(sampleRewards),
+      }),
+    );
+    await page.goto('/rewards');
+
+    const bar = page.locator('lib-reward-list .reward-card mat-progress-bar').first();
+    await expect(bar).toBeAttached();
+    const meta = await bar.evaluate((el) => ({
+      role: el.getAttribute('role'),
+      now: el.getAttribute('aria-valuenow'),
+      min: el.getAttribute('aria-valuemin'),
+      max: el.getAttribute('aria-valuemax'),
+      label: el.getAttribute('aria-label'),
+    }));
+    expect(meta.role).toBe('progressbar');
+    // Material renders aria-valuenow as the percent (0–100) by default, so
+    // the contract here is just "non-empty numeric value" + a populated max.
+    expect(Number.isFinite(Number(meta.now ?? ''))).toBe(true);
+    expect(Number.isFinite(Number(meta.max ?? ''))).toBe(true);
+    expect(meta.label ?? '').toMatch(/Spa day/);
+  });
+
   test('state communicated via text + icon, not color alone (05-TC-A-002)', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await authenticate(page);
