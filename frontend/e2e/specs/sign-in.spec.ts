@@ -1,11 +1,29 @@
 // Acceptance Test
-// Traces to: L2-036, 07-TC-V-001..014, 07-TC-C-001..018, 07-TC-L-001..010
+// Traces to: L2-036, 07-TC-V-001..014, 07-TC-C-001..018, 07-TC-L-001..011
 // Description: Username + password sign-in page. Each test exercises one
 //              vertical slice end-to-end against the running app.
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
 
 test.describe('Sign In — page', () => {
+  test('pill buttons full-radius (07-TC-L-011)', async ({ page }) => {
+    await page.goto('/sign-in');
+    const radii = await page.evaluate(() => {
+      const sel = (s: string) => {
+        const btn = document.querySelector(`lib-sign-in [data-testid="${s}"]`) as HTMLElement;
+        const inner =
+          btn?.querySelector('.mdc-button, .mat-mdc-button-base') as HTMLElement | null;
+        const target = inner ?? btn;
+        const r = target.getBoundingClientRect();
+        const radius = parseFloat(getComputedStyle(target).borderTopLeftRadius);
+        return { radius, half: r.height / 2 };
+      };
+      return { submit: sel('sign-in-submit'), oidc: sel('sign-in-oidc') };
+    });
+    expect(radii.submit.radius).toBeGreaterThanOrEqual(radii.submit.half - 0.5);
+    expect(radii.oidc.radius).toBeGreaterThanOrEqual(radii.oidc.half - 0.5);
+  });
+
   test('submit 48 mobile / 56 tablet+desktop, full width (07-TC-L-010)', async ({
     page,
   }) => {
