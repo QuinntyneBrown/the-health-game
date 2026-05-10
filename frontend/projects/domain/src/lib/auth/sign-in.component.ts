@@ -81,10 +81,10 @@ export class SignInComponent {
         (error as Error | undefined)?.name === 'InvalidCredentialsError'
       ) {
         this.errorMessage.set('Invalid username or password.');
+        this.password.set('');
       } else {
         this.errorMessage.set("We couldn't sign you in. Please try again.");
       }
-      this.password.set('');
     } finally {
       this.busy.set(false);
     }

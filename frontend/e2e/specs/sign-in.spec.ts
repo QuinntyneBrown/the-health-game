@@ -6,6 +6,26 @@ import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
 
 test.describe('Sign In — page', () => {
+  test('network failure: re-enables submit, preserves values, non-disclosing error (07-TC-F-015)', async ({
+    page,
+  }) => {
+    await page.route('**/api/auth/sign-in', (route) => route.abort('failed'));
+    await page.goto('/sign-in');
+    const username = page.getByTestId('sign-in-username').locator('input');
+    const password = page.getByTestId('sign-in-password').locator('input');
+    const submit = page.getByTestId('sign-in-submit');
+    await username.fill('alice@example.com');
+    await password.fill('Secret123!');
+    await submit.click();
+    const err = page.getByTestId('sign-in-error');
+    await expect(err).toBeVisible();
+    const text = (await err.textContent()) ?? '';
+    expect(text).not.toMatch(/network|fetch|http|status|stack/i);
+    await expect(submit).toBeEnabled();
+    await expect(username).toHaveValue('alice@example.com');
+    await expect(password).toHaveValue('Secret123!');
+  });
+
   test('Get started link navigates to /onboarding (07-TC-F-014)', async ({ page }) => {
     await page.goto('/sign-in');
     await page.getByTestId('sign-in-get-started').click();
