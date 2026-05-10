@@ -1,11 +1,23 @@
 // Acceptance Test
-// Traces to: L2-036, 07-TC-V-001..014, 07-TC-C-001..018, 07-TC-L-001..014, 07-TC-R-001..007
+// Traces to: L2-036, 07-TC-V-001..014, 07-TC-C-001..018, 07-TC-L-001..014, 07-TC-R-001..008
 // Description: Username + password sign-in page. Each test exercises one
 //              vertical slice end-to-end against the running app.
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
 
 test.describe('Sign In — page', () => {
+  test('soft keyboard: submit reachable via scroll (07-TC-R-008)', async ({ page }) => {
+    await page.setViewportSize({ width: 360, height: 360 });
+    await page.goto('/sign-in');
+    const submit = page.locator('lib-sign-in [data-testid="sign-in-submit"]');
+    await submit.scrollIntoViewIfNeeded();
+    await expect(submit).toBeVisible();
+    const box = await submit.boundingBox();
+    expect(box).not.toBeNull();
+    expect(box!.y + box!.height).toBeLessThanOrEqual(360 + 1);
+    expect(box!.y).toBeGreaterThanOrEqual(0);
+  });
+
   test('resize preserves focus and value (07-TC-R-007)', async ({ page }) => {
     await page.setViewportSize({ width: 360, height: 780 });
     await page.goto('/sign-in');
