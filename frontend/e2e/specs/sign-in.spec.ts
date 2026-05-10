@@ -1,10 +1,40 @@
 // Acceptance Test
-// Traces to: L2-036, 07-TC-V-001..014, 07-TC-C-001..007
+// Traces to: L2-036, 07-TC-V-001..014, 07-TC-C-001..008
 // Description: Username + password sign-in page. Each test exercises one
 //              vertical slice end-to-end against the running app.
 import { expect, test } from '@playwright/test';
 
 test.describe('Sign In — page', () => {
+  test('field outline error #BA1A1A / 2 px (07-TC-C-008)', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await page.goto('/sign-in');
+    // Submit-attempt with empty username triggers the inline error.
+    // Programmatically submit the form so the validation flow fires
+    // regardless of how Enter propagates from MatInput.
+    await page.evaluate(() => {
+      const form = document.querySelector('lib-sign-in form');
+      if (form) {
+        (form as HTMLFormElement).requestSubmit?.() ??
+          form.dispatchEvent(new Event('submit', { cancelable: true }));
+      }
+    });
+    await page.waitForTimeout(200);
+    await page.locator('body').click({ position: { x: 5, y: 5 } });
+    await page.waitForTimeout(200);
+    const piece = page
+      .locator(
+        'lib-sign-in hg-health-text-field.health-text-field--error .mdc-notched-outline__leading',
+      )
+      .first();
+    await expect(piece).toBeVisible();
+    const r = await piece.evaluate((el) => {
+      const s = getComputedStyle(el);
+      return { color: s.borderTopColor, width: s.borderTopWidth };
+    });
+    expect(r.color).toBe('rgb(186, 26, 26)');
+    expect(r.width).toBe('2px');
+  });
+
   test('field outline focused #006D3F / 2 px (07-TC-C-007)', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await page.goto('/sign-in');
