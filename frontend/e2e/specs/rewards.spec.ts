@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 05-TC-V-001..008, 05-TC-C-001..010, 05-TC-L-001..010, 05-TC-R-001..005, 05-TC-F-001..007, 05-TC-F-101..105, 05-TC-F-201..202
+// Traces to: 05-TC-V-001..008, 05-TC-C-001..010, 05-TC-L-001..010, 05-TC-R-001..005, 05-TC-F-001..007, 05-TC-F-101..105, 05-TC-F-201..203
 // Description: rewards list page chrome.
 import { expect, test } from '@playwright/test';
 
@@ -74,6 +74,63 @@ const readyReward = {
 };
 
 test.describe('Rewards list', () => {
+  test('reward notification has accessible name + dismissible (05-TC-F-203)', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await authenticate(page);
+    await page.unroute('**/api/rewards**');
+    await page.route('**/api/rewards**', (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify([readyReward, ...sampleRewards]),
+      }),
+    );
+
+    await page.goto('/rewards');
+    const snack = page
+      .locator('mat-snack-bar-container, .mat-mdc-snack-bar-container')
+      .first();
+    await expect(snack).toBeVisible({ timeout: 4000 });
+
+    // Accessible name: any descendant exposes a live-region role/aria so
+    // screen readers announce the toast (Material's CDK live announcer is
+    // typically a sibling div with aria-live).
+    const meta = await snack.evaluate((el) => {
+      const role = el.getAttribute('role');
+      const ariaLive = el.getAttribute('aria-live');
+      const liveDescendant =
+        el.querySelector('[role="alert"], [role="status"], [aria-live]') ??
+        document.querySelector('.cdk-live-announcer-element, [aria-live]');
+      const labelEl = el.querySelector(
+        '.mdc-snackbar__label, .mat-mdc-snack-bar-label, [aria-live]',
+      );
+      const text = (labelEl?.textContent ?? el.textContent ?? '').trim();
+      const action = el.querySelector(
+        'button.mat-mdc-snack-bar-action, button.mdc-snackbar__action, button[matsnackbaractions], button',
+      ) as HTMLButtonElement | null;
+      return {
+        role,
+        ariaLive,
+        hasLiveRegion: !!liveDescendant,
+        text,
+        hasAction: !!action,
+      };
+    });
+    const announced =
+      meta.role === 'alert' ||
+      meta.ariaLive === 'polite' ||
+      meta.ariaLive === 'assertive' ||
+      meta.hasLiveRegion;
+    expect(announced).toBe(true);
+    expect(meta.text.length).toBeGreaterThan(0);
+    expect(meta.text).toMatch(/Spa day|reward/i);
+    expect(meta.hasAction).toBe(true);
+
+    // Dismissible: clicking the action closes the snackbar.
+    await snack.locator('button').first().click();
+    await expect(snack).toBeHidden({ timeout: 4000 });
+  });
+
   test('queued offline earn surfaces on next /rewards visit (05-TC-F-202)', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await authenticate(page);
