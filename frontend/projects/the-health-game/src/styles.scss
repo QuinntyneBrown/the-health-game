@@ -146,6 +146,17 @@ hg-streak-summary .streak-summary__value {
   }
 }
 
+h2[mat-dialog-title],
+.mat-mdc-dialog-title {
+  font-family:
+    Inter,
+    Roboto,
+    Arial,
+    sans-serif !important;
+  font-size: 22px !important;
+  font-weight: 500 !important;
+}
+
 hg-action-button button.action-button,
 hg-action-button button.action-button .mdc-button__label {
   font-family:
