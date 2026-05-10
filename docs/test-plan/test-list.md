@@ -271,7 +271,7 @@ and made green. The /loop process picks the first test with
 | 260 | 04 | TC-F-010 | Edit existing activity entry | Persists; recomputes streak (L2-006 §1) | 2026-05-10T05:03:20Z |
 | 261 | 04 | TC-F-011 | Delete existing activity entry | Persists; recomputes streak (L2-006 §2) | 2026-05-10T05:04:42Z |
 | 262 | 04 | TC-F-012 | Edit/delete another user's entry via crafted request | 403 / 404 (L2-006 §3) | 2026-05-10T05:06:17Z |
-| 263 | 04 | TC-F-101 | Empty name | Validation error (L2-001 §2) | null |
+| 263 | 04 | TC-F-101 | Empty name | Validation error (L2-001 §2) | 2026-05-10T05:08:00Z |
 | 264 | 04 | TC-F-102 | Non-positive target | Validation error (L2-001 §3) | null |
 | 265 | 04 | TC-F-103 | Cadence Daily — happy path | Persisted; appears in list with streak 0 | null |
 | 266 | 04 | TC-F-104 | Cadence Hourly | Persisted; period rolls at top of next hour (L2-011 §4) | null |

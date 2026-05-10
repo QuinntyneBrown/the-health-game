@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 04-TC-V-001..007, 04-TC-C-001..010, 04-TC-L-001..010, 04-TC-R-001..006, 04-TC-F-001..012
+// Traces to: 04-TC-V-001..007, 04-TC-C-001..010, 04-TC-L-001..010, 04-TC-R-001..006, 04-TC-F-001..012, 04-TC-F-101
 // Description: log-activity dialog typography.
 import { expect, test } from '@playwright/test';
 
@@ -907,6 +907,51 @@ test.describe('Log activity dialog (desktop)', () => {
       page.locator('lib-goal-detail [data-testid="activity-list"]'),
     ).toBeVisible();
     expect(postBody).toMatchObject({ quantity: 5 });
+  });
+
+  test('create goal: empty name blocks submit + inline error (04-TC-F-101)', async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await authenticate(page);
+
+    let postCalls = 0;
+    await page.route('**/api/goals', (route) => {
+      if (route.request().method() === 'POST') {
+        postCalls += 1;
+        route.fulfill({ status: 201, contentType: 'application/json', body: '{}' });
+        return;
+      }
+      route.fulfill({ status: 200, contentType: 'application/json', body: '[]' });
+    });
+
+    await page.goto('/goals/new');
+    const save = page.locator('[data-testid="goal-form-save"]');
+    await expect(save).toBeDisabled();
+
+    await page
+      .locator('hg-health-text-field')
+      .filter({ hasText: 'Target' })
+      .locator('input')
+      .fill('10');
+    await page
+      .locator('hg-health-text-field')
+      .filter({ hasText: 'Unit' })
+      .locator('input')
+      .fill('min');
+    await expect(save).toBeDisabled();
+
+    await page
+      .locator('form[data-testid="goal-form"]')
+      .evaluate((form: HTMLFormElement) => {
+        form.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
+      });
+
+    const nameError = page
+      .locator('hg-health-text-field')
+      .filter({ hasText: 'Name' })
+      .locator('.health-text-field__error');
+    await expect(nameError).toBeVisible();
+    await expect(nameError).toContainText(/required/i);
+    expect(postCalls).toBe(0);
   });
 
   test('1200 px: dialog + backdrop, form padding 32 px (04-TC-R-003)', async ({ page }) => {
