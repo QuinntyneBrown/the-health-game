@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 04-TC-V-001..007, 04-TC-C-001..010, 04-TC-L-001..010, 04-TC-R-001..006, 04-TC-F-001..012, 04-TC-F-101
+// Traces to: 04-TC-V-001..007, 04-TC-C-001..010, 04-TC-L-001..010, 04-TC-R-001..006, 04-TC-F-001..012, 04-TC-F-101..102
 // Description: log-activity dialog typography.
 import { expect, test } from '@playwright/test';
 
@@ -907,6 +907,56 @@ test.describe('Log activity dialog (desktop)', () => {
       page.locator('lib-goal-detail [data-testid="activity-list"]'),
     ).toBeVisible();
     expect(postBody).toMatchObject({ quantity: 5 });
+  });
+
+  test('create goal: non-positive target blocks submit (04-TC-F-102)', async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await authenticate(page);
+
+    let postCalls = 0;
+    await page.route('**/api/goals', (route) => {
+      if (route.request().method() === 'POST') {
+        postCalls += 1;
+        route.fulfill({ status: 201, contentType: 'application/json', body: '{}' });
+        return;
+      }
+      route.fulfill({ status: 200, contentType: 'application/json', body: '[]' });
+    });
+
+    await page.goto('/goals/new');
+    await page
+      .locator('hg-health-text-field')
+      .filter({ hasText: 'Name' })
+      .locator('input')
+      .fill('Walk');
+    await page
+      .locator('hg-health-text-field')
+      .filter({ hasText: 'Unit' })
+      .locator('input')
+      .fill('min');
+
+    const targetInput = page
+      .locator('hg-health-text-field')
+      .filter({ hasText: 'Target' })
+      .locator('input');
+    const save = page.locator('[data-testid="goal-form-save"]');
+
+    for (const bad of ['0', '-3']) {
+      await targetInput.fill(bad);
+      await expect(save).toBeDisabled();
+    }
+    await page
+      .locator('form[data-testid="goal-form"]')
+      .evaluate((form: HTMLFormElement) => {
+        form.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
+      });
+    const targetError = page
+      .locator('hg-health-text-field')
+      .filter({ hasText: 'Target' })
+      .locator('.health-text-field__error');
+    await expect(targetError).toBeVisible();
+    await expect(targetError).toContainText(/positive|greater|0/i);
+    expect(postCalls).toBe(0);
   });
 
   test('create goal: empty name blocks submit + inline error (04-TC-F-101)', async ({ page }) => {
