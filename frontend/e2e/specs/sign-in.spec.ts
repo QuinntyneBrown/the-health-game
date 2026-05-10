@@ -1,10 +1,28 @@
 // Acceptance Test
-// Traces to: L2-036, 07-TC-V-001..010
+// Traces to: L2-036, 07-TC-V-001..011
 // Description: Username + password sign-in page. Each test exercises one
 //              vertical slice end-to-end against the running app.
 import { expect, test } from '@playwright/test';
 
 test.describe('Sign In — page', () => {
+  test('SSO button Inter 14/16 px / 500 / on-surface (07-TC-V-011)', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await page.goto('/sign-in');
+    const sso = page.locator('[data-testid="sign-in-oidc"]');
+    await expect(sso).toBeVisible();
+    const meta = await sso.evaluate((el) => {
+      const target = el.querySelector('span') ?? el;
+      const s = getComputedStyle(target);
+      return { family: s.fontFamily, size: s.fontSize, weight: s.fontWeight, color: s.color };
+    });
+    expect(meta.family).toMatch(/Inter/);
+    expect(['14px', '16px']).toContain(meta.size);
+    expect(meta.weight).toBe('500');
+    // on-surface dark; not white. Match either the design's on-surface
+    // (#191C18 = rgb(25, 28, 24)) or any other dark color.
+    expect(meta.color).not.toBe('rgb(255, 255, 255)');
+  });
+
   test('Sign in button Inter 14/16 px / 500 / white (07-TC-V-010)', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await page.goto('/sign-in');
