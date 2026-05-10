@@ -227,7 +227,7 @@ and made green. The /loop process picks the first test with
 | 216 | 03 | TC-P-002 | Create / update — p95 | <= 500 ms (L2-018 §2) | 2026-05-10T02:57:20Z |
 | 217 | 03 | TC-P-003 | Goals route lazy-loaded | confirmed via bundle analyzer (L2-019 §2) | 2026-05-10T02:59:17Z |
 | 218 | 04 | TC-V-001 | Sheet/dialog title ("Log activity", "New goal") | Inter 22 px, weight 500 | 2026-05-10T03:01:51Z |
-| 219 | 04 | TC-V-002 | Field labels | Inter 13 px, weight 500 | null |
+| 219 | 04 | TC-V-002 | Field labels | Inter 13 px, weight 500 | 2026-05-10T03:03:02Z |
 | 220 | 04 | TC-V-003 | Input text | Inter 14 px, weight 400 | null |
 | 221 | 04 | TC-V-004 | Helper text / unit suffix | Inter 12 px, weight 400 | null |
 | 222 | 04 | TC-V-005 | Submit button label | Inter 14 px, weight 500, white | null |

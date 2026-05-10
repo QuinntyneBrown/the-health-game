@@ -1,6 +1,6 @@
 // Acceptance Test
-// Traces to: 04-TC-V-001
-// Description: log-activity dialog title typography (Inter 22 px / weight 500).
+// Traces to: 04-TC-V-001..002
+// Description: log-activity dialog typography.
 import { expect, test } from '@playwright/test';
 
 async function authenticate(page: import('@playwright/test').Page): Promise<void> {
@@ -57,6 +57,38 @@ const goal = {
 
 test.describe('Log activity dialog (desktop)', () => {
   test.use({ viewport: { width: 1440, height: 900 } });
+
+  test('dialog field labels are Inter 13 px / weight 500 (04-TC-V-002)', async ({ page }) => {
+    await authenticate(page);
+    await page.route('**/api/goals/g1', (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify(goal),
+      }),
+    );
+    await page.route('**/api/goals/g1/activity**', (route) =>
+      route.fulfill({ status: 200, contentType: 'application/json', body: '[]' }),
+    );
+    await page.goto('/goals/g1');
+    await page.locator('[data-testid="goal-detail-log-fab"]').click();
+
+    const labels = page.locator(
+      '.cdk-overlay-container hg-health-text-field mat-label, ' +
+        '.cdk-overlay-container hg-health-text-field .mat-mdc-floating-label',
+    );
+    const count = await labels.count();
+    expect(count).toBeGreaterThan(0);
+    for (let i = 0; i < count; i++) {
+      const computed = await labels.nth(i).evaluate((el) => {
+        const s = getComputedStyle(el);
+        return { fontFamily: s.fontFamily, fontWeight: s.fontWeight, fontSize: s.fontSize };
+      });
+      expect(computed.fontFamily.split(',')[0].replace(/['"]/g, '').trim()).toBe('Inter');
+      expect(computed.fontWeight).toBe('500');
+      expect(computed.fontSize).toBe('13px');
+    }
+  });
 
   test('dialog title is Inter 22 px / weight 500 (04-TC-V-001)', async ({ page }) => {
     await authenticate(page);
