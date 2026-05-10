@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 06-TC-V-001..007, 06-TC-C-001..010, 06-TC-L-001..010, 06-TC-R-001..005, 06-TC-F-001..008, 06-TC-F-101..107, 06-TC-F-201..203
+// Traces to: 06-TC-V-001..007, 06-TC-C-001..010, 06-TC-L-001..010, 06-TC-R-001..005, 06-TC-F-001..008, 06-TC-F-101..107, 06-TC-F-201..204
 // Description: stats + profile page chrome.
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
@@ -45,6 +45,42 @@ async function authenticate(page: import('@playwright/test').Page): Promise<void
 }
 
 test.describe('Stats & Profile chrome', () => {
+  test('deleted account cannot sign back in (06-TC-F-204)', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+
+    // Simulate the post-deletion world: identity provider rejects the token
+    // exchange because the user record is gone.
+    await page.route('**/connect/token', (route) =>
+      route.fulfill({
+        status: 403,
+        contentType: 'application/json',
+        body: JSON.stringify({ error: 'invalid_grant', error_description: 'User has been deleted' }),
+      }),
+    );
+    await page.route('**/api/users/me**', (route) =>
+      route.fulfill({ status: 401, contentType: 'application/json', body: '{}' }),
+    );
+
+    await page.goto('/onboarding');
+    await page.evaluate(() => {
+      sessionStorage.setItem('hg.oidc.verifier', 'v');
+      sessionStorage.setItem('hg.oidc.state', 's');
+    });
+    await page.goto('/auth/callback?code=c&state=s');
+
+    // FE should NOT land on /home for a rejected exchange.
+    await page.waitForTimeout(1000);
+    const path = new URL(page.url()).pathname;
+    expect(path).not.toMatch(/\/home(\b|\/|$)/);
+    expect(path).toMatch(/\/(sign-in|onboarding|auth\/callback|auth\/signed-out)/);
+
+    // Local session never gained an access token.
+    const accessToken = await page.evaluate(
+      () => sessionStorage.getItem('hg.oidc.access-token'),
+    );
+    expect(accessToken).toBeNull();
+  });
+
   test('confirm deletion DELETEs and signs the user out (06-TC-F-203)', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await authenticate(page);

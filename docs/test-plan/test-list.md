@@ -423,7 +423,7 @@ and made green. The /loop process picks the first test with
 | 412 | 06 | TC-F-201 | Click "Delete account" | Confirmation dialog with explicit warning + typed confirmation ("DELETE") | 2026-05-10T12:13:18Z |
 | 413 | 06 | TC-F-202 | Cancel confirmation | No-op | 2026-05-10T12:17:28Z |
 | 414 | 06 | TC-F-203 | Confirm deletion | Backend deletes/anonymizes data and revokes sessions (L2-014 §2) | 2026-05-10T12:22:49Z |
-| 415 | 06 | TC-F-204 | Subsequent sign-in attempt with deleted account | Rejected (L2-014 §3) | null |
+| 415 | 06 | TC-F-204 | Subsequent sign-in attempt with deleted account | Rejected (L2-014 §3) | 2026-05-10T12:24:06Z |
 | 416 | 06 | TC-F-205 | RBAC: non-admin cannot delete other accounts | 403 (L2-015 §1) | null |
 | 417 | 06 | TC-B-001 | Tab order: window selector -> stat tiles -> chart -> profile fields -> save -> destructive | Logical | null |
 | 418 | 06 | TC-B-002 | Save button disabled until form is dirty AND valid | Yes | null |
