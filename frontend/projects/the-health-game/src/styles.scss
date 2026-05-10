@@ -176,6 +176,18 @@ mat-bottom-sheet-container {
   height: 56px !important;
 }
 
+button[data-testid='goal-form-save'] {
+  height: 48px !important;
+  min-height: 48px !important;
+}
+
+@media (min-width: 768px) {
+  button[data-testid='goal-form-save'] {
+    height: 56px !important;
+    min-height: 56px !important;
+  }
+}
+
 .mat-mdc-form-field .mdc-text-field--outlined {
   height: 56px !important;
 }

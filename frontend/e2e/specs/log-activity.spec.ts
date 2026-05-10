@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 04-TC-V-001..007, 04-TC-C-001..010, 04-TC-L-001..007
+// Traces to: 04-TC-V-001..007, 04-TC-C-001..010, 04-TC-L-001..008
 // Description: log-activity dialog typography.
 import { expect, test } from '@playwright/test';
 
@@ -158,6 +158,33 @@ test.describe('Log activity sheet (mobile)', () => {
 
 test.describe('Log activity dialog (desktop)', () => {
   test.use({ viewport: { width: 1440, height: 900 } });
+
+  test('submit button is 56 px on tablet (04-TC-L-008)', async ({ page }) => {
+    await page.setViewportSize({ width: 768, height: 1024 });
+    await authenticate(page);
+    await page.goto('/goals/new');
+    const save = page.locator('lib-goal-form [data-testid="goal-form-save"]');
+    const h = await save.evaluate((el) => Math.round(el.getBoundingClientRect().height));
+    expect(h).toBe(56);
+  });
+
+  test('submit button is 56 px on desktop (04-TC-L-008)', async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await authenticate(page);
+    await page.goto('/goals/new');
+    const save = page.locator('lib-goal-form [data-testid="goal-form-save"]');
+    const h = await save.evaluate((el) => Math.round(el.getBoundingClientRect().height));
+    expect(h).toBe(56);
+  });
+
+  test('submit button is 48 px on mobile (04-TC-L-008)', async ({ page }) => {
+    await page.setViewportSize({ width: 360, height: 780 });
+    await authenticate(page);
+    await page.goto('/goals/new');
+    const save = page.locator('lib-goal-form [data-testid="goal-form-save"]');
+    const h = await save.evaluate((el) => Math.round(el.getBoundingClientRect().height));
+    expect(h).toBe(48);
+  });
 
   test('cadence picker height 40 px / pill radius (04-TC-L-007)', async ({ page }) => {
     await authenticate(page);

@@ -250,7 +250,7 @@ and made green. The /loop process picks the first test with
 | 239 | 04 | TC-L-005 | Inter-field vertical gap | 16 px | 2026-05-10T04:14:55Z |
 | 240 | 04 | TC-L-006 | Section vertical gap | 24 px | 2026-05-10T04:16:30Z |
 | 241 | 04 | TC-L-007 | Cadence segmented control height | 40 px; corner radius 9999 | 2026-05-10T04:18:50Z |
-| 242 | 04 | TC-L-008 | Submit button height | 48 px (mobile) / 56 px (tablet/desktop) | null |
+| 242 | 04 | TC-L-008 | Submit button height | 48 px (mobile) / 56 px (tablet/desktop) | 2026-05-10T04:20:56Z |
 | 243 | 04 | TC-L-009 | Submit button width | full width on mobile / right-aligned on tablet/desktop | null |
 | 244 | 04 | TC-L-010 | Dialog max width on desktop | 720 px; centered with max content max-width respected | null |
 | 245 | 04 | TC-R-001 | 360 px | Bottom sheet slides up from below; takes ~75% of viewport height; drag handle visible | null |
