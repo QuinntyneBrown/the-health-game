@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 06-TC-V-001..007, 06-TC-C-001..010, 06-TC-L-001..010, 06-TC-R-001..005, 06-TC-F-001..005
+// Traces to: 06-TC-V-001..007, 06-TC-C-001..010, 06-TC-L-001..010, 06-TC-R-001..005, 06-TC-F-001..006
 // Description: stats + profile page chrome.
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
@@ -45,6 +45,28 @@ async function authenticate(page: import('@playwright/test').Page): Promise<void
 }
 
 test.describe('Stats & Profile chrome', () => {
+  test('level tile follows weekly total formula (06-TC-F-006)', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await authenticate(page);
+    await page.goto('/stats');
+
+    const meta = await page.evaluate(() => {
+      const bars = Array.from(
+        document.querySelectorAll('lib-stats .activity-chart__bar'),
+      ) as HTMLElement[];
+      const total = bars.reduce((sum, bar) => {
+        const m = (bar.getAttribute('aria-label') ?? '').match(/(\d+)%/);
+        return sum + (m ? Number(m[1]) : 0);
+      }, 0);
+      const tile = Array.from(document.querySelectorAll('lib-stats .stat-tile')).find(
+        (el) => el.textContent?.includes('Level'),
+      ) as HTMLElement | null;
+      const value = tile?.querySelector('.stat-tile__value')?.textContent?.trim() ?? '';
+      return { expected: Math.floor(total / 50), value };
+    });
+    expect(meta.value).toBe(`Lvl ${meta.expected}`);
+  });
+
   test('streak tile matches longest active goal streak (06-TC-F-005)', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await authenticate(page);

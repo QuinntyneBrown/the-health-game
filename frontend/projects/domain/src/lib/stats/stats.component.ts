@@ -250,6 +250,10 @@ export class StatsComponent {
     }
   });
   readonly weekTotal = this.weekSeries.reduce((sum, day) => sum + day.value, 0);
+  // Deterministic level formula: floor(cumulative activity / 50). Pure
+  // function of the same series the bar chart shows, so visual + tile
+  // stay consistent without a server round-trip.
+  readonly userLevel = Math.floor(this.weekTotal / 50);
 
   readonly currentStreakDays = computed(() => {
     const all = this.goals();
@@ -290,5 +294,11 @@ export class StatsComponent {
       tone: 'info',
     },
     { id: 'rewards', label: 'Rewards earned', value: '6', tone: 'reward' },
+    {
+      id: 'level',
+      label: 'Level',
+      value: `Lvl ${this.userLevel}`,
+      tone: 'success',
+    },
   ]);
 }

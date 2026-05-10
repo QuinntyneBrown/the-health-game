@@ -410,7 +410,7 @@ and made green. The /loop process picks the first test with
 | 399 | 06 | TC-F-003 | Completion % = met-period-count / total-period-count for window | Matches L2-007 logic | 2026-05-10T11:34:00Z |
 | 400 | 06 | TC-F-004 | Bar chart x-axis matches selected window (week / month / year) | Yes | 2026-05-10T11:36:06Z |
 | 401 | 06 | TC-F-005 | Streak tile matches L2-007 current streak across user's longest active goal | Yes | 2026-05-10T11:38:09Z |
-| 402 | 06 | TC-F-006 | Lvl tile derived from cumulative activity (deterministic formula) | Yes | null |
+| 402 | 06 | TC-F-006 | Lvl tile derived from cumulative activity (deterministic formula) | Yes | 2026-05-10T11:39:34Z |
 | 403 | 06 | TC-F-007 | Switching window selector | Tiles + chart re-fetch and update | null |
 | 404 | 06 | TC-F-008 | Empty state — no activity | Stats show 0/0/0 with "log your first activity" prompt | null |
 | 405 | 06 | TC-F-101 | View profile shows display name, email, avatar, member-since date | Yes | null |
