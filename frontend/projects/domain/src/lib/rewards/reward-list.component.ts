@@ -68,9 +68,11 @@ const filterOptions: readonly SegmentedFilterOption[] = [
               type="button"
               data-testid="reward-hero-claim"
               [attr.aria-label]="'Claim ' + hero.name"
+              [attr.aria-busy]="claiming() ? 'true' : null"
+              [disabled]="claiming()"
               (click)="onClaim(hero)"
             >
-              Claim
+              {{ claiming() ? 'Claiming…' : 'Claim' }}
             </button>
             <button
               class="reward-hero__secondary"
@@ -319,6 +321,7 @@ export class RewardListComponent {
   private readonly snackBar = inject(MatSnackBar);
 
   private readonly notified = new Set<string>();
+  readonly claiming = signal(false);
 
   constructor() {
     effect(() => {
@@ -392,9 +395,15 @@ export class RewardListComponent {
   }
 
   async onClaim(reward: Reward): Promise<void> {
-    const claimed = await firstValueFrom(this.rewardsService.claimReward(reward.id));
-    const merged = this.rewards().map((r) => (r.id === claimed.id ? claimed : r));
-    this.localOverride.set(merged);
+    if (this.claiming()) return;
+    this.claiming.set(true);
+    try {
+      const claimed = await firstValueFrom(this.rewardsService.claimReward(reward.id));
+      const merged = this.rewards().map((r) => (r.id === claimed.id ? claimed : r));
+      this.localOverride.set(merged);
+    } finally {
+      this.claiming.set(false);
+    }
   }
 
   onMaybeLater(_reward: Reward): void {

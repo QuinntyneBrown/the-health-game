@@ -358,7 +358,7 @@ and made green. The /loop process picks the first test with
 | 347 | 05 | TC-F-202 | Threshold reached while user offline | Notification queued; surfaces on next dashboard / rewards visit | 2026-05-10T07:59:19Z |
 | 348 | 05 | TC-F-203 | Notification has accessible name and is dismissible | Yes | 2026-05-10T08:00:38Z |
 | 349 | 05 | TC-B-001 | Tab order: top bar -> filter tabs -> hero -> grid -> CTA | Logical | 2026-05-10T08:01:56Z |
-| 350 | 05 | TC-B-002 | Hero "Claim" button shows loading state | Yes; disabled until done | null |
+| 350 | 05 | TC-B-002 | Hero "Claim" button shows loading state | Yes; disabled until done | 2026-05-10T08:03:13Z |
 | 351 | 05 | TC-B-003 | Reduced-motion preference | No celebratory animation | null |
 | 352 | 05 | TC-B-004 | Hover state on cards | Subtle elevation | null |
 | 353 | 05 | TC-A-001 | Hero is `<section aria-labelledby>` with title as `<h2>` | Yes | null |

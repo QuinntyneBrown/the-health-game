@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 05-TC-V-001..008, 05-TC-C-001..010, 05-TC-L-001..010, 05-TC-R-001..005, 05-TC-F-001..007, 05-TC-F-101..105, 05-TC-F-201..203, 05-TC-B-001
+// Traces to: 05-TC-V-001..008, 05-TC-C-001..010, 05-TC-L-001..010, 05-TC-R-001..005, 05-TC-F-001..007, 05-TC-F-101..105, 05-TC-F-201..203, 05-TC-B-001..002
 // Description: rewards list page chrome.
 import { expect, test } from '@playwright/test';
 
@@ -74,6 +74,47 @@ const readyReward = {
 };
 
 test.describe('Rewards list', () => {
+  test('Claim button shows loading state until done (05-TC-B-002)', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await authenticate(page);
+    await page.unroute('**/api/rewards**');
+    await page.route('**/api/rewards**', (route, request) => {
+      const url = new URL(request.url());
+      if (request.method() === 'POST' && /\/api\/rewards\/.+\/claim$/.test(url.pathname)) {
+        setTimeout(() => {
+          route.fulfill({
+            status: 200,
+            contentType: 'application/json',
+            body: JSON.stringify({
+              ...readyReward,
+              status: 'earned',
+              earnedAt: '2026-05-10T08:00:00Z',
+            }),
+          });
+        }, 600);
+        return;
+      }
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify([readyReward, ...sampleRewards]),
+      });
+    });
+
+    await page.goto('/rewards');
+    const claim = page.locator('[data-testid="reward-hero-claim"]');
+    expect(await claim.getAttribute('aria-busy')).not.toBe('true');
+    expect(await claim.isDisabled()).toBe(false);
+
+    await claim.click();
+    await page.waitForTimeout(80);
+    // While the POST is in flight: aria-busy=true and the button is disabled.
+    expect(await claim.getAttribute('aria-busy')).toBe('true');
+    expect(await claim.isDisabled()).toBe(true);
+
+    await expect(page.locator('lib-reward-list .reward-hero')).toBeHidden({ timeout: 4000 });
+  });
+
   test('tab order: filter -> hero claim -> grid card -> new reward (05-TC-B-001)', async ({
     page,
   }) => {
