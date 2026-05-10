@@ -149,12 +149,15 @@ export class RewardFormComponent {
       ? 'Streak days must be at least 1'
       : '',
   );
-  readonly canSave = computed(
-    () =>
+  readonly canSave = computed(() => true);
+
+  private isValid(): boolean {
+    return (
       this.name().trim() !== '' &&
       this.goalId() !== null &&
-      (this.conditionType() === 'goal-target' || Number(this.streakDays()) >= 1),
-  );
+      (this.conditionType() === 'goal-target' || Number(this.streakDays()) >= 1)
+    );
+  }
 
   constructor() {
     this.goalsService.getGoals().subscribe((goals) => {
@@ -171,7 +174,7 @@ export class RewardFormComponent {
 
   async submit(): Promise<void> {
     this.attemptedSubmit.set(true);
-    if (!this.canSave()) return;
+    if (!this.isValid()) return;
     const goalId = this.goalId();
     if (!goalId) return;
     const condition =

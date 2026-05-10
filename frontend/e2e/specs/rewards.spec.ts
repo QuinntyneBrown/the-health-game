@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 05-TC-V-001..008, 05-TC-C-001..010, 05-TC-L-001..010, 05-TC-R-001..005, 05-TC-F-001..007, 05-TC-F-101
+// Traces to: 05-TC-V-001..008, 05-TC-C-001..010, 05-TC-L-001..010, 05-TC-R-001..005, 05-TC-F-001..007, 05-TC-F-101..102
 // Description: rewards list page chrome.
 import { expect, test } from '@playwright/test';
 
@@ -74,6 +74,59 @@ const readyReward = {
 };
 
 test.describe('Rewards list', () => {
+  test('create reward without valid condition shows error (05-TC-F-102)', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await authenticate(page);
+    await page.unroute('**/api/goals**');
+    await page.route('**/api/goals**', (route, request) => {
+      if (request.method() === 'GET' && new URL(request.url()).pathname === '/api/goals') {
+        route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify([
+            { id: 'goal-1', name: 'Walk', cadence: 'daily', target: { value: 10, unit: 'min' }, completedQuantity: 0, currentStreak: 0, longestStreak: 0, rewardName: '', description: '' },
+          ]),
+        });
+        return;
+      }
+      route.fulfill({ status: 200, contentType: 'application/json', body: '{}' });
+    });
+
+    let postCalls = 0;
+    await page.route('**/api/goals/*/rewards', (route, request) => {
+      if (request.method() === 'POST') {
+        postCalls += 1;
+      }
+      route.continue();
+    });
+
+    await page.goto('/rewards/new');
+    await page
+      .locator('hg-health-text-field')
+      .filter({ hasText: 'Name' })
+      .locator('input, textarea')
+      .fill('Spa day');
+    // Pick the streak-milestone variant but leave streak days at 0.
+    await page.locator('[data-testid="reward-form-streak"] label').click();
+    await page
+      .locator('hg-health-text-field')
+      .filter({ hasText: 'Streak days' })
+      .locator('input')
+      .fill('0');
+    await page.locator('[data-testid="reward-form-save"]').click();
+    await page.waitForTimeout(150);
+
+    // Validation error visible, no POST, still on the form route.
+    const error = page
+      .locator('hg-health-text-field')
+      .filter({ hasText: 'Streak days' })
+      .locator('.health-text-field__error');
+    await expect(error).toBeVisible();
+    await expect(error).toContainText(/at least 1|required|streak/i);
+    expect(postCalls).toBe(0);
+    expect(new URL(page.url()).pathname).toBe('/rewards/new');
+  });
+
   test('create reward with goal + streak condition persists (05-TC-F-101)', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await authenticate(page);
