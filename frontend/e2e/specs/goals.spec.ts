@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 03-TC-V-001..009, 03-TC-C-001..011, 03-TC-L-001..011, 03-TC-R-001..006, 03-TC-F-001..009
+// Traces to: 03-TC-V-001..009, 03-TC-C-001..011, 03-TC-L-001..011, 03-TC-R-001..006, 03-TC-F-001..010
 // Description: /goals page title "Goals" renders with Inter weight 500 at 22/32 px.
 // Subtitle is Inter 13 px weight 400 with computed counts.
 import { expect, test } from '@playwright/test';
@@ -559,6 +559,62 @@ test.describe('Goals page — header typography', () => {
 
   test.describe('filter chip layout', () => {
     test.use({ viewport: { width: 1440, height: 900 } });
+
+    test('clicking a goal card navigates to /goals/{id} (03-TC-F-010)', async ({ page }) => {
+      await page.setViewportSize({ width: 1440, height: 900 });
+      await authenticate(page);
+      await page.unroute('**/api/goals**');
+      await page.route('**/api/goals**', (route) =>
+        route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify([
+            {
+              id: 'abc-123',
+              name: 'Walk',
+              description: '',
+              cadence: 'daily',
+              target: { value: 10, unit: 'min' },
+              completedQuantity: 0,
+              currentStreak: 0,
+              longestStreak: 0,
+              rewardName: '',
+            },
+          ]),
+        }),
+      );
+      await page.route('**/api/goals/abc-123', (route) =>
+        route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify({
+            id: 'abc-123',
+            name: 'Walk',
+            description: '',
+            cadence: 'daily',
+            target: { value: 10, unit: 'min' },
+            completedQuantity: 0,
+            currentStreak: 0,
+            longestStreak: 0,
+            rewardName: '',
+          }),
+        }),
+      );
+      await page.route('**/api/goals/abc-123/activity**', (route) =>
+        route.fulfill({ status: 200, contentType: 'application/json', body: '[]' }),
+      );
+
+      await page.goto('/goals');
+      const openBtn = page
+        .locator('lib-goal-list .goal-card hg-action-button button')
+        .filter({ hasText: 'Open' })
+        .first();
+      await expect(openBtn).toBeVisible();
+      await openBtn.click();
+
+      await expect(page).toHaveURL(/\/goals\/abc-123$/);
+      await expect(page.locator('lib-goal-detail [data-testid="goal-detail"]')).toBeVisible();
+    });
 
     test('empty state shows "Create your first goal" CTA when 0 goals (03-TC-F-009)', async ({
       page,
