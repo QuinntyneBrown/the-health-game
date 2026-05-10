@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@a
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { firstValueFrom } from 'rxjs';
-import { HealthTextFieldComponent } from 'components';
+import { HealthTextFieldComponent, PageHeaderComponent } from 'components';
 import { AuthService, USERS_SERVICE, UserProfile } from 'api';
 
 import {
@@ -12,7 +12,7 @@ import {
 
 @Component({
   selector: 'lib-profile',
-  imports: [HealthTextFieldComponent, MatButtonModule],
+  imports: [HealthTextFieldComponent, MatButtonModule, PageHeaderComponent],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

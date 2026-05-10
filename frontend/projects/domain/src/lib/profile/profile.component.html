@@ -1,5 +1,6 @@
 @if (profile(); as user) {
   <section class="profile" data-testid="profile">
+    <hg-page-header title="Profile" />
     <header class="profile__header">
       @if (user.avatarUrl) {
         <img class="profile__avatar" [src]="user.avatarUrl" [alt]="user.displayName" />

@@ -10,6 +10,12 @@ export const routes: Routes = [
   { path: 'auth/callback', component: CallbackComponent, title: 'Signing you in' },
   { path: 'auth/signed-out', component: SignedOutComponent, title: 'Signed out' },
   {
+    path: 'sign-in',
+    canMatch: [notAuthenticatedGuard],
+    title: 'Sign in — HealthQuest',
+    loadChildren: () => import('domain').then((module) => module.AUTH_ROUTES),
+  },
+  {
     path: 'onboarding',
     component: OnboardingComponent,
     title: 'Welcome — HealthQuest',
@@ -47,7 +53,14 @@ export const routes: Routes = [
     loadChildren: () => import('domain').then((module) => module.PROFILE_ROUTES),
   },
   {
+    path: 'stats',
+    canMatch: [authGuard],
+    title: 'Stats — HealthQuest',
+    loadChildren: () => import('domain').then((module) => module.STATS_ROUTES),
+  },
+  {
     path: '**',
     redirectTo: '',
   },
 ];
+

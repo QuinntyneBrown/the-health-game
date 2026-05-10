@@ -2,7 +2,12 @@
  * Public API Surface of domain
  */
 
+export * from './lib/auth/auth.routes';
 export * from './lib/auth/if-role.directive';
+export * from './lib/auth/sign-in.component';
+export * from './lib/auth/sign-in.providers';
+export * from './lib/auth/sign-in.service';
+export * from './lib/auth/sign-in.service.contract';
 export * from './lib/state/loadable';
 export * from './lib/dashboard/dashboard-overview.component';
 export * from './lib/dashboard/dashboard-overview.model';
@@ -24,3 +29,5 @@ export * from './lib/rewards/format-reward-earned';
 export * from './lib/rewards/reward-form.component';
 export * from './lib/rewards/reward-list.component';
 export * from './lib/rewards/rewards.routes';
+export * from './lib/stats/stats.component';
+export * from './lib/stats/stats.routes';
