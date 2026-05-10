@@ -38,6 +38,7 @@ export interface LogActivitySheetData {
       />
       <hg-health-text-field
         label="Notes (optional)"
+        [multiline]="true"
         [value]="notes()"
         (valueChange)="onNotes($event)"
       />

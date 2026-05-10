@@ -27,6 +27,7 @@ import { LogActivitySheetData } from './log-activity-sheet.component';
       />
       <hg-health-text-field
         label="Notes (optional)"
+        [multiline]="true"
         [value]="notes()"
         [errorText]="notesError()"
         (valueChange)="onNotes($event)"

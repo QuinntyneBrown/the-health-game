@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 04-TC-V-001..007, 04-TC-C-001..010, 04-TC-L-001..010, 04-TC-R-001..006, 04-TC-F-001..012, 04-TC-F-101..109, 04-TC-B-001..010, 04-TC-A-001..007, 04-TC-D-001..002
+// Traces to: 04-TC-V-001..007, 04-TC-C-001..010, 04-TC-L-001..010, 04-TC-R-001..006, 04-TC-F-001..012, 04-TC-F-101..109, 04-TC-B-001..010, 04-TC-A-001..007, 04-TC-D-001..003
 // Description: log-activity dialog typography.
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
@@ -127,6 +127,75 @@ test.describe('Log activity sheet (mobile)', () => {
     });
     const accessibleName = meta.targetText || meta.ariaLabel || '';
     expect(accessibleName).toMatch(/Log activity/i);
+  });
+
+  test('logged note text round-trips exactly (04-TC-D-003)', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await authenticate(page);
+
+    const note = 'Felt 💪 great\nRan to the café — łukasz cheered me on.\n\nLine 4: «quotes» & ©';
+    let postedNote: string | undefined;
+    let activities: Array<Record<string, unknown>> = [];
+
+    await page.route('**/api/goals/g1', (route) =>
+      route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(goal) }),
+    );
+    await page.route('**/api/goals/g1/activities**', async (route, request) => {
+      if (request.method() === 'POST') {
+        try {
+          postedNote = (request.postDataJSON() as { notes?: string } | null)?.notes;
+        } catch {
+          postedNote = undefined;
+        }
+        const entry = {
+          id: 'a-note',
+          goalId: 'g1',
+          quantity: 5,
+          notes: postedNote,
+          recordedAt: '2026-05-10T06:00:00Z',
+          newlyEarnedRewards: [],
+        };
+        activities = [entry];
+        await route.fulfill({
+          status: 201,
+          contentType: 'application/json',
+          body: JSON.stringify(entry),
+        });
+      } else {
+        await route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify(activities),
+        });
+      }
+    });
+
+    await page.goto('/goals/g1');
+    await page
+      .locator('[data-testid="goal-detail-log-fab"]')
+      .evaluate((el: HTMLElement) => el.click());
+    await page.waitForTimeout(300);
+
+    const dialog = page.locator('mat-dialog-container');
+    await expect(dialog).toBeVisible();
+    await dialog.locator('input[type="number"]').fill('5');
+    const notesField = dialog
+      .locator('hg-health-text-field')
+      .filter({ hasText: 'Notes' })
+      .locator('input, textarea');
+    await notesField.fill(note);
+    await page.locator('[data-testid="log-activity-save"]').click();
+    await expect(dialog).toBeHidden();
+
+    expect(postedNote).toBe(note);
+
+    await page.reload();
+    await page.waitForTimeout(400);
+    const stored = await page.evaluate(async () => {
+      const r = await fetch('/api/goals/g1/activities');
+      return r.json();
+    });
+    expect((stored as Array<{ notes?: string }>)[0]?.notes).toBe(note);
   });
 
   test('created goal survives reload (04-TC-D-002)', async ({ page }) => {
@@ -419,7 +488,9 @@ test.describe('Log activity sheet (mobile)', () => {
       .evaluate((el: HTMLElement) => el.click());
     await page.waitForTimeout(300);
 
-    const inputs = page.locator('mat-bottom-sheet-container input.mat-mdc-input-element');
+    const inputs = page.locator(
+      'mat-bottom-sheet-container input.mat-mdc-input-element, mat-bottom-sheet-container textarea.mat-mdc-input-element',
+    );
     const count = await inputs.count();
     expect(count).toBeGreaterThanOrEqual(2);
 
@@ -625,7 +696,7 @@ test.describe('Log activity sheet (mobile)', () => {
     const notes = page
       .locator('lib-log-activity-sheet hg-health-text-field')
       .filter({ hasText: 'Notes' })
-      .locator('input');
+      .locator('input, textarea');
     const longText = 'lorem ipsum dolor sit amet '.repeat(20);
     await notes.fill(longText);
 
@@ -1199,7 +1270,7 @@ test.describe('Log activity dialog (desktop)', () => {
     await page
       .locator('lib-log-activity-dialog hg-health-text-field')
       .filter({ hasText: 'Notes' })
-      .locator('input')
+      .locator('input, textarea')
       .fill(longNote);
     await page.locator('[data-testid="log-activity-save"]').click();
 
@@ -1263,7 +1334,7 @@ test.describe('Log activity dialog (desktop)', () => {
     await page
       .locator('lib-log-activity-dialog hg-health-text-field')
       .filter({ hasText: 'Notes' })
-      .locator('input')
+      .locator('input, textarea')
       .fill(note);
     await page.locator('[data-testid="log-activity-save"]').click();
 

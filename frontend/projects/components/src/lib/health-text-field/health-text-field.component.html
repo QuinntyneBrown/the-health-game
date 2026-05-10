@@ -7,18 +7,33 @@
     </mat-icon>
   }
 
-  <input
-    class="health-text-field__input"
-    matInput
-    [attr.aria-describedby]="errorText() ? errorId : null"
-    [attr.aria-invalid]="errorText() ? 'true' : null"
-    [attr.readonly]="readonly() ? '' : null"
-    [disabled]="disabled()"
-    [placeholder]="placeholder()"
-    [type]="effectiveType()"
-    [value]="value()"
-    (input)="onInput($event)"
-  />
+  @if (multiline()) {
+    <textarea
+      class="health-text-field__input"
+      matInput
+      [attr.aria-describedby]="errorText() ? errorId : null"
+      [attr.aria-invalid]="errorText() ? 'true' : null"
+      [attr.readonly]="readonly() ? '' : null"
+      [disabled]="disabled()"
+      [placeholder]="placeholder()"
+      [rows]="rows()"
+      [value]="value()"
+      (input)="onInput($event)"
+    ></textarea>
+  } @else {
+    <input
+      class="health-text-field__input"
+      matInput
+      [attr.aria-describedby]="errorText() ? errorId : null"
+      [attr.aria-invalid]="errorText() ? 'true' : null"
+      [attr.readonly]="readonly() ? '' : null"
+      [disabled]="disabled()"
+      [placeholder]="placeholder()"
+      [type]="effectiveType()"
+      [value]="value()"
+      (input)="onInput($event)"
+    />
+  }
 
   @if (showPasswordToggle()) {
     <button

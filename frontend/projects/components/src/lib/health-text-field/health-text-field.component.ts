@@ -29,6 +29,8 @@ export class HealthTextFieldComponent {
   readonly type = input<HealthTextFieldType>('text');
   readonly value = input('');
   readonly passwordToggle = input(false);
+  readonly multiline = input(false);
+  readonly rows = input(3);
 
   private readonly passwordRevealed = signal(false);
 
@@ -44,7 +46,7 @@ export class HealthTextFieldComponent {
   readonly errorId = `hg-health-text-field-error-${++HealthTextFieldComponent.nextId}`;
 
   onInput(event: Event): void {
-    const target = event.target as HTMLInputElement;
+    const target = event.target as HTMLInputElement | HTMLTextAreaElement;
     this.valueChange.emit(target.value);
   }
 
