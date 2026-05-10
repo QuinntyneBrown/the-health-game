@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 05-TC-V-001..008, 05-TC-C-001..010, 05-TC-L-001..008
+// Traces to: 05-TC-V-001..008, 05-TC-C-001..010, 05-TC-L-001..009
 // Description: rewards list page chrome.
 import { expect, test } from '@playwright/test';
 
@@ -74,6 +74,37 @@ const readyReward = {
 };
 
 test.describe('Rewards list', () => {
+  test('page padding 32 / 24 / 16 by viewport (05-TC-L-009)', async ({ page }) => {
+    await authenticate(page);
+    await page.unroute('**/api/rewards**');
+    await page.route('**/api/rewards**', (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify(sampleRewards),
+      }),
+    );
+
+    const measure = async () => {
+      const host = page.locator('lib-reward-list').first();
+      await expect(host).toBeVisible();
+      return host.evaluate((el) => getComputedStyle(el).paddingLeft);
+    };
+
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.goto('/rewards');
+    await page.waitForTimeout(120);
+    expect(await measure()).toBe('32px');
+
+    await page.setViewportSize({ width: 768, height: 1024 });
+    await page.waitForTimeout(120);
+    expect(await measure()).toBe('24px');
+
+    await page.setViewportSize({ width: 360, height: 780 });
+    await page.waitForTimeout(120);
+    expect(await measure()).toBe('16px');
+  });
+
   test('inter-card gap 16 px (05-TC-L-008)', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await authenticate(page);

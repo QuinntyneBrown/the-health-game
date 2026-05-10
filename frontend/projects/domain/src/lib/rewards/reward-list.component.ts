@@ -119,7 +119,19 @@ const filterOptions: readonly SegmentedFilterOption[] = [
         background: #f1f5ed;
         display: block;
         min-height: 100%;
-        padding: var(--hg-space-6);
+        padding: 16px;
+      }
+
+      @media (min-width: 768px) {
+        :host {
+          padding: 24px;
+        }
+      }
+
+      @media (min-width: 1200px) {
+        :host {
+          padding: 32px;
+        }
       }
 
       .reward-list__header {
