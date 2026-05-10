@@ -476,7 +476,7 @@ and made green. The /loop process picks the first test with
 | 465 | 07 | TC-C-014 | Inline error banner text | `#410002` (on error container) | 2026-05-10T13:44:20Z |
 | 466 | 07 | TC-C-015 | Desktop hero panel background | `#94F7B4` (primary container) | 2026-05-10T13:46:14Z |
 | 467 | 07 | TC-C-016 | Desktop hero text color | `#00210F` (on primary container) | 2026-05-10T13:47:17Z |
-| 468 | 07 | TC-C-017 | Sign-up link color | `#006D3F` (primary) | null |
+| 468 | 07 | TC-C-017 | Sign-up link color | `#006D3F` (primary) | 2026-05-10T13:48:19Z |
 | 469 | 07 | TC-C-018 | Text/background contrast meets WCAG AA | >= 4.5:1 normal, >= 3:1 large | null |
 | 470 | 07 | TC-L-001 | Mobile body padding | 24 px on all sides | null |
 | 471 | 07 | TC-L-002 | Tablet body padding | 40 px top/bottom, 80 px left/right | null |
