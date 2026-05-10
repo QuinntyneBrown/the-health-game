@@ -255,7 +255,7 @@ and made green. The /loop process picks the first test with
 | 244 | 04 | TC-L-010 | Dialog max width on desktop | 720 px; centered with max content max-width respected | 2026-05-10T04:24:59Z |
 | 245 | 04 | TC-R-001 | 360 px | Bottom sheet slides up from below; takes ~75% of viewport height; drag handle visible | 2026-05-10T04:26:15Z |
 | 246 | 04 | TC-R-002 | 768 px | Full-page form layout; nav rail still visible | 2026-05-10T04:27:25Z |
-| 247 | 04 | TC-R-003 | 1200 px | Centered dialog with backdrop; form re-uses tablet styling | null |
+| 247 | 04 | TC-R-003 | 1200 px | Centered dialog with backdrop; form re-uses tablet styling | 2026-05-10T04:28:46Z |
 | 248 | 04 | TC-R-004 | Resize from mobile to tablet while open | Component swaps from sheet to dialog without losing form state | null |
 | 249 | 04 | TC-R-005 | Soft keyboard on mobile | Sheet content scrolls; submit button stays visible above keyboard | null |
 | 250 | 04 | TC-R-006 | Long content (e.g., notes textarea grows) | Sheet remains scrollable; submit pinned to bottom | null |
