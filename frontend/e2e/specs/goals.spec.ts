@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 03-TC-V-001..009, 03-TC-C-001..011, 03-TC-L-001..011, 03-TC-R-001..006, 03-TC-F-001..004
+// Traces to: 03-TC-V-001..009, 03-TC-C-001..011, 03-TC-L-001..011, 03-TC-R-001..006, 03-TC-F-001..005
 // Description: /goals page title "Goals" renders with Inter weight 500 at 22/32 px.
 // Subtitle is Inter 13 px weight 400 with computed counts.
 import { expect, test } from '@playwright/test';
@@ -559,6 +559,59 @@ test.describe('Goals page — header typography', () => {
 
   test.describe('filter chip layout', () => {
     test.use({ viewport: { width: 1440, height: 900 } });
+
+    test('Hourly/Weekly/Monthly/Custom chip counts are accurate (03-TC-F-005)', async ({
+      page,
+    }) => {
+      await page.setViewportSize({ width: 1440, height: 900 });
+      await authenticate(page);
+      await page.unroute('**/api/goals**');
+      const baseGoal = {
+        description: '',
+        target: { value: 10, unit: 'min' },
+        completedQuantity: 0,
+        currentStreak: 0,
+        longestStreak: 0,
+        rewardName: '',
+      };
+      await page.route('**/api/goals**', (route) =>
+        route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify([
+            { id: 'h1', name: 'H1', cadence: 'hourly', ...baseGoal },
+            { id: 'h2', name: 'H2', cadence: 'hourly', ...baseGoal },
+            { id: 'h3', name: 'H3', cadence: 'hourly', ...baseGoal },
+            { id: 'w1', name: 'W1', cadence: 'weekly', ...baseGoal },
+            { id: 'w2', name: 'W2', cadence: 'weekly', ...baseGoal },
+            { id: 'm1', name: 'M1', cadence: 'monthly', ...baseGoal },
+            { id: 'c1', name: 'C1', cadence: 'custom', ...baseGoal },
+            { id: 'c2', name: 'C2', cadence: 'custom', ...baseGoal },
+            { id: 'c3', name: 'C3', cadence: 'custom', ...baseGoal },
+            { id: 'c4', name: 'C4', cadence: 'custom', ...baseGoal },
+          ]),
+        }),
+      );
+      await page.goto('/goals');
+
+      await expect(page.locator('lib-goal-list .goal-card')).toHaveCount(10);
+
+      const expectations: Array<{ label: string; count: number }> = [
+        { label: 'Hourly', count: 3 },
+        { label: 'Weekly', count: 2 },
+        { label: 'Monthly', count: 1 },
+        { label: 'Custom', count: 4 },
+      ];
+
+      for (const { label, count } of expectations) {
+        const chip = page
+          .locator('lib-goal-list mat-button-toggle')
+          .filter({ hasText: new RegExp(`^${label}`) })
+          .first();
+        const text = (await chip.innerText()).trim();
+        expect(text).toMatch(new RegExp(`${label}\\s*\\(?\\s*${count}\\s*\\)?`));
+      }
+    });
 
     test('"Daily" chip shows count of daily-cadence goals (03-TC-F-004)', async ({ page }) => {
       await page.setViewportSize({ width: 1440, height: 900 });
