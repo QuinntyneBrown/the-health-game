@@ -194,6 +194,7 @@ export class GoalDetailComponent {
       const ref = this.bottomSheet.open(LogActivitySheetComponent, {
         data,
         ariaModal: true,
+        ariaLabel: 'Log activity',
         restoreFocus: true,
       });
       this.currentSheetRef = ref;
