@@ -334,7 +334,7 @@ and made green. The /loop process picks the first test with
 | 323 | 05 | TC-L-005 | Reward grid columns — desktop/tablet/mobile | 3 / 2 / 1 | 2026-05-10T07:24:21Z |
 | 324 | 05 | TC-L-006 | Card corner radius | 16 px | 2026-05-10T07:25:14Z |
 | 325 | 05 | TC-L-007 | Card padding | 20 px | 2026-05-10T07:29:00Z |
-| 326 | 05 | TC-L-008 | Inter-card gap | 16 px | null |
+| 326 | 05 | TC-L-008 | Inter-card gap | 16 px | 2026-05-10T07:30:02Z |
 | 327 | 05 | TC-L-009 | Page padding desktop / tablet / mobile | 32 / 24 / 16 px | null |
 | 328 | 05 | TC-L-010 | Top bar height | 80 px | null |
 | 329 | 05 | TC-R-001 | 360 px | Single column; hero stacks icon-then-text vertically | null |
