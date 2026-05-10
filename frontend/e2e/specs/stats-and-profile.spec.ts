@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 06-TC-V-001..007, 06-TC-C-001..010, 06-TC-L-001..010, 06-TC-R-001..005, 06-TC-F-001..008, 06-TC-F-101
+// Traces to: 06-TC-V-001..007, 06-TC-C-001..010, 06-TC-L-001..010, 06-TC-R-001..005, 06-TC-F-001..008, 06-TC-F-101..102
 // Description: stats + profile page chrome.
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
@@ -45,6 +45,73 @@ async function authenticate(page: import('@playwright/test').Page): Promise<void
 }
 
 test.describe('Stats & Profile chrome', () => {
+  test('edit display name persists + reflects in greeting (06-TC-F-102)', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await page.route('**/connect/token', (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({
+          access_token: 'test-access-token',
+          token_type: 'Bearer',
+          expires_in: 3600,
+        }),
+      }),
+    );
+    await page.route('**/api/goals**', (route) =>
+      route.fulfill({ status: 200, contentType: 'application/json', body: '[]' }),
+    );
+    await page.route('**/api/rewards**', (route) =>
+      route.fulfill({ status: 200, contentType: 'application/json', body: '[]' }),
+    );
+
+    let user = {
+      displayName: 'Quinn',
+      email: 'q@q.q',
+      avatarUrl: null as string | null,
+      roles: [] as string[],
+    };
+    let putBody: { displayName: string; email: string } | null = null;
+    await page.route('**/api/users/me**', (route, request) => {
+      if (request.method() === 'PUT') {
+        putBody = request.postDataJSON();
+        user = { ...user, ...(putBody as { displayName: string; email: string }) };
+      }
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify(user),
+      });
+    });
+
+    await page.goto('/onboarding');
+    await page.evaluate(() => {
+      sessionStorage.setItem('hg.oidc.verifier', 'v');
+      sessionStorage.setItem('hg.oidc.state', 's');
+    });
+    await page.goto('/auth/callback?code=c&state=s');
+    await page.waitForURL(/\/home(\b|\/|$)/);
+    await page.goto('/profile');
+    await page.locator('[data-testid="profile-edit"]').click();
+
+    const nameInput = page
+      .locator('lib-profile hg-health-text-field')
+      .filter({ hasText: 'Display name' })
+      .locator('input');
+    await nameInput.fill('Quinntyne');
+    await page.locator('[data-testid="profile-save"]').click();
+    await expect(page.locator('lib-profile [data-testid="profile-form"]')).toHaveCount(0);
+    expect(putBody).toMatchObject({ displayName: 'Quinntyne' });
+
+    // Profile heading reflects the updated name without a reload.
+    await expect(page.locator('[data-testid="profile-display-name"]')).toHaveText('Quinntyne');
+
+    // Dashboard greeting reflects the new name on next visit.
+    await page.goto('/home');
+    await page.waitForTimeout(150);
+    await expect(page.locator('app-root')).toContainText('Quinntyne');
+  });
+
   test('profile shows name, email, avatar, member since (06-TC-F-101)', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await page.route('**/connect/token', (route) =>

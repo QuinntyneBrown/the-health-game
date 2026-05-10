@@ -414,7 +414,7 @@ and made green. The /loop process picks the first test with
 | 403 | 06 | TC-F-007 | Switching window selector | Tiles + chart re-fetch and update | 2026-05-10T11:41:07Z |
 | 404 | 06 | TC-F-008 | Empty state — no activity | Stats show 0/0/0 with "log your first activity" prompt | 2026-05-10T11:42:47Z |
 | 405 | 06 | TC-F-101 | View profile shows display name, email, avatar, member-since date | Yes | 2026-05-10T11:44:52Z |
-| 406 | 06 | TC-F-102 | Edit display name — happy path | Persisted; reflected in dashboard greeting (L2-014 §1) | null |
+| 406 | 06 | TC-F-102 | Edit display name — happy path | Persisted; reflected in dashboard greeting (L2-014 §1) | 2026-05-10T11:48:01Z |
 | 407 | 06 | TC-F-103 | Edit email — when provider permits | Persisted; verification email sent if required | null |
 | 408 | 06 | TC-F-104 | Edit email — when provider forbids | UI displays read-only with explanation | null |
 | 409 | 06 | TC-F-105 | Cancel edit | Form reverts to last saved values | null |

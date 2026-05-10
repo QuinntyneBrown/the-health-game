@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { firstValueFrom } from 'rxjs';
@@ -12,7 +13,7 @@ import {
 
 @Component({
   selector: 'lib-profile',
-  imports: [HealthTextFieldComponent, MatButtonModule, PageHeaderComponent],
+  imports: [FormsModule, HealthTextFieldComponent, MatButtonModule, PageHeaderComponent],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
