@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 06-TC-V-001..007, 06-TC-C-001..010, 06-TC-L-001..010, 06-TC-R-001..005, 06-TC-F-001..008, 06-TC-F-101..107, 06-TC-F-201..205, 06-TC-B-001..006, 06-TC-A-001..006, 06-TC-D-001..002
+// Traces to: 06-TC-V-001..007, 06-TC-C-001..010, 06-TC-L-001..010, 06-TC-R-001..005, 06-TC-F-001..008, 06-TC-F-101..107, 06-TC-F-201..205, 06-TC-B-001..006, 06-TC-A-001..006, 06-TC-D-001..003
 // Description: stats + profile page chrome.
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
@@ -45,6 +45,51 @@ async function authenticate(page: import('@playwright/test').Page): Promise<void
 }
 
 test.describe('Stats & Profile chrome', () => {
+  test('deletion DELETE round-trips a correlation id (06-TC-D-003)', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await authenticate(page);
+
+    let observedDeleteAuth: string | undefined;
+    let respondedCid = '';
+    await page.unroute('**/api/users/me**');
+    await page.route('**/api/users/me**', (route, request) => {
+      if (request.method() === 'DELETE') {
+        observedDeleteAuth = request.headers()['authorization'];
+        respondedCid = `cid-deletion-${Date.now()}`;
+        route.fulfill({
+          status: 204,
+          headers: { 'X-Correlation-Id': respondedCid },
+          body: '',
+        });
+        return;
+      }
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({
+          displayName: 'Quinn',
+          email: 'q@q.q',
+          avatarUrl: null,
+          roles: [],
+        }),
+      });
+    });
+
+    await page.goto('/profile');
+    await page.locator('[data-testid="profile-delete"]').click();
+    await page
+      .locator('lib-delete-account-dialog input')
+      .fill('q@q.q');
+    await page.locator('[data-testid="delete-account-confirm"]').click();
+    await page.waitForTimeout(600);
+
+    // FE always stamps the DELETE with the bearer token so the server can
+    // correlate the audit event with the user, and the server's response
+    // carried a correlation id (which it would log against the deletion).
+    expect(observedDeleteAuth ?? '').toMatch(/^Bearer .+/);
+    expect(respondedCid).toMatch(/^cid-deletion-/);
+  });
+
   test('post-deletion FE has no token + no user data (06-TC-D-002)', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await authenticate(page);

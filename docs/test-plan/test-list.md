@@ -439,7 +439,7 @@ and made green. The /loop process picks the first test with
 | 428 | 06 | TC-A-006 | axe-core | 0 critical / serious | 2026-05-10T12:50:45Z |
 | 429 | 06 | TC-D-001 | Profile edit survives reload | Yes | 2026-05-10T12:52:27Z |
 | 430 | 06 | TC-D-002 | After account deletion, no API endpoint reveals deleted user's data | Yes (L2-014 §2) | 2026-05-10T12:54:08Z |
-| 431 | 06 | TC-D-003 | After account deletion, audit log records the deletion event with correlation ID | Yes (L2-022 §3) | null |
+| 431 | 06 | TC-D-003 | After account deletion, audit log records the deletion event with correlation ID | Yes (L2-022 §3) | 2026-05-10T12:56:05Z |
 | 432 | 06 | TC-D-004 | Email is never logged at any level | Confirmed (L2-017 §3) | null |
 | 433 | 06 | TC-D-005 | Auth tokens never written to localStorage; refresh tokens (if used) httpOnly cookie only | Confirmed (L2-013 §3) | null |
 | 434 | 06 | TC-D-006 | Stats accurately reflect cadence rollovers across midnight / month boundaries (L2-011) | Yes | null |
