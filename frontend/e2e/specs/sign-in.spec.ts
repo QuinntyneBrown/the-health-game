@@ -1,10 +1,19 @@
 // Acceptance Test
-// Traces to: L2-036, 07-TC-V-001..014, 07-TC-C-001..004
+// Traces to: L2-036, 07-TC-V-001..014, 07-TC-C-001..005
 // Description: Username + password sign-in page. Each test exercises one
 //              vertical slice end-to-end against the running app.
 import { expect, test } from '@playwright/test';
 
 test.describe('Sign In — page', () => {
+  test('subtitle color #424940 (07-TC-C-005)', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await page.goto('/sign-in');
+    const color = await page
+      .getByTestId('sign-in-subtitle')
+      .evaluate((el) => getComputedStyle(el).color);
+    expect(color).toBe('rgb(66, 73, 64)');
+  });
+
   test('title color #191D17 (07-TC-C-004)', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await page.goto('/sign-in');
