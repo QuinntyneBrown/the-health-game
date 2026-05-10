@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 05-TC-V-001..008, 05-TC-C-001..010, 05-TC-L-001..010, 05-TC-R-001..003
+// Traces to: 05-TC-V-001..008, 05-TC-C-001..010, 05-TC-L-001..010, 05-TC-R-001..004
 // Description: rewards list page chrome.
 import { expect, test } from '@playwright/test';
 
@@ -74,6 +74,40 @@ const readyReward = {
 };
 
 test.describe('Rewards list', () => {
+  test('hero CTAs stack on mobile with 12 px gap (05-TC-R-004)', async ({ page }) => {
+    await page.setViewportSize({ width: 360, height: 780 });
+    await authenticate(page);
+    await page.unroute('**/api/rewards**');
+    await page.route('**/api/rewards**', (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify([readyReward, ...sampleRewards]),
+      }),
+    );
+    await page.goto('/rewards');
+
+    const actions = page.locator('lib-reward-list .reward-hero__actions').first();
+    await expect(actions).toBeVisible();
+    const meta = await actions.evaluate((el) => {
+      const s = getComputedStyle(el);
+      const claim = el.querySelector('[data-testid="reward-hero-claim"]') as HTMLElement | null;
+      const secondary = el.querySelector(
+        '[data-testid="reward-hero-secondary"]',
+      ) as HTMLElement | null;
+      const cb = claim?.getBoundingClientRect();
+      const sb = secondary?.getBoundingClientRect();
+      return {
+        flexDirection: s.flexDirection,
+        gap: s.rowGap || s.gap,
+        stacked: !!(cb && sb && sb.top >= cb.bottom - 4),
+      };
+    });
+    expect(meta.flexDirection).toBe('column');
+    expect(meta.gap).toBe('12px');
+    expect(meta.stacked).toBe(true);
+  });
+
   test('desktop 1440 px: 3-col grid + bounded by max width (05-TC-R-003)', async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 900 });
     await authenticate(page);

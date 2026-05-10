@@ -205,8 +205,15 @@ const filterOptions: readonly SegmentedFilterOption[] = [
 
       .reward-hero__actions {
         display: flex;
+        flex-direction: column;
         gap: 12px;
         margin-top: var(--hg-space-3);
+      }
+
+      @media (min-width: 768px) {
+        .reward-hero__actions {
+          flex-direction: row;
+        }
       }
 
       .reward-hero__claim {
