@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 05-TC-V-001..008, 05-TC-C-001..010, 05-TC-L-001..010, 05-TC-R-001..005, 05-TC-F-001..007, 05-TC-F-101..105, 05-TC-F-201..203, 05-TC-B-001..004, 05-TC-A-001..005
+// Traces to: 05-TC-V-001..008, 05-TC-C-001..010, 05-TC-L-001..010, 05-TC-R-001..005, 05-TC-F-001..007, 05-TC-F-101..105, 05-TC-F-201..203, 05-TC-B-001..004, 05-TC-A-001..005, 05-TC-D-001
 // Description: rewards list page chrome.
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
@@ -75,6 +75,81 @@ const readyReward = {
 };
 
 test.describe('Rewards list', () => {
+  test('defined reward survives reload (05-TC-D-001)', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await authenticate(page);
+    await page.unroute('**/api/goals**');
+    await page.route('**/api/goals**', (route, request) => {
+      if (request.method() === 'GET' && new URL(request.url()).pathname === '/api/goals') {
+        route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify([
+            { id: 'g1', name: 'Walk', cadence: 'daily', target: { value: 10, unit: 'min' }, completedQuantity: 0, currentStreak: 0, longestStreak: 0, rewardName: '', description: '' },
+          ]),
+        });
+        return;
+      }
+      route.fulfill({ status: 200, contentType: 'application/json', body: '{}' });
+    });
+
+    let serverRewards: Array<Record<string, unknown>> = [];
+    const created = {
+      id: 'r-defined',
+      goalId: 'g1',
+      name: 'Defined reward',
+      description: 'Survives reload',
+      status: 'in-progress',
+      earnedAt: null,
+      condition: { type: 'streak-milestone', streakDays: 7 },
+    };
+    await page.unroute('**/api/rewards**');
+    await page.route('**/api/rewards', (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify(serverRewards),
+      }),
+    );
+    await page.route('**/api/goals/*/rewards', (route, request) => {
+      if (request.method() === 'POST') {
+        serverRewards = [created];
+        route.fulfill({
+          status: 201,
+          contentType: 'application/json',
+          body: JSON.stringify(created),
+        });
+        return;
+      }
+      route.continue();
+    });
+
+    await page.goto('/rewards/new');
+    await page
+      .locator('hg-health-text-field')
+      .filter({ hasText: 'Name' })
+      .locator('input, textarea')
+      .fill('Defined reward');
+    await page
+      .locator('hg-health-text-field')
+      .filter({ hasText: 'Description' })
+      .locator('input, textarea')
+      .fill('Survives reload');
+    await page.locator('[data-testid="reward-form-streak"] label').click();
+    await page
+      .locator('hg-health-text-field')
+      .filter({ hasText: 'Streak days' })
+      .locator('input')
+      .fill('7');
+    await page.locator('[data-testid="reward-form-save"]').click();
+    await page.waitForURL(/\/rewards($|\?|#)/);
+
+    await expect(page.locator('lib-reward-list')).toContainText('Defined reward');
+
+    await page.reload();
+    await expect(page.locator('lib-reward-list')).toContainText('Defined reward');
+  });
+
   test('axe-core: 0 critical/serious on /rewards (05-TC-A-005)', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await authenticate(page);
