@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 05-TC-V-001..008, 05-TC-C-001..010, 05-TC-L-001..010, 05-TC-R-001
+// Traces to: 05-TC-V-001..008, 05-TC-C-001..010, 05-TC-L-001..010, 05-TC-R-001..002
 // Description: rewards list page chrome.
 import { expect, test } from '@playwright/test';
 
@@ -74,6 +74,44 @@ const readyReward = {
 };
 
 test.describe('Rewards list', () => {
+  test('tablet 768 px: 2-col grid + hero side-by-side (05-TC-R-002)', async ({ page }) => {
+    await page.setViewportSize({ width: 768, height: 1024 });
+    await authenticate(page);
+    await page.unroute('**/api/rewards**');
+    await page.route('**/api/rewards**', (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify([readyReward, ...sampleRewards]),
+      }),
+    );
+    await page.goto('/rewards');
+
+    const grid = page
+      .locator('lib-reward-list .reward-section[data-status="in-progress"] .reward-list')
+      .first();
+    await expect(grid).toBeVisible();
+    const cols = await grid.evaluate(
+      (el) => getComputedStyle(el).gridTemplateColumns.split(/\s+/).filter(Boolean).length,
+    );
+    expect(cols).toBe(2);
+
+    const hero = page.locator('lib-reward-list .reward-hero').first();
+    const heroLayout = await hero.evaluate((el) => {
+      const tracks = getComputedStyle(el).gridTemplateColumns.split(/\s+/).filter(Boolean);
+      const frame = el.querySelector('.reward-hero__icon-frame') as HTMLElement | null;
+      const copy = el.querySelector('.reward-hero__copy') as HTMLElement | null;
+      const fb = frame?.getBoundingClientRect();
+      const cb = copy?.getBoundingClientRect();
+      return {
+        cols: tracks.length,
+        sideBySide: !!(fb && cb && fb.right <= cb.left + 4 && Math.abs(fb.top - cb.top) < 200),
+      };
+    });
+    expect(heroLayout.cols).toBe(2);
+    expect(heroLayout.sideBySide).toBe(true);
+  });
+
   test('mobile 360 px: single column + hero stacks vertically (05-TC-R-001)', async ({ page }) => {
     await page.setViewportSize({ width: 360, height: 780 });
     await authenticate(page);
