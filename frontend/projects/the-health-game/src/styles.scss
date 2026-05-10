@@ -495,6 +495,10 @@ lib-profile button[data-testid='profile-save'] .mdc-button__label {
 lib-sign-in form button[type='submit'] {
   background-color: #006d3f !important;
   color: #ffffff !important;
+  cursor: pointer !important;
+}
+lib-sign-in form button[type='submit']:disabled {
+  cursor: default !important;
 }
 lib-sign-in form button[type='submit'] .mdc-button__label,
 lib-sign-in form button[type='submit'] span {

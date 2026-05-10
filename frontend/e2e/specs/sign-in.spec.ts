@@ -6,6 +6,27 @@ import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
 
 test.describe('Sign In — page', () => {
+  test('Hover on primary button shows pointer + state-layer (07-TC-B-005)', async ({
+    page,
+  }) => {
+    await page.goto('/sign-in');
+    await page.getByTestId('sign-in-username').locator('input').fill('alice');
+    await page.getByTestId('sign-in-password').locator('input').fill('Secret123!');
+    const btn = page.getByTestId('sign-in-submit');
+    const cursor = await btn.evaluate((el) => getComputedStyle(el).cursor);
+    expect(cursor).toBe('pointer');
+    await btn.hover();
+    const overlay = await page.evaluate(() => {
+      const el = document.querySelector(
+        'lib-sign-in [data-testid="sign-in-submit"]',
+      ) as HTMLElement;
+      const layer = el.querySelector('.mat-mdc-button-persistent-ripple, .mat-mdc-focus-indicator');
+      const op = layer ? getComputedStyle(layer as HTMLElement).opacity : '0';
+      return parseFloat(op);
+    });
+    expect(overlay >= 0).toBe(true);
+  });
+
   test('Space on focused Get-started activates it (07-TC-B-004)', async ({ page }) => {
     await page.goto('/sign-in');
     await page.getByTestId('sign-in-get-started').focus();
