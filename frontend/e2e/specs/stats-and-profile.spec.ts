@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 06-TC-V-001..007, 06-TC-C-001..010, 06-TC-L-001..010, 06-TC-R-001..005, 06-TC-F-001..006
+// Traces to: 06-TC-V-001..007, 06-TC-C-001..010, 06-TC-L-001..010, 06-TC-R-001..005, 06-TC-F-001..007
 // Description: stats + profile page chrome.
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
@@ -45,6 +45,36 @@ async function authenticate(page: import('@playwright/test').Page): Promise<void
 }
 
 test.describe('Stats & Profile chrome', () => {
+  test('switching window refreshes tile + chart (06-TC-F-007)', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await authenticate(page);
+    await page.goto('/stats');
+
+    const totalTile = page
+      .locator('lib-stats .stat-tile')
+      .filter({ hasText: 'Activities this week' })
+      .locator('.stat-tile__value');
+    const weekValue = await totalTile.textContent();
+
+    await page
+      .locator('lib-stats hg-segmented-filter mat-button-toggle')
+      .filter({ hasText: 'Year' })
+      .click();
+    await page.waitForTimeout(80);
+
+    const yearTile = page
+      .locator('lib-stats .stat-tile')
+      .filter({ hasText: 'Activities this year' })
+      .locator('.stat-tile__value');
+    await expect(yearTile).toBeVisible();
+    const yearValue = await yearTile.textContent();
+    expect(yearValue?.trim()).not.toBe(weekValue?.trim());
+
+    // Bars also reflowed.
+    const barCount = await page.locator('lib-stats .activity-chart__bar').count();
+    expect(barCount).toBe(12);
+  });
+
   test('level tile follows weekly total formula (06-TC-F-006)', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await authenticate(page);

@@ -249,7 +249,21 @@ export class StatsComponent {
         return this.weekSeries;
     }
   });
+
+  activityLabel(): string {
+    switch (this.windowChoice()) {
+      case 'month':
+        return 'Activities this month';
+      case 'year':
+        return 'Activities this year';
+      default:
+        return 'Activities this week';
+    }
+  }
   readonly weekTotal = this.weekSeries.reduce((sum, day) => sum + day.value, 0);
+  readonly activeTotal = computed(() =>
+    this.activeSeries().reduce((sum, day) => sum + day.value, 0),
+  );
   // Deterministic level formula: floor(cumulative activity / 50). Pure
   // function of the same series the bar chart shows, so visual + tile
   // stay consistent without a server round-trip.
@@ -288,9 +302,9 @@ export class StatsComponent {
       tone: 'streak',
     },
     {
-      id: 'week-total',
-      label: 'Activities this week',
-      value: String(this.weekTotal),
+      id: 'window-total',
+      label: this.activityLabel(),
+      value: String(this.activeTotal()),
       tone: 'info',
     },
     { id: 'rewards', label: 'Rewards earned', value: '6', tone: 'reward' },
