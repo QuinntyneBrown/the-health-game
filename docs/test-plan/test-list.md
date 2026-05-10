@@ -309,7 +309,7 @@ and made green. The /loop process picks the first test with
 | 298 | 04 | TC-S-004 | No tokens or code verifiers logged | Confirmed (L2-013 §3, L2-022) | 2026-05-10T06:45:00Z |
 | 299 | 04 | TC-P-001 | Sheet opens within 100 ms of FAB tap | Yes | 2026-05-10T06:46:02Z |
 | 300 | 04 | TC-P-002 | Submit p95 server time | <= 500 ms (L2-018 §2) | 2026-05-10T06:47:17Z |
-| 301 | 05 | TC-V-001 | Page title "Rewards" | Inter 32 px desktop / 22 px mobile, weight 500 | null |
+| 301 | 05 | TC-V-001 | Page title "Rewards" | Inter 32 px desktop / 22 px mobile, weight 500 | 2026-05-10T06:53:25Z |
 | 302 | 05 | TC-V-002 | Hero "READY TO CLAIM" eyebrow | Inter 11 px, weight 600, letter-spacing 1.5 px, uppercase | null |
 | 303 | 05 | TC-V-003 | Hero reward title | Inter 36 px desktop, weight 500 | null |
 | 304 | 05 | TC-V-004 | Hero description | Inter 16 px, weight 400, line-height 1.5 | null |

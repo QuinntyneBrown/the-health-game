@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { REWARDS_SERVICE, Reward } from 'api';
 import {
   EmptyStateComponent,
+  PageHeaderComponent,
   RewardCardComponent,
   SegmentedFilterComponent,
   SegmentedFilterOption,
@@ -19,8 +20,19 @@ const filterOptions: readonly SegmentedFilterOption[] = [
 
 @Component({
   selector: 'lib-reward-list',
-  imports: [EmptyStateComponent, RewardCardComponent, SegmentedFilterComponent],
+  imports: [
+    EmptyStateComponent,
+    PageHeaderComponent,
+    RewardCardComponent,
+    SegmentedFilterComponent,
+  ],
   template: `
+    <hg-page-header
+      title="Rewards"
+      actionLabel="New reward"
+      actionIcon="add"
+      (actionSelected)="onCreate()"
+    />
     @if (rewards().length === 0) {
       <hg-empty-state
         title="No rewards yet"
