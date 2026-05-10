@@ -50,9 +50,17 @@
 
 .sign-in__subtitle {
   color: var(--hg-color-on-surface-variant);
-  font-size: var(--hg-font-size-body-md, 16px);
+  font-family: Inter, Roboto, Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 400;
   margin: 0;
   text-align: center;
+}
+
+@media (min-width: 768px) {
+  .sign-in__subtitle {
+    font-size: 16px;
+  }
 }
 
 .sign-in__error {

@@ -1,10 +1,36 @@
 // Acceptance Test
-// Traces to: L2-036, 07-TC-V-001..004
+// Traces to: L2-036, 07-TC-V-001..006
 // Description: Username + password sign-in page. Each test exercises one
 //              vertical slice end-to-end against the running app.
 import { expect, test } from '@playwright/test';
 
 test.describe('Sign In — page', () => {
+  test('subtitle weight 400 (07-TC-V-005)', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await page.goto('/sign-in');
+    const w = await page
+      .getByTestId('sign-in-subtitle')
+      .evaluate((el) => getComputedStyle(el).fontWeight);
+    expect(w).toBe('400');
+  });
+
+  test('subtitle size 14 / 16 / 16 (07-TC-V-006)', async ({ page }) => {
+    const measure = async () =>
+      page
+        .getByTestId('sign-in-subtitle')
+        .evaluate((el) => getComputedStyle(el).fontSize);
+
+    await page.setViewportSize({ width: 360, height: 780 });
+    await page.goto('/sign-in');
+    expect(await measure()).toBe('14px');
+    await page.setViewportSize({ width: 768, height: 1024 });
+    await page.waitForTimeout(80);
+    expect(await measure()).toBe('16px');
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await page.waitForTimeout(80);
+    expect(await measure()).toBe('16px');
+  });
+
   test('title 36 px tablet (07-TC-V-003)', async ({ page }) => {
     await page.setViewportSize({ width: 768, height: 1024 });
     await page.goto('/sign-in');
