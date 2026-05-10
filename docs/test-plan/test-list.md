@@ -386,7 +386,7 @@ and made green. The /loop process picks the first test with
 | 375 | 06 | TC-C-004 | Activity bar chart bars | `#006D3F` | 2026-05-10T10:56:34Z |
 | 376 | 06 | TC-C-005 | Activity bar chart axis labels | `#424940` (on surface variant) | 2026-05-10T10:57:52Z |
 | 377 | 06 | TC-C-006 | Profile avatar background | `#94F7B4`; initial in `#00210F` | 2026-05-10T10:59:20Z |
-| 378 | 06 | TC-C-007 | Profile primary action ("Save") | `#006D3F` bg, white label | null |
+| 378 | 06 | TC-C-007 | Profile primary action ("Save") | `#006D3F` bg, white label | 2026-05-10T11:00:59Z |
 | 379 | 06 | TC-C-008 | Destructive ("Delete account") | `#BA1A1A` bg, white label | null |
 | 380 | 06 | TC-C-009 | Form outline (default / focus / error) | `#C2C9BE` / `#006D3F` 2 px / `#BA1A1A` 2 px | null |
 | 381 | 06 | TC-C-010 | Color contrast all text | WCAG AA | null |

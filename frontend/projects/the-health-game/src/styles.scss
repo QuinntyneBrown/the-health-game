@@ -467,6 +467,14 @@ lib-profile button.profile__delete .mdc-button__label {
   font-weight: 500 !important;
 }
 
+lib-profile button[data-testid='profile-save'] {
+  background-color: #006d3f !important;
+  color: #ffffff !important;
+}
+lib-profile button[data-testid='profile-save'] .mdc-button__label {
+  color: #ffffff !important;
+}
+
 lib-reward-list .reward-card {
   transition: box-shadow 150ms ease-out;
 }
