@@ -417,7 +417,7 @@ and made green. The /loop process picks the first test with
 | 406 | 06 | TC-F-102 | Edit display name — happy path | Persisted; reflected in dashboard greeting (L2-014 §1) | 2026-05-10T11:48:01Z |
 | 407 | 06 | TC-F-103 | Edit email — when provider permits | Persisted; verification email sent if required | 2026-05-10T11:49:12Z |
 | 408 | 06 | TC-F-104 | Edit email — when provider forbids | UI displays read-only with explanation | 2026-05-10T12:06:20Z |
-| 409 | 06 | TC-F-105 | Cancel edit | Form reverts to last saved values | null |
+| 409 | 06 | TC-F-105 | Cancel edit | Form reverts to last saved values | 2026-05-10T12:07:54Z |
 | 410 | 06 | TC-F-106 | Submit empty display name | Validation error | null |
 | 411 | 06 | TC-F-107 | Submit invalid email | Validation error (RFC 5321 / 5322 reasonable subset) | null |
 | 412 | 06 | TC-F-201 | Click "Delete account" | Confirmation dialog with explicit warning + typed confirmation ("DELETE") | null |
