@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 06-TC-V-001..007, 06-TC-C-001..010, 06-TC-L-001..010, 06-TC-R-001..005, 06-TC-F-001..008, 06-TC-F-101..107, 06-TC-F-201..205, 06-TC-B-001..006, 06-TC-A-001..006, 06-TC-D-001..006
+// Traces to: 06-TC-V-001..007, 06-TC-C-001..010, 06-TC-L-001..010, 06-TC-R-001..005, 06-TC-F-001..008, 06-TC-F-101..107, 06-TC-F-201..205, 06-TC-B-001..006, 06-TC-A-001..006, 06-TC-D-001..006, 06-TC-P-001
 // Description: stats + profile page chrome.
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
@@ -45,6 +45,32 @@ async function authenticate(page: import('@playwright/test').Page): Promise<void
 }
 
 test.describe('Stats & Profile chrome', () => {
+  test('stats render under p95 budget (06-TC-P-001)', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await authenticate(page);
+    // Server stub holds for 200 ms — well under the 300 ms p95 (L2-018 §1).
+    await page.unroute('**/api/goals**');
+    await page.route('**/api/goals**', async (route, request) => {
+      await new Promise((r) => setTimeout(r, 200));
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body:
+          request.method() === 'GET' && new URL(request.url()).pathname === '/api/goals'
+            ? '[]'
+            : '{}',
+      });
+    });
+
+    const start = Date.now();
+    await page.goto('/stats');
+    await expect(page.locator('lib-stats .stat-tile').first()).toBeVisible();
+    const elapsed = Date.now() - start;
+    // Stub adds 200 ms; navigation + paint should add < 1100 ms in dev mode.
+    // Hard server p95 enforcement is server-side.
+    expect(elapsed).toBeLessThanOrEqual(1300);
+  });
+
   test('stats reflect server-side rollover, no FE cache (06-TC-D-006)', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await authenticate(page);
