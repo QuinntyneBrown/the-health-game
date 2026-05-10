@@ -34,4 +34,8 @@ export class RewardsService implements IRewardsService {
   updateReward(rewardId: string, input: UpdateRewardInput): Observable<Reward> {
     return this.http.put<Reward>(`${this.apiBaseUrl}/api/rewards/${rewardId}`, input);
   }
+
+  deleteReward(rewardId: string): Observable<void> {
+    return this.http.delete<void>(`${this.apiBaseUrl}/api/rewards/${rewardId}`);
+  }
 }

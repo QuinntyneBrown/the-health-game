@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 05-TC-V-001..008, 05-TC-C-001..010, 05-TC-L-001..010, 05-TC-R-001..005, 05-TC-F-001..007, 05-TC-F-101..104
+// Traces to: 05-TC-V-001..008, 05-TC-C-001..010, 05-TC-L-001..010, 05-TC-R-001..005, 05-TC-F-001..007, 05-TC-F-101..105
 // Description: rewards list page chrome.
 import { expect, test } from '@playwright/test';
 
@@ -74,6 +74,88 @@ const readyReward = {
 };
 
 test.describe('Rewards list', () => {
+  test('delete reward removes it from the list (05-TC-F-105)', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await authenticate(page);
+    await page.unroute('**/api/goals**');
+    await page.route('**/api/goals**', (route, request) => {
+      if (request.method() === 'GET' && new URL(request.url()).pathname === '/api/goals') {
+        route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify([
+            { id: 'g1', name: 'Walk', cadence: 'daily', target: { value: 10, unit: 'min' }, completedQuantity: 0, currentStreak: 0, longestStreak: 0, rewardName: '', description: '' },
+          ]),
+        });
+        return;
+      }
+      route.fulfill({ status: 200, contentType: 'application/json', body: '{}' });
+    });
+
+    let deleteCalls = 0;
+    let deleteUrl = '';
+    let serverRewards: Array<Record<string, unknown>> = [
+      {
+        id: 'r-del',
+        goalId: 'g1',
+        name: 'Delete me',
+        description: '',
+        status: 'in-progress',
+        earnedAt: null,
+        condition: { type: 'streak-milestone', streakDays: 5 },
+      },
+      {
+        id: 'r-keep',
+        goalId: 'g1',
+        name: 'Already earned trophy',
+        description: '',
+        status: 'earned',
+        earnedAt: '2026-04-01T08:00:00Z',
+        condition: { type: 'streak-milestone', streakDays: 5 },
+      },
+    ];
+    await page.unroute('**/api/rewards**');
+    await page.route('**/api/rewards/r-del', (route, request) => {
+      if (request.method() === 'GET') {
+        route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify(serverRewards.find((r) => (r as { id: string }).id === 'r-del')),
+        });
+        return;
+      }
+      if (request.method() === 'DELETE') {
+        deleteCalls += 1;
+        deleteUrl = new URL(request.url()).pathname;
+        // Server preserves the earned trophy as user history (L2-009 §4)
+        // and removes the deleted reward from the active list.
+        serverRewards = serverRewards.filter((r) => (r as { id: string }).id !== 'r-del');
+        route.fulfill({ status: 204, contentType: 'application/json', body: '' });
+        return;
+      }
+      route.continue();
+    });
+    await page.route('**/api/rewards', (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify(serverRewards),
+      }),
+    );
+
+    await page.goto('/rewards/r-del/edit');
+    await expect(
+      page.locator('hg-health-text-field').filter({ hasText: 'Name' }).locator('input'),
+    ).toHaveValue('Delete me');
+    await page.locator('[data-testid="reward-form-delete"]').click();
+    await page.waitForURL(/\/rewards($|\?|#)/);
+
+    expect(deleteCalls).toBe(1);
+    expect(deleteUrl).toBe('/api/rewards/r-del');
+    await expect(page.locator('lib-reward-list')).not.toContainText('Delete me');
+    await expect(page.locator('lib-reward-list')).toContainText('Already earned trophy');
+  });
+
   test('edit reward name/description persists (05-TC-F-104)', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await authenticate(page);

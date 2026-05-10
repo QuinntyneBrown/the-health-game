@@ -74,6 +74,17 @@ import { HealthTextFieldComponent } from 'components';
       </fieldset>
 
       <div class="reward-form__actions">
+        @if (isEditing()) {
+          <button
+            mat-stroked-button
+            type="button"
+            color="warn"
+            data-testid="reward-form-delete"
+            (click)="onDelete()"
+          >
+            Delete
+          </button>
+        }
         <button mat-stroked-button type="button" (click)="cancel()">Cancel</button>
         <button
           mat-flat-button
@@ -189,6 +200,21 @@ export class RewardFormComponent {
   }
 
   cancel(): void {
+    void this.router.navigateByUrl('/rewards');
+  }
+
+  async onDelete(): Promise<void> {
+    const id = this.editingId();
+    if (!id) return;
+    try {
+      await firstValueFrom(this.rewardsService.deleteReward(id));
+    } catch (err: unknown) {
+      const message =
+        (err as { message?: string } | null)?.message ??
+        'Could not delete reward — please try again.';
+      this.snackBar.open(message, 'Dismiss', { duration: 6_000 });
+      return;
+    }
     void this.router.navigateByUrl('/rewards');
   }
 

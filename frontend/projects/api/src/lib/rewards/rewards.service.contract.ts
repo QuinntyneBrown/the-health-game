@@ -19,6 +19,7 @@ export interface IRewardsService {
   getRewards(): Observable<readonly Reward[]>;
   getReward(rewardId: string): Observable<Reward>;
   updateReward(rewardId: string, input: UpdateRewardInput): Observable<Reward>;
+  deleteReward(rewardId: string): Observable<void>;
   claimReward(rewardId: string): Observable<Reward>;
 }
 
