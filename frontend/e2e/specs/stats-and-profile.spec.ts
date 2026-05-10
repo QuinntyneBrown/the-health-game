@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 06-TC-V-001..007, 06-TC-C-001..010
+// Traces to: 06-TC-V-001..007, 06-TC-C-001..010, 06-TC-L-001
 // Description: stats + profile page chrome.
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
@@ -45,6 +45,31 @@ async function authenticate(page: import('@playwright/test').Page): Promise<void
 }
 
 test.describe('Stats & Profile chrome', () => {
+  test('stat tile grid 5 / 3 / 2 cols by viewport (06-TC-L-001)', async ({ page }) => {
+    await authenticate(page);
+
+    const measureCols = async () => {
+      const grid = page.locator('lib-stats .stat-tiles').first();
+      await expect(grid).toBeVisible();
+      return grid.evaluate((el) =>
+        getComputedStyle(el).gridTemplateColumns.split(/\s+/).filter(Boolean).length,
+      );
+    };
+
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.goto('/stats');
+    await page.waitForTimeout(120);
+    expect(await measureCols()).toBe(5);
+
+    await page.setViewportSize({ width: 768, height: 1024 });
+    await page.waitForTimeout(120);
+    expect(await measureCols()).toBe(3);
+
+    await page.setViewportSize({ width: 360, height: 780 });
+    await page.waitForTimeout(120);
+    expect(await measureCols()).toBe(2);
+  });
+
   test('color contrast WCAG AA on Stats + Profile (06-TC-C-010)', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await authenticate(page);
