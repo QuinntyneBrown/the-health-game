@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 06-TC-V-001..004
+// Traces to: 06-TC-V-001..005
 // Description: stats + profile page chrome.
 import { expect, test } from '@playwright/test';
 
@@ -44,6 +44,27 @@ async function authenticate(page: import('@playwright/test').Page): Promise<void
 }
 
 test.describe('Stats & Profile chrome', () => {
+  test('profile form labels Inter 13 px / 500 (06-TC-V-005)', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await authenticate(page);
+    await page.goto('/profile');
+    await page.locator('[data-testid="profile-edit"]').click();
+
+    const labelEls = await page
+      .locator('lib-profile mat-form-field .mat-mdc-floating-label, lib-profile mat-form-field mat-label')
+      .all();
+    expect(labelEls.length).toBeGreaterThanOrEqual(2);
+    for (const el of labelEls) {
+      const result = await el.evaluate((node) => {
+        const s = getComputedStyle(node);
+        return { family: s.fontFamily, size: s.fontSize, weight: s.fontWeight };
+      });
+      expect(result.family).toMatch(/Inter/);
+      expect(result.size).toBe('13px');
+      expect(result.weight).toBe('500');
+    }
+  });
+
   test('section headings Inter 18 px / weight 500 (06-TC-V-004)', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await authenticate(page);
