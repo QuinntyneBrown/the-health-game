@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 05-TC-V-001..008, 05-TC-C-001..010
+// Traces to: 05-TC-V-001..008, 05-TC-C-001..010, 05-TC-L-001
 // Description: rewards list page chrome.
 import { expect, test } from '@playwright/test';
 
@@ -74,6 +74,25 @@ const readyReward = {
 };
 
 test.describe('Rewards list', () => {
+  test('hero corner radius 24 px (05-TC-L-001)', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await authenticate(page);
+    await page.unroute('**/api/rewards**');
+    await page.route('**/api/rewards**', (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify([readyReward, ...sampleRewards]),
+      }),
+    );
+
+    await page.goto('/rewards');
+    const hero = page.locator('lib-reward-list .reward-hero').first();
+    await expect(hero).toBeVisible();
+    const radius = await hero.evaluate((el) => getComputedStyle(el).borderTopLeftRadius);
+    expect(radius).toBe('24px');
+  });
+
   test('rewards page background #F1F5ED (05-TC-C-010)', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await authenticate(page);

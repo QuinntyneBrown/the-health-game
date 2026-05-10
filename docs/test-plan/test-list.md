@@ -327,7 +327,7 @@ and made green. The /loop process picks the first test with
 | 316 | 05 | TC-C-008 | Progress bar track | `#E5E9E2` | 2026-05-10T07:15:38Z |
 | 317 | 05 | TC-C-009 | Earned reward chip | `#94F7B4` bg, `#00210F` label | 2026-05-10T07:17:04Z |
 | 318 | 05 | TC-C-010 | Page background | `#F1F5ED` | 2026-05-10T07:18:14Z |
-| 319 | 05 | TC-L-001 | Hero corner radius | 24 px | null |
+| 319 | 05 | TC-L-001 | Hero corner radius | 24 px | 2026-05-10T07:18:59Z |
 | 320 | 05 | TC-L-002 | Hero padding | 32 px | null |
 | 321 | 05 | TC-L-003 | Hero icon size | 120 px square, 9999 corner radius | null |
 | 322 | 05 | TC-L-004 | Hero shadow | offset y=2, blur 8, color `#00000026` | null |
