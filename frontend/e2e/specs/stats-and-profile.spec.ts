@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 06-TC-V-001..007, 06-TC-C-001..010, 06-TC-L-001..010, 06-TC-R-001..005, 06-TC-F-001..008, 06-TC-F-101..107, 06-TC-F-201..205
+// Traces to: 06-TC-V-001..007, 06-TC-C-001..010, 06-TC-L-001..010, 06-TC-R-001..005, 06-TC-F-001..008, 06-TC-F-101..107, 06-TC-F-201..205, 06-TC-B-001
 // Description: stats + profile page chrome.
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
@@ -45,6 +45,45 @@ async function authenticate(page: import('@playwright/test').Page): Promise<void
 }
 
 test.describe('Stats & Profile chrome', () => {
+  test('Stats + Profile reading order matches DOM order (06-TC-B-001)', async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await authenticate(page);
+
+    await page.goto('/stats');
+    const statsOrder = await page.evaluate(() => {
+      const filter = document.querySelector(
+        'lib-stats hg-segmented-filter mat-button-toggle button',
+      );
+      const tile = document.querySelector('lib-stats .stat-tile') as HTMLElement | null;
+      const chart = document.querySelector('lib-stats .activity-chart') as HTMLElement | null;
+      return {
+        filterY: (filter as HTMLElement | null)?.getBoundingClientRect().top ?? -1,
+        tileY: tile?.getBoundingClientRect().top ?? -1,
+        chartY: chart?.getBoundingClientRect().top ?? -1,
+      };
+    });
+    expect(statsOrder.filterY).toBeGreaterThanOrEqual(0);
+    expect(statsOrder.chartY).toBeGreaterThan(statsOrder.filterY - 200);
+    expect(statsOrder.tileY).toBeGreaterThan(statsOrder.chartY);
+
+    await page.goto('/profile');
+    await page.locator('[data-testid="profile-edit"]').click();
+    const profileOrder = await page.evaluate(() => {
+      const name = document.querySelector(
+        'lib-profile hg-health-text-field input',
+      ) as HTMLElement | null;
+      const save = document.querySelector(
+        '[data-testid="profile-save"]',
+      ) as HTMLElement | null;
+      return {
+        nameY: name?.getBoundingClientRect().top ?? -1,
+        saveY: save?.getBoundingClientRect().top ?? -1,
+      };
+    });
+    expect(profileOrder.nameY).toBeGreaterThanOrEqual(0);
+    expect(profileOrder.saveY).toBeGreaterThan(profileOrder.nameY);
+  });
+
   test('FE never targets another user for deletion (06-TC-F-205)', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await authenticate(page);
