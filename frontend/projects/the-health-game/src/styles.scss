@@ -172,6 +172,14 @@ mat-bottom-sheet-container {
   border-width: 2px !important;
 }
 
+.mat-mdc-form-field .mat-mdc-text-field-wrapper {
+  height: 56px !important;
+}
+
+.mat-mdc-form-field .mdc-text-field--outlined {
+  height: 56px !important;
+}
+
 hg-health-text-field.health-text-field--error .mdc-notched-outline__leading,
 hg-health-text-field.health-text-field--error .mdc-notched-outline__notch,
 hg-health-text-field.health-text-field--error .mdc-notched-outline__trailing {

@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 04-TC-V-001..007, 04-TC-C-001..010, 04-TC-L-001..003
+// Traces to: 04-TC-V-001..007, 04-TC-C-001..010, 04-TC-L-001..004
 // Description: log-activity dialog typography.
 import { expect, test } from '@playwright/test';
 
@@ -158,6 +158,20 @@ test.describe('Log activity sheet (mobile)', () => {
 
 test.describe('Log activity dialog (desktop)', () => {
   test.use({ viewport: { width: 1440, height: 900 } });
+
+  test('form field height is 56 px (04-TC-L-004)', async ({ page }) => {
+    await authenticate(page);
+    await page.goto('/goals/new');
+
+    const wrapper = page
+      .locator('lib-goal-form hg-health-text-field .mat-mdc-text-field-wrapper')
+      .first();
+    await expect(wrapper).toBeVisible();
+    const height = await wrapper.evaluate((el) =>
+      Math.round(el.getBoundingClientRect().height),
+    );
+    expect(height).toBe(56);
+  });
 
   test('tablet goal-form padding is 32 px (04-TC-L-003)', async ({ page }) => {
     await page.setViewportSize({ width: 768, height: 1024 });
