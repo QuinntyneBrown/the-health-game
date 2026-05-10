@@ -6,6 +6,40 @@ import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
 
 test.describe('Sign In — page', () => {
+  test('tab order: username -> password -> toggle -> submit -> OIDC -> get-started (07-TC-B-001)', async ({
+    page,
+  }) => {
+    await page.goto('/sign-in');
+    await page.getByTestId('sign-in-username').locator('input').fill('alice');
+    await page.getByTestId('sign-in-password').locator('input').fill('Secret123!');
+    await page.getByTestId('sign-in-username').locator('input').focus();
+    const expectFocus = async (testId: string) => {
+      const ok = await page.evaluate((id) => {
+        const a = document.activeElement as HTMLElement | null;
+        return a?.closest(`[data-testid="${id}"]`) !== null;
+      }, testId);
+      expect(ok, `expected focus inside [data-testid="${testId}"]`).toBe(true);
+    };
+    await expectFocus('sign-in-username');
+    await page.keyboard.press('Tab');
+    await expectFocus('sign-in-password');
+    await page.keyboard.press('Tab');
+    // Password toggle button is inside the password field
+    const onToggle = await page.evaluate(
+      () =>
+        document.activeElement?.getAttribute('aria-label')?.toLowerCase().includes('password') ||
+        document.activeElement?.classList.contains('health-text-field__visibility') ||
+        false,
+    );
+    expect(onToggle).toBe(true);
+    await page.keyboard.press('Tab');
+    await expectFocus('sign-in-submit');
+    await page.keyboard.press('Tab');
+    await expectFocus('sign-in-oidc');
+    await page.keyboard.press('Tab');
+    await expectFocus('sign-in-get-started');
+  });
+
   test('password over 256 chars: client blocks submit (07-TC-F-018)', async ({ page }) => {
     await page.goto('/sign-in');
     const submit = page.getByTestId('sign-in-submit');
