@@ -468,7 +468,7 @@ and made green. The /loop process picks the first test with
 | 457 | 07 | TC-C-006 | Field outline (default) | `#C2C9BE` (outline-variant), 1 px | 2026-05-10T13:31:35Z |
 | 458 | 07 | TC-C-007 | Field outline (focused) | `#006D3F` (primary), 2 px | 2026-05-10T13:32:36Z |
 | 459 | 07 | TC-C-008 | Field outline (error) | `#BA1A1A` (error), 2 px | 2026-05-10T13:37:23Z |
-| 460 | 07 | TC-C-009 | Primary button background | `#006D3F` (primary) | null |
+| 460 | 07 | TC-C-009 | Primary button background | `#006D3F` (primary) | 2026-05-10T13:38:26Z |
 | 461 | 07 | TC-C-010 | Primary button label color | `#FFFFFF` | null |
 | 462 | 07 | TC-C-011 | OIDC button border | `#C2C9BE` (outline-variant), 1 px; transparent fill | null |
 | 463 | 07 | TC-C-012 | OIDC button label color | `#191D17` (on surface) | null |

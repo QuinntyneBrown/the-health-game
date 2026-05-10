@@ -1,10 +1,20 @@
 // Acceptance Test
-// Traces to: L2-036, 07-TC-V-001..014, 07-TC-C-001..008
+// Traces to: L2-036, 07-TC-V-001..014, 07-TC-C-001..009
 // Description: Username + password sign-in page. Each test exercises one
 //              vertical slice end-to-end against the running app.
 import { expect, test } from '@playwright/test';
 
 test.describe('Sign In — page', () => {
+  test('primary button bg #006D3F (07-TC-C-009)', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await page.goto('/sign-in');
+    await page.locator('lib-sign-in [data-testid="sign-in-username"] input').fill('a');
+    await page.locator('lib-sign-in [data-testid="sign-in-password"] input').fill('p');
+    const btn = page.locator('lib-sign-in form button[type="submit"]');
+    const bg = await btn.evaluate((el) => getComputedStyle(el).backgroundColor);
+    expect(bg).toBe('rgb(0, 109, 63)');
+  });
+
   test('field outline error #BA1A1A / 2 px (07-TC-C-008)', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await page.goto('/sign-in');
