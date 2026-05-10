@@ -100,7 +100,7 @@ const filterOptions: readonly SegmentedFilterOption[] = [
           <h3 class="reward-section__label">{{ group.label }}</h3>
           <ul class="reward-list" data-testid="reward-list">
             @for (reward of group.rewards; track reward.id) {
-              <li class="reward-list__item">
+              <li class="reward-list__item" (click)="onSelectReward(reward)">
                 <hg-reward-card
                   [name]="reward.name"
                   [description]="reward.description"
@@ -164,6 +164,7 @@ const filterOptions: readonly SegmentedFilterOption[] = [
       }
 
       .reward-list__item {
+        cursor: pointer;
         display: contents;
       }
 
@@ -364,6 +365,10 @@ export class RewardListComponent {
 
   onCreate(): void {
     void this.router.navigateByUrl('/rewards/new');
+  }
+
+  onSelectReward(reward: Reward): void {
+    void this.router.navigateByUrl(`/rewards/${reward.id}`);
   }
 
   async onClaim(reward: Reward): Promise<void> {

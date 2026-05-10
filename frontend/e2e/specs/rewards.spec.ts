@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 05-TC-V-001..008, 05-TC-C-001..010, 05-TC-L-001..010, 05-TC-R-001..005, 05-TC-F-001..006
+// Traces to: 05-TC-V-001..008, 05-TC-C-001..010, 05-TC-L-001..010, 05-TC-R-001..005, 05-TC-F-001..007
 // Description: rewards list page chrome.
 import { expect, test } from '@playwright/test';
 
@@ -74,6 +74,25 @@ const readyReward = {
 };
 
 test.describe('Rewards list', () => {
+  test('click reward card navigates to /rewards/:id (05-TC-F-007)', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await authenticate(page);
+    await page.unroute('**/api/rewards**');
+    await page.route('**/api/rewards**', (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify(sampleRewards),
+      }),
+    );
+    await page.goto('/rewards');
+    await page
+      .locator('lib-reward-list .reward-section[data-status="in-progress"] .reward-card')
+      .first()
+      .click();
+    await page.waitForURL(/\/rewards\/r2($|\?|#)/);
+  });
+
   test('filter tabs scope grid to status (05-TC-F-006)', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await authenticate(page);
