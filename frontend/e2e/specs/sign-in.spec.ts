@@ -6,6 +6,26 @@ import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
 
 test.describe('Sign In — page', () => {
+  test('inline 401 error uses role=alert + aria-live=assertive (07-TC-A-007)', async ({
+    page,
+  }) => {
+    await page.route('**/api/auth/sign-in', (route) =>
+      route.fulfill({
+        status: 401,
+        contentType: 'application/problem+json',
+        body: JSON.stringify({ status: 401 }),
+      }),
+    );
+    await page.goto('/sign-in');
+    await page.getByTestId('sign-in-username').locator('input').fill('alice');
+    await page.getByTestId('sign-in-password').locator('input').fill('Secret123!');
+    await page.getByTestId('sign-in-submit').click();
+    const err = page.getByTestId('sign-in-error');
+    await expect(err).toBeVisible();
+    expect(await err.getAttribute('role')).toBe('alert');
+    expect(await err.getAttribute('aria-live')).toBe('assertive');
+  });
+
   test('validation errors use aria-describedby + aria-live=polite (07-TC-A-006)', async ({
     page,
   }) => {
