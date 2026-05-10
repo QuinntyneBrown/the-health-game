@@ -1,10 +1,29 @@
 // Acceptance Test
-// Traces to: L2-036, 07-TC-V-001..014, 07-TC-C-001..002
+// Traces to: L2-036, 07-TC-V-001..014, 07-TC-C-001..003
 // Description: Username + password sign-in page. Each test exercises one
 //              vertical slice end-to-end against the running app.
 import { expect, test } from '@playwright/test';
 
 test.describe('Sign In — page', () => {
+  test('card border 0 mobile / 1 px #C2C9BE tablet+ (07-TC-C-003)', async ({ page }) => {
+    await page.setViewportSize({ width: 360, height: 780 });
+    await page.goto('/sign-in');
+    let result = await page.locator('lib-sign-in .sign-in__card').evaluate((el) => {
+      const s = getComputedStyle(el);
+      return { width: s.borderTopWidth, color: s.borderTopColor };
+    });
+    expect(result.width).toBe('0px');
+
+    await page.setViewportSize({ width: 768, height: 1024 });
+    await page.waitForTimeout(80);
+    result = await page.locator('lib-sign-in .sign-in__card').evaluate((el) => {
+      const s = getComputedStyle(el);
+      return { width: s.borderTopWidth, color: s.borderTopColor };
+    });
+    expect(result.width).toBe('1px');
+    expect(result.color).toBe('rgb(194, 201, 190)');
+  });
+
   test('sign-in card surface #F7FBF3 (07-TC-C-002)', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await page.goto('/sign-in');

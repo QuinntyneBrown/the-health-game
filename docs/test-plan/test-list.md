@@ -462,7 +462,7 @@ and made green. The /loop process picks the first test with
 | 451 | 07 | TC-V-014 | Brand wordmark visibility — desktop hero | Visible (Inter 22 px, weight 500) | 2026-05-10T13:24:09Z |
 | 452 | 07 | TC-C-001 | Page background | `#F1F5ED` (surface-container-low) | 2026-05-10T13:25:33Z |
 | 453 | 07 | TC-C-002 | Form card surface | `#F7FBF3` (surface) | 2026-05-10T13:26:48Z |
-| 454 | 07 | TC-C-003 | Form card border | none on mobile, 1 px `#C2C9BE` on tablet+ when outlined | null |
+| 454 | 07 | TC-C-003 | Form card border | none on mobile, 1 px `#C2C9BE` on tablet+ when outlined | 2026-05-10T13:28:10Z |
 | 455 | 07 | TC-C-004 | Title text color | `#191D17` (on surface) | null |
 | 456 | 07 | TC-C-005 | Subtitle text color | `#424940` (on surface variant) | null |
 | 457 | 07 | TC-C-006 | Field outline (default) | `#C2C9BE` (outline-variant), 1 px | null |
