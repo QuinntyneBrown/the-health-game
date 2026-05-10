@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 04-TC-V-001..007, 04-TC-C-001..010, 04-TC-L-001..010, 04-TC-R-001..006, 04-TC-F-001..004
+// Traces to: 04-TC-V-001..007, 04-TC-C-001..010, 04-TC-L-001..010, 04-TC-R-001..006, 04-TC-F-001..005
 // Description: log-activity dialog typography.
 import { expect, test } from '@playwright/test';
 
@@ -323,6 +323,63 @@ test.describe('Log activity sheet (mobile)', () => {
 
 test.describe('Log activity dialog (desktop)', () => {
   test.use({ viewport: { width: 1440, height: 900 } });
+
+  test('log activity with note (1–500 chars) persists (04-TC-F-005)', async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await authenticate(page);
+
+    let postBody: Record<string, unknown> | null = null;
+    await page.route('**/api/goals/g1', (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify(goal),
+      }),
+    );
+    await page.route('**/api/goals/g1/activities**', (route) => {
+      const req = route.request();
+      if (req.method() === 'POST') {
+        postBody = req.postDataJSON();
+        route.fulfill({
+          status: 201,
+          contentType: 'application/json',
+          body: JSON.stringify({
+            id: 'a-1',
+            goalId: 'g1',
+            quantity: 5,
+            unit: 'min',
+            notes: postBody!.notes ?? '',
+            recordedAt: new Date().toISOString(),
+            newlyEarnedRewards: [],
+          }),
+        });
+        return;
+      }
+      route.fulfill({ status: 200, contentType: 'application/json', body: '[]' });
+    });
+
+    await page.goto('/goals/g1');
+    await page.locator('[data-testid="goal-detail-log-fab"]').click();
+    await page
+      .locator('lib-log-activity-dialog hg-health-text-field')
+      .filter({ hasText: 'Quantity' })
+      .locator('input')
+      .fill('5');
+
+    const note = 'Felt strong, especially on the last set. '.repeat(10).slice(0, 480);
+    expect(note.length).toBeGreaterThan(1);
+    expect(note.length).toBeLessThanOrEqual(500);
+
+    await page
+      .locator('lib-log-activity-dialog hg-health-text-field')
+      .filter({ hasText: 'Notes' })
+      .locator('input')
+      .fill(note);
+    await page.locator('[data-testid="log-activity-save"]').click();
+
+    await expect(page.locator('lib-log-activity-dialog')).toHaveCount(0);
+    expect(postBody).toMatchObject({ quantity: 5, notes: note.trim() });
+  });
 
   test('server rejects out-of-window timestamp → toast (04-TC-F-004)', async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 900 });

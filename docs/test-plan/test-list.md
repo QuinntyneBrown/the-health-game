@@ -263,7 +263,7 @@ and made green. The /loop process picks the first test with
 | 252 | 04 | TC-F-002 | Log a quantity of 0 | Allowed (counts as "checked in") OR rejected per design — confirm with spec; current expectation: rejected | 2026-05-10T04:45:26Z |
 | 253 | 04 | TC-F-003 | Log a negative quantity | Validation error (L2-001 §3 / L2-016) | 2026-05-10T04:47:04Z |
 | 254 | 04 | TC-F-004 | Log activity with future timestamp beyond cadence window | Validation error (L2-005 §2) | 2026-05-10T04:49:33Z |
-| 255 | 04 | TC-F-005 | Log activity with optional note (1–500 chars) | Persisted | null |
+| 255 | 04 | TC-F-005 | Log activity with optional note (1–500 chars) | Persisted | 2026-05-10T04:53:05Z |
 | 256 | 04 | TC-F-006 | Note exceeding 500 chars | Validation error | null |
 | 257 | 04 | TC-F-007 | Log against a goal owned by another user (crafted request) | 403 / 404 (L2-005 §3) | null |
 | 258 | 04 | TC-F-008 | After successful log, streak recomputed | L2-007 satisfied; UI reflects new current streak | null |
