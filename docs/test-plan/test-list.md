@@ -448,8 +448,8 @@ and made green. The /loop process picks the first test with
 | 437 | 06 | TC-P-003 | Bar chart renders without layout shift (CLS ~ 0) | Yes | 2026-05-10T13:06:39Z |
 | 438 | 07 | TC-V-001 | Title ("Welcome back.") font family | `Inter`, weight 500 | 2026-05-10T13:09:00Z |
 | 439 | 07 | TC-V-002 | Title size — mobile | 28 px, line-height 1.2 | 2026-05-10T13:10:16Z |
-| 440 | 07 | TC-V-003 | Title size — tablet | 36 px, line-height 1.2 | null |
-| 441 | 07 | TC-V-004 | Title size — desktop hero panel | 57 px, line-height 1.1 | null |
+| 440 | 07 | TC-V-003 | Title size — tablet | 36 px, line-height 1.2 | 2026-05-10T13:11:01Z |
+| 441 | 07 | TC-V-004 | Title size — desktop hero panel | 57 px, line-height 1.1 | 2026-05-10T13:11:01Z |
 | 442 | 07 | TC-V-005 | Subtitle font weight | 400 (normal) | null |
 | 443 | 07 | TC-V-006 | Subtitle size — mobile/tablet/desktop | 14 / 16 / 16 px | null |
 | 444 | 07 | TC-V-007 | Field label font | Inter 13 px, weight 500 | null |
