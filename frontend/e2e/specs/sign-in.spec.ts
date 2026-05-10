@@ -1,11 +1,26 @@
 // Acceptance Test
-// Traces to: L2-036, 07-TC-V-001..014, 07-TC-C-001..018, 07-TC-L-001..014
+// Traces to: L2-036, 07-TC-V-001..014, 07-TC-C-001..018, 07-TC-L-001..014, 07-TC-R-001
 // Description: Username + password sign-in page. Each test exercises one
 //              vertical slice end-to-end against the running app.
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
 
 test.describe('Sign In — page', () => {
+  test('viewport 360x780: single-column, no horizontal scroll (07-TC-R-001)', async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 360, height: 780 });
+    await page.goto('/sign-in');
+    const overflow = await page.evaluate(() => ({
+      scrollWidth: document.documentElement.scrollWidth,
+      clientWidth: document.documentElement.clientWidth,
+    }));
+    expect(overflow.scrollWidth).toBeLessThanOrEqual(overflow.clientWidth);
+    await expect(page.locator('lib-sign-in [data-testid="sign-in-hero"]')).toBeHidden();
+    await expect(page.locator('lib-sign-in [data-testid="sign-in-brand"]')).toBeVisible();
+    await expect(page.locator('lib-sign-in [data-testid="sign-in-form"]')).toBeVisible();
+  });
+
   test('desktop hero outer radius 0 (07-TC-L-014)', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await page.goto('/sign-in');
