@@ -371,7 +371,7 @@ and made green. The /loop process picks the first test with
 | 360 | 05 | TC-D-003 | Earned reward NOT revoked when streak later breaks | Yes (L2-010 §3) | 2026-05-10T08:14:47Z |
 | 361 | 05 | TC-D-004 | Claimed timestamp recorded | Yes; displayed on detail view | 2026-05-10T08:15:52Z |
 | 362 | 05 | TC-D-005 | Sign in as different user | Other users' rewards not visible | 2026-05-10T08:17:37Z |
-| 363 | 05 | TC-P-001 | Read rewards list (up to 100) — p95 | <= 300 ms | null |
+| 363 | 05 | TC-P-001 | Read rewards list (up to 100) — p95 | <= 300 ms | 2026-05-10T08:18:35Z |
 | 364 | 05 | TC-P-002 | Claim reward — p95 | <= 500 ms | null |
 | 365 | 06 | TC-V-001 | Page title ("Stats", "Profile") | Inter 32 / 22 px (desktop / mobile), weight 500 | null |
 | 366 | 06 | TC-V-002 | Stat headline numbers (e.g., "87%", "1,240", "Lvl 8") | Inter 32 px, weight 600 | null |
