@@ -6,6 +6,28 @@ import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
 
 test.describe('Sign In — page', () => {
+  test('Enter in any field submits the form (07-TC-B-003)', async ({ page }) => {
+    let submitCount = 0;
+    await page.route('**/api/auth/sign-in', (route) => {
+      submitCount++;
+      return route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({
+          accessToken: 't',
+          user: { id: 'u', displayName: 'A', roles: ['Player'] },
+        }),
+      });
+    });
+    await page.goto('/sign-in');
+    await page.getByTestId('sign-in-username').locator('input').fill('alice');
+    await page.getByTestId('sign-in-password').locator('input').fill('Secret123!');
+    await page.getByTestId('sign-in-username').locator('input').focus();
+    await page.keyboard.press('Enter');
+    await page.waitForURL(/\/home/);
+    expect(submitCount).toBe(1);
+  });
+
   test('every interactive control shows a visible focus indicator (07-TC-B-002)', async ({
     page,
   }) => {
