@@ -510,6 +510,10 @@ lib-sign-in form button[type='submit'] span {
   }
 }
 
+lib-sign-in [data-testid='sign-in-oidc'] {
+  background-color: transparent !important;
+  border: 1px solid #c2c9be !important;
+}
 lib-sign-in [data-testid='sign-in-oidc'] .mdc-button__label,
 lib-sign-in [data-testid='sign-in-oidc'] span {
   font-family: Inter, Roboto, Arial, sans-serif !important;

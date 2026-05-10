@@ -470,7 +470,7 @@ and made green. The /loop process picks the first test with
 | 459 | 07 | TC-C-008 | Field outline (error) | `#BA1A1A` (error), 2 px | 2026-05-10T13:37:23Z |
 | 460 | 07 | TC-C-009 | Primary button background | `#006D3F` (primary) | 2026-05-10T13:38:26Z |
 | 461 | 07 | TC-C-010 | Primary button label color | `#FFFFFF` | 2026-05-10T13:39:22Z |
-| 462 | 07 | TC-C-011 | OIDC button border | `#C2C9BE` (outline-variant), 1 px; transparent fill | null |
+| 462 | 07 | TC-C-011 | OIDC button border | `#C2C9BE` (outline-variant), 1 px; transparent fill | 2026-05-10T13:41:05Z |
 | 463 | 07 | TC-C-012 | OIDC button label color | `#191D17` (on surface) | null |
 | 464 | 07 | TC-C-013 | Inline error banner background | `#FFEDEA` (error container) | null |
 | 465 | 07 | TC-C-014 | Inline error banner text | `#410002` (on error container) | null |
