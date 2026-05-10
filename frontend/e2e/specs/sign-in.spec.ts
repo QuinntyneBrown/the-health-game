@@ -6,6 +6,14 @@ import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
 
 test.describe('Sign In — page', () => {
+  test('Space on focused Get-started activates it (07-TC-B-004)', async ({ page }) => {
+    await page.goto('/sign-in');
+    await page.getByTestId('sign-in-get-started').focus();
+    await page.keyboard.press(' ');
+    await page.waitForURL(/\/onboarding/);
+    expect(page.url()).toContain('/onboarding');
+  });
+
   test('Enter in any field submits the form (07-TC-B-003)', async ({ page }) => {
     let submitCount = 0;
     await page.route('**/api/auth/sign-in', (route) => {

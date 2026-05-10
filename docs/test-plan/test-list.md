@@ -521,7 +521,7 @@ and made green. The /loop process picks the first test with
 | 510 | 07 | TC-B-001 | Tab order: username -> password -> toggle -> submit -> OIDC -> "Get started" | Logical, no skipped controls | 2026-05-10T14:45:30Z |
 | 511 | 07 | TC-B-002 | Visible focus ring on every interactive element | Yes, contrast >= 3:1 | 2026-05-10T14:47:00Z |
 | 512 | 07 | TC-B-003 | Enter inside any field submits the form | Yes | 2026-05-10T14:48:00Z |
-| 513 | 07 | TC-B-004 | Space on focused button activates it | Yes | null |
+| 513 | 07 | TC-B-004 | Space on focused button activates it | Yes | 2026-05-10T14:48:30Z |
 | 514 | 07 | TC-B-005 | Hover on primary button | Slight elevation / state-layer overlay; cursor pointer | null |
 | 515 | 07 | TC-B-006 | Click during in-flight submit (double click "Sign in") | Only one POST emitted | null |
 | 516 | 07 | TC-B-007 | Submit button shows busy state while in-flight | Label "Signing in..."; disabled | null |
