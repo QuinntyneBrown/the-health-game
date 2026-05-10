@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 03-TC-V-001..009, 03-TC-C-001..011, 03-TC-L-001..011, 03-TC-R-001..006, 03-TC-F-001..011, 03-TC-F-101..109, 03-TC-F-201..204, 03-TC-B-001..006, 03-TC-A-001
+// Traces to: 03-TC-V-001..009, 03-TC-C-001..011, 03-TC-L-001..011, 03-TC-R-001..006, 03-TC-F-001..011, 03-TC-F-101..109, 03-TC-F-201..204, 03-TC-B-001..006, 03-TC-A-001..002
 // Description: /goals page title "Goals" renders with Inter weight 500 at 22/32 px.
 // Subtitle is Inter 13 px weight 400 with computed counts.
 import { expect, test } from '@playwright/test';
@@ -559,6 +559,49 @@ test.describe('Goals page — header typography', () => {
 
   test.describe('filter chip layout', () => {
     test.use({ viewport: { width: 1440, height: 900 } });
+
+    test('filter chips expose accurate role + aria-pressed (03-TC-A-002)', async ({ page }) => {
+      await page.setViewportSize({ width: 1440, height: 900 });
+      await authenticate(page);
+      await page.goto('/goals');
+
+      const chips = page.locator('lib-goal-list mat-button-toggle');
+      const count = await chips.count();
+      expect(count).toBeGreaterThanOrEqual(2);
+
+      // Each toggle should expose a button-style role + aria-pressed reflecting checked state.
+      for (let i = 0; i < count; i++) {
+        const chip = chips.nth(i);
+        const meta = await chip.evaluate((host) => {
+          const inner = host.querySelector(
+            '.mat-button-toggle-button, button',
+          ) as HTMLElement | null;
+          const target = inner ?? host;
+          return {
+            role: target.getAttribute('role'),
+            ariaPressed: target.getAttribute('aria-pressed'),
+            ariaChecked: target.getAttribute('aria-checked'),
+            checkedClass: host.classList.contains('mat-button-toggle-checked'),
+          };
+        });
+        const aria = meta.ariaPressed ?? meta.ariaChecked;
+        expect(['button', 'tab', 'radio', 'checkbox']).toContain(meta.role ?? 'button');
+        expect(aria === 'true' || aria === 'false').toBe(true);
+        expect(aria === 'true').toBe(meta.checkedClass);
+      }
+
+      // Toggle "Daily" and re-verify the new state propagates.
+      const daily = chips.filter({ hasText: /^Daily/ }).first();
+      await daily.click();
+      const dailyAria = await daily.evaluate((host) => {
+        const inner = host.querySelector(
+          '.mat-button-toggle-button, button',
+        ) as HTMLElement | null;
+        return (inner ?? host).getAttribute('aria-pressed') ??
+          (inner ?? host).getAttribute('aria-checked');
+      });
+      expect(dailyAria).toBe('true');
+    });
 
     test('goal card has a single accessible button (03-TC-A-001)', async ({ page }) => {
       await page.setViewportSize({ width: 1440, height: 900 });
