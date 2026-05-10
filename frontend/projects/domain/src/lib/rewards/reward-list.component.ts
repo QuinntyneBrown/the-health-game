@@ -75,6 +75,8 @@ const filterOptions: readonly SegmentedFilterOption[] = [
                   [isEarned]="reward.status === 'earned'"
                   [statusLabel]="statusLabel(reward)"
                   [earnedDateLabel]="earnedLabel(reward)"
+                  [progressCurrent]="reward.progress?.current ?? null"
+                  [progressTarget]="reward.progress?.target ?? null"
                 />
               </li>
             }

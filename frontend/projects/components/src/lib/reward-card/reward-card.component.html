@@ -16,6 +16,9 @@
       @if (earnedDateLabel()) {
         <span class="reward-card__date">{{ earnedDateLabel() }}</span>
       }
+      @if (progressTarget() !== null && progressCurrent() !== null) {
+        <span class="reward-card__progress-label">{{ progressCurrent() }} of {{ progressTarget() }}</span>
+      }
     </div>
 
     @if (statusLabel()) {

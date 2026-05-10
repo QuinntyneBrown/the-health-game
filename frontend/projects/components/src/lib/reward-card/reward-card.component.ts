@@ -21,4 +21,6 @@ export class RewardCardComponent {
   readonly isEarned = input(false);
   readonly name = input.required<string>();
   readonly statusLabel = input('');
+  readonly progressCurrent = input<number | null>(null);
+  readonly progressTarget = input<number | null>(null);
 }

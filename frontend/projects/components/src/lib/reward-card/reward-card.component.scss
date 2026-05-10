@@ -65,6 +65,14 @@
   margin: 0;
 }
 
+.reward-card__progress-label {
+  color: var(--hg-color-on-surface);
+  font-family: Inter, Roboto, Arial, sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  margin: 0;
+}
+
 .reward-card__status,
 .reward-card__action {
   justify-self: end;
