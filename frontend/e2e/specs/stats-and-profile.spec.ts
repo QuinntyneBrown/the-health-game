@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 06-TC-V-001..007
+// Traces to: 06-TC-V-001..007, 06-TC-C-001
 // Description: stats + profile page chrome.
 import { expect, test } from '@playwright/test';
 
@@ -44,6 +44,22 @@ async function authenticate(page: import('@playwright/test').Page): Promise<void
 }
 
 test.describe('Stats & Profile chrome', () => {
+  test('Stats + Profile pages background #F1F5ED (06-TC-C-001)', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await authenticate(page);
+
+    const checkBg = async (path: string, host: string) => {
+      await page.goto(path);
+      const target = page.locator(host).first();
+      await expect(target).toBeVisible();
+      const bg = await target.evaluate((el) => getComputedStyle(el).backgroundColor);
+      return bg;
+    };
+
+    expect(await checkBg('/stats', 'lib-stats')).toBe('rgb(241, 245, 237)');
+    expect(await checkBg('/profile', 'lib-profile')).toBe('rgb(241, 245, 237)');
+  });
+
   test('Delete account button Inter 14 px / 500 (06-TC-V-007)', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await authenticate(page);
