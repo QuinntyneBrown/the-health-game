@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 03-TC-V-001..009, 03-TC-C-001..011, 03-TC-L-001..011, 03-TC-R-001..006, 03-TC-F-001..011, 03-TC-F-101..109, 03-TC-F-201..204, 03-TC-B-001..005
+// Traces to: 03-TC-V-001..009, 03-TC-C-001..011, 03-TC-L-001..011, 03-TC-R-001..006, 03-TC-F-001..011, 03-TC-F-101..109, 03-TC-F-201..204, 03-TC-B-001..006
 // Description: /goals page title "Goals" renders with Inter weight 500 at 22/32 px.
 // Subtitle is Inter 13 px weight 400 with computed counts.
 import { expect, test } from '@playwright/test';
@@ -559,6 +559,61 @@ test.describe('Goals page — header typography', () => {
 
   test.describe('filter chip layout', () => {
     test.use({ viewport: { width: 1440, height: 900 } });
+
+    test('streak count has transition when motion allowed; none when reduced (03-TC-B-006)', async ({
+      browser,
+    }) => {
+      const goal = {
+        id: 'g1',
+        name: 'Walk',
+        description: '',
+        cadence: 'daily' as const,
+        target: { value: 10, unit: 'min' },
+        completedQuantity: 0,
+        currentStreak: 4,
+        longestStreak: 7,
+        rewardName: '',
+      };
+
+      async function readTransition(reducedMotion: 'reduce' | 'no-preference') {
+        const ctx = await browser.newContext({ reducedMotion });
+        const page = await ctx.newPage();
+        page.setDefaultTimeout(15000);
+        await page.setViewportSize({ width: 1440, height: 900 });
+        await authenticate(page);
+        await page.route('**/api/goals/g1', (route) =>
+          route.fulfill({
+            status: 200,
+            contentType: 'application/json',
+            body: JSON.stringify(goal),
+          }),
+        );
+        await page.route('**/api/goals/g1/activity**', (route) =>
+          route.fulfill({ status: 200, contentType: 'application/json', body: '[]' }),
+        );
+        await page.goto('/goals/g1');
+        const value = page
+          .locator('lib-goal-detail [data-testid="goal-detail-current-streak"] .streak-summary__value')
+          .first();
+        await expect(value).toBeVisible();
+        const props = await value.evaluate((el) => {
+          const s = getComputedStyle(el);
+          return { transition: s.transitionProperty, duration: s.transitionDuration };
+        });
+        await ctx.close();
+        return props;
+      }
+
+      const motion = await readTransition('no-preference');
+      const reduced = await readTransition('reduce');
+
+      const motionMs = parseFloat(motion.duration);
+      const reducedMs = parseFloat(reduced.duration);
+
+      expect(motion.transition).not.toBe('none');
+      expect(motionMs).toBeGreaterThan(0);
+      expect(reducedMs).toBe(0);
+    });
 
     test('optimistic UI on create rolls back with toast on failure (03-TC-B-005)', async ({
       page,
