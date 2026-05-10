@@ -55,7 +55,7 @@ export class SignInComponent {
     () =>
       !this.busy() &&
       this.usernameOrEmail().trim().length > 0 &&
-      this.password().length > 0,
+      this.password().trim().length > 0,
   );
 
   async onSubmit(event: Event): Promise<void> {
@@ -65,7 +65,7 @@ export class SignInComponent {
     const identifier = this.usernameOrEmail().trim();
     const password = this.password();
 
-    if (identifier.length === 0 || password.length === 0) {
+    if (identifier.length === 0 || password.trim().length === 0) {
       return;
     }
 

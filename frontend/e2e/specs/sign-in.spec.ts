@@ -6,6 +6,20 @@ import AxeBuilder from '@axe-core/playwright';
 import { expect, test } from '@playwright/test';
 
 test.describe('Sign In — page', () => {
+  test('whitespace-only credentials keep submit disabled (07-TC-F-016)', async ({
+    page,
+  }) => {
+    await page.goto('/sign-in');
+    const submit = page.getByTestId('sign-in-submit');
+    await expect(submit).toBeDisabled();
+    await page.getByTestId('sign-in-username').locator('input').fill('   ');
+    await page.getByTestId('sign-in-password').locator('input').fill('Secret');
+    await expect(submit).toBeDisabled();
+    await page.getByTestId('sign-in-username').locator('input').fill('alice');
+    await page.getByTestId('sign-in-password').locator('input').fill('   ');
+    await expect(submit).toBeDisabled();
+  });
+
   test('network failure: re-enables submit, preserves values, non-disclosing error (07-TC-F-015)', async ({
     page,
   }) => {
