@@ -44,7 +44,12 @@
   }
 </mat-form-field>
 @if (errorText()) {
-  <p class="health-text-field__error" [attr.id]="errorId" role="alert">
+  <p
+    class="health-text-field__error"
+    [attr.id]="errorId"
+    aria-live="polite"
+    aria-atomic="true"
+  >
     {{ errorText() }}
   </p>
 }

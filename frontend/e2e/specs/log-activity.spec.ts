@@ -1,5 +1,5 @@
 // Acceptance Test
-// Traces to: 04-TC-V-001..007, 04-TC-C-001..010, 04-TC-L-001..010, 04-TC-R-001..006, 04-TC-F-001..012, 04-TC-F-101..109, 04-TC-B-001..010, 04-TC-A-001..003
+// Traces to: 04-TC-V-001..007, 04-TC-C-001..010, 04-TC-L-001..010, 04-TC-R-001..006, 04-TC-F-001..012, 04-TC-F-101..109, 04-TC-B-001..010, 04-TC-A-001..004
 // Description: log-activity dialog typography.
 import { expect, test } from '@playwright/test';
 
@@ -126,6 +126,37 @@ test.describe('Log activity sheet (mobile)', () => {
     });
     const accessibleName = meta.targetText || meta.ariaLabel || '';
     expect(accessibleName).toMatch(/Log activity/i);
+  });
+
+  test('inline errors are announced via aria-live=polite (04-TC-A-004)', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await authenticate(page);
+    await page.route('**/api/goals/g1', (route) =>
+      route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(goal) }),
+    );
+    await page.route('**/api/goals/g1/activities**', (route) =>
+      route.fulfill({ status: 200, contentType: 'application/json', body: '[]' }),
+    );
+    await page.goto('/goals/g1');
+    await page
+      .locator('[data-testid="goal-detail-log-fab"]')
+      .evaluate((el: HTMLElement) => el.click());
+    await page.waitForTimeout(300);
+
+    await page.locator('[data-testid="log-activity-save"]').click();
+    const errorMsg = page.locator('mat-dialog-container .health-text-field__error').first();
+    await expect(errorMsg).toBeVisible();
+
+    const announcement = await errorMsg.evaluate((el) => {
+      const liveRegion = el.closest('[aria-live]') ?? el.querySelector('[aria-live]');
+      const ownLive = el.getAttribute('aria-live');
+      const ownRole = el.getAttribute('role');
+      return {
+        ariaLive: ownLive ?? liveRegion?.getAttribute('aria-live') ?? null,
+        role: ownRole ?? liveRegion?.getAttribute('role') ?? null,
+      };
+    });
+    expect(announcement.ariaLive).toBe('polite');
   });
 
   test('each input has a visible label programmatically associated (04-TC-A-003)', async ({ page }) => {

@@ -293,7 +293,7 @@ and made green. The /loop process picks the first test with
 | 282 | 04 | TC-A-001 | Sheet exposes `role="dialog"` with `aria-modal="true"` | Yes | 2026-05-10T05:55:07Z |
 | 283 | 04 | TC-A-002 | Title programmatically associated via `aria-labelledby` | Yes | 2026-05-10T05:57:21Z |
 | 284 | 04 | TC-A-003 | Each input has visible label and matching `<label for>` | Yes | 2026-05-10T06:02:01Z |
-| 285 | 04 | TC-A-004 | Inline errors announced via `aria-live="polite"` | Yes | null |
+| 285 | 04 | TC-A-004 | Inline errors announced via `aria-live="polite"` | Yes | 2026-05-10T06:14:45Z |
 | 286 | 04 | TC-A-005 | Submit button announces loading state via `aria-busy` | Yes | null |
 | 287 | 04 | TC-A-006 | Sheet handle has `aria-label="Drag to close"` (or button alternative) | Yes | null |
 | 288 | 04 | TC-A-007 | axe-core | 0 critical / serious | null |
