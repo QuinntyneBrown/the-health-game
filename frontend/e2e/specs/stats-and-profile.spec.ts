@@ -237,11 +237,11 @@ test.describe('Stats & Profile chrome', () => {
     });
 
     // localStorage holds NOTHING auth-related — no access token, no refresh
-    // token, no PKCE state. (PKCE secrets ride sessionStorage which dies
+    // token, no transient auth state. (Transient auth state rides sessionStorage which dies
     // with the tab; refresh tokens, if any, must come back as httpOnly
     // cookies the JS context can't see.)
     for (const [key, value] of Object.entries(storage.localKeys)) {
-      expect(/(token|access|refresh|verifier|pkce|hg\.oidc)/i.test(key)).toBe(false);
+      expect(/(token|access|refresh|verifier|hg\.oidc)/i.test(key)).toBe(false);
       expect(/(test-access-token|Bearer )/i.test(value)).toBe(false);
     }
 

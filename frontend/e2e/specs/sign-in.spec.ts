@@ -1965,7 +1965,7 @@ test.describe('Sign In — page', () => {
     expect(page.url()).toContain('/sign-in');
   });
 
-  test('Slice 6: "Continue with Single Sign-On" starts the OIDC PKCE flow', async ({ page }) => {
+  test('Slice 6: "Continue with Single Sign-On" starts the authorization flow', async ({ page }) => {
     await page.route('**/connect/authorize**', (route) =>
       route.fulfill({ status: 200, contentType: 'text/html', body: '<html></html>' }),
     );

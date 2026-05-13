@@ -243,7 +243,7 @@ requirements:
 - Add activity logging and activity history.
 - Implement current and longest streak computation across all cadence types.
 - Add reward definition, earning, and display flows.
-- Complete OIDC PKCE authentication and user management.
+- Complete backend-issued OAuth2 token authentication and user management.
 - Add EF Core migrations and database lifecycle documentation.
 - Add Playwright end-to-end tests using the Page Object Model pattern.
 - Add CI for backend, frontend, and end-to-end verification.

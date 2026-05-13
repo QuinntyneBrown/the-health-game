@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>HealthQuest Mock - Log activity</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body class="v8">
+<section class="screen-frame" data-screen="log-activity" aria-labelledby="log-activity-title">
+      <header class="screen-frame__header">
+        <div>
+          <p>sheet/dialog</p>
+          <h2 id="log-activity-title">Log activity</h2>
+        </div>
+        <a href="./index.html">Index</a>
+      </header>
+      
+    <div class="app-preview app-preview--tabs">
+      <header class="app-top">
+        <a class="skip-link" href="#main-morning-walk-log-activity">Skip to content</a>
+        <div class="brand">
+          <span class="brand__mark" aria-hidden="true"></span>
+          <span class="brand__name">HealthQuest</span>
+        </div>
+        <div class="app-top__meta">
+          <span class="pill">Log activity</span>
+          <button class="icon-button" type="button" aria-label="Notifications">
+            <span class="dot" aria-hidden="true"></span>
+          </button>
+        </div>
+      </header>
+      
+    <nav class="app-nav app-nav--tabs" aria-label="Primary">
+      
+        <a class="app-nav__item app-nav__item--active" href="./dashboard.html">
+          <span class="app-nav__mark" aria-hidden="true"></span>
+          <span>Home</span>
+        </a>
+        <a class="app-nav__item" href="./goals-list.html">
+          <span class="app-nav__mark" aria-hidden="true"></span>
+          <span>Goals</span>
+        </a>
+        <a class="app-nav__item" href="./rewards-list.html">
+          <span class="app-nav__mark" aria-hidden="true"></span>
+          <span>Rewards</span>
+        </a>
+        <a class="app-nav__item" href="./profile.html">
+          <span class="app-nav__mark" aria-hidden="true"></span>
+          <span>Profile</span>
+        </a>
+    </nav>
+      <main class="app-main" id="main-morning-walk-log-activity">
+        <div class="page-title">
+          <p class="eyebrow">bottom sheet under 768px, dialog at desktop</p>
+          <h1>Morning walk</h1>
+          
+        </div>
+        
+    <section class="modal-stage">
+      <div class="sheet" role="dialog" aria-label="Log activity">
+        <span class="sheet__handle" aria-hidden="true"></span>
+        <h2>Log activity</h2>
+        
+    
+    <label class="field">
+      <span>Quantity</span>
+      <input type="number" value="24" />
+      <small>minutes</small>
+    </label>
+    
+    <label class="field">
+      <span>Notes optional</span>
+      <input type="text" value="Park loop" />
+      
+    </label>
+    <div class="notice notice--success">Reward ready: Trail breakfast.</div>
+        <div class="actions actions--end">
+          <button class="button button--ghost" type="button">Cancel</button>
+          <button class="button button--primary" type="button">Log</button>
+        </div>
+      </div>
+      
+    <div class="dialog" role="dialog" aria-label="Desktop dialog">
+      <h3>Desktop dialog</h3>
+      <div class="dialog__body">
+    
+    <label class="field">
+      <span>Quantity</span>
+      <input type="number" value="24" />
+      <small>minutes</small>
+    </label>
+    
+    <label class="field">
+      <span>Notes optional</span>
+      <input type="text" value="Park loop" />
+      
+    </label>
+    <div class="notice notice--success">Reward ready: Trail breakfast.</div></div>
+      <div class="dialog__actions">
+        <button class="button button--ghost" type="button">Cancel</button><button class="button button--primary" type="button">Log</button>
+      </div>
+    </div>
+    </section>
+      </main>
+    </div>
+    </section>
+
+</body>
+</html>

@@ -1,0 +1,354 @@
+{
+  "selectedVersion": "v8",
+  "name": "Sage Lilac",
+  "concept": "A soft habit ritual that makes one small win feel ceremonial.",
+  "palette": "sage, muted lilac, apricot accent",
+  "pages": [
+    {
+      "id": "onboarding",
+      "label": "Onboarding",
+      "route": "/onboarding",
+      "file": "onboarding.html"
+    },
+    {
+      "id": "sign-in",
+      "label": "Sign in",
+      "route": "/sign-in",
+      "file": "sign-in.html"
+    },
+    {
+      "id": "create-account",
+      "label": "Create account",
+      "route": "/register",
+      "file": "create-account.html"
+    },
+    {
+      "id": "reset-password",
+      "label": "Reset password",
+      "route": "/password-reset",
+      "file": "reset-password.html"
+    },
+    {
+      "id": "session-states",
+      "label": "Session states",
+      "route": "/auth/callback, /auth/signed-out, expired token",
+      "file": "session-states.html"
+    },
+    {
+      "id": "dashboard",
+      "label": "Home dashboard",
+      "route": "/home",
+      "file": "dashboard.html"
+    },
+    {
+      "id": "goals-empty",
+      "label": "Goals empty",
+      "route": "/goals",
+      "file": "goals-empty.html"
+    },
+    {
+      "id": "goals-list",
+      "label": "Goals list",
+      "route": "/goals",
+      "file": "goals-list.html"
+    },
+    {
+      "id": "goal-detail",
+      "label": "Goal detail",
+      "route": "/goals/morning-walk",
+      "file": "goal-detail.html"
+    },
+    {
+      "id": "goal-form",
+      "label": "Goal form",
+      "route": "/goals/new, /goals/:id/edit",
+      "file": "goal-form.html"
+    },
+    {
+      "id": "goal-delete",
+      "label": "Delete goal",
+      "route": "dialog",
+      "file": "goal-delete.html"
+    },
+    {
+      "id": "log-activity",
+      "label": "Log activity",
+      "route": "sheet/dialog",
+      "file": "log-activity.html"
+    },
+    {
+      "id": "activity-management",
+      "label": "Activity edit/delete",
+      "route": "dialog",
+      "file": "activity-management.html"
+    },
+    {
+      "id": "rewards-list",
+      "label": "Rewards list",
+      "route": "/rewards",
+      "file": "rewards-list.html"
+    },
+    {
+      "id": "reward-form",
+      "label": "Reward form",
+      "route": "/rewards/new, /rewards/:id/edit",
+      "file": "reward-form.html"
+    },
+    {
+      "id": "stats",
+      "label": "Stats",
+      "route": "/stats",
+      "file": "stats.html"
+    },
+    {
+      "id": "profile",
+      "label": "Profile",
+      "route": "/profile",
+      "file": "profile.html"
+    },
+    {
+      "id": "admin-error-states",
+      "label": "Admin and states",
+      "route": "role gated / fallback states",
+      "file": "admin-error-states.html"
+    }
+  ],
+  "componentsLibrary": [
+    {
+      "id": "action-button",
+      "label": "Action button",
+      "file": "components/action-button.html",
+      "description": "Command buttons, icon actions, and destructive variants."
+    },
+    {
+      "id": "activity-list-item",
+      "label": "Activity list item",
+      "file": "components/activity-list-item.html",
+      "description": "Single activity-history row with metadata and edit/delete actions."
+    },
+    {
+      "id": "app-brand",
+      "label": "App brand",
+      "file": "components/app-brand.html",
+      "description": "Compact and large HealthQuest identity lockups."
+    },
+    {
+      "id": "app-top-bar",
+      "label": "App top bar",
+      "file": "components/app-top-bar.html",
+      "description": "Responsive shell toolbar with brand, status chip, and notification action."
+    },
+    {
+      "id": "empty-state",
+      "label": "Empty state",
+      "file": "components/empty-state.html",
+      "description": "Centered empty state with one clear recovery action."
+    },
+    {
+      "id": "goal-card",
+      "label": "Goal card",
+      "file": "components/goal-card.html",
+      "description": "Reusable card for a goal summary, streaks, progress, and reward."
+    },
+    {
+      "id": "health-text-field",
+      "label": "Health text field",
+      "file": "components/health-text-field.html",
+      "description": "Labeled text, numeric, select, helper, and error field states."
+    },
+    {
+      "id": "metric-card",
+      "label": "Metric card",
+      "file": "components/metric-card.html",
+      "description": "Small dashboard summary tiles with semantic tone."
+    },
+    {
+      "id": "navigation-bar",
+      "label": "Navigation bar",
+      "file": "components/navigation-bar.html",
+      "description": "Primary navigation item states used for bottom, rail, tab, and drawer modes."
+    },
+    {
+      "id": "page-header",
+      "label": "Page header",
+      "file": "components/page-header.html",
+      "description": "Page title block with eyebrow, description, and primary action."
+    },
+    {
+      "id": "reward-card",
+      "label": "Reward card",
+      "file": "components/reward-card.html",
+      "description": "Reward state card with status, milestone progress, and earned treatment."
+    },
+    {
+      "id": "section-header",
+      "label": "Section header",
+      "file": "components/section-header.html",
+      "description": "Section title row with supporting note or inline action."
+    },
+    {
+      "id": "segmented-filter",
+      "label": "Segmented filter",
+      "file": "components/segmented-filter.html",
+      "description": "Compact mode, status, cadence, and time-window selector."
+    },
+    {
+      "id": "status-banner",
+      "label": "Status banner",
+      "file": "components/status-banner.html",
+      "description": "Offline, success, and error status messages."
+    },
+    {
+      "id": "streak-summary",
+      "label": "Streak summary",
+      "file": "components/streak-summary.html",
+      "description": "Current and longest streak summaries for list and detail views."
+    },
+    {
+      "id": "user-avatar",
+      "label": "User avatar",
+      "file": "components/user-avatar.html",
+      "description": "Profile avatar and initials fallback."
+    },
+    {
+      "id": "week-strip",
+      "label": "Week strip",
+      "file": "components/week-strip.html",
+      "description": "Seven-day progress strip for cadence windows."
+    }
+  ],
+  "domainLibrary": [
+    {
+      "id": "onboarding",
+      "label": "Onboarding component",
+      "file": "domain/onboarding.component.html",
+      "description": "First-run habit ritual and entry CTA."
+    },
+    {
+      "id": "sign-in",
+      "label": "Sign-in component",
+      "file": "domain/sign-in.component.html",
+      "description": "Username/password sign-in with SSO fallback and error state."
+    },
+    {
+      "id": "create-account",
+      "label": "Create account component",
+      "file": "domain/create-account.component.html",
+      "description": "Registration candidate for backend-owned user management."
+    },
+    {
+      "id": "reset-password",
+      "label": "Reset password component",
+      "file": "domain/reset-password.component.html",
+      "description": "Password reset request and neutral success message."
+    },
+    {
+      "id": "auth-session-states",
+      "label": "Auth session states component",
+      "file": "domain/auth-session-states.component.html",
+      "description": "Callback, signed-out, and expired-token states."
+    },
+    {
+      "id": "dashboard-overview",
+      "label": "Dashboard overview component",
+      "file": "domain/dashboard-overview.component.html",
+      "description": "Authenticated home overview with next action, metrics, goals, rewards, and chart."
+    },
+    {
+      "id": "goal-list",
+      "label": "Goal list component",
+      "file": "domain/goal-list.component.html",
+      "description": "Searchable and filterable goal collection view."
+    },
+    {
+      "id": "goal-empty",
+      "label": "Goal empty component",
+      "file": "domain/goal-empty.component.html",
+      "description": "No-goals state for first run or all goals deleted."
+    },
+    {
+      "id": "goal-detail",
+      "label": "Goal detail component",
+      "file": "domain/goal-detail.component.html",
+      "description": "Single-goal detail with target, streaks, reward, and activity history."
+    },
+    {
+      "id": "goal-form",
+      "label": "Goal form component",
+      "file": "domain/goal-form.component.html",
+      "description": "Create/edit goal form with cadence and custom interval controls."
+    },
+    {
+      "id": "delete-goal-dialog",
+      "label": "Delete goal dialog component",
+      "file": "domain/delete-goal-dialog.component.html",
+      "description": "Explicit destructive confirmation for goal deletion."
+    },
+    {
+      "id": "log-activity-sheet",
+      "label": "Log activity sheet component",
+      "file": "domain/log-activity-sheet.component.html",
+      "description": "Mobile bottom-sheet activity logging interaction."
+    },
+    {
+      "id": "log-activity-dialog",
+      "label": "Log activity dialog component",
+      "file": "domain/log-activity-dialog.component.html",
+      "description": "Desktop activity logging dialog."
+    },
+    {
+      "id": "edit-activity-dialog",
+      "label": "Edit activity dialog component",
+      "file": "domain/edit-activity-dialog.component.html",
+      "description": "Activity edit dialog that recomputes streaks after save."
+    },
+    {
+      "id": "delete-activity-dialog",
+      "label": "Delete activity dialog component",
+      "file": "domain/delete-activity-dialog.component.html",
+      "description": "Activity deletion confirmation."
+    },
+    {
+      "id": "discard-changes-dialog",
+      "label": "Discard changes dialog component",
+      "file": "domain/discard-changes-dialog.component.html",
+      "description": "Unsaved draft confirmation for activity logging."
+    },
+    {
+      "id": "reward-list",
+      "label": "Reward list component",
+      "file": "domain/reward-list.component.html",
+      "description": "Reward collection, claim hero, grouped statuses, and earned notification."
+    },
+    {
+      "id": "reward-form",
+      "label": "Reward form component",
+      "file": "domain/reward-form.component.html",
+      "description": "Create/edit reward form with goal target or streak milestone condition."
+    },
+    {
+      "id": "stats",
+      "label": "Stats component",
+      "file": "domain/stats.component.html",
+      "description": "Activity chart and aggregate progress summaries."
+    },
+    {
+      "id": "profile",
+      "label": "Profile component",
+      "file": "domain/profile.component.html",
+      "description": "Profile display, edit mode, roles, sign-out, and delete entry point."
+    },
+    {
+      "id": "delete-account-dialog",
+      "label": "Delete account dialog component",
+      "file": "domain/delete-account-dialog.component.html",
+      "description": "Account deletion confirmation requiring email entry."
+    },
+    {
+      "id": "admin-states",
+      "label": "Admin and fallback states component",
+      "file": "domain/admin-states.component.html",
+      "description": "RBAC-gated controls, loading skeleton, and structured error state."
+    }
+  ]
+}

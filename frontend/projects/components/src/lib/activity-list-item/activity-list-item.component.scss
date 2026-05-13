@@ -1,35 +1,3 @@
-:host {
-  display: block;
-}
+@use '../mock-theme' as *;
 
-.activity-list-item {
-  background: var(--hg-color-surface);
-  border: var(--hg-border-subtle);
-  border-radius: var(--hg-radius-card);
-  padding: 0;
-}
-
-.activity-list-item__row {
-  min-height: var(--hg-size-list-item);
-}
-
-.activity-list-item__icon {
-  color: var(--hg-color-primary);
-}
-
-.activity-list-item__title,
-.activity-list-item__quantity {
-  font-weight: var(--hg-font-weight-semibold);
-}
-
-.activity-list-item__detail,
-.activity-list-item__meta {
-  color: var(--hg-color-on-surface-variant);
-}
-
-.activity-list-item__trailing {
-  align-items: end;
-  display: grid;
-  gap: var(--hg-space-2);
-  justify-items: end;
-}
+@include health-mock-theme;

@@ -26,10 +26,8 @@
 - HTTP request DTOs are pure transport shapes — no validation attributes; map to commands and let the Application layer validate.
 
 ## Authentication & User Management
-- Two supported sign-in flows, configurable per environment, both producing an equivalent authenticated session:
-    - **PKCE-based OAuth 2.0 / OIDC authorization code flow** against an external identity provider.
-    - **Local username + password** sign-in: backend validates credentials against the application database and issues a signed JWT access token (and a refresh token where appropriate).
-- Passwords stored only as salted hashes from a modern password-hashing function (Argon2id, PBKDF2 with adequate iterations, or bcrypt with adequate cost). Never store or log plaintext passwords, code verifiers, or tokens.
+- Backend-owned OAuth2-compatible sign-in: backend stores user records in the application database, validates username/email and password credentials, and issues a signed JWT access token (and a refresh token where appropriate).
+- Passwords stored only as salted hashes from a modern password-hashing function (Argon2id, PBKDF2 with adequate iterations, or bcrypt with adequate cost). Never store or log plaintext passwords, tokens, refresh tokens, reset tokens, or other secrets.
 - JWTs validated on every request: issuer, audience, signature, expiration. Invalid/expired tokens → HTTP 401.
 - Repeated failed sign-ins are rate-limited, locked out, or otherwise throttled, with a security audit log entry on each event.
 - Full user management — registration, sign-in, sign-out, password reset, profile management, account deletion.

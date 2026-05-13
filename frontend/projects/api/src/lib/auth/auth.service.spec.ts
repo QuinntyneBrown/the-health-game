@@ -1,6 +1,6 @@
 // Acceptance Test
 // Traces to: L2-013
-// Description: AuthService.signIn redirects to the OIDC authority with PKCE parameters.
+// Description: AuthService.signIn redirects to the authorization authority with challenge parameters.
 import { TestBed } from '@angular/core/testing';
 
 import { API_CONFIG, ApiConfig } from '../api.config';
@@ -28,7 +28,7 @@ describe('AuthService.signIn', () => {
     });
   });
 
-  it('redirects to {oidcAuthority}/connect/authorize with PKCE code challenge', async () => {
+  it('redirects to {oidcAuthority}/connect/authorize with a code challenge', async () => {
     const service = TestBed.inject(AuthService);
 
     await service.signIn();
@@ -48,7 +48,7 @@ describe('AuthService.signIn', () => {
     expect(url.searchParams.get('state')).toMatch(/^[A-Za-z0-9_-]{16,}$/);
   });
 
-  it('persists the PKCE verifier in sessionStorage for the callback', async () => {
+  it('persists the authorization verifier in sessionStorage for the callback', async () => {
     const service = TestBed.inject(AuthService);
 
     await service.signIn();

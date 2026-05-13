@@ -1,48 +1,10 @@
-<mat-card
-  class="reward-card"
-  [class.reward-card--earned]="isEarned()"
-  appearance="outlined"
->
-  <mat-card-content class="reward-card__content">
-    <span class="reward-card__icon-frame" aria-hidden="true">
-      <mat-icon class="reward-card__icon" fontSet="material-symbols-rounded">{{ icon() }}</mat-icon>
-    </span>
-
-    <div class="reward-card__copy">
-      <h3 class="reward-card__name">{{ name() }}</h3>
-      @if (description()) {
-        <p class="reward-card__description">{{ description() }}</p>
-      }
-      @if (earnedDateLabel()) {
-        <span class="reward-card__date">{{ earnedDateLabel() }}</span>
-      }
-      @if (hasProgress()) {
-        <span class="reward-card__progress-label">{{ progressCurrent() }} of {{ progressTarget() }}</span>
-        <mat-progress-bar
-          class="reward-card__progress-bar"
-          mode="determinate"
-          [value]="progressPercent()"
-          [attr.aria-valuenow]="progressCurrent()"
-          [attr.aria-valuemin]="0"
-          [attr.aria-valuemax]="progressTarget()"
-          [attr.aria-label]="name() + ' progress'"
-        />
-      }
-    </div>
-
-    @if (statusLabel()) {
-      <mat-chip-set class="reward-card__status" aria-label="Reward status">
-        <mat-chip>{{ statusLabel() }}</mat-chip>
-      </mat-chip-set>
-    }
-
-    @if (actionLabel()) {
-      <hg-action-button
-        class="reward-card__action"
-        variant="text"
-        [label]="actionLabel()"
-        (action)="actionSelected.emit()"
-      />
-    }
-  </mat-card-content>
-</mat-card>
+<article class="reward-card">
+  <span class="reward-card__mark" aria-hidden="true"></span>
+  <h3>{{ name }}</h3>
+  <p>{{ earnedDateLabel || statusLabel }}</p>
+  <p>{{ description }}</p>
+  <div class="progress-row">
+    <div class="progress-row__label"><span>Reward progress</span><strong>{{ progressValue }}%</strong></div>
+    <span class="progress"><span [attr.style]="progressStyle"></span></span>
+  </div>
+</article>

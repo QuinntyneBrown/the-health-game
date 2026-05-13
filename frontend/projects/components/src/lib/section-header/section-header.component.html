@@ -1,9 +1,4 @@
-<header class="section-header">
-  <div class="section-header__copy">
-    <h2 class="section-header__title" [id]="headingId()">{{ title() }}</h2>
-    @if (note()) {
-      <span class="section-header__note">{{ note() }}</span>
-    }
-  </div>
-  <ng-content select="[hgSectionHeaderAction]" />
-</header>
+<div class="section-title">
+  <h2 [id]="headingId || null">{{ title }}</h2>
+  @if (note) { <span class="pill">{{ note }}</span> }
+</div>

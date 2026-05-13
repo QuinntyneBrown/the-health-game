@@ -1,14 +1,8 @@
-<mat-chip-set class="week-strip" [attr.aria-label]="ariaLabel()">
-  @for (day of days(); track day.label) {
-    <mat-chip
-      class="week-strip__day"
-      [class.week-strip__day--done]="day.status === 'done'"
-      [class.week-strip__day--idle]="day.status === 'idle'"
-      [class.week-strip__day--missed]="day.status === 'missed'"
-      [class.week-strip__day--today]="day.status === 'today'"
-      [attr.aria-label]="day.ariaLabel ?? day.label"
-    >
-      {{ day.label }}
-    </mat-chip>
+<div class="week-strip" aria-label="Week progress">
+  @for (day of days; track day.label) {
+    <span class="week-strip__day" [class.week-strip__day--complete]="day.status === 'complete'" [class.week-strip__day--today]="day.status === 'today'">
+      <strong>{{ day.label }}</strong>
+      <small>{{ day.status === 'complete' ? 'Done' : day.status === 'today' ? 'Today' : 'Next' }}</small>
+    </span>
   }
-</mat-chip-set>
+</div>

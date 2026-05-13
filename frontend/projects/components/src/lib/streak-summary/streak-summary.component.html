@@ -1,21 +1,4 @@
-<mat-card
-  class="streak-summary"
-  [class.streak-summary--neutral]="tone() === 'neutral'"
-  [class.streak-summary--primary]="tone() === 'primary'"
-  [class.streak-summary--streak]="tone() === 'streak'"
-  appearance="outlined"
->
-  <mat-card-content class="streak-summary__content">
-    <span class="streak-summary__icon-frame" aria-hidden="true">
-      <mat-icon class="streak-summary__icon" fontSet="material-symbols-rounded">{{ icon() }}</mat-icon>
-    </span>
-
-    <span class="streak-summary__body">
-      <span class="streak-summary__label">{{ label() }}</span>
-      <strong class="streak-summary__value">{{ value() }} {{ unit() }}</strong>
-      @if (supportText()) {
-        <span class="streak-summary__support">{{ supportText() }}</span>
-      }
-    </span>
-  </mat-card-content>
-</mat-card>
+<article class="metric" [class.metric--primary]="tone === 'primary' || tone === 'streak'" [class.metric--accent]="tone === 'accent'">
+  <span class="metric__value">{{ value }} {{ unit }}</span>
+  <span class="metric__label">{{ label }}</span>
+</article>

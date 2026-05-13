@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>HealthQuest Domain Mock - Goal form component</title>
+  <link rel="stylesheet" href="../styles.css" />
+</head>
+<body class="v8">
+<main class="library-page">
+  <a class="mock-breadcrumb" href="./index.html">Domain</a>
+  <section class="component-demo" aria-labelledby="domain-goal-form-mock-title">
+    <header class="component-demo__header">
+      <p class="eyebrow">domain library candidate</p>
+      <h1 id="domain-goal-form-mock-title">Goal form component</h1>
+      <p>Create/edit goal form with cadence and custom interval controls.</p>
+    </header>
+    <div class="component-demo__canvas">
+      <section class="screen-frame" data-screen="goal-form" aria-labelledby="goal-form-title">
+      <header class="screen-frame__header">
+        <div>
+          <p>/goals/new, /goals/:id/edit</p>
+          <h2 id="goal-form-title">Goal form</h2>
+        </div>
+        <a href="../index.html">Index</a>
+      </header>
+      
+    <div class="app-preview app-preview--tabs">
+      <header class="app-top">
+        <a class="skip-link" href="#main-create-goal-hourly-daily-weekly-monthly-custom">Skip to content</a>
+        <div class="brand">
+          <span class="brand__mark" aria-hidden="true"></span>
+          <span class="brand__name">HealthQuest</span>
+        </div>
+        <div class="app-top__meta">
+          <span class="pill">Hourly, daily, weekly, monthly, custom</span>
+          <button class="icon-button" type="button" aria-label="Notifications">
+            <span class="dot" aria-hidden="true"></span>
+          </button>
+        </div>
+      </header>
+      
+    <nav class="app-nav app-nav--tabs" aria-label="Primary">
+      
+        <a class="app-nav__item app-nav__item--active" href="../dashboard.html">
+          <span class="app-nav__mark" aria-hidden="true"></span>
+          <span>Home</span>
+        </a>
+        <a class="app-nav__item" href="../goals-list.html">
+          <span class="app-nav__mark" aria-hidden="true"></span>
+          <span>Goals</span>
+        </a>
+        <a class="app-nav__item" href="../rewards-list.html">
+          <span class="app-nav__mark" aria-hidden="true"></span>
+          <span>Rewards</span>
+        </a>
+        <a class="app-nav__item" href="../profile.html">
+          <span class="app-nav__mark" aria-hidden="true"></span>
+          <span>Profile</span>
+        </a>
+    </nav>
+      <main class="app-main" id="main-create-goal-hourly-daily-weekly-monthly-custom">
+        <div class="page-title">
+          <p class="eyebrow">/goals/new and /goals/:id/edit</p>
+          <h1>Create goal</h1>
+          
+        </div>
+        
+    <form class="form-panel">
+      
+    <label class="field">
+      <span>Name</span>
+      <input type="text" value="Morning walk" />
+      
+    </label>
+      <div class="form-grid">
+        
+    <label class="field">
+      <span>Target</span>
+      <input type="number" value="30" />
+      
+    </label>
+        
+    <label class="field">
+      <span>Unit</span>
+      <input type="text" value="minutes" />
+      
+    </label>
+      </div>
+      <h2>Cadence</h2>
+      
+    <div class="segmented" role="group" aria-label="Filter">
+      <button class="" type="button">Hourly</button><button class="is-active" type="button">Daily</button><button class="" type="button">Weekly</button><button class="" type="button">Monthly</button><button class="" type="button">Custom</button>
+    </div>
+      <div class="form-grid">
+        
+    <label class="field">
+      <span>Every</span>
+      <input type="number" value="3" />
+      
+    </label>
+        
+    <label class="field">
+      <span>Custom unit</span>
+      <select>
+        <option>days</option><option>hours</option>
+      </select>
+    </label>
+      </div>
+      <div class="notice">Changing cadence recomputes future streak windows and keeps existing activity.</div>
+      <label class="check-row"><input type="checkbox" checked /> <span>Send daily reminder</span></label>
+      <div class="actions actions--end">
+        <button class="button button--ghost" type="button">Cancel</button>
+        <button class="button button--primary" type="button">Create goal</button>
+      </div>
+    </form>
+      </main>
+    </div>
+    </section>
+    </div>
+  </section>
+</main>
+</body>
+</html>

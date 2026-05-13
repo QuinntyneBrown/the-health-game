@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>HealthQuest Domain Mock - Reward form component</title>
+  <link rel="stylesheet" href="../styles.css" />
+</head>
+<body class="v8">
+<main class="library-page">
+  <a class="mock-breadcrumb" href="./index.html">Domain</a>
+  <section class="component-demo" aria-labelledby="domain-reward-form-mock-title">
+    <header class="component-demo__header">
+      <p class="eyebrow">domain library candidate</p>
+      <h1 id="domain-reward-form-mock-title">Reward form component</h1>
+      <p>Create/edit reward form with goal target or streak milestone condition.</p>
+    </header>
+    <div class="component-demo__canvas">
+      <section class="screen-frame" data-screen="reward-form" aria-labelledby="reward-form-title">
+      <header class="screen-frame__header">
+        <div>
+          <p>/rewards/new, /rewards/:id/edit</p>
+          <h2 id="reward-form-title">Reward form</h2>
+        </div>
+        <a href="../index.html">Index</a>
+      </header>
+      
+    <div class="app-preview app-preview--tabs">
+      <header class="app-top">
+        <a class="skip-link" href="#main-define-reward-goal-target-or-streak-milestone">Skip to content</a>
+        <div class="brand">
+          <span class="brand__mark" aria-hidden="true"></span>
+          <span class="brand__name">HealthQuest</span>
+        </div>
+        <div class="app-top__meta">
+          <span class="pill">Goal target or streak milestone</span>
+          <button class="icon-button" type="button" aria-label="Notifications">
+            <span class="dot" aria-hidden="true"></span>
+          </button>
+        </div>
+      </header>
+      
+    <nav class="app-nav app-nav--tabs" aria-label="Primary">
+      
+        <a class="app-nav__item app-nav__item--active" href="../dashboard.html">
+          <span class="app-nav__mark" aria-hidden="true"></span>
+          <span>Home</span>
+        </a>
+        <a class="app-nav__item" href="../goals-list.html">
+          <span class="app-nav__mark" aria-hidden="true"></span>
+          <span>Goals</span>
+        </a>
+        <a class="app-nav__item" href="../rewards-list.html">
+          <span class="app-nav__mark" aria-hidden="true"></span>
+          <span>Rewards</span>
+        </a>
+        <a class="app-nav__item" href="../profile.html">
+          <span class="app-nav__mark" aria-hidden="true"></span>
+          <span>Profile</span>
+        </a>
+    </nav>
+      <main class="app-main" id="main-define-reward-goal-target-or-streak-milestone">
+        <div class="page-title">
+          <p class="eyebrow">/rewards/new and /rewards/:id/edit</p>
+          <h1>Define reward</h1>
+          
+        </div>
+        
+    <form class="form-panel">
+      
+    <label class="field">
+      <span>Name</span>
+      <input type="text" value="Trail breakfast" />
+      
+    </label>
+      
+    <label class="field">
+      <span>Description</span>
+      <input type="text" value="Saturday breakfast after a full week" />
+      
+    </label>
+      
+    <label class="field">
+      <span>Goal</span>
+      <select>
+        <option>Morning walk</option><option>Hydration</option><option>Strength</option>
+      </select>
+    </label>
+      <fieldset class="fieldset">
+        <legend>Condition</legend>
+        <label><input type="radio" name="condition" /> Goal target met</label>
+        <label><input type="radio" name="condition" checked /> Streak milestone</label>
+      </fieldset>
+      
+    <label class="field">
+      <span>Streak days</span>
+      <input type="number" value="7" />
+      
+    </label>
+      <div class="actions actions--end">
+        <button class="button button--ghost" type="button">Cancel</button>
+        <button class="button button--primary" type="button">Create reward</button>
+      </div>
+    </form>
+      </main>
+    </div>
+    </section>
+    </div>
+  </section>
+</main>
+</body>
+</html>

@@ -66,7 +66,7 @@ export class AuthService {
       sessionStorage.setItem(RETURN_URL_KEY, returnUrl);
     }
 
-    const challenge = await pkceChallenge(verifier);
+    const challenge = await createAuthorizationChallenge(verifier);
 
     const url = new URL('/connect/authorize', this.config.oidcAuthority);
     url.searchParams.set('response_type', 'code');
@@ -103,7 +103,7 @@ export class AuthService {
     }
     const verifier = sessionStorage.getItem(VERIFIER_KEY);
     if (!verifier) {
-      throw new Error('Missing PKCE verifier');
+      throw new Error('Missing authorization verifier');
     }
 
     const body = new URLSearchParams();
@@ -198,7 +198,7 @@ function randomBase64Url(byteLength: number): string {
   return base64Url(bytes);
 }
 
-async function pkceChallenge(verifier: string): Promise<string> {
+async function createAuthorizationChallenge(verifier: string): Promise<string> {
   const data = new TextEncoder().encode(verifier);
   const hash = await crypto.subtle.digest('SHA-256', data);
   return base64Url(new Uint8Array(hash));

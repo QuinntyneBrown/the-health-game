@@ -200,7 +200,7 @@ test.describe('Onboarding — headline typography', () => {
     expect(background).toBe('rgb(0, 109, 63)');
   });
 
-  test('clicking "Get started" navigates to OIDC /connect/authorize with PKCE (TC-F-001)', async ({
+  test('clicking "Get started" navigates to the authorization endpoint (TC-F-001)', async ({
     page,
   }) => {
     await page.route('**/connect/authorize**', (route) =>

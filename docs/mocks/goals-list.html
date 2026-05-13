@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>HealthQuest Mock - Goals list</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body class="v8">
+<section class="screen-frame" data-screen="goals-list" aria-labelledby="goals-list-title">
+      <header class="screen-frame__header">
+        <div>
+          <p>/goals</p>
+          <h2 id="goals-list-title">Goals list</h2>
+        </div>
+        <a href="./index.html">Index</a>
+      </header>
+      
+    <div class="app-preview app-preview--tabs">
+      <header class="app-top">
+        <a class="skip-link" href="#main-goals-3-active">Skip to content</a>
+        <div class="brand">
+          <span class="brand__mark" aria-hidden="true"></span>
+          <span class="brand__name">HealthQuest</span>
+        </div>
+        <div class="app-top__meta">
+          <span class="pill">3 active</span>
+          <button class="icon-button" type="button" aria-label="Notifications">
+            <span class="dot" aria-hidden="true"></span>
+          </button>
+        </div>
+      </header>
+      
+    <nav class="app-nav app-nav--tabs" aria-label="Primary">
+      
+        <a class="app-nav__item app-nav__item--active" href="./dashboard.html">
+          <span class="app-nav__mark" aria-hidden="true"></span>
+          <span>Home</span>
+        </a>
+        <a class="app-nav__item" href="./goals-list.html">
+          <span class="app-nav__mark" aria-hidden="true"></span>
+          <span>Goals</span>
+        </a>
+        <a class="app-nav__item" href="./rewards-list.html">
+          <span class="app-nav__mark" aria-hidden="true"></span>
+          <span>Rewards</span>
+        </a>
+        <a class="app-nav__item" href="./profile.html">
+          <span class="app-nav__mark" aria-hidden="true"></span>
+          <span>Profile</span>
+        </a>
+    </nav>
+      <main class="app-main" id="main-goals-3-active">
+        <div class="page-title">
+          <p class="eyebrow">/goals</p>
+          <h1>Goals</h1>
+          <button class="button button--primary" type="button">New goal</button>
+        </div>
+        
+    <div class="toolbar-row">
+      
+    <label class="field">
+      <span>Search goals</span>
+      <input type="text" value="walk" />
+      
+    </label>
+      
+    <div class="segmented" role="group" aria-label="Filter">
+      <button class="" type="button">All</button><button class="is-active" type="button">Daily</button><button class="" type="button">Weekly</button><button class="" type="button">Custom</button>
+    </div>
+      
+    <label class="field">
+      <span>Sort by</span>
+      <select>
+        <option>Streak length</option><option>Recently active</option><option>Name</option>
+      </select>
+    </label>
+    </div>
+    <section class="goal-grid">
+      
+    <article class="goal-card">
+      <div class="goal-card__top">
+        <div>
+          <h3>Morning walk</h3>
+          <p>30 min daily</p>
+        </div>
+        <button class="button button--ghost" type="button">Open</button>
+      </div>
+      
+    <div class="progress-row">
+      <div class="progress-row__label">
+        <span>Progress</span>
+        <strong>82%</strong>
+      </div>
+      <span class="progress" aria-label="Progress 82%">
+        <span style="inline-size:82%"></span>
+      </span>
+    </div>
+      <div class="chips">
+        <span class="chip">7 current</span>
+        <span class="chip">12 best</span>
+        <span class="chip chip--accent">Trail breakfast</span>
+      </div>
+    </article>
+    <article class="goal-card">
+      <div class="goal-card__top">
+        <div>
+          <h3>Hydration</h3>
+          <p>8 cups daily</p>
+        </div>
+        <button class="button button--ghost" type="button">Open</button>
+      </div>
+      
+    <div class="progress-row">
+      <div class="progress-row__label">
+        <span>Progress</span>
+        <strong>63%</strong>
+      </div>
+      <span class="progress" aria-label="Progress 63%">
+        <span style="inline-size:63%"></span>
+      </span>
+    </div>
+      <div class="chips">
+        <span class="chip">4 current</span>
+        <span class="chip">18 best</span>
+        <span class="chip chip--accent">New bottle</span>
+      </div>
+    </article>
+    <article class="goal-card">
+      <div class="goal-card__top">
+        <div>
+          <h3>Strength</h3>
+          <p>3 sets weekly</p>
+        </div>
+        <button class="button button--ghost" type="button">Open</button>
+      </div>
+      
+    <div class="progress-row">
+      <div class="progress-row__label">
+        <span>Progress</span>
+        <strong>50%</strong>
+      </div>
+      <span class="progress" aria-label="Progress 50%">
+        <span style="inline-size:50%"></span>
+      </span>
+    </div>
+      <div class="chips">
+        <span class="chip">3 current</span>
+        <span class="chip">8 best</span>
+        <span class="chip chip--accent">Recovery hour</span>
+      </div>
+    </article>
+    </section>
+      </main>
+    </div>
+    </section>
+
+</body>
+</html>

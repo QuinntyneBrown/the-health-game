@@ -40,8 +40,8 @@ Contributions should preserve the project's security requirements:
 
 - Validate input at trust boundaries.
 - Enforce ownership and role checks on backend endpoints.
-- Avoid logging credentials, tokens, code verifiers, passwords, or sensitive
-  personal data.
+- Avoid logging credentials, tokens, passwords, refresh tokens, reset tokens, or
+  sensitive personal data.
 - Store secrets outside source control.
 - Use parameterized data access through EF Core.
 - Keep authentication and authorization checks on the server, even when the UI

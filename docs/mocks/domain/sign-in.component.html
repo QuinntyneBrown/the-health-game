@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>HealthQuest Domain Mock - Sign-in component</title>
+  <link rel="stylesheet" href="../styles.css" />
+</head>
+<body class="v8">
+<main class="library-page">
+  <a class="mock-breadcrumb" href="./index.html">Domain</a>
+  <section class="component-demo" aria-labelledby="domain-sign-in-mock-title">
+    <header class="component-demo__header">
+      <p class="eyebrow">domain library candidate</p>
+      <h1 id="domain-sign-in-mock-title">Sign-in component</h1>
+      <p>Username/password sign-in with SSO fallback and error state.</p>
+    </header>
+    <div class="component-demo__canvas">
+      <section class="screen-frame" data-screen="sign-in" aria-labelledby="sign-in-title">
+      <header class="screen-frame__header">
+        <div>
+          <p>/sign-in</p>
+          <h2 id="sign-in-title">Sign in</h2>
+        </div>
+        <a href="../index.html">Index</a>
+      </header>
+      
+    <div class="auth-layout">
+      <aside class="auth-hero">
+        <div class="brand brand--large"><span class="brand__mark"></span><span class="brand__name">HealthQuest</span></div>
+        <p>Build healthy streaks. Earn rewards.</p>
+      </aside>
+      <form class="auth-card">
+        <h2>Welcome back</h2>
+        <p>Sign in with the account that owns your goals.</p>
+        
+    <label class="field">
+      <span>Username or email</span>
+      <input type="text" value="quinn@example.com" />
+      
+    </label>
+        
+    <label class="field">
+      <span>Password</span>
+      <input type="password" value="********" />
+      
+    </label>
+        <p class="inline-error" role="alert">Incorrect username or password.</p>
+        <button class="button button--primary" type="button">Sign in</button>
+        <button class="button button--ghost" type="button">Continue with SSO</button>
+      </form>
+    </div>
+    </section>
+    </div>
+  </section>
+</main>
+</body>
+</html>

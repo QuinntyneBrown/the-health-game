@@ -1,18 +1,15 @@
-import { ChangeDetectionStrategy, Component, input } from '@angular/core';
-import { MatIconModule } from '@angular/material/icon';
-
-export type UserAvatarSize = 'small' | 'medium' | 'large';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 @Component({
   selector: 'hg-user-avatar',
-  imports: [MatIconModule],
   templateUrl: './user-avatar.component.html',
   styleUrl: './user-avatar.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UserAvatarComponent {
-  readonly imageUrl = input<string | null>(null);
-  readonly initials = input('');
-  readonly name = input('User');
-  readonly size = input<UserAvatarSize>('medium');
+  @Input() name = 'Quinn';
+  @Input() size: 'small' | 'medium' | 'large' = 'medium';
+
+  get initial(): string { return (this.name || '?').trim().charAt(0).toUpperCase(); }
+
 }

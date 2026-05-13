@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>HealthQuest Mock - Profile</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body class="v8">
+<section class="screen-frame" data-screen="profile" aria-labelledby="profile-title">
+      <header class="screen-frame__header">
+        <div>
+          <p>/profile</p>
+          <h2 id="profile-title">Profile</h2>
+        </div>
+        <a href="./index.html">Index</a>
+      </header>
+      
+    <div class="app-preview app-preview--tabs">
+      <header class="app-top">
+        <a class="skip-link" href="#main-profile-user-management">Skip to content</a>
+        <div class="brand">
+          <span class="brand__mark" aria-hidden="true"></span>
+          <span class="brand__name">HealthQuest</span>
+        </div>
+        <div class="app-top__meta">
+          <span class="pill">User management</span>
+          <button class="icon-button" type="button" aria-label="Notifications">
+            <span class="dot" aria-hidden="true"></span>
+          </button>
+        </div>
+      </header>
+      
+    <nav class="app-nav app-nav--tabs" aria-label="Primary">
+      
+        <a class="app-nav__item app-nav__item--active" href="./dashboard.html">
+          <span class="app-nav__mark" aria-hidden="true"></span>
+          <span>Home</span>
+        </a>
+        <a class="app-nav__item" href="./goals-list.html">
+          <span class="app-nav__mark" aria-hidden="true"></span>
+          <span>Goals</span>
+        </a>
+        <a class="app-nav__item" href="./rewards-list.html">
+          <span class="app-nav__mark" aria-hidden="true"></span>
+          <span>Rewards</span>
+        </a>
+        <a class="app-nav__item" href="./profile.html">
+          <span class="app-nav__mark" aria-hidden="true"></span>
+          <span>Profile</span>
+        </a>
+    </nav>
+      <main class="app-main" id="main-profile-user-management">
+        <div class="page-title">
+          <p class="eyebrow">/profile</p>
+          <h1>Profile</h1>
+          
+        </div>
+        
+    <section class="profile-panel">
+      <div class="avatar" aria-hidden="true">Q</div>
+      <div>
+        <h2>Quinn</h2>
+        <p>quinn@example.com</p>
+        <div class="chips"><span class="chip">user</span><span class="chip chip--accent">beta tester</span></div>
+      </div>
+      <button class="button button--ghost" type="button">Sign out</button>
+    </section>
+    <form class="form-panel">
+      <h2>Edit profile</h2>
+      
+    <label class="field">
+      <span>Display name</span>
+      <input type="text" value="Quinn" />
+      
+    </label>
+      
+    <label class="field">
+      <span>Email</span>
+      <input type="email" value="quinn@example.com" />
+      
+    </label>
+      <div class="actions actions--end"><button class="button button--ghost" type="button">Cancel</button><button class="button button--primary" type="button">Save</button></div>
+    </form>
+    
+    <div class="dialog" role="dialog" aria-label="Delete account">
+      <h3>Delete account</h3>
+      <div class="dialog__body">
+    <label class="field">
+      <span>Type email to confirm</span>
+      <input type="email" value="quinn@example.com" />
+      
+    </label><p>All goals, activities, rewards, and active sessions are removed.</p></div>
+      <div class="dialog__actions">
+        <button class="button button--ghost" type="button">Cancel</button><button class="button button--primary" type="button">Delete</button>
+      </div>
+    </div>
+      </main>
+    </div>
+    </section>
+
+</body>
+</html>

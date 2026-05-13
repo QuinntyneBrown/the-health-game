@@ -1,35 +1,28 @@
-import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
-import { MatBadgeModule } from '@angular/material/badge';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
 
-export type NavigationBarVariant = 'bottom' | 'rail' | 'drawer';
+export type NavigationBarVariant = 'bottom' | 'rail' | 'drawer' | 'tabs' | 'top';
 
 export interface NavigationBarItem {
-  readonly badgeLabel?: string;
-  readonly disabled?: boolean;
-  readonly icon: string;
   readonly id: string;
   readonly label: string;
+  readonly icon?: string;
 }
 
 @Component({
   selector: 'hg-navigation-bar',
-  imports: [MatBadgeModule, MatButtonModule, MatIconModule],
   templateUrl: './navigation-bar.component.html',
   styleUrl: './navigation-bar.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NavigationBarComponent {
-  readonly itemSelected = output<string>();
-  readonly activeItemId = input<string | null>(null);
-  readonly ariaLabel = input('Primary navigation');
-  readonly items = input<readonly NavigationBarItem[]>([]);
-  readonly variant = input<NavigationBarVariant>('bottom');
+  @Input() variant: NavigationBarVariant = 'bottom';
+  @Input() items: readonly NavigationBarItem[] = [
+    { id: 'home', label: 'Home' },
+    { id: 'goals', label: 'Goals' },
+    { id: 'rewards', label: 'Rewards' },
+    { id: 'profile', label: 'Profile' },
+  ];
+  @Input() activeItemId = 'home';
+  @Output() itemSelected = new EventEmitter<string>();
 
-  selectItem(item: NavigationBarItem): void {
-    if (!item.disabled) {
-      this.itemSelected.emit(item.id);
-    }
-  }
 }

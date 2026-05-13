@@ -1,70 +1,10 @@
-<mat-form-field class="health-text-field" [appearance]="appearance()">
-  <mat-label>{{ label() }}</mat-label>
-
-  @if (icon()) {
-    <mat-icon class="health-text-field__icon" fontSet="material-symbols-rounded" matPrefix aria-hidden="true">
-      {{ icon() }}
-    </mat-icon>
-  }
-
-  @if (multiline()) {
-    <textarea
-      class="health-text-field__input"
-      matInput
-      [attr.aria-describedby]="errorText() ? errorId : null"
-      [attr.aria-invalid]="errorText() ? 'true' : null"
-      [readonly]="isReadonly()"
-      [disabled]="disabled()"
-      [placeholder]="placeholder()"
-      [rows]="rows()"
-      [value]="value()"
-      (input)="onInput($event)"
-    ></textarea>
+<label class="field">
+  <span>{{ label }}</span>
+  @if (multiline) {
+    <textarea [value]="value" [disabled]="disabled" [readOnly]="isReadonly" (input)="onInput($any($event.target).value)"></textarea>
   } @else {
-    <input
-      class="health-text-field__input"
-      matInput
-      [attr.aria-describedby]="errorText() ? errorId : null"
-      [attr.aria-invalid]="errorText() ? 'true' : null"
-      [readonly]="isReadonly()"
-      [disabled]="disabled()"
-      [placeholder]="placeholder()"
-      [type]="effectiveType()"
-      [value]="value()"
-      (input)="onInput($event)"
-    />
+    <input [type]="type" [value]="value" [disabled]="disabled" [readOnly]="isReadonly" (input)="onInput($any($event.target).value)" />
   }
-
-  @if (showPasswordToggle()) {
-    <button
-      class="health-text-field__visibility"
-      mat-icon-button
-      matSuffix
-      type="button"
-      [disabled]="disabled()"
-      [attr.aria-label]="isPasswordRevealed() ? 'Hide password' : 'Show password'"
-      [attr.aria-pressed]="isPasswordRevealed()"
-      (click)="togglePasswordVisibility()"
-    >
-      <mat-icon fontSet="material-symbols-rounded" aria-hidden="true">
-        {{ isPasswordRevealed() ? 'visibility_off' : 'visibility' }}
-      </mat-icon>
-    </button>
-  }
-
-  @if (errorText()) {
-    <mat-error>{{ errorText() }}</mat-error>
-  } @else if (helperText()) {
-    <mat-hint>{{ helperText() }}</mat-hint>
-  }
-</mat-form-field>
-@if (errorText()) {
-  <p
-    class="health-text-field__error"
-    [attr.id]="errorId"
-    aria-live="polite"
-    aria-atomic="true"
-  >
-    {{ errorText() }}
-  </p>
-}
+  @if (helperText && !errorText) { <small>{{ helperText }}</small> }
+  @if (errorText) { <small class="inline-error">{{ errorText }}</small> }
+</label>

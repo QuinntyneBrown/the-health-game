@@ -1,27 +1,3 @@
-:host {
-  display: block;
-}
+@use '../mock-theme' as *;
 
-.week-strip {
-  max-width: 100%;
-}
-
-.week-strip__day {
-  font-weight: var(--hg-font-weight-semibold);
-}
-
-.week-strip__day--done {
-  --mdc-chip-elevated-container-color: var(--hg-color-primary-container);
-}
-
-.week-strip__day--today {
-  --mdc-chip-elevated-container-color: var(--hg-color-tertiary-container);
-}
-
-.week-strip__day--missed {
-  --mdc-chip-elevated-container-color: var(--hg-color-error-container);
-}
-
-.week-strip__day--idle {
-  --mdc-chip-elevated-container-color: var(--hg-color-surface-container);
-}
+@include health-mock-theme;

@@ -1,6 +1,4 @@
-<span class="app-brand" aria-label="HealthQuest">
-  <span class="app-brand__mark" aria-hidden="true">
-    <mat-icon class="app-brand__icon" fontSet="material-symbols-rounded">{{ icon() }}</mat-icon>
-  </span>
-  <span class="app-brand__name">{{ name() }}</span>
-</span>
+<div class="brand" [class.brand--large]="isLarge">
+  <span class="brand__mark" aria-hidden="true"></span>
+  <span class="brand__name">{{ label }}</span>
+</div>

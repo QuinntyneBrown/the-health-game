@@ -1,28 +1,8 @@
-<mat-list class="activity-list-item">
-  <mat-list-item class="activity-list-item__row">
-    <mat-icon class="activity-list-item__icon" fontSet="material-symbols-rounded" matListItemIcon>
-      {{ icon() }}
-    </mat-icon>
-
-    <span class="activity-list-item__title" matListItemTitle>{{ title() }}</span>
-    @if (detail()) {
-      <span class="activity-list-item__detail" matListItemLine>{{ detail() }}</span>
-    }
-    @if (metaLabel()) {
-      <span class="activity-list-item__meta" matListItemLine>{{ metaLabel() }}</span>
-    }
-
-    @if (quantityLabel() || statusLabel()) {
-      <span class="activity-list-item__trailing" matListItemMeta>
-        @if (quantityLabel()) {
-          <span class="activity-list-item__quantity">{{ quantityLabel() }}</span>
-        }
-        @if (statusLabel()) {
-          <mat-chip-set aria-label="Activity status">
-            <mat-chip>{{ statusLabel() }}</mat-chip>
-          </mat-chip-set>
-        }
-      </span>
-    }
-  </mat-list-item>
-</mat-list>
+<article class="history-item">
+  <span aria-hidden="true"></span>
+  <p><strong>{{ title }}</strong><br />{{ detail || metaLabel }}</p>
+  <div>
+    <button class="icon-button" type="button" aria-label="Edit activity"></button>
+    <button class="icon-button icon-button--danger" type="button" aria-label="Delete activity"></button>
+  </div>
+</article>

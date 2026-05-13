@@ -1,20 +1,17 @@
-import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
-import { MatIconModule } from '@angular/material/icon';
-
-import { ActionButtonComponent } from '../action-button/action-button.component';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
   selector: 'hg-empty-state',
-  imports: [ActionButtonComponent, MatIconModule],
   templateUrl: './empty-state.component.html',
   styleUrl: './empty-state.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EmptyStateComponent {
-  readonly actionSelected = output<void>();
-  readonly actionIcon = input<string | null>(null);
-  readonly actionLabel = input('');
-  readonly description = input('');
-  readonly icon = input('flag');
-  readonly title = input.required<string>();
+  @Input() title = 'No goals yet';
+  @Input() description = 'Choose the smallest repeatable action. The game starts after the first log.';
+  @Input() actionLabel = 'Create first goal';
+  @Input() actionIcon = 'add';
+  @Input() icon = 'flag';
+  @Output() actionSelected = new EventEmitter<void>();
+
 }
