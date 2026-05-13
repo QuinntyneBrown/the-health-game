@@ -1,7 +1,25 @@
-<button [class]="buttonClass" type="button" [attr.aria-label]="ariaLabel || label" [disabled]="disabled" (click)="actionSelected.emit()">
-  @if (variant === 'icon') {
-    <span class="dot" aria-hidden="true"></span>
-  } @else {
-    <span>{{ label }}</span>
+@switch (variant) {
+  @case ('icon') {
+    <button mat-icon-button class="action-button action-button--icon" type="button" [attr.aria-label]="ariaLabel || label" [attr.data-testid]="testId || null" [disabled]="disabled" (click)="actionSelected.emit()">
+      <mat-icon aria-hidden="true">{{ iconName }}</mat-icon>
+    </button>
   }
-</button>
+  @case ('ghost') {
+    <button mat-stroked-button class="action-button action-button--ghost" type="button" [attr.aria-label]="ariaLabel || label" [attr.data-testid]="testId || null" [disabled]="disabled" (click)="actionSelected.emit()">
+      @if (icon) { <mat-icon aria-hidden="true">{{ icon }}</mat-icon> }
+      <span>{{ label }}</span>
+    </button>
+  }
+  @case ('danger') {
+    <button mat-stroked-button class="action-button action-button--danger" type="button" [attr.aria-label]="ariaLabel || label" [attr.data-testid]="testId || null" [disabled]="disabled" (click)="actionSelected.emit()">
+      <mat-icon aria-hidden="true">{{ iconName }}</mat-icon>
+      <span>{{ label }}</span>
+    </button>
+  }
+  @default {
+    <button mat-flat-button class="action-button action-button--primary" type="button" [attr.aria-label]="ariaLabel || label" [attr.data-testid]="testId || null" [disabled]="disabled" (click)="actionSelected.emit()">
+      @if (icon) { <mat-icon aria-hidden="true">{{ icon }}</mat-icon> }
+      <span>{{ label }}</span>
+    </button>
+  }
+}

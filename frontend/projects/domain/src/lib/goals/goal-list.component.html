@@ -3,124 +3,79 @@
     <header class="screen-frame__header">
       <div>
         <p>/goals</p>
-        <h2 id="goals-list-title">Goals list</h2>
+        <hg-section-header title="Goals list" headingId="goals-list-title" />
       </div>
       <a href="/">Home</a>
     </header>
 
     <div class="app-preview app-preview--tabs">
       <main class="app-main" id="main-goals-real-backend">
-        <div class="page-title">
-          <p class="eyebrow">real backend</p>
-          <h1>Goals</h1>
-          <button class="button button--ghost" type="button" data-testid="reload-goals" (click)="load()">
-            Reload
-          </button>
-        </div>
+        <hg-page-header eyebrow="real backend" title="Goals" />
+        <hg-action-button label="Reload" variant="ghost" icon="refresh" testId="reload-goals" (actionSelected)="load()" />
 
-        <p class="pill" role="status" data-testid="goals-status">{{ status() }}</p>
+        <hg-status-banner [message]="status()" data-testid="goals-status" />
 
         <section class="panel-grid" aria-label="Create goal">
-          <label class="field">
-            <span>Name</span>
-            <input data-testid="goal-name" [(ngModel)]="goalName" />
-          </label>
-          <label class="field">
-            <span>Description</span>
-            <input data-testid="goal-description" [(ngModel)]="goalDescription" />
-          </label>
-          <label class="field">
-            <span>Target</span>
-            <input data-testid="goal-target" type="number" [(ngModel)]="goalTarget" />
-          </label>
-          <label class="field">
-            <span>Unit</span>
-            <input data-testid="goal-unit" [(ngModel)]="goalUnit" />
-          </label>
-          <label class="field">
-            <span>Cadence</span>
-            <select data-testid="goal-cadence" [(ngModel)]="goalCadence">
-              <option value="hourly">Hourly</option>
-              <option value="daily">Daily</option>
-              <option value="weekly">Weekly</option>
-              <option value="monthly">Monthly</option>
-            </select>
-          </label>
-          <button class="button button--primary" type="button" data-testid="create-goal" (click)="createGoal()">
-            Create goal
-          </button>
+          <hg-section-header title="Create goal" note="API backed" />
+          <hg-health-text-field label="Name" [value]="goalName" testId="goal-name" (valueChange)="goalName = $event" />
+          <hg-health-text-field label="Description" [value]="goalDescription" testId="goal-description" (valueChange)="goalDescription = $event" />
+          <hg-health-text-field label="Target" type="number" [value]="goalTarget" testId="goal-target" (valueChange)="setGoalTarget($event)" />
+          <hg-health-text-field label="Unit" [value]="goalUnit" testId="goal-unit" (valueChange)="goalUnit = $event" />
+          <hg-segmented-filter ariaLabel="Goal cadence" [options]="cadenceOptions" [value]="goalCadence" data-testid="goal-cadence" (valueChange)="setGoalCadence($event)" />
+          <hg-action-button label="Create goal" icon="add" testId="create-goal" (actionSelected)="createGoal()" />
         </section>
 
         <section class="toolbar-row" aria-label="Activity and reward inputs">
-          <label class="field">
-            <span>Activity quantity</span>
-            <input data-testid="activity-quantity" type="number" [(ngModel)]="activityQuantity" />
-          </label>
-          <label class="field">
-            <span>Activity notes</span>
-            <input data-testid="activity-notes" [(ngModel)]="activityNotes" />
-          </label>
-          <label class="field">
-            <span>Reward name</span>
-            <input data-testid="reward-name" [(ngModel)]="rewardName" />
-          </label>
+          <hg-health-text-field label="Activity quantity" type="number" [value]="activityQuantity" testId="activity-quantity" (valueChange)="setActivityQuantity($event)" />
+          <hg-health-text-field label="Activity notes" [value]="activityNotes" testId="activity-notes" (valueChange)="activityNotes = $event" />
+          <hg-health-text-field label="Reward name" [value]="rewardName" testId="reward-name" (valueChange)="rewardName = $event" />
         </section>
 
         <section class="goal-grid" data-testid="goal-list">
           @for (goal of goals(); track goal.id) {
-            <article class="goal-card" [attr.data-testid]="'goal-card-' + goal.id">
-              <div class="goal-card__top">
-                <div>
-                  <h3>{{ goal.name }}</h3>
-                  <p>{{ goal.target.value }} {{ goal.target.unit }} - {{ goal.cadence }}</p>
-                </div>
-                <button class="button button--ghost" type="button" [attr.data-testid]="'delete-goal-' + goal.id" (click)="deleteGoal(goal)">
-                  Delete
-                </button>
+            <section class="domain-card" [attr.data-testid]="'goal-card-' + goal.id">
+              <hg-goal-card
+                [title]="goal.name"
+                [description]="goalSummaryDescription(goal)"
+                [cadenceLabel]="goal.cadence"
+                [progressValue]="goalProgress(goal)"
+                [currentStreakLabel]="goal.currentStreak + ' current'"
+                [longestStreakLabel]="goal.longestStreak + ' best'"
+                [rewardName]="goal.rewardName"
+                actionLabel="Delete"
+                (actionSelected)="deleteGoal(goal)"
+              />
+              <hg-health-text-field label="Edit name" [testId]="'edit-goal-name-' + goal.id" [value]="editNames[goal.id] ?? goal.name" (valueChange)="setEditName(goal.id, $event)" />
+              <div class="actions">
+                <hg-action-button label="Update goal" [testId]="'update-goal-' + goal.id" (actionSelected)="updateGoal(goal)" />
+                <hg-action-button label="Log activity" [testId]="'log-activity-' + goal.id" (actionSelected)="logActivity(goal)" />
+                <hg-action-button label="Create reward" [testId]="'create-reward-' + goal.id" (actionSelected)="createReward(goal)" />
+                <hg-action-button label="Delete" variant="danger" [testId]="'delete-goal-' + goal.id" (actionSelected)="deleteGoal(goal)" />
               </div>
-
-              <label class="field">
-                <span>Edit name</span>
-                <input
-                  [attr.data-testid]="'edit-goal-name-' + goal.id"
-                  [ngModel]="editNames[goal.id] ?? goal.name"
-                  (ngModelChange)="editNames[goal.id] = $event"
-                />
-              </label>
-              <button class="button button--primary" type="button" [attr.data-testid]="'update-goal-' + goal.id" (click)="updateGoal(goal)">
-                Update goal
-              </button>
-              <button class="button button--primary" type="button" [attr.data-testid]="'log-activity-' + goal.id" (click)="logActivity(goal)">
-                Log activity
-              </button>
-              <button class="button button--primary" type="button" [attr.data-testid]="'create-reward-' + goal.id" (click)="createReward(goal)">
-                Create reward
-              </button>
 
               <div class="chips" [attr.data-testid]="'goal-rewards-' + goal.id">
                 @for (reward of goalRewards(goal.id); track reward.id) {
-                  <span class="chip chip--accent">{{ reward.name }}</span>
+                  <hg-reward-card [name]="reward.name" [description]="reward.description" [statusLabel]="reward.status" [isEarned]="reward.status === 'earned'" />
                 }
               </div>
 
               <div [attr.data-testid]="'goal-activities-' + goal.id">
                 @for (activity of goalActivities(goal.id); track activity.id) {
-                  <article class="history-item" [attr.data-testid]="'activity-' + activity.id">
-                    <span></span>
-                    <p>{{ activity.quantity }} {{ goal.target.unit }} - {{ activity.notes }}</p>
-                    <div>
-                      <button class="icon-button" type="button" aria-label="Edit activity" [attr.data-testid]="'update-activity-' + activity.id" (click)="updateActivity(goal, activity)"></button>
-                      <button class="icon-button icon-button--danger" type="button" aria-label="Delete activity" [attr.data-testid]="'delete-activity-' + activity.id" (click)="deleteActivity(goal, activity)"></button>
-                    </div>
-                  </article>
+                  <hg-activity-list-item
+                    [testId]="'activity-' + activity.id"
+                    [editTestId]="'update-activity-' + activity.id"
+                    [deleteTestId]="'delete-activity-' + activity.id"
+                    [title]="activityTitle(activity, goal)"
+                    [detail]="activity.notes ?? 'No notes'"
+                    [metaLabel]="goal.name"
+                    (editSelected)="updateActivity(goal, activity)"
+                    (deleteSelected)="deleteActivity(goal, activity)"
+                  />
                 }
               </div>
-            </article>
+            </section>
           } @empty {
-            <article class="empty-state" data-testid="goals-empty-real">
-              <h2>No goals yet</h2>
-              <p>Create a goal to start the real backend flow.</p>
-            </article>
+            <hg-empty-state title="No goals yet" description="Create a goal to start the real backend flow." data-testid="goals-empty-real" />
           }
         </section>
       </main>

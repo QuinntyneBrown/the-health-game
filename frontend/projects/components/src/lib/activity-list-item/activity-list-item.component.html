@@ -1,8 +1,13 @@
-<article class="history-item">
-  <span aria-hidden="true"></span>
-  <p><strong>{{ title }}</strong><br />{{ detail || metaLabel }}</p>
-  <div>
-    <button class="icon-button" type="button" aria-label="Edit activity"></button>
-    <button class="icon-button icon-button--danger" type="button" aria-label="Delete activity"></button>
-  </div>
-</article>
+<mat-list-item class="history-item" [attr.data-testid]="testId || null">
+  <mat-icon matListItemIcon aria-hidden="true">radio_button_checked</mat-icon>
+  <span matListItemTitle>{{ title }}</span>
+  <span matListItemLine>{{ detail || metaLabel }}</span>
+  <span matListItemMeta class="history-item__actions">
+    <button mat-icon-button type="button" aria-label="Edit activity" [attr.data-testid]="editTestId || null" (click)="editSelected.emit()">
+      <mat-icon aria-hidden="true">edit</mat-icon>
+    </button>
+    <button mat-icon-button class="icon-button--danger" type="button" aria-label="Delete activity" [attr.data-testid]="deleteTestId || null" (click)="deleteSelected.emit()">
+      <mat-icon aria-hidden="true">delete</mat-icon>
+    </button>
+  </span>
+</mat-list-item>

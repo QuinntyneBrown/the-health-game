@@ -1,6 +1,8 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
+  imports: [MatIconModule],
   selector: 'hg-user-avatar',
   templateUrl: './user-avatar.component.html',
   styleUrl: './user-avatar.component.scss',

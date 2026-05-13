@@ -1,6 +1,11 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { MatCardModule } from '@angular/material/card';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatIconModule } from '@angular/material/icon';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 @Component({
+  imports: [MatCardModule, MatChipsModule, MatIconModule, MatProgressBarModule],
   selector: 'hg-reward-card',
   templateUrl: './reward-card.component.html',
   styleUrl: './reward-card.component.scss',
@@ -22,5 +27,6 @@ export class RewardCardComponent {
   }
 
   get progressStyle(): string { return `inline-size: ${this.progressValue}%`; }
+  get rewardIcon(): string { return this.icon || (this.isEarned ? 'workspace_premium' : 'redeem'); }
 
 }

@@ -7,6 +7,7 @@ import { UrlTree } from '@angular/router';
 
 import { API_CONFIG, ApiConfig } from '../api.config';
 import { AuthService, OIDC_REDIRECTOR } from './auth.service';
+import { AUTH_SERVICE } from './auth.service.contract';
 import { roleGuard } from './role.guard';
 
 const config: ApiConfig = {
@@ -26,6 +27,7 @@ describe('roleGuard("admin")', () => {
       providers: [
         provideHttpClient(),
         { provide: API_CONFIG, useValue: config },
+        { provide: AUTH_SERVICE, useExisting: AuthService },
         { provide: OIDC_REDIRECTOR, useValue: () => undefined },
       ],
     });

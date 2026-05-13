@@ -11,6 +11,8 @@ import { provideRouter } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 
 import { API_CONFIG } from '../api.config';
+import { AuthService } from '../auth/auth.service';
+import { AUTH_SERVICE } from '../auth/auth.service.contract';
 
 import {
   ApiError,
@@ -42,6 +44,7 @@ describe('errorInterceptor', () => {
             oidcPostLogoutRedirectUri: '',
           },
         },
+        { provide: AUTH_SERVICE, useExisting: AuthService },
       ],
     });
     http = TestBed.inject(HttpClient);

@@ -1,48 +1,21 @@
 <main class="library-page">
-  <a class="mock-breadcrumb" href="/">Domain</a>
-  <section class="component-demo" aria-labelledby="domain-auth-session-states-mock-title">
-    <header class="component-demo__header">
-      <p class="eyebrow">domain library candidate</p>
-      <h1 id="domain-auth-session-states-mock-title">Auth session states component</h1>
-      <p>Callback, signed-out, and expired-token states.</p>
-    </header>
-    <div class="component-demo__canvas">
-      <section class="screen-frame" data-screen="session-states" aria-labelledby="session-states-title">
-      <header class="screen-frame__header">
-        <div>
-          <p>/auth/callback, /auth/signed-out, expired token</p>
-          <h2 id="session-states-title">Session states</h2>
-        </div>
-        <a href="/">Index</a>
-      </header>
-      
-    <section class="modal-grid">
-      
+  <section class="modal-grid" aria-label="Session states">
     <div class="dialog" role="dialog" aria-label="Signing you in">
-      <h3>Signing you in</h3>
-      <div class="dialog__body"><p>Verifying the returned authorization code and restoring the requested route.</p><span class="skeleton"></span><span class="skeleton skeleton--short"></span></div>
-      <div class="dialog__actions">
-        <button class="button button--primary" type="button">Cancel</button>
-      </div>
+      <hg-section-header title="Signing you in" note="Callback" />
+      <hg-status-banner message="Verifying the returned authorization code and restoring the requested route." />
+      <span class="skeleton"></span>
+      <span class="skeleton skeleton--short"></span>
+      <hg-action-button label="Cancel" variant="ghost" />
     </div>
-      
     <div class="dialog" role="dialog" aria-label="Signed out">
-      <h3>Signed out</h3>
-      <div class="dialog__body"><p>Your local session is cleared. Shared-device data is no longer visible.</p></div>
-      <div class="dialog__actions">
-        <button class="button button--primary" type="button">Back to sign in</button>
-      </div>
+      <hg-section-header title="Signed out" note="Local session cleared" />
+      <hg-status-banner message="Shared-device data is no longer visible." tone="success" />
+      <hg-action-button label="Back to sign in" />
     </div>
-      
     <div class="dialog" role="dialog" aria-label="Session expired">
-      <h3>Session expired</h3>
-      <div class="dialog__body"><p>The access token is expired or invalid. Re-authentication keeps goals private.</p></div>
-      <div class="dialog__actions">
-        <button class="button button--primary" type="button">Sign in again</button>
-      </div>
-    </div>
-    </section>
-    </section>
+      <hg-section-header title="Session expired" note="Token invalid" />
+      <hg-status-banner message="Re-authentication keeps goals private." tone="error" />
+      <hg-action-button label="Sign in again" />
     </div>
   </section>
 </main>

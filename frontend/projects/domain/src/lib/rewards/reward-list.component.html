@@ -3,39 +3,32 @@
     <header class="screen-frame__header">
       <div>
         <p>/rewards</p>
-        <h2 id="rewards-list-title">Rewards list</h2>
+        <hg-section-header title="Rewards list" headingId="rewards-list-title" />
       </div>
       <a href="/">Home</a>
     </header>
 
     <div class="app-preview app-preview--tabs">
       <main class="app-main" id="main-rewards-real-backend">
-        <div class="page-title">
-          <p class="eyebrow">real backend</p>
-          <h1>Rewards</h1>
-          <button class="button button--ghost" type="button" data-testid="reload-rewards" (click)="load()">
-            Reload
-          </button>
-        </div>
+        <hg-page-header eyebrow="real backend" title="Rewards" />
+        <hg-action-button label="Reload" variant="ghost" icon="refresh" testId="reload-rewards" (actionSelected)="load()" />
 
-        <p class="pill" role="status" data-testid="rewards-status">{{ status() }}</p>
+        <hg-status-banner [message]="status()" data-testid="rewards-status" />
 
         <section class="reward-grid" data-testid="reward-list">
           @for (reward of rewards(); track reward.id) {
-            <article class="reward-card" [attr.data-testid]="'reward-card-' + reward.id">
-              <div class="reward-card__top">
-                <div>
-                  <h3>{{ reward.name }}</h3>
-                  <p>{{ reward.description }}</p>
-                </div>
-                <span class="pill">{{ reward.status }}</span>
-              </div>
-            </article>
+            <hg-reward-card
+              [attr.data-testid]="'reward-card-' + reward.id"
+              [name]="reward.name"
+              [description]="reward.description"
+              [statusLabel]="reward.status"
+              [earnedDateLabel]="reward.earnedAt ?? ''"
+              [isEarned]="reward.status === 'earned'"
+              [progressCurrent]="rewardProgressCurrent(reward)"
+              [progressTarget]="rewardProgressTarget(reward)"
+            />
           } @empty {
-            <article class="empty-state" data-testid="rewards-empty-real">
-              <h2>No rewards yet</h2>
-              <p>Create one from the goals page.</p>
-            </article>
+            <hg-empty-state title="No rewards yet" description="Create one from the goals page." data-testid="rewards-empty-real" />
           }
         </section>
       </main>

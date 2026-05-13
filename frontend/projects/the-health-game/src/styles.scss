@@ -124,11 +124,7 @@ body {
 body {
   background: var(--hg-color-app-background);
   color: var(--hg-color-on-surface);
-  font-family:
-    Inter,
-    Roboto,
-    Arial,
-    sans-serif;
+  font-family: Inter, Roboto, Arial, sans-serif;
   margin: 0;
 }
 
@@ -137,7 +133,9 @@ body {
 }
 
 hg-streak-summary .streak-summary__value {
-  transition: transform 600ms ease, opacity 600ms ease;
+  transition:
+    transform 600ms ease,
+    opacity 600ms ease;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -211,25 +209,34 @@ hg-health-text-field.health-text-field--error
   border-width: 2px !important;
 }
 
-hg-segmented-filter[data-testid='cadence-picker'] mat-button-toggle.mat-button-toggle-checked .mat-button-toggle-button {
+hg-segmented-filter[data-testid='cadence-picker']
+  mat-button-toggle.mat-button-toggle-checked
+  .mat-button-toggle-button {
   background-color: #94f7b4 !important;
 }
 
-hg-segmented-filter[data-testid='cadence-picker'] mat-button-toggle.mat-button-toggle-checked .segmented-filter__label {
+hg-segmented-filter[data-testid='cadence-picker']
+  mat-button-toggle.mat-button-toggle-checked
+  .segmented-filter__label {
   color: #00210f !important;
 }
 
-hg-segmented-filter[data-testid='cadence-picker'] mat-button-toggle:not(.mat-button-toggle-checked) {
+hg-segmented-filter[data-testid='cadence-picker']
+  mat-button-toggle:not(.mat-button-toggle-checked) {
   border-color: #c2c9be !important;
   border-width: 1px !important;
   border-style: solid !important;
 }
 
-hg-segmented-filter[data-testid='cadence-picker'] mat-button-toggle:not(.mat-button-toggle-checked) .mat-button-toggle-button {
+hg-segmented-filter[data-testid='cadence-picker']
+  mat-button-toggle:not(.mat-button-toggle-checked)
+  .mat-button-toggle-button {
   background-color: transparent !important;
 }
 
-hg-segmented-filter[data-testid='cadence-picker'] mat-button-toggle:not(.mat-button-toggle-checked) .segmented-filter__label {
+hg-segmented-filter[data-testid='cadence-picker']
+  mat-button-toggle:not(.mat-button-toggle-checked)
+  .segmented-filter__label {
   color: #191d17 !important;
 }
 
@@ -245,7 +252,9 @@ hg-segmented-filter[data-testid='cadence-picker'] .segmented-filter__option {
 }
 
 hg-segmented-filter[data-testid='cadence-picker'] mat-button-toggle .mat-button-toggle-button,
-hg-segmented-filter[data-testid='cadence-picker'] mat-button-toggle .mat-button-toggle-label-content {
+hg-segmented-filter[data-testid='cadence-picker']
+  mat-button-toggle
+  .mat-button-toggle-label-content {
   height: 100% !important;
   min-height: 0 !important;
   display: inline-flex !important;
@@ -279,11 +288,7 @@ mat-slide-toggle.mat-mdc-slide-toggle-checked .mdc-switch--selected .mdc-switch_
 
 h2[mat-dialog-title],
 .mat-mdc-dialog-title {
-  font-family:
-    Inter,
-    Roboto,
-    Arial,
-    sans-serif !important;
+  font-family: Inter, Roboto, Arial, sans-serif !important;
   font-size: 22px !important;
   font-weight: 500 !important;
 }
@@ -291,11 +296,7 @@ h2[mat-dialog-title],
 input.mat-mdc-input-element,
 .mat-mdc-form-field input,
 .mat-mdc-form-field textarea {
-  font-family:
-    Inter,
-    Roboto,
-    Arial,
-    sans-serif !important;
+  font-family: Inter, Roboto, Arial, sans-serif !important;
   font-size: 14px !important;
   font-weight: 400 !important;
 }
@@ -304,22 +305,14 @@ button[data-testid='log-activity-save'],
 button[data-testid='log-activity-save'] .mdc-button__label {
   background-color: #006d3f !important;
   color: #ffffff !important;
-  font-family:
-    Inter,
-    Roboto,
-    Arial,
-    sans-serif !important;
+  font-family: Inter, Roboto, Arial, sans-serif !important;
   font-size: 14px !important;
   font-weight: 500 !important;
 }
 
 hg-action-button button.action-button,
 hg-action-button button.action-button .mdc-button__label {
-  font-family:
-    Inter,
-    Roboto,
-    Arial,
-    sans-serif !important;
+  font-family: Inter, Roboto, Arial, sans-serif !important;
   font-size: 14px !important;
   font-weight: 500 !important;
 }
@@ -558,11 +551,7 @@ button[data-testid='delete-goal-confirm'] .mdc-button__label {
 }
 
 hg-empty-state .empty-state__title {
-  font-family:
-    Inter,
-    Roboto,
-    Arial,
-    sans-serif !important;
+  font-family: Inter, Roboto, Arial, sans-serif !important;
   font-size: 22px !important;
   font-weight: 500 !important;
 }
@@ -570,22 +559,14 @@ hg-empty-state .empty-state__title {
 mat-form-field mat-label,
 mat-form-field .mat-mdc-floating-label,
 mat-form-field .mdc-floating-label {
-  font-family:
-    Inter,
-    Roboto,
-    Arial,
-    sans-serif !important;
+  font-family: Inter, Roboto, Arial, sans-serif !important;
   font-size: 13px !important;
   font-weight: 500 !important;
 }
 
 mat-form-field mat-hint,
 mat-form-field .mat-mdc-form-field-hint {
-  font-family:
-    Inter,
-    Roboto,
-    Arial,
-    sans-serif !important;
+  font-family: Inter, Roboto, Arial, sans-serif !important;
   font-size: 12px !important;
   font-weight: 400 !important;
 }
@@ -594,11 +575,7 @@ mat-form-field mat-error,
 mat-form-field .mat-mdc-form-field-error,
 .health-text-field__error {
   color: #ba1a1a !important;
-  font-family:
-    Inter,
-    Roboto,
-    Arial,
-    sans-serif !important;
+  font-family: Inter, Roboto, Arial, sans-serif !important;
   font-size: 12px !important;
   font-weight: 500 !important;
   margin: 4px 0 0;

@@ -3,12 +3,13 @@ import { inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { catchError, throwError } from 'rxjs';
 
-import { ACCESS_TOKEN_KEY, AuthService, RETURN_URL_KEY, STATE_KEY, VERIFIER_KEY } from '../auth/auth.service';
+import { ACCESS_TOKEN_KEY, RETURN_URL_KEY, STATE_KEY, VERIFIER_KEY } from '../auth/auth.service';
+import { AUTH_SERVICE } from '../auth/auth.service.contract';
 import { fromHttpErrorResponse } from './api-errors';
 
 export const errorInterceptor: HttpInterceptorFn = (req, next) => {
   const router = inject(Router);
-  const auth = inject(AuthService);
+  const auth = inject(AUTH_SERVICE);
   const isSignInRequest = req.url.includes('/api/auth/sign-in');
   return next(req).pipe(
     catchError((response: unknown) => {

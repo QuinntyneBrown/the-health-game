@@ -1,8 +1,10 @@
 <nav class="app-nav" [class.app-nav--drawer]="variant === 'drawer'" [class.app-nav--rail]="variant === 'rail'" [class.app-nav--bottom]="variant === 'bottom'" aria-label="Primary">
-  @for (item of items; track item.id) {
-    <button class="app-nav__item" [class.app-nav__item--active]="item.id === activeItemId" type="button" (click)="itemSelected.emit(item.id)">
-      <span class="app-nav__mark" aria-hidden="true"></span>
-      <span>{{ item.label }}</span>
-    </button>
-  }
+  <mat-button-toggle-group class="app-nav__group" [value]="activeItemId" aria-label="Primary navigation" (change)="onSelectionChange($event)">
+    @for (item of items; track item.id) {
+      <mat-button-toggle class="app-nav__item" [class.app-nav__item--active]="item.id === activeItemId" [value]="item.id">
+        <mat-icon class="app-nav__mark" aria-hidden="true">{{ item.icon || 'circle' }}</mat-icon>
+        <span class="app-nav__label">{{ item.label }}</span>
+      </mat-button-toggle>
+    }
+  </mat-button-toggle-group>
 </nav>

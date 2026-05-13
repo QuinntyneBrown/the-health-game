@@ -1,5 +1,7 @@
-<div class="segmented" role="group" [attr.aria-label]="ariaLabel">
+<mat-button-toggle-group class="segmented" [value]="value" [attr.aria-label]="ariaLabel" (change)="onSelectionChange($event)">
   @for (option of options; track option.value) {
-    <button [class.is-active]="option.value === value" type="button" (click)="valueChange.emit(option.value)">{{ option.label }}</button>
+    <mat-button-toggle class="segmented-filter__option" [class.is-active]="option.value === value" [value]="option.value">
+      <span class="segmented-filter__label">{{ option.label }}</span>
+    </mat-button-toggle>
   }
-</div>
+</mat-button-toggle-group>

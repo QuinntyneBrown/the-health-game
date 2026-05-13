@@ -1,17 +1,31 @@
 import { ChangeDetectionStrategy, Component, OnInit, inject, signal } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { UserProfile, UsersService } from 'api';
+import { USERS_SERVICE, UserProfile } from 'api';
+import {
+  ActionButtonComponent,
+  HealthTextFieldComponent,
+  PageHeaderComponent,
+  SectionHeaderComponent,
+  StatusBannerComponent,
+  UserAvatarComponent,
+} from 'components';
 import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'lib-profile',
-  imports: [FormsModule],
+  imports: [
+    ActionButtonComponent,
+    HealthTextFieldComponent,
+    PageHeaderComponent,
+    SectionHeaderComponent,
+    StatusBannerComponent,
+    UserAvatarComponent,
+  ],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProfileComponent implements OnInit {
-  private readonly usersService = inject(UsersService);
+  private readonly usersService = inject(USERS_SERVICE);
 
   readonly profile = signal<UserProfile | null>(null);
   readonly status = signal('Ready');

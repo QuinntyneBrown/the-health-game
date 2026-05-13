@@ -1,28 +1,13 @@
 <main class="library-page">
-  <a class="mock-breadcrumb" href="/">Domain</a>
-  <section class="component-demo" aria-labelledby="domain-edit-activity-dialog-mock-title">
-    <header class="component-demo__header">
-      <p class="eyebrow">domain library candidate</p>
-      <h1 id="domain-edit-activity-dialog-mock-title">Edit activity dialog component</h1>
-      <p>Activity edit dialog that recomputes streaks after save.</p>
-    </header>
-    <div class="component-demo__canvas">
-      <div class="dialog" role="dialog" aria-label="Edit activity">
-  <h3>Edit activity</h3>
-  <div class="dialog__body"><label class="field">
-  <span>Quantity</span>
-  <input type="number" value="31" />
-  <small>minutes</small>
-</label><label class="field">
-  <span>Notes optional</span>
-  <input type="text" value="Light rain" />
-  
-</label></div>
-  <div class="dialog__actions">
-    <button class="button button--ghost" type="button">Cancel</button>
-    <button class="button button--primary" type="button">Save</button>
-  </div>
-</div>
+  <div class="dialog" role="dialog" aria-label="Edit activity">
+    <hg-section-header title="Edit activity" note="Recomputes streaks" />
+    <div class="dialog__body">
+      <hg-health-text-field label="Quantity" type="number" value="31" helperText="minutes" />
+      <hg-health-text-field label="Notes optional" value="Light rain" />
     </div>
-  </section>
+    <div class="dialog__actions">
+      <hg-action-button label="Cancel" variant="ghost" />
+      <hg-action-button label="Save" icon="save" />
+    </div>
+  </div>
 </main>

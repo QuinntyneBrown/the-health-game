@@ -1,3 +1,4 @@
-<div class="avatar" [attr.aria-label]="name">
-  {{ initial }}
-</div>
+<span class="avatar" [class.avatar--small]="size === 'small'" [class.avatar--large]="size === 'large'" [attr.aria-label]="name">
+  <mat-icon class="avatar__icon" aria-hidden="true">account_circle</mat-icon>
+  <span class="avatar__initial mat-label-large">{{ initial }}</span>
+</span>

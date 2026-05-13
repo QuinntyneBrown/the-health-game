@@ -1,7 +1,11 @@
-<header class="app-top">
+<mat-toolbar class="app-top">
   <hg-app-brand />
   <div class="app-top__meta">
-    <span class="pill">{{ statusLabel }}</span>
-    <button class="icon-button" type="button" aria-label="Notifications"><span class="dot" aria-hidden="true"></span></button>
+    <mat-chip-set aria-label="Current status">
+      <mat-chip class="pill">{{ statusLabel }}</mat-chip>
+    </mat-chip-set>
+    <button mat-icon-button class="icon-button" type="button" aria-label="Notifications">
+      <mat-icon aria-hidden="true">notifications</mat-icon>
+    </button>
   </div>
-</header>
+</mat-toolbar>

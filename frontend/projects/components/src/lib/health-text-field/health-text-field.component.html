@@ -1,10 +1,15 @@
-<label class="field">
-  <span>{{ label }}</span>
+<mat-form-field class="field" appearance="outline">
+  <mat-label>{{ label }}</mat-label>
   @if (multiline) {
-    <textarea [value]="value" [disabled]="disabled" [readOnly]="isReadonly" (input)="onInput($any($event.target).value)"></textarea>
+    <textarea matInput [attr.data-testid]="testId || null" [value]="fieldValue" [disabled]="disabled" [readOnly]="isReadonly" (input)="onInput($any($event.target).value)"></textarea>
   } @else {
-    <input [type]="type" [value]="value" [disabled]="disabled" [readOnly]="isReadonly" (input)="onInput($any($event.target).value)" />
+    <input matInput [attr.data-testid]="testId || null" [type]="resolvedType" [value]="fieldValue" [disabled]="disabled" [readOnly]="isReadonly" (input)="onInput($any($event.target).value)" />
   }
-  @if (helperText && !errorText) { <small>{{ helperText }}</small> }
-  @if (errorText) { <small class="inline-error">{{ errorText }}</small> }
-</label>
+  @if (passwordToggle && type === 'password') {
+    <button mat-icon-button matSuffix type="button" [attr.aria-label]="isPasswordVisible ? 'Hide password' : 'Show password'" (click)="togglePasswordVisibility()">
+      <mat-icon aria-hidden="true">{{ passwordToggleIcon }}</mat-icon>
+    </button>
+  }
+  @if (helperText && !errorText) { <mat-hint>{{ helperText }}</mat-hint> }
+  @if (errorText) { <mat-error>{{ errorText }}</mat-error> }
+</mat-form-field>

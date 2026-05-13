@@ -1,5 +1,9 @@
-<article class="metric" [class.metric--primary]="tone === 'primary'" [class.metric--success]="tone === 'success'" [class.metric--accent]="tone === 'accent'" [attr.aria-label]="ariaLabel || null">
-  <span class="metric__value">{{ value }}</span>
-  <span class="metric__label">{{ label }}</span>
-  @if (supportText) { <span class="metric__label">{{ supportText }}</span> }
-</article>
+<mat-card class="metric" [class.metric--primary]="tone === 'primary'" [class.metric--success]="tone === 'success'" [class.metric--accent]="tone === 'accent'" appearance="outlined" [attr.aria-label]="ariaLabel || null">
+  @if (icon) { <mat-icon class="metric__icon" aria-hidden="true">{{ icon }}</mat-icon> }
+  <mat-card-title class="metric__value">{{ value }}</mat-card-title>
+  <mat-card-subtitle class="metric__label">{{ label }}</mat-card-subtitle>
+  @if (supportText) { <mat-card-content class="metric__label">{{ supportText }}</mat-card-content> }
+  @if (progressValue !== null) {
+    <mat-progress-bar mode="determinate" [value]="progressPercent" [attr.aria-label]="label"></mat-progress-bar>
+  }
+</mat-card>

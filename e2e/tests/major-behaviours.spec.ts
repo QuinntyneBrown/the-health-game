@@ -1,5 +1,6 @@
 // Acceptance Test
-// Objective: exercise the frontend against the real backend and SQL Express database.
+// Traces to: L2-001, L2-003, L2-004, L2-005, L2-006, L2-009, L2-014, L2-035
+// Description: Exercises the frontend against the real backend and SQL Express database for profile, goal, activity, and reward persistence.
 import { expect, test } from '@playwright/test';
 
 import { HealthGameE2EPage } from '../pages/HealthGameE2EPage';

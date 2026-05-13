@@ -1,24 +1,13 @@
 <main class="library-page">
-  <a class="mock-breadcrumb" href="/">Domain</a>
-  <section class="component-demo" aria-labelledby="domain-delete-account-dialog-mock-title">
-    <header class="component-demo__header">
-      <p class="eyebrow">domain library candidate</p>
-      <h1 id="domain-delete-account-dialog-mock-title">Delete account dialog component</h1>
-      <p>Account deletion confirmation requiring email entry.</p>
-    </header>
-    <div class="component-demo__canvas">
-      <div class="dialog" role="dialog" aria-label="Delete account">
-  <h3>Delete account</h3>
-  <div class="dialog__body"><label class="field">
-  <span>Type email to confirm</span>
-  <input type="email" value="quinn&#64;example.com" />
-  
-</label><p>All goals, activities, rewards, and active sessions are removed.</p></div>
-  <div class="dialog__actions">
-    <button class="button button--ghost" type="button">Cancel</button>
-    <button class="button button--primary" type="button">Delete</button>
-  </div>
-</div>
+  <div class="dialog" role="dialog" aria-label="Delete account">
+    <hg-section-header title="Delete account" note="Destructive action" />
+    <div class="dialog__body">
+      <hg-health-text-field label="Type email to confirm" type="email" value="quinn@example.com" />
+      <hg-status-banner message="All goals, activities, rewards, and active sessions are removed." tone="error" />
     </div>
-  </section>
+    <div class="dialog__actions">
+      <hg-action-button label="Cancel" variant="ghost" />
+      <hg-action-button label="Delete" variant="danger" />
+    </div>
+  </div>
 </main>

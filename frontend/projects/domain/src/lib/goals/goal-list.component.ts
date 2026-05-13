@@ -1,26 +1,49 @@
 import { ChangeDetectionStrategy, Component, OnInit, inject, signal } from '@angular/core';
-import { FormsModule } from '@angular/forms';
 import {
-  ActivitiesService,
+  ACTIVITIES_SERVICE,
   ActivityEntry,
+  GOALS_SERVICE,
   GoalSummary,
-  GoalsService,
+  REWARDS_SERVICE,
   Reward,
-  RewardsService,
 } from 'api';
+import {
+  ActionButtonComponent,
+  ActivityListItemComponent,
+  EmptyStateComponent,
+  GoalCardComponent,
+  HealthTextFieldComponent,
+  PageHeaderComponent,
+  RewardCardComponent,
+  SectionHeaderComponent,
+  SegmentedFilterComponent,
+  SegmentedFilterOption,
+  StatusBannerComponent,
+} from 'components';
 import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'lib-goal-list',
-  imports: [FormsModule],
+  imports: [
+    ActionButtonComponent,
+    ActivityListItemComponent,
+    EmptyStateComponent,
+    GoalCardComponent,
+    HealthTextFieldComponent,
+    PageHeaderComponent,
+    RewardCardComponent,
+    SectionHeaderComponent,
+    SegmentedFilterComponent,
+    StatusBannerComponent,
+  ],
   templateUrl: './goal-list.component.html',
   styleUrl: './goal-list.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GoalListComponent implements OnInit {
-  private readonly goalsService = inject(GoalsService);
-  private readonly activitiesService = inject(ActivitiesService);
-  private readonly rewardsService = inject(RewardsService);
+  private readonly goalsService = inject(GOALS_SERVICE);
+  private readonly activitiesService = inject(ACTIVITIES_SERVICE);
+  private readonly rewardsService = inject(REWARDS_SERVICE);
 
   readonly goals = signal<readonly GoalSummary[]>([]);
   readonly activities = signal<Record<string, readonly ActivityEntry[]>>({});
@@ -36,6 +59,12 @@ export class GoalListComponent implements OnInit {
   activityQuantity = 20;
   activityNotes = 'Park loop';
   readonly editNames: Partial<Record<string, string>> = {};
+  readonly cadenceOptions: readonly SegmentedFilterOption[] = [
+    { value: 'hourly', label: 'Hourly' },
+    { value: 'daily', label: 'Daily' },
+    { value: 'weekly', label: 'Weekly' },
+    { value: 'monthly', label: 'Monthly' },
+  ];
 
   ngOnInit(): void {
     void this.load();
@@ -113,7 +142,6 @@ export class GoalListComponent implements OnInit {
       this.activitiesService.updateActivityEntry(goal.id, activity.id, {
         quantity: activity.quantity + 1,
         notes: `${activity.notes ?? 'Activity'} updated`,
-        recordedAt: activity.recordedAt,
       }),
     );
     await this.loadActivities(goal.id);
@@ -148,6 +176,24 @@ export class GoalListComponent implements OnInit {
     return this.rewards().filter((reward) => reward.goalId === goalId);
   }
 
+  setGoalTarget(value: string): void { this.goalTarget = toPositiveNumber(value, this.goalTarget); }
+  setActivityQuantity(value: string): void { this.activityQuantity = toPositiveNumber(value, this.activityQuantity); }
+  setGoalCadence(value: string): void { this.goalCadence = value as GoalSummary['cadence']; }
+  setEditName(goalId: string, value: string): void { this.editNames[goalId] = value; }
+
+  goalProgress(goal: GoalSummary): number {
+    if (goal.target.value <= 0) return 0;
+    return Math.round(Math.min(goal.completedQuantity / goal.target.value, 1) * 100);
+  }
+
+  goalSummaryDescription(goal: GoalSummary): string {
+    return `${goal.target.value} ${goal.target.unit} - ${goal.cadence}`;
+  }
+
+  activityTitle(activity: ActivityEntry, goal: GoalSummary): string {
+    return `${activity.quantity} ${goal.target.unit}`;
+  }
+
   private async loadActivities(goalId: string): Promise<void> {
     const entries = await firstValueFrom(this.activitiesService.getGoalActivities(goalId));
     this.activities.update((current) => ({
@@ -155,4 +201,9 @@ export class GoalListComponent implements OnInit {
       [goalId]: entries,
     }));
   }
+}
+
+function toPositiveNumber(value: string, fallback: number): number {
+  const parsed = Number(value);
+  return Number.isFinite(parsed) && parsed > 0 ? parsed : fallback;
 }

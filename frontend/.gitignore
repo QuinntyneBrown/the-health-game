@@ -41,6 +41,7 @@ dev-server-*.log
 .sass-cache/
 /connect.lock
 /coverage
+/artifacts
 /libpeerconnection.log
 testem.log
 /typings

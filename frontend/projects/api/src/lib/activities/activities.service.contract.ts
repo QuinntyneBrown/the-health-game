@@ -9,7 +9,10 @@ export interface LogActivityInput {
   readonly recordedAt?: string;
 }
 
-export type UpdateActivityInput = LogActivityInput;
+export interface UpdateActivityInput {
+  readonly quantity: number;
+  readonly notes?: string;
+}
 
 export interface IActivitiesService {
   logActivity(goalId: string, input: LogActivityInput): Observable<ActivityEntry>;

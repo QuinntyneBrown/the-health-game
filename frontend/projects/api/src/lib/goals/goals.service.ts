@@ -1,55 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
-import { Observable, map, of } from 'rxjs';
+import { Observable, map } from 'rxjs';
 
 import { API_CONFIG } from '../api.config';
-import { GoalSummary } from '../models/goal-summary.model';
+import { GoalSummary, WeekDay } from '../models/goal-summary.model';
 import { CreateGoalInput, IGoalsService, UpdateGoalInput } from './goals.service.contract';
-
-const goalSummaries: readonly GoalSummary[] = [
-  {
-    id: 'hydrate',
-    name: 'Hydrate',
-    description: 'Drink enough water before the day closes.',
-    cadence: 'daily',
-    target: {
-      value: 8,
-      unit: 'cups',
-    },
-    completedQuantity: 6,
-    currentStreak: 12,
-    longestStreak: 18,
-    rewardName: 'Trail breakfast',
-  },
-  {
-    id: 'walk',
-    name: 'Walk outside',
-    description: 'Get outside and move with intention.',
-    cadence: 'daily',
-    target: {
-      value: 30,
-      unit: 'minutes',
-    },
-    completedQuantity: 30,
-    currentStreak: 7,
-    longestStreak: 14,
-    rewardName: 'New playlist',
-  },
-  {
-    id: 'mobility',
-    name: 'Mobility reset',
-    description: 'Keep the weekly mobility habit alive.',
-    cadence: 'weekly',
-    target: {
-      value: 3,
-      unit: 'sessions',
-    },
-    completedQuantity: 1,
-    currentStreak: 4,
-    longestStreak: 9,
-    rewardName: 'Recovery hour',
-  },
-];
 
 @Injectable({ providedIn: 'root' })
 export class GoalsService implements IGoalsService {
@@ -57,7 +12,7 @@ export class GoalsService implements IGoalsService {
   private readonly apiBaseUrl = inject(API_CONFIG).apiBaseUrl;
 
   getGoalSummaries(): Observable<readonly GoalSummary[]> {
-    return of(goalSummaries);
+    return this.getGoals();
   }
 
   getGoals(): Observable<readonly GoalSummary[]> {
@@ -97,10 +52,14 @@ interface GoalDto {
     readonly type: number | string;
     readonly interval: number;
   };
+  readonly timeZoneId: string;
+  readonly weekStartsOn: number | string;
   readonly streak: {
     readonly currentStreak: number;
     readonly longestStreak: number;
   };
+  readonly createdAtUtc: string;
+  readonly updatedAtUtc: string | null;
 }
 
 interface GoalRequest {
@@ -182,6 +141,10 @@ function mapGoal(dto: GoalDto): GoalSummary {
     currentStreak: dto.streak.currentStreak,
     longestStreak: dto.streak.longestStreak,
     rewardName: '',
+    timeZoneId: dto.timeZoneId,
+    weekStartsOn: mapWeekDay(dto.weekStartsOn),
+    createdAt: dto.createdAtUtc,
+    updatedAt: dto.updatedAtUtc,
   };
 }
 
@@ -203,5 +166,35 @@ function mapCadence(type: number | string): GoalSummary['cadence'] {
       return 'monthly';
     default:
       return 'custom';
+  }
+}
+
+function mapWeekDay(day: number | string): WeekDay {
+  const normalized = typeof day === 'string' ? day.toLowerCase() : day;
+
+  switch (normalized) {
+    case 0:
+    case 'sunday':
+      return 'sunday';
+    case 1:
+    case 'monday':
+      return 'monday';
+    case 2:
+    case 'tuesday':
+      return 'tuesday';
+    case 3:
+    case 'wednesday':
+      return 'wednesday';
+    case 4:
+    case 'thursday':
+      return 'thursday';
+    case 5:
+    case 'friday':
+      return 'friday';
+    case 6:
+    case 'saturday':
+      return 'saturday';
+    default:
+      return 'monday';
   }
 }

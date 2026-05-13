@@ -1,18 +1,18 @@
-<article class="goal-card">
-  <div class="goal-card__top">
-    <div>
-      <h3>{{ title }}</h3>
-      <p>{{ description || cadenceLabel }}</p>
-    </div>
-    <button class="button button--ghost" type="button" (click)="actionSelected.emit()">{{ actionLabel }}</button>
-  </div>
+<mat-card class="goal-card" appearance="outlined">
+  <mat-card-header class="goal-card__top">
+    <mat-card-title>{{ title }}</mat-card-title>
+    <mat-card-subtitle>{{ description || cadenceLabel }}</mat-card-subtitle>
+    <button mat-stroked-button class="button button--ghost" type="button" (click)="actionSelected.emit()">{{ actionLabel }}</button>
+  </mat-card-header>
   <div class="progress-row">
     <div class="progress-row__label"><span>{{ progressLabel }}</span><strong>{{ progressValue }}%</strong></div>
-    <span class="progress"><span [attr.style]="progressStyle"></span></span>
+    <mat-progress-bar mode="determinate" [value]="progressPercent" [attr.aria-label]="progressLabel"></mat-progress-bar>
   </div>
-  <div class="chips">
-    <span class="chip">{{ currentStreakLabel }}</span>
-    <span class="chip">{{ longestStreakLabel }}</span>
-    @if (rewardName) { <span class="chip chip--accent">{{ rewardName }}</span> }
-  </div>
-</article>
+  <mat-card-content>
+    <mat-chip-set class="chips" aria-label="Goal summary">
+      <mat-chip>{{ currentStreakLabel }}</mat-chip>
+      <mat-chip>{{ longestStreakLabel }}</mat-chip>
+      @if (rewardName) { <mat-chip class="chip--accent">{{ rewardName }}</mat-chip> }
+    </mat-chip-set>
+  </mat-card-content>
+</mat-card>

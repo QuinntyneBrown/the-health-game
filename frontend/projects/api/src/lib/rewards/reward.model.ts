@@ -27,4 +27,6 @@ export interface Reward {
   readonly status: RewardStatus;
   readonly earnedAt: string | null;
   readonly progress?: RewardProgress;
+  readonly createdAt?: string;
+  readonly updatedAt?: string | null;
 }

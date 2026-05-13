@@ -1,4 +1,8 @@
 <div class="section-title">
-  <h2 [id]="headingId || null">{{ title }}</h2>
-  @if (note) { <span class="pill">{{ note }}</span> }
+  <h2 class="mat-headline-small" [id]="headingId || null">{{ title }}</h2>
+  @if (note) {
+    <mat-chip-set aria-label="Section note">
+      <mat-chip class="pill">{{ note }}</mat-chip>
+    </mat-chip-set>
+  }
 </div>

@@ -1,46 +1,10 @@
 <main class="library-page">
-  <a class="mock-breadcrumb" href="/">Domain</a>
-  <section class="component-demo" aria-labelledby="domain-create-account-mock-title">
-    <header class="component-demo__header">
-      <p class="eyebrow">domain library candidate</p>
-      <h1 id="domain-create-account-mock-title">Create account component</h1>
-      <p>Registration candidate for backend-owned user management.</p>
-    </header>
-    <div class="component-demo__canvas">
-      <section class="screen-frame" data-screen="create-account" aria-labelledby="create-account-title">
-      <header class="screen-frame__header">
-        <div>
-          <p>/register</p>
-          <h2 id="create-account-title">Create account</h2>
-        </div>
-        <a href="/">Index</a>
-      </header>
-      
-    <form class="form-panel form-panel--narrow">
-      <h2>Create account</h2>
-      <p>Start with one goal. Add more when the first one feels automatic.</p>
-      
-    <label class="field">
-      <span>Display name</span>
-      <input type="text" value="Quinn" />
-      
-    </label>
-      
-    <label class="field">
-      <span>Email</span>
-      <input type="email" value="quinn&#64;example.com" />
-      
-    </label>
-      
-    <label class="field">
-      <span>Password</span>
-      <input type="password" value="" />
-      <small>At least 12 characters</small>
-    </label>
-      <label class="check-row"><input type="checkbox" checked /> <span>Use local time zone for streak windows</span></label>
-      <button class="button button--primary" type="button">Create account</button>
-    </form>
-    </section>
-    </div>
+  <section class="form-panel form-panel--narrow" aria-labelledby="create-account-title">
+    <hg-page-header headingId="create-account-title" title="Create account" description="Start with one goal. Add more when the first one feels automatic." />
+    <hg-status-banner message="Account creation is handled by the configured identity provider." />
+    <hg-health-text-field label="Display name" value="Quinn" />
+    <hg-health-text-field label="Email" type="email" value="quinn@example.com" />
+    <hg-health-text-field label="Password" type="password" helperText="At least 12 characters" [passwordToggle]="true" />
+    <hg-action-button label="Create account" icon="person_add" />
   </section>
 </main>

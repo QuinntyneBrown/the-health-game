@@ -1,6 +1,9 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
+  imports: [MatButtonModule, MatIconModule],
   selector: 'hg-page-header',
   templateUrl: './page-header.component.html',
   styleUrl: './page-header.component.scss',

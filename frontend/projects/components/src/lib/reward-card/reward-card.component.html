@@ -1,10 +1,10 @@
-<article class="reward-card">
-  <span class="reward-card__mark" aria-hidden="true"></span>
-  <h3>{{ name }}</h3>
-  <p>{{ earnedDateLabel || statusLabel }}</p>
-  <p>{{ description }}</p>
+<mat-card class="reward-card" appearance="outlined">
+  <mat-icon class="reward-card__mark" aria-hidden="true">{{ rewardIcon }}</mat-icon>
+  <mat-card-title>{{ name }}</mat-card-title>
+  <mat-card-subtitle>{{ earnedDateLabel || statusLabel }}</mat-card-subtitle>
+  <mat-card-content>{{ description }}</mat-card-content>
   <div class="progress-row">
     <div class="progress-row__label"><span>Reward progress</span><strong>{{ progressValue }}%</strong></div>
-    <span class="progress"><span [attr.style]="progressStyle"></span></span>
+    <mat-progress-bar mode="determinate" [value]="progressValue" aria-label="Reward progress"></mat-progress-bar>
   </div>
-</article>
+</mat-card>

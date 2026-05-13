@@ -1,8 +1,9 @@
 <div class="week-strip" aria-label="Week progress">
   @for (day of days; track day.label) {
-    <span class="week-strip__day" [class.week-strip__day--complete]="day.status === 'complete'" [class.week-strip__day--today]="day.status === 'today'">
-      <strong>{{ day.label }}</strong>
-      <small>{{ day.status === 'complete' ? 'Done' : day.status === 'today' ? 'Today' : 'Next' }}</small>
-    </span>
+    <mat-card class="week-strip__day" [class.week-strip__day--complete]="day.status === 'complete'" [class.week-strip__day--today]="day.status === 'today'" appearance="outlined">
+      <mat-icon aria-hidden="true">{{ getStatusIcon(day) }}</mat-icon>
+      <strong class="mat-label-large">{{ day.label }}</strong>
+      <small class="mat-body-small">{{ getStatusLabel(day) }}</small>
+    </mat-card>
   }
 </div>

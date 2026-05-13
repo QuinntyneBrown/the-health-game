@@ -1,27 +1,14 @@
 <main class="library-page">
-  <a class="mock-breadcrumb" href="/">Domain</a>
-  <section class="component-demo" aria-labelledby="domain-log-activity-sheet-mock-title">
-    <header class="component-demo__header">
-      <p class="eyebrow">domain library candidate</p>
-      <h1 id="domain-log-activity-sheet-mock-title">Log activity sheet component</h1>
-      <p>Mobile bottom-sheet activity logging interaction.</p>
-    </header>
-    <div class="component-demo__canvas">
-      <section class="modal-stage modal-stage--single"><div class="sheet" role="dialog" aria-label="Log activity">
-  <span class="sheet__handle" aria-hidden="true"></span>
-  <h2>Log activity</h2>
-  <label class="field">
-  <span>Quantity</span>
-  <input type="number" value="24" />
-  <small>minutes</small>
-</label>
-  <label class="field">
-  <span>Notes optional</span>
-  <input type="text" value="Park loop" />
-  
-</label>
-  <div class="actions actions--end"><button class="button button--ghost" type="button">Cancel</button><button class="button button--primary" type="button">Log</button></div>
-</div></section>
+  <section class="modal-stage modal-stage--single">
+    <div class="sheet" role="dialog" aria-label="Log activity">
+      <span class="sheet__handle" aria-hidden="true"></span>
+      <hg-section-header title="Log activity" note="Bottom sheet" />
+      <hg-health-text-field label="Quantity" type="number" value="24" helperText="minutes" />
+      <hg-health-text-field label="Notes optional" value="Park loop" />
+      <div class="actions actions--end">
+        <hg-action-button label="Cancel" variant="ghost" />
+        <hg-action-button label="Log" icon="add" />
+      </div>
     </div>
   </section>
 </main>

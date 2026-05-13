@@ -31,19 +31,27 @@ export class UsersService implements IUsersService {
 }
 
 interface UserProfileDto {
+  readonly id: string;
+  readonly subjectId: string;
   readonly displayName: string;
   readonly email: string;
+  readonly timeZoneId: string;
   readonly roles: readonly (string | number)[];
   readonly createdAtUtc: string;
+  readonly updatedAtUtc: string | null;
 }
 
 function mapUser(dto: UserProfileDto): UserProfile {
   return {
+    id: dto.id,
+    subjectId: dto.subjectId,
     displayName: dto.displayName,
     email: dto.email,
+    timeZoneId: dto.timeZoneId,
     avatarUrl: null,
     roles: dto.roles.map((role) => (typeof role === 'number' ? mapRole(role) : role)),
     memberSince: dto.createdAtUtc,
+    updatedAt: dto.updatedAtUtc,
     emailEditable: true,
   };
 }

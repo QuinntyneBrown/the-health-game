@@ -1,4 +1,6 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
+import { MatButtonToggleChange, MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatIconModule } from '@angular/material/icon';
 
 export type NavigationBarVariant = 'bottom' | 'rail' | 'drawer' | 'tabs' | 'top';
 
@@ -9,6 +11,7 @@ export interface NavigationBarItem {
 }
 
 @Component({
+  imports: [MatButtonToggleModule, MatIconModule],
   selector: 'hg-navigation-bar',
   templateUrl: './navigation-bar.component.html',
   styleUrl: './navigation-bar.component.scss',
@@ -24,5 +27,11 @@ export class NavigationBarComponent {
   ];
   @Input() activeItemId = 'home';
   @Output() itemSelected = new EventEmitter<string>();
+
+  onSelectionChange(event: MatButtonToggleChange): void {
+    if (typeof event.value === 'string') {
+      this.itemSelected.emit(event.value);
+    }
+  }
 
 }

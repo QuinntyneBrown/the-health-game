@@ -1,3 +1,4 @@
-<div class="notice" [class.notice--success]="tone === 'success'" [class.inline-error]="tone === 'error'" [attr.role]="tone === 'error' ? 'alert' : 'status'">
-  {{ message }}
-</div>
+<mat-card class="notice" [class.notice--success]="tone === 'success'" [class.inline-error]="tone === 'error'" appearance="outlined" [attr.role]="tone === 'error' ? 'alert' : 'status'">
+  <mat-icon aria-hidden="true">{{ iconName }}</mat-icon>
+  <mat-card-content class="mat-body-medium">{{ message }}</mat-card-content>
+</mat-card>

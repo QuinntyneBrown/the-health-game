@@ -3,28 +3,23 @@
     <header class="screen-frame__header">
       <div>
         <p>/profile</p>
-        <h2 id="profile-title">Profile</h2>
+        <hg-section-header title="Profile" headingId="profile-title" />
       </div>
       <a href="/">Home</a>
     </header>
 
     <div class="app-preview app-preview--tabs">
       <main class="app-main" id="main-profile-real-backend">
-        <div class="page-title">
-          <p class="eyebrow">real backend</p>
-          <h1>Profile</h1>
-          <button class="button button--ghost" type="button" data-testid="reload-profile" (click)="load()">
-            Reload
-          </button>
-        </div>
+        <hg-page-header eyebrow="real backend" title="Profile" />
+        <hg-action-button label="Reload" variant="ghost" icon="refresh" testId="reload-profile" (actionSelected)="load()" />
 
-        <p class="pill" role="status" data-testid="profile-status">{{ status() }}</p>
+        <hg-status-banner [message]="status()" data-testid="profile-status" />
 
         @if (profile(); as currentProfile) {
           <section class="profile-panel" data-testid="profile-summary">
-            <div class="avatar" aria-hidden="true">{{ currentProfile.displayName.charAt(0) }}</div>
+            <hg-user-avatar [name]="currentProfile.displayName" />
             <div>
-              <h2 data-testid="profile-display">{{ currentProfile.displayName }}</h2>
+              <hg-section-header [title]="currentProfile.displayName" data-testid="profile-display" />
               <p data-testid="profile-email-display">{{ currentProfile.email }}</p>
               <div class="chips">
                 @for (role of currentProfile.roles; track role) {
@@ -36,20 +31,10 @@
         }
 
         <section class="panel-grid" aria-label="Edit profile">
-          <label class="field">
-            <span>Display name</span>
-            <input data-testid="profile-name" [(ngModel)]="displayName" />
-          </label>
-          <label class="field">
-            <span>Email</span>
-            <input data-testid="profile-email" [(ngModel)]="email" />
-          </label>
-          <button class="button button--primary" type="button" data-testid="save-profile" (click)="save()">
-            Save
-          </button>
-          <button class="button button--ghost" type="button" data-testid="delete-account" (click)="deleteAccount()">
-            Delete account
-          </button>
+          <hg-health-text-field label="Display name" [value]="displayName" testId="profile-name" (valueChange)="displayName = $event" />
+          <hg-health-text-field label="Email" type="email" [value]="email" testId="profile-email" (valueChange)="email = $event" />
+          <hg-action-button label="Save" testId="save-profile" (actionSelected)="save()" />
+          <hg-action-button label="Delete account" variant="danger" testId="delete-account" (actionSelected)="deleteAccount()" />
         </section>
       </main>
     </div>

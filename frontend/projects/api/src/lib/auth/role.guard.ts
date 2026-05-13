@@ -1,11 +1,11 @@
 import { inject } from '@angular/core';
 import { CanMatchFn, Router } from '@angular/router';
 
-import { AuthService } from './auth.service';
+import { AUTH_SERVICE } from './auth.service.contract';
 
 export function roleGuard(role: string): CanMatchFn {
   return () => {
-    const auth = inject(AuthService);
+    const auth = inject(AUTH_SERVICE);
     if (auth.hasRole(role)) {
       return true;
     }

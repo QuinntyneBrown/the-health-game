@@ -38,7 +38,7 @@ export class ActivitiesService implements IActivitiesService {
     return this.http
       .put<ActivityEntryDto>(
         `${this.apiBaseUrl}/api/goals/${goalId}/activities/${activityEntryId}`,
-        toActivityRequest(input),
+        toUpdateActivityRequest(input),
       )
       .pipe(map(mapActivity));
   }
@@ -56,10 +56,17 @@ interface ActivityEntryDto {
   readonly occurredAtUtc: string;
   readonly quantity: number;
   readonly notes: string | null;
+  readonly createdAtUtc: string;
+  readonly updatedAtUtc: string | null;
 }
 
 interface ActivityRequest {
   readonly occurredAtUtc: string;
+  readonly quantity: number;
+  readonly notes: string | null;
+}
+
+interface UpdateActivityRequest {
   readonly quantity: number;
   readonly notes: string | null;
 }
@@ -72,6 +79,13 @@ function toActivityRequest(input: LogActivityInput): ActivityRequest {
   };
 }
 
+function toUpdateActivityRequest(input: UpdateActivityInput): UpdateActivityRequest {
+  return {
+    quantity: input.quantity,
+    notes: input.notes ?? null,
+  };
+}
+
 function mapActivity(dto: ActivityEntryDto): ActivityEntry {
   return {
     id: dto.id,
@@ -79,5 +93,7 @@ function mapActivity(dto: ActivityEntryDto): ActivityEntry {
     quantity: Number(dto.quantity),
     notes: dto.notes,
     recordedAt: dto.occurredAtUtc,
+    createdAt: dto.createdAtUtc,
+    updatedAt: dto.updatedAtUtc,
   };
 }

@@ -1,6 +1,11 @@
 <div class="page-title">
-  @if (eyebrow) { <p class="eyebrow">{{ eyebrow }}</p> }
-  <h1 [id]="headingId || null">{{ title }}</h1>
-  @if (description) { <p>{{ description }}</p> }
-  @if (actionLabel) { <button class="button button--primary" type="button" (click)="actionSelected.emit()">{{ actionLabel }}</button> }
+  @if (eyebrow) { <p class="eyebrow mat-label-large">{{ eyebrow }}</p> }
+  <h1 class="mat-display-small" [id]="headingId || null">{{ title }}</h1>
+  @if (description) { <p class="mat-body-large">{{ description }}</p> }
+  @if (actionLabel) {
+    <button mat-flat-button class="button button--primary" type="button" (click)="actionSelected.emit()">
+      @if (actionIcon) { <mat-icon aria-hidden="true">{{ actionIcon }}</mat-icon> }
+      <span>{{ actionLabel }}</span>
+    </button>
+  }
 </div>

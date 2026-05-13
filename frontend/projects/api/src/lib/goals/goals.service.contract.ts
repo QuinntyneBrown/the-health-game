@@ -1,16 +1,7 @@
 import { InjectionToken } from '@angular/core';
 import { Observable } from 'rxjs';
 
-import { GoalCadence, GoalSummary, GoalTarget } from '../models/goal-summary.model';
-
-export type WeekDay =
-  | 'sunday'
-  | 'monday'
-  | 'tuesday'
-  | 'wednesday'
-  | 'thursday'
-  | 'friday'
-  | 'saturday';
+import { GoalCadence, GoalSummary, GoalTarget, WeekDay } from '../models/goal-summary.model';
 
 export type CustomIntervalUnit = 'hours' | 'days';
 

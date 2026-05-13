@@ -6,5 +6,7 @@ export interface ActivityEntry {
   readonly quantity: number;
   readonly notes: string | null;
   readonly recordedAt: string;
+  readonly createdAt?: string;
+  readonly updatedAt?: string | null;
   readonly newlyEarnedRewards?: readonly Reward[];
 }

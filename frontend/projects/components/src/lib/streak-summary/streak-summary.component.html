@@ -1,4 +1,5 @@
-<article class="metric" [class.metric--primary]="tone === 'primary' || tone === 'streak'" [class.metric--accent]="tone === 'accent'">
-  <span class="metric__value">{{ value }} {{ unit }}</span>
-  <span class="metric__label">{{ label }}</span>
-</article>
+<mat-card class="metric" [class.metric--primary]="tone === 'primary' || tone === 'streak'" [class.metric--accent]="tone === 'accent'" appearance="outlined">
+  <mat-icon class="metric__icon" aria-hidden="true">{{ iconName }}</mat-icon>
+  <mat-card-title class="metric__value streak-summary__value">{{ value }} {{ unit }}</mat-card-title>
+  <mat-card-subtitle class="metric__label">{{ label }}</mat-card-subtitle>
+</mat-card>

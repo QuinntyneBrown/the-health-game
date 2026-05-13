@@ -3,6 +3,7 @@ import { Injectable, InjectionToken, inject, signal } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 
 import { API_CONFIG } from '../api.config';
+import { IAuthService, SignInOptions } from './auth.service.contract';
 
 export const VERIFIER_KEY = 'hg.oidc.verifier';
 export const STATE_KEY = 'hg.oidc.state';
@@ -50,14 +51,14 @@ function normalizeRole(role: string | number): string {
 }
 
 @Injectable({ providedIn: 'root' })
-export class AuthService {
+export class AuthService implements IAuthService {
   private readonly config = inject(API_CONFIG);
   private readonly redirect = inject(OIDC_REDIRECTOR);
   private readonly http = inject(HttpClient);
   private readonly accessToken = signal<string | null>(readPersistedAccessToken());
   private readonly rolesSignal = signal<readonly string[]>([]);
 
-  async signIn(returnUrl?: string, options?: { prompt?: 'login' | 'none' }): Promise<void> {
+  async signIn(returnUrl?: string, options?: SignInOptions): Promise<void> {
     const verifier = randomBase64Url(32);
     const state = randomBase64Url(16);
     sessionStorage.setItem(VERIFIER_KEY, verifier);

@@ -11,6 +11,7 @@ import { firstValueFrom } from 'rxjs';
 
 import { API_CONFIG, ApiConfig } from '../api.config';
 import { AuthService } from './auth.service';
+import { AUTH_SERVICE } from './auth.service.contract';
 import { authInterceptor } from './auth.interceptor';
 
 const config: ApiConfig = {
@@ -32,6 +33,7 @@ describe('authInterceptor', () => {
         provideHttpClient(withInterceptors([authInterceptor])),
         provideHttpClientTesting(),
         { provide: API_CONFIG, useValue: config },
+        { provide: AUTH_SERVICE, useExisting: AuthService },
       ],
     });
     http = TestBed.inject(HttpClient);

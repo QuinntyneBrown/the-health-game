@@ -27,16 +27,26 @@ export class RewardsService implements IRewardsService {
       .pipe(map((rewards) => rewards.map(mapReward)));
   }
 
+  getGoalRewards(goalId: string): Observable<readonly Reward[]> {
+    return this.http
+      .get<readonly RewardDto[]>(`${this.apiBaseUrl}/api/goals/${goalId}/rewards`)
+      .pipe(map((rewards) => rewards.map(mapReward)));
+  }
+
   claimReward(rewardId: string): Observable<Reward> {
-    return this.http.post<Reward>(`${this.apiBaseUrl}/api/rewards/${rewardId}/claim`, {});
+    return this.http
+      .post<RewardDto>(`${this.apiBaseUrl}/api/rewards/${rewardId}/claim`, {})
+      .pipe(map(mapReward));
   }
 
   getReward(rewardId: string): Observable<Reward> {
-    return this.http.get<Reward>(`${this.apiBaseUrl}/api/rewards/${rewardId}`);
+    return this.http.get<RewardDto>(`${this.apiBaseUrl}/api/rewards/${rewardId}`).pipe(map(mapReward));
   }
 
   updateReward(rewardId: string, input: UpdateRewardInput): Observable<Reward> {
-    return this.http.put<Reward>(`${this.apiBaseUrl}/api/rewards/${rewardId}`, input);
+    return this.http
+      .put<RewardDto>(`${this.apiBaseUrl}/api/rewards/${rewardId}`, input)
+      .pipe(map(mapReward));
   }
 
   deleteReward(rewardId: string): Observable<void> {
@@ -55,6 +65,8 @@ interface RewardDto {
   };
   readonly isEarned: boolean;
   readonly earnedAtUtc: string | null;
+  readonly createdAtUtc: string;
+  readonly updatedAtUtc: string | null;
 }
 
 interface RewardRequest {
@@ -92,5 +104,7 @@ function mapReward(dto: RewardDto): Reward {
       : { type: 'goal-target' },
     status: dto.isEarned ? 'earned' : 'in-progress',
     earnedAt: dto.earnedAtUtc,
+    createdAt: dto.createdAtUtc,
+    updatedAt: dto.updatedAtUtc,
   };
 }

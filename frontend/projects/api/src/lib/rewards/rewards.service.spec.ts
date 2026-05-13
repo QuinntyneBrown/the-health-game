@@ -73,4 +73,12 @@ describe('RewardsService', () => {
     req.flush([]);
     expect(await promise).toEqual([]);
   });
+
+  it('GETs /api/goals/:goalId/rewards and returns the goal rewards', async () => {
+    const promise = firstValueFrom(service.getGoalRewards('g-1'));
+    const req = controller.expectOne(`${config.apiBaseUrl}/api/goals/g-1/rewards`);
+    expect(req.request.method).toBe('GET');
+    req.flush([]);
+    expect(await promise).toEqual([]);
+  });
 });
