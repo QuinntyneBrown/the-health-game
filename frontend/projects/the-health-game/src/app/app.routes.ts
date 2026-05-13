@@ -1,66 +1,100 @@
 import { Routes } from '@angular/router';
-import { authGuard } from 'api';
-
-import { CallbackComponent } from './auth/callback.component';
-import { notAuthenticatedGuard } from './auth/not-authenticated.guard';
-import { SignedOutComponent } from './auth/signed-out.component';
-import { OnboardingComponent } from './onboarding/onboarding.component';
 
 export const routes: Routes = [
-  { path: 'auth/callback', component: CallbackComponent, title: 'Signing you in' },
-  { path: 'auth/signed-out', component: SignedOutComponent, title: 'Signed out' },
+  { path: '', pathMatch: 'full', redirectTo: 'home' },
+  {
+    path: 'onboarding',
+    title: 'Onboarding - HealthQuest',
+    loadComponent: () => import('domain').then((module) => module.OnboardingComponent),
+  },
   {
     path: 'sign-in',
-    canMatch: [notAuthenticatedGuard],
-    title: 'Sign in — HealthQuest',
+    title: 'Sign in - HealthQuest',
     loadChildren: () => import('domain').then((module) => module.AUTH_ROUTES),
   },
   {
-    path: 'onboarding',
-    component: OnboardingComponent,
-    title: 'Welcome — HealthQuest',
-    canMatch: [notAuthenticatedGuard],
+    path: 'register',
+    title: 'Create account - HealthQuest',
+    loadComponent: () => import('domain').then((module) => module.CreateAccountComponent),
   },
   {
-    path: '',
-    pathMatch: 'full',
-    canMatch: [authGuard],
-    title: 'Home — HealthQuest',
-    loadChildren: () => import('domain').then((module) => module.DASHBOARD_ROUTES),
+    path: 'password-reset',
+    title: 'Reset password - HealthQuest',
+    loadComponent: () => import('domain').then((module) => module.ResetPasswordComponent),
+  },
+  {
+    path: 'auth/callback',
+    title: 'Session status - HealthQuest',
+    loadComponent: () => import('domain').then((module) => module.AuthSessionStatesComponent),
+  },
+  {
+    path: 'auth/signed-out',
+    title: 'Signed out - HealthQuest',
+    loadComponent: () => import('domain').then((module) => module.AuthSessionStatesComponent),
   },
   {
     path: 'home',
-    canMatch: [authGuard],
-    title: 'Home — HealthQuest',
+    title: 'Home - HealthQuest',
     loadChildren: () => import('domain').then((module) => module.DASHBOARD_ROUTES),
   },
   {
     path: 'goals',
-    canMatch: [authGuard],
-    title: 'Goals — HealthQuest',
+    title: 'Goals - HealthQuest',
     loadChildren: () => import('domain').then((module) => module.GOALS_ROUTES),
   },
   {
     path: 'rewards',
-    canMatch: [authGuard],
-    title: 'Rewards — HealthQuest',
+    title: 'Rewards - HealthQuest',
     loadChildren: () => import('domain').then((module) => module.REWARDS_ROUTES),
   },
   {
     path: 'profile',
-    canMatch: [authGuard],
-    title: 'Profile — HealthQuest',
+    title: 'Profile - HealthQuest',
     loadChildren: () => import('domain').then((module) => module.PROFILE_ROUTES),
   },
   {
     path: 'stats',
-    canMatch: [authGuard],
-    title: 'Stats — HealthQuest',
+    title: 'Stats - HealthQuest',
     loadChildren: () => import('domain').then((module) => module.STATS_ROUTES),
   },
   {
+    path: 'activity/log',
+    title: 'Log activity - HealthQuest',
+    loadComponent: () => import('domain').then((module) => module.LogActivitySheetComponent),
+  },
+  {
+    path: 'activity/log-dialog',
+    title: 'Log activity dialog - HealthQuest',
+    loadComponent: () => import('domain').then((module) => module.LogActivityDialogComponent),
+  },
+  {
+    path: 'activity/edit',
+    title: 'Edit activity - HealthQuest',
+    loadComponent: () => import('domain').then((module) => module.EditActivityDialogComponent),
+  },
+  {
+    path: 'activity/delete',
+    title: 'Delete activity - HealthQuest',
+    loadComponent: () => import('domain').then((module) => module.DeleteActivityDialogComponent),
+  },
+  {
+    path: 'activity/discard-changes',
+    title: 'Discard changes - HealthQuest',
+    loadComponent: () => import('domain').then((module) => module.DiscardChangesDialogComponent),
+  },
+  {
+    path: 'account/delete',
+    title: 'Delete account - HealthQuest',
+    loadComponent: () => import('domain').then((module) => module.DeleteAccountDialogComponent),
+  },
+  {
+    path: 'admin',
+    title: 'Admin and states - HealthQuest',
+    loadComponent: () => import('domain').then((module) => module.AdminStatesComponent),
+  },
+  {
     path: '**',
-    redirectTo: '',
+    redirectTo: 'home',
   },
 ];
 

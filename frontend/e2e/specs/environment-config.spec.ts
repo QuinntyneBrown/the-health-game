@@ -14,6 +14,6 @@ test.describe('Environment configuration', () => {
   test('the development build exposes the dev apiBaseUrl', async ({ page }) => {
     await page.goto('/');
     const apiBaseUrl = await page.locator('body').getAttribute('data-api-base-url');
-    expect(apiBaseUrl).toBe('http://localhost:5117');
+    expect(apiBaseUrl).toBe('http://localhost:5224');
   });
 });

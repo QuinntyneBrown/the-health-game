@@ -52,16 +52,16 @@ describe('RewardsService', () => {
     expect(req.request.body).toEqual({
       name: 'New playlist',
       description: 'Earned by completing daily walks',
-      condition: { type: 'streak-milestone', streakDays: 7 },
+      condition: { type: 2, requiredStreakCount: 7 },
     });
     req.flush({
       id: 'r-1',
       goalId: 'g-1',
       name: 'New playlist',
       description: 'Earned by completing daily walks',
-      condition: { type: 'streak-milestone', streakDays: 7 },
-      status: 'pending',
-      earnedAt: null,
+      condition: { type: 2, requiredStreakCount: 7 },
+      isEarned: false,
+      earnedAtUtc: null,
     });
     expect((await promise).id).toBe('r-1');
   });

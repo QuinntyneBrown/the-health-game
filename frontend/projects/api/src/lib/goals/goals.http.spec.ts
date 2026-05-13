@@ -56,17 +56,21 @@ describe('GoalsService.getGoals', () => {
     const promise = firstValueFrom(service.createGoal(input));
     const req = controller.expectOne(`${config.apiBaseUrl}/api/goals`);
     expect(req.request.method).toBe('POST');
-    expect(req.request.body).toEqual(input);
+    expect(req.request.body).toMatchObject({
+      name: 'Hydrate',
+      description: null,
+      targetQuantity: 8,
+      targetUnit: 'cups',
+      cadence: { type: 2, interval: 1 },
+    });
     req.flush({
       id: 'g-1',
       name: 'Hydrate',
       description: '',
-      cadence: 'daily',
-      target: { value: 8, unit: 'cups' },
-      completedQuantity: 0,
-      currentStreak: 0,
-      longestStreak: 0,
-      rewardName: '',
+      targetQuantity: 8,
+      targetUnit: 'cups',
+      cadence: { type: 2, interval: 1 },
+      streak: { currentStreak: 0, longestStreak: 0 },
     });
     expect((await promise).id).toBe('g-1');
   });
@@ -79,12 +83,10 @@ describe('GoalsService.getGoals', () => {
       id: 'g-1',
       name: 'Hydrate',
       description: 'Drink water',
-      cadence: 'daily',
-      target: { value: 8, unit: 'cups' },
-      completedQuantity: 6,
-      currentStreak: 12,
-      longestStreak: 18,
-      rewardName: '',
+      targetQuantity: 8,
+      targetUnit: 'cups',
+      cadence: { type: 2, interval: 1 },
+      streak: { currentStreak: 12, longestStreak: 18 },
     });
     expect((await promise).name).toBe('Hydrate');
   });
@@ -98,17 +100,20 @@ describe('GoalsService.getGoals', () => {
     const promise = firstValueFrom(service.updateGoal('g-1', input));
     const req = controller.expectOne(`${config.apiBaseUrl}/api/goals/g-1`);
     expect(req.request.method).toBe('PUT');
-    expect(req.request.body).toEqual(input);
+    expect(req.request.body).toMatchObject({
+      name: 'Hydrate (revised)',
+      targetQuantity: 10,
+      targetUnit: 'cups',
+      cadence: { type: 2, interval: 1 },
+    });
     req.flush({
       id: 'g-1',
       name: 'Hydrate (revised)',
       description: '',
-      cadence: 'daily',
-      target: { value: 10, unit: 'cups' },
-      completedQuantity: 4,
-      currentStreak: 3,
-      longestStreak: 7,
-      rewardName: '',
+      targetQuantity: 10,
+      targetUnit: 'cups',
+      cadence: { type: 2, interval: 1 },
+      streak: { currentStreak: 3, longestStreak: 7 },
     });
     expect((await promise).name).toBe('Hydrate (revised)');
   });

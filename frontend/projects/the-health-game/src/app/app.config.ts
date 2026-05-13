@@ -5,7 +5,6 @@ import { provideApiServices } from 'api';
 
 import { environment } from '../environments/environment';
 import { routes } from './app.routes';
-import { provideViewport } from './viewport/viewport.signal';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -20,6 +19,5 @@ export const appConfig: ApplicationConfig = {
     }),
     provideBrowserGlobalErrorListeners(),
     provideRouter(routes),
-    provideViewport(),
   ],
 };

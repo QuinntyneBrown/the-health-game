@@ -1,159 +1,129 @@
 <main class="library-page">
-  <a class="mock-breadcrumb" href="/">Domain</a>
-  <section class="component-demo" aria-labelledby="domain-goal-list-mock-title">
-    <header class="component-demo__header">
-      <p class="eyebrow">domain library candidate</p>
-      <h1 id="domain-goal-list-mock-title">Goal list component</h1>
-      <p>Searchable and filterable goal collection view.</p>
+  <section class="screen-frame" data-screen="goals-list" aria-labelledby="goals-list-title">
+    <header class="screen-frame__header">
+      <div>
+        <p>/goals</p>
+        <h2 id="goals-list-title">Goals list</h2>
+      </div>
+      <a href="/">Home</a>
     </header>
-    <div class="component-demo__canvas">
-      <section class="screen-frame" data-screen="goals-list" aria-labelledby="goals-list-title">
-      <header class="screen-frame__header">
-        <div>
-          <p>/goals</p>
-          <h2 id="goals-list-title">Goals list</h2>
-        </div>
-        <a href="/">Index</a>
-      </header>
-      
+
     <div class="app-preview app-preview--tabs">
-      <header class="app-top">
-        <a class="skip-link" href="#main-goals-3-active">Skip to content</a>
-        <div class="brand">
-          <span class="brand__mark" aria-hidden="true"></span>
-          <span class="brand__name">HealthQuest</span>
-        </div>
-        <div class="app-top__meta">
-          <span class="pill">3 active</span>
-          <button class="icon-button" type="button" aria-label="Notifications">
-            <span class="dot" aria-hidden="true"></span>
+      <main class="app-main" id="main-goals-real-backend">
+        <div class="page-title">
+          <p class="eyebrow">real backend</p>
+          <h1>Goals</h1>
+          <button class="button button--ghost" type="button" data-testid="reload-goals" (click)="load()">
+            Reload
           </button>
         </div>
-      </header>
-      
-    <nav class="app-nav app-nav--tabs" aria-label="Primary">
-      
-        <a class="app-nav__item app-nav__item--active" href="../dashboard.html">
-          <span class="app-nav__mark" aria-hidden="true"></span>
-          <span>Home</span>
-        </a>
-        <a class="app-nav__item" href="../goals-list.html">
-          <span class="app-nav__mark" aria-hidden="true"></span>
-          <span>Goals</span>
-        </a>
-        <a class="app-nav__item" href="../rewards-list.html">
-          <span class="app-nav__mark" aria-hidden="true"></span>
-          <span>Rewards</span>
-        </a>
-        <a class="app-nav__item" href="../profile.html">
-          <span class="app-nav__mark" aria-hidden="true"></span>
-          <span>Profile</span>
-        </a>
-    </nav>
-      <main class="app-main" id="main-goals-3-active">
-        <div class="page-title">
-          <p class="eyebrow">/goals</p>
-          <h1>Goals</h1>
-          <button class="button button--primary" type="button">New goal</button>
-        </div>
-        
-    <div class="toolbar-row">
-      
-    <label class="field">
-      <span>Search goals</span>
-      <input type="text" value="walk" />
-      
-    </label>
-      
-    <div class="segmented" role="group" aria-label="Filter">
-      <button class="" type="button">All</button><button class="is-active" type="button">Daily</button><button class="" type="button">Weekly</button><button class="" type="button">Custom</button>
-    </div>
-      
-    <label class="field">
-      <span>Sort by</span>
-      <select>
-        <option>Streak length</option><option>Recently active</option><option>Name</option>
-      </select>
-    </label>
-    </div>
-    <section class="goal-grid">
-      
-    <article class="goal-card">
-      <div class="goal-card__top">
-        <div>
-          <h3>Morning walk</h3>
-          <p>30 min daily</p>
-        </div>
-        <button class="button button--ghost" type="button">Open</button>
-      </div>
-      
-    <div class="progress-row">
-      <div class="progress-row__label">
-        <span>Progress</span>
-        <strong>82%</strong>
-      </div>
-      <span class="progress" aria-label="Progress 82%">
-        <span style="inline-size:82%"></span>
-      </span>
-    </div>
-      <div class="chips">
-        <span class="chip">7 current</span>
-        <span class="chip">12 best</span>
-        <span class="chip chip--accent">Trail breakfast</span>
-      </div>
-    </article>
-    <article class="goal-card">
-      <div class="goal-card__top">
-        <div>
-          <h3>Hydration</h3>
-          <p>8 cups daily</p>
-        </div>
-        <button class="button button--ghost" type="button">Open</button>
-      </div>
-      
-    <div class="progress-row">
-      <div class="progress-row__label">
-        <span>Progress</span>
-        <strong>63%</strong>
-      </div>
-      <span class="progress" aria-label="Progress 63%">
-        <span style="inline-size:63%"></span>
-      </span>
-    </div>
-      <div class="chips">
-        <span class="chip">4 current</span>
-        <span class="chip">18 best</span>
-        <span class="chip chip--accent">New bottle</span>
-      </div>
-    </article>
-    <article class="goal-card">
-      <div class="goal-card__top">
-        <div>
-          <h3>Strength</h3>
-          <p>3 sets weekly</p>
-        </div>
-        <button class="button button--ghost" type="button">Open</button>
-      </div>
-      
-    <div class="progress-row">
-      <div class="progress-row__label">
-        <span>Progress</span>
-        <strong>50%</strong>
-      </div>
-      <span class="progress" aria-label="Progress 50%">
-        <span style="inline-size:50%"></span>
-      </span>
-    </div>
-      <div class="chips">
-        <span class="chip">3 current</span>
-        <span class="chip">8 best</span>
-        <span class="chip chip--accent">Recovery hour</span>
-      </div>
-    </article>
-    </section>
+
+        <p class="pill" role="status" data-testid="goals-status">{{ status() }}</p>
+
+        <section class="panel-grid" aria-label="Create goal">
+          <label class="field">
+            <span>Name</span>
+            <input data-testid="goal-name" [(ngModel)]="goalName" />
+          </label>
+          <label class="field">
+            <span>Description</span>
+            <input data-testid="goal-description" [(ngModel)]="goalDescription" />
+          </label>
+          <label class="field">
+            <span>Target</span>
+            <input data-testid="goal-target" type="number" [(ngModel)]="goalTarget" />
+          </label>
+          <label class="field">
+            <span>Unit</span>
+            <input data-testid="goal-unit" [(ngModel)]="goalUnit" />
+          </label>
+          <label class="field">
+            <span>Cadence</span>
+            <select data-testid="goal-cadence" [(ngModel)]="goalCadence">
+              <option value="hourly">Hourly</option>
+              <option value="daily">Daily</option>
+              <option value="weekly">Weekly</option>
+              <option value="monthly">Monthly</option>
+            </select>
+          </label>
+          <button class="button button--primary" type="button" data-testid="create-goal" (click)="createGoal()">
+            Create goal
+          </button>
+        </section>
+
+        <section class="toolbar-row" aria-label="Activity and reward inputs">
+          <label class="field">
+            <span>Activity quantity</span>
+            <input data-testid="activity-quantity" type="number" [(ngModel)]="activityQuantity" />
+          </label>
+          <label class="field">
+            <span>Activity notes</span>
+            <input data-testid="activity-notes" [(ngModel)]="activityNotes" />
+          </label>
+          <label class="field">
+            <span>Reward name</span>
+            <input data-testid="reward-name" [(ngModel)]="rewardName" />
+          </label>
+        </section>
+
+        <section class="goal-grid" data-testid="goal-list">
+          @for (goal of goals(); track goal.id) {
+            <article class="goal-card" [attr.data-testid]="'goal-card-' + goal.id">
+              <div class="goal-card__top">
+                <div>
+                  <h3>{{ goal.name }}</h3>
+                  <p>{{ goal.target.value }} {{ goal.target.unit }} - {{ goal.cadence }}</p>
+                </div>
+                <button class="button button--ghost" type="button" [attr.data-testid]="'delete-goal-' + goal.id" (click)="deleteGoal(goal)">
+                  Delete
+                </button>
+              </div>
+
+              <label class="field">
+                <span>Edit name</span>
+                <input
+                  [attr.data-testid]="'edit-goal-name-' + goal.id"
+                  [ngModel]="editNames[goal.id] ?? goal.name"
+                  (ngModelChange)="editNames[goal.id] = $event"
+                />
+              </label>
+              <button class="button button--primary" type="button" [attr.data-testid]="'update-goal-' + goal.id" (click)="updateGoal(goal)">
+                Update goal
+              </button>
+              <button class="button button--primary" type="button" [attr.data-testid]="'log-activity-' + goal.id" (click)="logActivity(goal)">
+                Log activity
+              </button>
+              <button class="button button--primary" type="button" [attr.data-testid]="'create-reward-' + goal.id" (click)="createReward(goal)">
+                Create reward
+              </button>
+
+              <div class="chips" [attr.data-testid]="'goal-rewards-' + goal.id">
+                @for (reward of goalRewards(goal.id); track reward.id) {
+                  <span class="chip chip--accent">{{ reward.name }}</span>
+                }
+              </div>
+
+              <div [attr.data-testid]="'goal-activities-' + goal.id">
+                @for (activity of goalActivities(goal.id); track activity.id) {
+                  <article class="history-item" [attr.data-testid]="'activity-' + activity.id">
+                    <span></span>
+                    <p>{{ activity.quantity }} {{ goal.target.unit }} - {{ activity.notes }}</p>
+                    <div>
+                      <button class="icon-button" type="button" aria-label="Edit activity" [attr.data-testid]="'update-activity-' + activity.id" (click)="updateActivity(goal, activity)"></button>
+                      <button class="icon-button icon-button--danger" type="button" aria-label="Delete activity" [attr.data-testid]="'delete-activity-' + activity.id" (click)="deleteActivity(goal, activity)"></button>
+                    </div>
+                  </article>
+                }
+              </div>
+            </article>
+          } @empty {
+            <article class="empty-state" data-testid="goals-empty-real">
+              <h2>No goals yet</h2>
+              <p>Create a goal to start the real backend flow.</p>
+            </article>
+          }
+        </section>
       </main>
-    </div>
-    </section>
     </div>
   </section>
 </main>

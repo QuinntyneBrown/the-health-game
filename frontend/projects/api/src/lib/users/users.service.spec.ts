@@ -46,15 +46,15 @@ describe('UsersService', () => {
     req.flush({
       displayName: 'Ada Lovelace',
       email: 'ada@example.test',
-      avatarUrl: 'https://cdn.example.test/ada.png',
-      roles: ['user', 'beta-tester'],
+      roles: [1, 2],
+      createdAtUtc: '2026-05-09T10:00:00Z',
     });
 
     const profile = await promise;
     expect(profile.displayName).toBe('Ada Lovelace');
     expect(profile.email).toBe('ada@example.test');
-    expect(profile.avatarUrl).toBe('https://cdn.example.test/ada.png');
-    expect(profile.roles).toEqual(['user', 'beta-tester']);
+    expect(profile.avatarUrl).toBeNull();
+    expect(profile.roles).toEqual(['User', 'Admin']);
   });
 
   it('PUTs displayName and email to /api/users/me and returns the updated profile', async () => {
@@ -66,12 +66,13 @@ describe('UsersService', () => {
     expect(req.request.body).toEqual({
       displayName: 'Grace Hopper',
       email: 'grace@example.test',
+      timeZoneId: expect.any(String),
     });
     req.flush({
       displayName: 'Grace Hopper',
       email: 'grace@example.test',
-      avatarUrl: null,
-      roles: ['user'],
+      roles: [1],
+      createdAtUtc: '2026-05-09T10:00:00Z',
     });
 
     const profile = await promise;

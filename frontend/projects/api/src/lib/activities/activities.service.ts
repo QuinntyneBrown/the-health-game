@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
 
 import { API_CONFIG } from '../api.config';
 import {
@@ -16,23 +16,68 @@ export class ActivitiesService implements IActivitiesService {
   private readonly apiBaseUrl = inject(API_CONFIG).apiBaseUrl;
 
   logActivity(goalId: string, input: LogActivityInput): Observable<ActivityEntry> {
-    return this.http.post<ActivityEntry>(
-      `${this.apiBaseUrl}/api/goals/${goalId}/activities`,
-      input,
-    );
+    return this.http
+      .post<ActivityEntryDto>(
+        `${this.apiBaseUrl}/api/goals/${goalId}/activities`,
+        toActivityRequest(input),
+      )
+      .pipe(map(mapActivity));
   }
 
   getGoalActivities(goalId: string): Observable<readonly ActivityEntry[]> {
-    return this.http.get<readonly ActivityEntry[]>(
-      `${this.apiBaseUrl}/api/goals/${goalId}/activities`,
+    return this.http
+      .get<readonly ActivityEntryDto[]>(`${this.apiBaseUrl}/api/goals/${goalId}/activities`)
+      .pipe(map((entries) => entries.map(mapActivity)));
+  }
+
+  updateActivityEntry(
+    goalId: string,
+    activityEntryId: string,
+    input: UpdateActivityInput,
+  ): Observable<ActivityEntry> {
+    return this.http
+      .put<ActivityEntryDto>(
+        `${this.apiBaseUrl}/api/goals/${goalId}/activities/${activityEntryId}`,
+        toActivityRequest(input),
+      )
+      .pipe(map(mapActivity));
+  }
+
+  deleteActivityEntry(goalId: string, activityEntryId: string): Observable<void> {
+    return this.http.delete<void>(
+      `${this.apiBaseUrl}/api/goals/${goalId}/activities/${activityEntryId}`,
     );
   }
+}
 
-  updateActivityEntry(id: string, input: UpdateActivityInput): Observable<ActivityEntry> {
-    return this.http.put<ActivityEntry>(`${this.apiBaseUrl}/api/activities/${id}`, input);
-  }
+interface ActivityEntryDto {
+  readonly id: string;
+  readonly goalId: string;
+  readonly occurredAtUtc: string;
+  readonly quantity: number;
+  readonly notes: string | null;
+}
 
-  deleteActivityEntry(id: string): Observable<void> {
-    return this.http.delete<void>(`${this.apiBaseUrl}/api/activities/${id}`);
-  }
+interface ActivityRequest {
+  readonly occurredAtUtc: string;
+  readonly quantity: number;
+  readonly notes: string | null;
+}
+
+function toActivityRequest(input: LogActivityInput): ActivityRequest {
+  return {
+    occurredAtUtc: input.recordedAt ?? new Date().toISOString(),
+    quantity: input.quantity,
+    notes: input.notes ?? null,
+  };
+}
+
+function mapActivity(dto: ActivityEntryDto): ActivityEntry {
+  return {
+    id: dto.id,
+    goalId: dto.goalId,
+    quantity: Number(dto.quantity),
+    notes: dto.notes,
+    recordedAt: dto.occurredAtUtc,
+  };
 }

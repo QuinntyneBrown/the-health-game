@@ -6,6 +6,7 @@ import { UserProfile } from './user-profile.model';
 export interface UpdateUserProfileInput {
   readonly displayName: string;
   readonly email: string;
+  readonly timeZoneId?: string;
 }
 
 export interface IUsersService {

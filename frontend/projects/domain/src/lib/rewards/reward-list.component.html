@@ -1,141 +1,44 @@
 <main class="library-page">
-  <a class="mock-breadcrumb" href="/">Domain</a>
-  <section class="component-demo" aria-labelledby="domain-reward-list-mock-title">
-    <header class="component-demo__header">
-      <p class="eyebrow">domain library candidate</p>
-      <h1 id="domain-reward-list-mock-title">Reward list component</h1>
-      <p>Reward collection, claim hero, grouped statuses, and earned notification.</p>
+  <section class="screen-frame" data-screen="rewards-list" aria-labelledby="rewards-list-title">
+    <header class="screen-frame__header">
+      <div>
+        <p>/rewards</p>
+        <h2 id="rewards-list-title">Rewards list</h2>
+      </div>
+      <a href="/">Home</a>
     </header>
-    <div class="component-demo__canvas">
-      <section class="screen-frame" data-screen="rewards-list" aria-labelledby="rewards-list-title">
-      <header class="screen-frame__header">
-        <div>
-          <p>/rewards</p>
-          <h2 id="rewards-list-title">Rewards list</h2>
-        </div>
-        <a href="/">Index</a>
-      </header>
-      
+
     <div class="app-preview app-preview--tabs">
-      <header class="app-top">
-        <a class="skip-link" href="#main-rewards-1-ready-1-earned">Skip to content</a>
-        <div class="brand">
-          <span class="brand__mark" aria-hidden="true"></span>
-          <span class="brand__name">HealthQuest</span>
-        </div>
-        <div class="app-top__meta">
-          <span class="pill">1 ready, 1 earned</span>
-          <button class="icon-button" type="button" aria-label="Notifications">
-            <span class="dot" aria-hidden="true"></span>
+      <main class="app-main" id="main-rewards-real-backend">
+        <div class="page-title">
+          <p class="eyebrow">real backend</p>
+          <h1>Rewards</h1>
+          <button class="button button--ghost" type="button" data-testid="reload-rewards" (click)="load()">
+            Reload
           </button>
         </div>
-      </header>
-      
-    <nav class="app-nav app-nav--tabs" aria-label="Primary">
-      
-        <a class="app-nav__item app-nav__item--active" href="../dashboard.html">
-          <span class="app-nav__mark" aria-hidden="true"></span>
-          <span>Home</span>
-        </a>
-        <a class="app-nav__item" href="../goals-list.html">
-          <span class="app-nav__mark" aria-hidden="true"></span>
-          <span>Goals</span>
-        </a>
-        <a class="app-nav__item" href="../rewards-list.html">
-          <span class="app-nav__mark" aria-hidden="true"></span>
-          <span>Rewards</span>
-        </a>
-        <a class="app-nav__item" href="../profile.html">
-          <span class="app-nav__mark" aria-hidden="true"></span>
-          <span>Profile</span>
-        </a>
-    </nav>
-      <main class="app-main" id="main-rewards-1-ready-1-earned">
-        <div class="page-title">
-          <p class="eyebrow">/rewards</p>
-          <h1>Rewards</h1>
-          <button class="button button--primary" type="button">New reward</button>
-        </div>
-        
-    <section class="reward-hero">
-      <div>
-        <p class="eyebrow">Ready to claim</p>
-        <h2>Trail breakfast</h2>
-        <p>Unlocked by a 7 day Morning walk streak.</p>
-      </div>
-      <button class="button button--primary" type="button">Claim</button>
-    </section>
-    
-    <div class="segmented" role="group" aria-label="Filter">
-      <button class="is-active" type="button">All</button><button class="" type="button">Ready</button><button class="" type="button">In progress</button><button class="" type="button">Earned</button><button class="" type="button">Locked</button>
-    </div>
-    <section class="reward-grid">
-      
-        <article class="reward-card">
-          <span class="reward-card__mark" aria-hidden="true"></span>
-          <h3>Trail breakfast</h3>
-          <p>Ready</p>
-          
-    <div class="progress-row">
-      <div class="progress-row__label">
-        <span>Reward progress</span>
-        <strong>100%</strong>
-      </div>
-      <span class="progress" aria-label="Reward progress 100%">
-        <span style="inline-size:100%"></span>
-      </span>
-    </div>
-        </article>
-        <article class="reward-card">
-          <span class="reward-card__mark" aria-hidden="true"></span>
-          <h3>New playlist</h3>
-          <p>In progress</p>
-          
-    <div class="progress-row">
-      <div class="progress-row__label">
-        <span>Reward progress</span>
-        <strong>71%</strong>
-      </div>
-      <span class="progress" aria-label="Reward progress 71%">
-        <span style="inline-size:71%"></span>
-      </span>
-    </div>
-        </article>
-        <article class="reward-card">
-          <span class="reward-card__mark" aria-hidden="true"></span>
-          <h3>Recovery hour</h3>
-          <p>Earned May 12</p>
-          
-    <div class="progress-row">
-      <div class="progress-row__label">
-        <span>Reward progress</span>
-        <strong>100%</strong>
-      </div>
-      <span class="progress" aria-label="Reward progress 100%">
-        <span style="inline-size:100%"></span>
-      </span>
-    </div>
-        </article>
-        <article class="reward-card">
-          <span class="reward-card__mark" aria-hidden="true"></span>
-          <h3>New bottle</h3>
-          <p>Locked</p>
-          
-    <div class="progress-row">
-      <div class="progress-row__label">
-        <span>Reward progress</span>
-        <strong>20%</strong>
-      </div>
-      <span class="progress" aria-label="Reward progress 20%">
-        <span style="inline-size:20%"></span>
-      </span>
-    </div>
-        </article>
-    </section>
-    <div class="toast" role="status">Reward earned: Trail breakfast. <button type="button">View</button></div>
+
+        <p class="pill" role="status" data-testid="rewards-status">{{ status() }}</p>
+
+        <section class="reward-grid" data-testid="reward-list">
+          @for (reward of rewards(); track reward.id) {
+            <article class="reward-card" [attr.data-testid]="'reward-card-' + reward.id">
+              <div class="reward-card__top">
+                <div>
+                  <h3>{{ reward.name }}</h3>
+                  <p>{{ reward.description }}</p>
+                </div>
+                <span class="pill">{{ reward.status }}</span>
+              </div>
+            </article>
+          } @empty {
+            <article class="empty-state" data-testid="rewards-empty-real">
+              <h2>No rewards yet</h2>
+              <p>Create one from the goals page.</p>
+            </article>
+          }
+        </section>
       </main>
-    </div>
-    </section>
     </div>
   </section>
 </main>

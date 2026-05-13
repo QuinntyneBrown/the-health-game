@@ -21,6 +21,7 @@ export interface CustomInterval {
 
 export interface CreateGoalInput {
   readonly name: string;
+  readonly description?: string;
   readonly cadence: GoalCadence;
   readonly target: GoalTarget;
   readonly weekStart?: WeekDay;

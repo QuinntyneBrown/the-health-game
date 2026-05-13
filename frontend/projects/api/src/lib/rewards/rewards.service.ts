@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
 
 import { API_CONFIG } from '../api.config';
 import { Reward } from './reward.model';
@@ -16,11 +16,15 @@ export class RewardsService implements IRewardsService {
   private readonly apiBaseUrl = inject(API_CONFIG).apiBaseUrl;
 
   createReward(goalId: string, input: CreateRewardInput): Observable<Reward> {
-    return this.http.post<Reward>(`${this.apiBaseUrl}/api/goals/${goalId}/rewards`, input);
+    return this.http
+      .post<RewardDto>(`${this.apiBaseUrl}/api/goals/${goalId}/rewards`, toRewardRequest(input))
+      .pipe(map(mapReward));
   }
 
   getRewards(): Observable<readonly Reward[]> {
-    return this.http.get<readonly Reward[]>(`${this.apiBaseUrl}/api/rewards`);
+    return this.http
+      .get<readonly RewardDto[]>(`${this.apiBaseUrl}/api/rewards`)
+      .pipe(map((rewards) => rewards.map(mapReward)));
   }
 
   claimReward(rewardId: string): Observable<Reward> {
@@ -38,4 +42,55 @@ export class RewardsService implements IRewardsService {
   deleteReward(rewardId: string): Observable<void> {
     return this.http.delete<void>(`${this.apiBaseUrl}/api/rewards/${rewardId}`);
   }
+}
+
+interface RewardDto {
+  readonly id: string;
+  readonly goalId: string;
+  readonly name: string;
+  readonly description: string | null;
+  readonly condition: {
+    readonly type: number | string;
+    readonly requiredStreakCount: number;
+  };
+  readonly isEarned: boolean;
+  readonly earnedAtUtc: string | null;
+}
+
+interface RewardRequest {
+  readonly name: string;
+  readonly description: string | null;
+  readonly condition: {
+    readonly type: number;
+    readonly requiredStreakCount: number;
+  };
+}
+
+function toRewardRequest(input: CreateRewardInput): RewardRequest {
+  return {
+    name: input.name,
+    description: input.description ?? null,
+    condition:
+      input.condition.type === 'streak-milestone'
+        ? { type: 2, requiredStreakCount: input.condition.streakDays }
+        : { type: 1, requiredStreakCount: 1 },
+  };
+}
+
+function mapReward(dto: RewardDto): Reward {
+  const isStreak =
+    dto.condition.type === 2 ||
+    String(dto.condition.type).toLowerCase() === 'streakmilestone';
+
+  return {
+    id: dto.id,
+    goalId: dto.goalId,
+    name: dto.name,
+    description: dto.description ?? '',
+    condition: isStreak
+      ? { type: 'streak-milestone', streakDays: dto.condition.requiredStreakCount }
+      : { type: 'goal-target' },
+    status: dto.isEarned ? 'earned' : 'in-progress',
+    earnedAt: dto.earnedAtUtc,
+  };
 }

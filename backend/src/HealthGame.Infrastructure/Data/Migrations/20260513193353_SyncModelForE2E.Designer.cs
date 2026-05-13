@@ -4,6 +4,7 @@ using HealthGame.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HealthGame.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(HealthGameContext))]
-    partial class HealthGameContextModelSnapshot : ModelSnapshot
+    [Migration("20260513193353_SyncModelForE2E")]
+    partial class SyncModelForE2E
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

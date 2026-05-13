@@ -14,6 +14,9 @@ internal sealed class UserProfileConfiguration : IEntityTypeConfiguration<UserPr
 
         builder.HasKey(profile => profile.Id);
 
+        builder.Property(profile => profile.Id)
+            .ValueGeneratedNever();
+
         builder.Property(profile => profile.SubjectId)
             .HasMaxLength(128)
             .IsRequired();

@@ -45,13 +45,15 @@ describe('ActivitiesService.logActivity', () => {
     );
     const req = controller.expectOne(`${config.apiBaseUrl}/api/goals/g-1/activities`);
     expect(req.request.method).toBe('POST');
-    expect(req.request.body).toEqual({ quantity: 2, notes: 'morning walk' });
+    expect(req.request.body.quantity).toBe(2);
+    expect(req.request.body.notes).toBe('morning walk');
+    expect(req.request.body.occurredAtUtc).toBeTruthy();
     req.flush({
       id: 'a-1',
       goalId: 'g-1',
       quantity: 2,
       notes: 'morning walk',
-      recordedAt: '2026-05-09T10:00:00Z',
+      occurredAtUtc: '2026-05-09T10:00:00Z',
     });
     const entry = await promise;
     expect(entry.id).toBe('a-1');
@@ -63,32 +65,33 @@ describe('ActivitiesService.logActivity', () => {
     const req = controller.expectOne(`${config.apiBaseUrl}/api/goals/g-1/activities`);
     expect(req.request.method).toBe('GET');
     req.flush([
-      { id: 'a-1', goalId: 'g-1', quantity: 2, notes: 'morning', recordedAt: '2026-05-09T10:00:00Z' },
-      { id: 'a-2', goalId: 'g-1', quantity: 4, notes: null, recordedAt: '2026-05-08T08:00:00Z' },
+      { id: 'a-1', goalId: 'g-1', quantity: 2, notes: 'morning', occurredAtUtc: '2026-05-09T10:00:00Z' },
+      { id: 'a-2', goalId: 'g-1', quantity: 4, notes: null, occurredAtUtc: '2026-05-08T08:00:00Z' },
     ]);
     expect((await promise).length).toBe(2);
   });
 
-  it('PUTs the update body to /api/activities/:id and returns the updated entry', async () => {
+  it('PUTs the update body to /api/goals/:goalId/activities/:id and returns the updated entry', async () => {
     const promise = firstValueFrom(
-      service.updateActivityEntry('a-1', { quantity: 5, notes: 'corrected' }),
+      service.updateActivityEntry('g-1', 'a-1', { quantity: 5, notes: 'corrected' }),
     );
-    const req = controller.expectOne(`${config.apiBaseUrl}/api/activities/a-1`);
+    const req = controller.expectOne(`${config.apiBaseUrl}/api/goals/g-1/activities/a-1`);
     expect(req.request.method).toBe('PUT');
-    expect(req.request.body).toEqual({ quantity: 5, notes: 'corrected' });
+    expect(req.request.body.quantity).toBe(5);
+    expect(req.request.body.notes).toBe('corrected');
     req.flush({
       id: 'a-1',
       goalId: 'g-1',
       quantity: 5,
       notes: 'corrected',
-      recordedAt: '2026-05-09T10:00:00Z',
+      occurredAtUtc: '2026-05-09T10:00:00Z',
     });
     expect((await promise).quantity).toBe(5);
   });
 
-  it('DELETEs /api/activities/:id', async () => {
-    const promise = firstValueFrom(service.deleteActivityEntry('a-1'));
-    const req = controller.expectOne(`${config.apiBaseUrl}/api/activities/a-1`);
+  it('DELETEs /api/goals/:goalId/activities/:id', async () => {
+    const promise = firstValueFrom(service.deleteActivityEntry('g-1', 'a-1'));
+    const req = controller.expectOne(`${config.apiBaseUrl}/api/goals/g-1/activities/a-1`);
     expect(req.request.method).toBe('DELETE');
     req.flush(null, { status: 204, statusText: 'No Content' });
     await promise;

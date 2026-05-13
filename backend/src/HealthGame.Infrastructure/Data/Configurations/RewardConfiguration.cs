@@ -12,6 +12,9 @@ internal sealed class RewardConfiguration : IEntityTypeConfiguration<Reward>
 
         builder.HasKey(reward => reward.Id);
 
+        builder.Property(reward => reward.Id)
+            .ValueGeneratedNever();
+
         builder.Property(reward => reward.GoalId)
             .IsRequired();
 

@@ -12,6 +12,9 @@ internal sealed class GoalConfiguration : IEntityTypeConfiguration<Goal>
 
         builder.HasKey(goal => goal.Id);
 
+        builder.Property(goal => goal.Id)
+            .ValueGeneratedNever();
+
         builder.Property(goal => goal.UserId)
             .HasMaxLength(128)
             .IsRequired();

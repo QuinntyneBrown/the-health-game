@@ -12,6 +12,9 @@ internal sealed class ActivityEntryConfiguration : IEntityTypeConfiguration<Acti
 
         builder.HasKey(activityEntry => activityEntry.Id);
 
+        builder.Property(activityEntry => activityEntry.Id)
+            .ValueGeneratedNever();
+
         builder.Property(activityEntry => activityEntry.GoalId)
             .IsRequired();
 
